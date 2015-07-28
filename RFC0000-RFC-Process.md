@@ -14,10 +14,16 @@ written where it becomes harder to change at the risk of compatibility. The
 complete list of RFCs are available at
 https://github.com/powershell/powershell-language-rfc
 
+This process was adapted from the Chef RFC process as well as from DMTF.org process
+
 ## Roles
 
 Currently, only members of the PowerShell Core team are allowed to author
 new RFCs.  All members of the community can provide feedback to any RFC.
+
+## RFC Naming Convention
+
+TBD
 
 ## RFC Workflow
 
@@ -45,4 +51,5 @@ Based on community feedback, this RFC was decided to not proceed any further.
 
 * Final
 
-Design and implementation is considered complete.
+Design and implementation is considered complete.  Any proposed changes 
+would be through a new RFC.
