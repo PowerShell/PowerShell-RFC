@@ -23,7 +23,33 @@ new RFCs.  All members of the community can provide feedback to any RFC.
 
 ## RFC Naming Convention
 
-TBD
+RFC documents shall follow the naming convention of "RFC####-Title.md" where #### is 
+the RFC number and Title is the title of the document.
+
+## RFC Template
+
+RFC documents shall follow the following template:
+
+```markdown
+---
+RFC: <four digit unique incrementing number>
+Author: <First Last>
+Status: <Draft | Experimental | Accepted | Rejected | Final>
+Area: <Area within the PowerShell language>
+---
+
+# Title
+
+Description and rationale.
+
+## Motivation
+
+    As a <<user_profile>>,
+    I can <<functionality>>,
+    so that <<benefit>>.
+
+## Specification
+```
 
 ## RFC Workflow
 
