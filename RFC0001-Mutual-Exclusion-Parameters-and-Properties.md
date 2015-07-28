@@ -5,7 +5,7 @@ Status: Draft
 Area: Parameters
 ---
 
-# Mutually exclusive parameters and properties
+# Mutually Exclusive Parameters and Properties
 
 ParameterSets were introduced in PowerShell v2.  This allowed definition of
 different sets of parameters for advanced functions.  For example, the
