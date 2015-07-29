@@ -56,10 +56,38 @@ properties are mutually exclusive at parse time rather than run time.
 
 ## Specification
 
-There are currently two options being proposed to handle mutual exclusion
-which would apply to both parameters and properties.
+The proposal is to use an attribute to describe parameters and properties
+that are mutually exclusive.  This makes it simple to author and also 
+makes it simple to read and understand.
 
-### Option 1: [ExclusionSet()] attribute on each parameter/property
+### [MutuallyExclusive()] attribute on the function/class definition
+
+```PowerShell
+	# Prop1 and Prop3 are mutually exclusive
+	# Prop2 and Prop4 are mutually exclusive
+	# Prop2 and Prop5 are mutually exclusive
+	[MutuallyExclusive("Prop1", "Prop3")]
+	[MutuallyExclusive("Prop2", "Prop4")]
+	[MutuallyExclusive("Prop2", "Prop5")]
+	class foo {
+		[string] $Prop1
+		
+		[string] $Prop2
+		
+		[string] $Prop3
+		
+		[string] $Prop4
+		
+		[string] $Prop5
+	}	
+```
+
+Pros: easier to understand the resulting mutually exclusive sets
+Cons: introduces new semantics
+
+## Alternate Proposals and Considerations
+
+### [ExclusionSet()] attribute on each parameter/property
 
 ```PowerShell
 	class foo {
@@ -86,29 +114,3 @@ which would apply to both parameters and properties.
 Pros: consistent with ParameterSet annotation being on the parameters
 Cons: harder to determine the resulting mutually exclusive sets after authoring
 
-### Option 2: [MutuallyExclusive()] attribute on the function/class definition
-
-```PowerShell
-	# Prop1 and Prop3 are mutually exclusive
-	# Prop2 and Prop4 are mutually exclusive
-	# Prop2 and Prop5 are mutually exclusive
-	[MutuallyExclusive("Prop1", "Prop3")]
-	[MutuallyExclusive("Prop2", "Prop4")]
-	[MutuallyExclusive("Prop2", "Prop5")]
-	class foo {
-		[string] $Prop1
-		
-		[string] $Prop2
-		
-		[string] $Prop3
-		
-		[string] $Prop4
-		
-		[string] $Prop5
-	}	
-```
-
-Pros: easier to understand the resulting mutually exclusive sets
-Cons: introduces new semantics
-
-The current recommendation is to go with Option2.
