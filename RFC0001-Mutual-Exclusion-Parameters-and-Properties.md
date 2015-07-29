@@ -83,6 +83,7 @@ makes it simple to read and understand.
 ```
 
 Pros: easier to understand the resulting mutually exclusive sets
+
 Cons: introduces new semantics
 
 ## Alternate Proposals and Considerations
@@ -112,5 +113,6 @@ Cons: introduces new semantics
 ```
 
 Pros: consistent with ParameterSet annotation being on the parameters
+
 Cons: harder to determine the resulting mutually exclusive sets after authoring
 
