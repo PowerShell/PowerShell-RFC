@@ -49,6 +49,9 @@ Description and rationale.
     so that <<benefit>>.
 
 ## Specification
+
+## Alternate Proposals and Considerations
+
 ```
 
 ## RFC Workflow
