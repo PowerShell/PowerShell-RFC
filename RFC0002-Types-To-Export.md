@@ -13,27 +13,9 @@ PowerShell module author should be able to explicitly export types (classes, enu
 
 ## Manifest
 
-We need to introduce a new optional entry **TypesToExport** in the module manifest.
-Proposed syntax:
+We would not provide a separate entry for exported types in manifest, like we did for function, aliases.
 
-```powershell
-# Aliases to export from this module 
-TypesToExport = @('ClassName', 'EnumName')
-```
+## Design
 
-We should also support `'*'` wildcard to export all types, defined in the root module file. 
-This would be used by default.
-
-```powershell
-# Aliases to export from this module 
-TypesToExport = '*'
-```
-### Default behavior
-
-There are two reasonable options for default:
-
-1. `'*'` - export everything.
-1. `@()` - export nothing.
-
-Author find 'export everything' reasonable and suitable for the most common scenarios.
-
+Classes attributed with `hidden` keyword would not be exported from the module.
+All other classes would be exported from the module.
