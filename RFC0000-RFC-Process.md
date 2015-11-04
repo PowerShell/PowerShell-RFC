@@ -61,7 +61,7 @@ RFCs go through several stages:
 * Draft
 
 This is the initial draft of a RFC posted for comments and considered a
-work-in-progress.
+work-in-progress.  Typically, two months is allowed for comments.
 
 * Experimental
 
