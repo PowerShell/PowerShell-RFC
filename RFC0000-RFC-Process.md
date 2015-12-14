@@ -3,6 +3,7 @@ RFC: 0000
 Author: Steve Lee
 Status: Draft
 Area: Process
+Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/5
 ---
 
 # PowerShell Language RFC Process and Guidelines
