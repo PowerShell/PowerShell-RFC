@@ -6,14 +6,13 @@ Area: Process
 Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/5
 ---
 
-# PowerShell Language RFC Process and Guidelines
+# PowerShell RFC Process and Guidelines
 
-A PowerShell Language RFC (Request for Comments) is a publication to propose 
-design changes and improvements to the PowerShell script language.  This
-provides the community an opportunity to provide feedback before code is
-written where it becomes harder to change at the risk of compatibility. The
-complete list of RFCs are available at
-https://github.com/powershell/powershell-language-rfc
+A PowerShell RFC (Request for Comments) is a publication to propose 
+design changes and improvements to PowerShell.  This provides the community an opportunity 
+to provide feedback before code is written where it becomes harder to change at the risk of 
+compatibility. The complete list of RFCs are available at
+https://github.com/powershell/powershell-rfc
 
 This process was adapted from the Chef RFC process as well as from DMTF.org process
 
