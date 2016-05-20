@@ -3,6 +3,7 @@ RFC: 0000
 Author: Steve Lee
 Status: Draft
 Area: Process
+Version: 1.1
 Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/5
 ---
 
@@ -35,6 +36,7 @@ RFC documents shall follow the following template:
 RFC: <four digit unique incrementing number>
 Author: <First Last>
 Status: <Draft | Experimental | Accepted | Rejected | Final>
+Version: <Major>.<Minor>
 Area: <Area within the PowerShell language>
 ---
 
@@ -56,19 +58,24 @@ Description and rationale.
 
 ## RFC Workflow
 
-RFCs go through several stages:
+RFCs go through applicable stages:
 
 * Draft
 
 This is the initial draft of a RFC posted for comments and considered a
 work-in-progress.  Typically, two months is allowed for comments.
 
+* Draft-Accepted
+
+Comments have been reviewed and new comments are not being sought.  Code
+work has not started/planned or not needed.
+
 * Experimental
 
 Comments have been reviewed and code is being written to provide an working
 example of the proposed design change to get further feedback.
 
-* Accepted
+* Experimental-Accepted
 
 Feedback from the experimental implementation and RFC have been reviewed.
 Engineering team will work towards final implementation in code to match
@@ -82,3 +89,7 @@ Based on community feedback, this RFC was decided to not proceed any further.
 
 Design and implementation is considered complete.  Any proposed changes 
 would be through a new RFC.
+
+---
+History:
+v1.1 - 5-20-2016 - Updated to enable RFCs for design changes that don't require code changes.  Added Draft-Accepted state and Version header property.
