@@ -36,7 +36,7 @@ This RFC proposes the following:
 				* e.g. a type for TCP-connections or other items which are commonly implemented as Integers but not technically integers; or things like “Little-endian, 16-bit value, unsigned” and “Little-endian, 16-bit value, signed”.
 			0. User — Defined for user-added types.
 				* This could also be [or contain] an “undefined” tree where anything below is system-dependant. While that would defeat the much of the usage of the OID-system, it would allow a sort of “type-registry” for the user’s system. (Not recommended, but a possibility nonetheless.)
-0. The system should provide for efficient transmission and be reliable (WRT serialize/deserialize).
+0. The system should provide for efficient transmission and be reliable (complete serialize/deserialize roundtrip).
 	* ASN.1 has the advantage that proper, unambiguous message-passing (in our case typed information) is efficient.
 0. The system should provide for error-checked values.
 	* Error-checked values can have intermediate error-checking optimized away.
@@ -54,4 +54,46 @@ Invariably someone will suggest something like JSON as a solution to this proble
 0. Because of #2 JSON is unsuitable for transmitting records ("structs"), because of #1 JSON is unsuitable for transmitting objects (essentially stateful records).
 0. Because of #3 JSON is unsuitable for seralizing/deserializing complex/compound types such as are used in .NET.
 
+Viable alternitives would include:
+
+* The Wulf, Lamb, Nestor [Interface Description Language](http://repository.cmu.edu/compsci/2412/); see also [Snodgrass’s book](https://www.amazon.com/Interface-Description-Language-Definition-Principles/dp/0716781980) ISBN 0716781980.
+	* Possibly w/ updated syntax to be more in-line with Ada-2012/SPARK-2014; see example #1 below.
+* IBM's [SOM](https://en.wikipedia.org/wiki/IBM_System_Object_Model)
+* COM/DCOM — This is not recommended, but there already exists an OID tree for [UUIDs](http://www.oid-info.com/get/2.25).
+
 Altering the underlying architecture for IPC is a big change, and likely to break compatibility; however the benefits of the change – efficiency of transmitting values, ensuring that values are correct, and increased reliability – are quite desirable in a system.
+
+--------
+
+Example 1:
+
+    Type Id_String is new String;
+    
+    -- SSN format: ###-##-####
+    Subtype Social_Security_Number is ID_String(1..11)
+      with Dynamic_Predicate =>
+        (for all Index in Social_Security_Number'Range =>
+          (case Index is
+           when 4|7 => Social_Security_Number(Index) = '-',
+           when others => Social_Security_Number(Index) in '0'..'9'
+          )
+         );
+    
+    -- EIN format: ##-#######
+    Subtype EIN is ID_String(1..10)
+      with Dynamic_Predicate =>
+        (for all Index in EIN'Range =>
+          (case Index is
+           when 3 => EIN(Index) = '-',
+           when others => EIN(Index) in '0'..'9'
+          )
+         );
+    
+    -- Tax_ID: A string guarenteed to be an SSN or EIN.
+    -- SSN (###-##-####)
+    -- EIN (##-#######)
+    Subtype Tax_ID is ID_String
+      with Dynamic_Predicate =>
+          (Tax_ID in Social_Security_Number) or
+          (Tax_ID in EIN);
+
