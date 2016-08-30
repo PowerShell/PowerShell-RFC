@@ -62,9 +62,10 @@ As a PowerShell help user, I can have a simplified visual and navigation experie
 ## Specification
  
  The RFC proposes a way to improve navigation by making 'Related Links' and 'Remarks' sections have clickable links. On clicking the links, the help for linked topic is shown. To improve the readability, this RFC proposes syntax highlighting the examples. Following are the samples with the proposed changes.
-
- ### Proposed improvements for exploring related topics as clickable links.
-
+ 
+ 
+#### Proposed improvements for exploring related topics as clickable links.
+ 
  RELATED LINKS <br />
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Online Version: http://go.microsoft.com/fwlink/p/?linkid=290495 <br />
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a name="clearItem">[Clear-Item](#clearItem)<br />
@@ -77,7 +78,7 @@ As a PowerShell help user, I can have a simplified visual and navigation experie
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For technical information, type: "<a name="full">[get-help Get-Item -full](#full)".<br />
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For online help, type: "<a name="online">[get-help Get-Item -online](#online)" <br />
 
- ### Proposed improvements for examples with syntax hightlighting. 
+#### Proposed improvements for examples with syntax hightlighting.
 
  EXAMPLES <br />
  Example 1: Get the current directory
@@ -98,7 +99,8 @@ As a PowerShell help user, I can have a simplified visual and navigation experie
  
 ## Alternate Proposals and Considerations
 
-### Navigation multiple topics
+#### Navigation of multiple topics
+
 Get-Help current only accepts one cmdlet name for looking up help. Alternatively, it could accept multiple cmdlet names. PowerShell would then display help for both the topics. 
 ```PowerShell
 Get-Help 'Get-Item', 'Set-Item'
