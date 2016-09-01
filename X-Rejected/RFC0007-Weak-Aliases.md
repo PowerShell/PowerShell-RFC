@@ -118,7 +118,8 @@ Hemant Mahawar: Absent
 ### Majority Decision
 
 The [feedback](https://github.com/PowerShell/PowerShell-RFC/issues/16) was extremely helpful as lead to some great discussion and insights.
-After discussion of the RFC and the feedback with the PowerShell team, the committee voted unanimously to reject this RFC.  We will continue to develop a better solution to address this problem.
+After discussion of the RFC and the feedback with the PowerShell team, the committee voted unanimously to reject this RFC.
+We will continue to develop a better solution to address this problem.
 
 The Weak Alias RFC as it's currently written does not solve the overall problem with aliases that collide with existing tools.
 Although it resolves some specific use cases, it introduces other problems which may lead to unpredictable and inconsistent results.
