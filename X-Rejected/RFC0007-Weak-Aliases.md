@@ -104,9 +104,13 @@ This suggestion has some significant flaws as in some cases, it is impossible to
 ## PowerShell Committee Decision
 
 ### Voting Results
+
 Jason Shirk: Reject 
+
 Joey Aiello: Reject
+
 Bruce Payette: Reject
+
 Steve Lee: Reject
 
 ### Majority Decision
