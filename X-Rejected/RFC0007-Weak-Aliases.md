@@ -1,7 +1,7 @@
 ---
 RFC: 0007
 Author: Jason Shirk
-Status: Draft
+Status: Rejected
 Area: Command Resolution
 ---
 
@@ -99,3 +99,36 @@ This design suffers a small problem of knowing the exact extension for the exter
 
 There are some suggestions to choose the appropiate target command based on parameters.
 This suggestion has some significant flaws as in some cases, it is impossible to distinguish which target command was desired.   
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Reject 
+
+Joey Aiello: Reject
+
+Bruce Payette: Reject
+
+Steve Lee: Reject
+
+Hemant Mahawar: Absent
+
+### Majority Decision
+
+The [feedback](https://github.com/PowerShell/PowerShell-RFC/issues/16) was extremely helpful as lead to some great discussion and insights.
+After discussion of the RFC and the feedback with the PowerShell team, the committee voted unanimously to reject this RFC.
+We will continue to develop a better solution to address this problem.
+
+The Weak Alias RFC as it's currently written does not solve the overall problem with aliases that collide with existing tools.
+Although it resolves some specific use cases, it introduces other problems which may lead to unpredictable and inconsistent results.
+The wget/curl aliases were already removed from PowerShell Core so the problem was limited to Windows PowerShell.
+
+The PowerShell team have discussed several ideas to help mitigate this issue on Windows PowerShell and over time educate users to not rely on aliases in scripts.
+PSScriptAnalyzer already contains a rule to discourage the use of aliases in scripts and more work may be done to enforce the rule.
+A new RFC will be drafted introducing the capability for deprecation in PowerShell to inform users of potential future breaking changes.
+
+### Minority Decision
+
+N/A
