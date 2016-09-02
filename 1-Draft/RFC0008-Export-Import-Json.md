@@ -1,5 +1,5 @@
 ---
-RFC: 0007
+RFC: 0008
 Author: Doug Finke
 Status: Draft
 Version: 1.0
