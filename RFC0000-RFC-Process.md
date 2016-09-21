@@ -64,7 +64,7 @@ RFCs go through applicable stages:
 This is the initial draft of a RFC posted for comments and considered a work-in-progress.
 An issue is created for this RFC and used for collection and response to comments.
 Typically, two months is allowed for comments.
-When the author is ready to submit to the committee for voting, they submit a Pull Request and indicate they are ready for voting.
+When the author is ready to submit to the committee for voting, they add a comment to their issue indicating the draft is ready for voting mentioning @PowerShell/powershell-committee
 
 * Draft-Accepted
 
