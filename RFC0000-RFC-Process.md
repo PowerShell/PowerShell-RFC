@@ -60,6 +60,7 @@ RFCs go through applicable stages:
 * Draft
 
 This is the initial draft of a RFC posted for comments and considered a work-in-progress.
+An issue is created for this RFC and used for collection and response to comments.
 Typically, two months is allowed for comments.
 
 * Draft-Accepted
