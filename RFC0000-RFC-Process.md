@@ -32,9 +32,11 @@ RFC documents shall follow the following template:
 ---
 RFC: <four digit unique incrementing number>
 Author: <First Last>
-Status: <Draft | Experimental | Accepted | Rejected | Final>
+Status: <Draft | Experimental | Accepted | Rejected | Withdrawn | Final>
+SupercededBy: <link to another RFC>
 Version: <Major>.<Minor>
 Area: <Area within the PowerShell language>
+Comments Due: <Date for submitting comments to current draft>
 ---
 
 # Title
@@ -62,6 +64,7 @@ RFCs go through applicable stages:
 This is the initial draft of a RFC posted for comments and considered a work-in-progress.
 An issue is created for this RFC and used for collection and response to comments.
 Typically, two months is allowed for comments.
+When the author is ready to submit to the committee for voting, they submit a Pull Request and indicate they are ready for voting.
 
 * Draft-Accepted
 
@@ -80,6 +83,10 @@ Engineering team will work towards final implementation in code to match the RFC
 * Rejected
 
 Based on community feedback, this RFC was decided to not proceed any further.
+
+* Withdrawn
+
+Author has decided not to pursue this RFC any further
 
 * Final
 
