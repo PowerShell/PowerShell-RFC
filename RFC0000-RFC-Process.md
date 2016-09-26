@@ -3,7 +3,7 @@ RFC: 0000
 Author: Steve Lee
 Status: Draft
 Area: Process
-Version: 1.2
+Version: 1.3
 Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/5
 ---
 
@@ -23,6 +23,7 @@ All members of the community are allowed to author new RFCs and can provide feed
 ## RFC Naming Convention
 
 RFC documents shall follow the naming convention of "RFC####-Title.md" where #### is the RFC number and Title is the title of the document.
+Authors of RFCs do not assign an RFC number.  The Committee will assign an RFC number and update the title accordingly.
 
 ## RFC Template
 
@@ -30,7 +31,7 @@ RFC documents shall follow the following template:
 
 ```markdown
 ---
-RFC: <four digit unique incrementing number>
+RFC: <four digit unique incrementing number - assigned by Committee>
 Author: <First Last>
 Status: <Draft | Experimental | Accepted | Rejected | Withdrawn | Final>
 SupercededBy: <link to another RFC>
@@ -98,3 +99,5 @@ v1.1 - 5-20-2016 - Updated to enable RFCs for design changes that don't require 
 Added Draft-Accepted state and Version header property.
 
 v1.2 - 8-18-2016 - Open submitting RFCs to the community and update formatting.
+
+v1.3 - 9-26-2016 - Added Withdrawn stage.  Comments Due field to template.  Updated guidance on RFC numbering.
