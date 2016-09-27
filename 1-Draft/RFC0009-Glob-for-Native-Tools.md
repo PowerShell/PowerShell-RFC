@@ -1,5 +1,5 @@
 ---
-RFC: 0008
+RFC: 0009
 Author: Andrew Schwartzmeyer
 Status: Draft
 Version: 0.1
