@@ -1,5 +1,5 @@
 ---
-RFC: 0009
+RFC: 0010
 Author: Paul Higinbotham
 Status: Draft
 Version 0.1
