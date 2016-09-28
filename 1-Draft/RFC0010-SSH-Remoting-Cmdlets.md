@@ -2,7 +2,7 @@
 RFC: 0010
 Author: Paul Higinbotham
 Status: Draft
-Version 0.1
+Version: 0.1
 Area: Remoting
 ---
 
