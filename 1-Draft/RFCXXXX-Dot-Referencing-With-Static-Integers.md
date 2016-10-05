@@ -263,4 +263,4 @@ in a repeatable, consistent manner.
 Also, as a learning exercise, I decided to figure out how to fix this in the
 PowerShell Core project over the weekend. If you'd like to try the fix out,
 or if you would like to see the changes required for this fix, visit
-https://github.com/PowerShell/PowerShell/compare/master...KirkMunro:parsing-literal-integers
+https://github.com/PowerShell/PowerShell/compare/master...KirkMunro:parsing-static-integers
