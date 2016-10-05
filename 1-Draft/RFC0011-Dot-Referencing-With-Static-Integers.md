@@ -1,0 +1,227 @@
+---
+RFC: 0011
+Author: Kirk Munro
+Status: Draft
+Version: 0.1
+Area: Parsing Static Numbers
+Comments Due: November 4, 2016
+---
+
+# Parsing Static Numbers
+
+PowerShell has multiple inconsistencies in the parser when parsing static
+numbers. Static numbers include any of the following:
+
+```PowerShell
+3
+3.
+3.14
+1e10
+1e+10
+1e-10
+3l
+3.l
+3.14l
+1e10l
+1e+10l
+1e-10l
+3d
+3.d
+3.14d
+1e10d
+1e-10d
+1e+10d
+0xabcd
+0xabcdl
+```
+
+In addition, any of these static numbers may be preceded by a sign (+/-), and
+any of these static numbers may have a byte-size unit (KB/MB/GB/TB/PB) appended
+to the end. With all supported pieces in place, you can end up with a static
+number that looks like one of these:
+
+```PowerShell
+-1e+10lmb # Equal to -10485760000000000
+0xabcdefgb # Equal to 12089661849600000
+```
+
+Since static numbers (including their sign, type suffix, and byte-size unit)
+evaluate to objects like any other, be they int32, int64, decimal, or double,
+and since objects have property and method members, you can invoke a member by
+dot-referencing the member name immediately at the end of the static number,
+except for int32 or int64 static numbers that don't have a type suffix nor a
+byte-size unit. That is to say, you can invoke members directly at the end of
+_most_ static number formats, but you can't invoke members directly at the end
+of int32 or int64 static numbers that don't have a suffix. These are parsed
+and evaluated just fine today:
+
+```PowerShell
+-1e+10lmb.GetType()
+0xabcdefgb.GetType()
+2.0.Equals(2.0)
+3l.CompareTo(1l)
+Update-TypeData -TypeName int64 -MemberName days -MemberType ScriptProperty `
+    -Value {New-TimeSpan -Days $this}
+3l.days
+```
+
+These, however, are not:
+
+```PowerShell
+Update-TypeData -TypeName int -MemberName days -MemberType ScriptProperty `
+    -Value {New-TimeSpan -Days $this}
+2.days
+2.GetType()
+2.Equals(3)
+```
+
+This demonstrates an inconsistency in how PowerShell handles static numbers.
+The workaround is to wrap the static numbers in brackets, in which case you
+can invoke members just fine. For example this works:
+
+```
+(2).GetType()
+```
+
+That extra set of brackets shouldn't be necessary though, because it isn't
+necessary for all of the other static number formats. This is simply a design
+bug in the PowerShell parser. In vanilla PowerShell this isn't a huge issue,
+because int32 and int64 objects don't have many properties or methods on them
+that you would want to use with static values; however, since PowerShell has
+a rich extensibility model, there are many opportunities to add properties and
+methods to the extended type system that make great sense to use with static
+values, and it is with all of these that having to use round brackets gets in
+the way (example: ```Get-EventLog -LogName System -After 2.weeks.ago```).
+
+The inconsistency continues beyond simple invocation of members on static
+numerics. When PowerShell parses a script, if it finds a token that it
+identifies as a number, whether that token is followed by a dot-reference of a
+member or not, then PowerShell will treat it as a number. This means that if
+you create a command whose name is recognized by the parser as a static numeric
+value or as a static numeric value followed by a dot-reference to a member, then
+you will not be able to invoke that command unless you use the call operator or
+the dot-source operator. The reason for this is that the parser checks for
+static numeric values before it checks for commands. This is the case for every
+format of static numeric values, except for integers that are not followed by a
+type suffix nor by a byte-size unit. This results in some unexpected behaviour
+due to the inconsistency.
+
+For example, you could create the following functions:
+
+```
+function 1a.LoadModule {...}
+function 1b.CreateUser {...}
+function 1c.AddUserToGroup {...}
+function 1d.GetGroupMembers {...}
+```
+
+Once these are created, you can invoke each of these functions normally except
+for the last one because the parser recognizes it as a static decimal value
+followed by a member invocation. With strict mode turned off, this invocation
+would simply return nothing to the user. Regardless of where the command comes
+from (batch file, executable program, PowerShell function or alias), if the
+command is parsable as a static number or as a static number with a member
+invocation, then invoking that command requires a call operator (unless the
+static number happens to be an integer -- then it works today due to the design
+issue mentioned earlier).
+
+This RFC is about correcting these inconsistencies.
+
+## Motivation
+
+As a PowerShell user, I value consistency and discoverability very highly, as
+they allow me to apply knowledge I have learned about PowerShell throughout My
+work with the language and make intelligent decisions that are based on My
+knowledge of the language with a high level of confidence. I also value the
+simplicity and elegance that can be achieved with code that doesn't require a
+lot of unnecessary syntax in order to make it work properly.
+
+## Specification
+
+The proposal is to fix the parser in PowerShell Core such that static integer
+values followed by a dot-reference of a member are properly recognized as just
+that, bringing the integer format in line with the rest of the numeric formats
+that are used in PowerShell. With the appropriate changes in place, users will
+be able to dot-reference any member after any static numeric value, Regardless
+of the format of that static numeric value.
+
+Examples:
+
+Invoking an ETS property on a static integer value:
+```PowerShell
+PS C:\> Update-TypeData -TypeName int -MemberName weeks -MemberType ScriptProperty -Value {New
+-TimeSpan -Days ($this*7)} -Force
+PS C:\> 2.weeks
+
+
+Days              : 14
+Hours             : 0
+Minutes           : 0
+Seconds           : 0
+Milliseconds      : 0
+Ticks             : 12096000000000
+TotalDays         : 14
+TotalHours        : 336
+TotalMinutes      : 20160
+TotalSeconds      : 1209600
+TotalMilliseconds : 1209600000
+
+PS C:\>
+```
+
+Invoking a command with a name that parses as a static integer value that
+dot-references a member: 
+```PowerShell
+PS C:\> function 4.StartService {Start-Service wuauserv}
+PS C:\> 4.StartService # Nothing happens because it's not parsed as a command
+PS C:\>
+```
+
+Pros: 
+ + Ensures consistency among static numeric value use regardless of the format,
+ whether you're invoking members or commands that look like numeric values
+ followed by member invocations.  
+ + Prefers simplicity and elegance over unnecessary syntax complexity.
+
+Cons:
+ + Would break commands whose name evaluates as a static integer value followed
+ by a dot-reference of a member
+
+## Alternate Proposals and Considerations
+
+### Warn on command invocations that cannot be invoked without call/dot-source
+
+As an addition to the proposal above, the parser could also identify commands
+that are hidden by static numeric values followed by a dot-reference of a
+member.
+
+Pros:
+ + Improves discoverability and makes it easier for users to invoke commands
+ that otherwise require invocation with a call operator or a dot-source
+ operator (similar to how you are warned when you try to invoke a script
+ without an absolute or relative path).
+
+Cons:
+ + Requires more parsing that may be unnecessary (how common is it for users to
+ invoke commands whose name would be parsed as a numeric value or as a numeric
+ value followed by a dot-reference of a member?)
+
+### Move the consistency needle the other way
+
+As an alternative of the proposal above, the consistency needle could be moved
+the other way, requiring all static numeric values to be wrapped in brackets in
+order to dot-reference members on them.
+
+Pros:
+ + Keeps things consistent, but at a high cost.
+
+Cons:
+ + Risks breaking much more code.
+ + Adds syntax complexity that shouldn't be necessary.
+
+ ## Additional Details
+
+ As a learning exercise, I decided to figure out how to fix this in the
+ PowerShell Core project over the weekend. If you'd like to try the fix out,
+ or if you would like to see the changes required for this fix, visit
+ https://github.com/KirkMunro/PowerShell/commit/842575e49b8b5f5336881bdc219dceae9d90fbee
