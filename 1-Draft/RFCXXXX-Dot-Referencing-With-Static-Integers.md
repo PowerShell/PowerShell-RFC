@@ -1,5 +1,5 @@
 ---
-RFC: 0011
+RFC: XXXX
 Author: Kirk Munro
 Status: Draft
 Version: 0.1
