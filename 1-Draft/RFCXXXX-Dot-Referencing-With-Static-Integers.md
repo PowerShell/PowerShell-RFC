@@ -2,6 +2,7 @@
 RFC: XXXX
 Author: Kirk Munro
 Status: Draft
+SupercededBy: N/A
 Version: 0.1
 Area: Parsing Static Numbers
 Comments Due: November 4, 2016
@@ -129,12 +130,11 @@ This RFC is about correcting these inconsistencies.
 
 ## Motivation
 
-As a PowerShell user, I value consistency and discoverability very highly, as
-they allow me to apply knowledge I have learned about PowerShell throughout My
-work with the language and make intelligent decisions that are based on My
-knowledge of the language with a high level of confidence. I also value the
-simplicity and elegance that can be achieved with code that doesn't require a
-lot of unnecessary syntax in order to make it work properly.
+As a PowerShell user, I can invoke members on every static numeric value the
+same way, with simplicity and elegance and without having to consider the type
+of numeric value, so that my user experience remains consistent and reliable by
+making sure that members on static numeric values are easily discoverable and
+accessible.
 
 ## Specification
 
@@ -262,4 +262,4 @@ in a repeatable, consistent manner.
 Also, as a learning exercise, I decided to figure out how to fix this in the
 PowerShell Core project over the weekend. If you'd like to try the fix out,
 or if you would like to see the changes required for this fix, visit
-https://github.com/KirkMunro/PowerShell/commit/842575e49b8b5f5336881bdc219dceae9d90fbee
+https://github.com/PowerShell/PowerShell/compare/master...KirkMunro:parsing-static-integers
