@@ -219,9 +219,47 @@ Cons:
  + Risks breaking much more code.
  + Adds syntax complexity that shouldn't be necessary.
 
- ## Additional Details
+### Provide a way to define units for numeric values
 
- As a learning exercise, I decided to figure out how to fix this in the
- PowerShell Core project over the weekend. If you'd like to try the fix out,
- or if you would like to see the changes required for this fix, visit
- https://github.com/KirkMunro/PowerShell/commit/842575e49b8b5f5336881bdc219dceae9d90fbee
+This isn't really an alternative, because the proposed changes are required for
+proper method invocation on a static integer value -- it's more of an extension
+of the idea. It may be interesting to specifically allow the definition of
+units that would be automatically supported on static numeric values that do
+not already have a unit added to them, where unit names (which are simply a
+series of characters such as KB, MB, days, years, weeks, etc) would be
+associated with a multiplier/converter script that would automatically resolve
+the numeric value with the unit in the appropriate type (based on the script).
+
+Pros:
+ + Eliminates the magic in KB, MB, GB, TB, and PB units and provides a unit
+ extension point in PowerShell.
+
+Cons:
+ + Since this is an extension of the main idea, it would probably be best to
+ consider it in a completely separate RFC.
+  
+## Additional Details
+
+If this RFC gets accepted, as an added benefit to the PowerShell language it
+would be possible to implement units on any numeric constant as a property of
+the appropriate numeric type. Since PowerShell v1, there has been support for
+units of KB, MB, GB, TB, and later PB was added as well. The way this support
+is implemented has always been parser magic, meaning that the parser has extra
+internal logic hardcoded to apply these units to static numeric values that it
+encounters. These are not the only units that are desirable in the PowerShell
+scripting language. This change would allow for ETS extensions to define units
+for numeric types that are then accessible as properties (invoked using a dot-
+reference operator). For example, time units to define time spans (seconds,
+minutes, hours, days, weeks, months, years). You can see these units defined in
+my TypePx module. The existing limitation of having to wrap integers in
+brackets hurts the end user experience when applying these units in a script.
+Fixing this inconsistency would allow for easier invocation of these units, and
+would encourage such units to be invoked as members (which you can do with KB,
+MB, GB, TB, and PB today -- e.g. 2.MB). This would be a better way to implement
+units in PowerShell, with less magic and more applied logic that can be used
+in a repeatable, consistent manner. 
+
+Also, as a learning exercise, I decided to figure out how to fix this in the
+PowerShell Core project over the weekend. If you'd like to try the fix out,
+or if you would like to see the changes required for this fix, visit
+https://github.com/KirkMunro/PowerShell/commit/842575e49b8b5f5336881bdc219dceae9d90fbee
