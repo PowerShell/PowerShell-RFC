@@ -1,5 +1,5 @@
 ---
-RFC: XXXX
+RFC: 0011
 Author: Kirk Munro
 Status: Draft
 SupercededBy: N/A
