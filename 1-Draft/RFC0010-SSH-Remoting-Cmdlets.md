@@ -1,9 +1,10 @@
 ---
-RFC: 0009
+RFC: 10
 Author: Paul Higinbotham
 Status: Draft
-Version 0.1
+Version: 0.1
 Area: Remoting
+Comments Due: October 28, 2016
 ---
 
 # SSH Remoting Cmdlets
