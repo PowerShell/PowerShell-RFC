@@ -6,7 +6,9 @@ SupercededBy: N/A
 Version: 0.1
 Area: Parsing Literal Numbers
 Comments Due: November 4, 2016
+Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/38
 ---
+
 
 # Parsing literal Numbers
 
