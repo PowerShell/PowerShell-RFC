@@ -3,7 +3,7 @@ RFC: 0000
 Author: Steve Lee
 Status: Draft
 Area: Process
-Version: 1.2
+Version: 1.3
 Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/5
 ---
 
@@ -23,6 +23,7 @@ All members of the community are allowed to author new RFCs and can provide feed
 ## RFC Naming Convention
 
 RFC documents shall follow the naming convention of "RFC####-Title.md" where #### is the RFC number and Title is the title of the document.
+Authors of RFCs do not assign an RFC number.  The Committee will assign an RFC number and update the title accordingly.
 
 ## RFC Template
 
@@ -30,11 +31,13 @@ RFC documents shall follow the following template:
 
 ```markdown
 ---
-RFC: <four digit unique incrementing number>
+RFC: <four digit unique incrementing number - assigned by Committee>
 Author: <First Last>
-Status: <Draft | Experimental | Accepted | Rejected | Final>
+Status: <Draft | Experimental | Accepted | Rejected | Withdrawn | Final>
+SupercededBy: <link to another RFC>
 Version: <Major>.<Minor>
 Area: <Area within the PowerShell language>
+Comments Due: <Date for submitting comments to current draft>
 ---
 
 # Title
@@ -60,7 +63,9 @@ RFCs go through applicable stages:
 * Draft
 
 This is the initial draft of a RFC posted for comments and considered a work-in-progress.
+An issue is created for this RFC and used for collection and response to comments.
 Typically, two months is allowed for comments.
+When the author is ready to submit to the committee for voting, they submit a Pull Request and indicate they are ready for voting.
 
 * Draft-Accepted
 
@@ -80,6 +85,10 @@ Engineering team will work towards final implementation in code to match the RFC
 
 Based on community feedback, this RFC was decided to not proceed any further.
 
+* Withdrawn
+
+Author has decided not to pursue this RFC any further
+
 * Final
 
 Design and implementation is considered complete.
@@ -90,3 +99,5 @@ v1.1 - 5-20-2016 - Updated to enable RFCs for design changes that don't require 
 Added Draft-Accepted state and Version header property.
 
 v1.2 - 8-18-2016 - Open submitting RFCs to the community and update formatting.
+
+v1.3 - 9-26-2016 - Added Withdrawn stage.  Comments Due field to template.  Updated guidance on RFC numbering.

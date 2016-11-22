@@ -1,7 +1,7 @@
 ---
 RFC: 0001
 Author: Steve Lee
-Status: Draft
+Status: Withdrawn
 Area: Parameters
 Comments Due: 1/31/2016
 ---
