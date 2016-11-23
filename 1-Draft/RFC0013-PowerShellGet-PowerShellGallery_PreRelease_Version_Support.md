@@ -1,5 +1,5 @@
 --
-RFC: XXXX
+RFC: 0013
 Author: Keith Bankston, Manikyam Bavanda
 Status: Draft 
 Version: 0.2.0
