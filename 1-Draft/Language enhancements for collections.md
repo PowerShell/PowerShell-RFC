@@ -3,7 +3,7 @@ RFC:
 Author: Aditya Patwardhan
 Status: Draft
 SupercededBy: 
-Version: 0.1
+Version: 0.2
 Area: LanguageAndParser
 Comments Due: 02/01/2017
 ---
@@ -37,14 +37,15 @@ Stack | 71051 | <https://github.com/search?l=PowerShell&q=%22New-Object+System.C
 
 This RFC proposes adding type accelerators to support types from Sytem.Collections namespace. Looking at the usage on GitHUb, ArrayList, Queue and Stack are proposed to be added.
 
-The usage of the proposed accelerators will be as follows;
+The definitions of the proposed accelerators are:
 
-```PowerShell
-$list = [list] @()
-$queue = [queue] @()
-$stack = [stack] @()
-```
-Alternatively,
+| Accelerator | Type Name
+--- | ---
+[list] | System.Collections.ArrayList
+[queue] | System.Collections.Queue
+[stack] | System.Collections.Stack
+
+The usage of the proposed accelerators will be as follows;
 
 ```PowerShell
 $list = [list]::new()
@@ -52,7 +53,7 @@ $queue = [queue]::new()
 $stack = [stack]::new()
 ```
 
-As the type accelerators are used before the array operator the collection can be initialized using the supplied values.
+As the type accelerators can be used before the array operator the collection can be initialized using the supplied values.
 
 ```PowerShell
 $list = [list] @(1,2,3)
