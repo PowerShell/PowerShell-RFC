@@ -46,3 +46,26 @@ It is recommended that the command-line parser parses all options along the call
 ## Alternate Proposals and Considerations
 
 This proposal is essentially ‘polish’ on the current system which, honestly speaking, contains 90% of what “Architecture Design Facilitating a Command-line Interface” suggests for the process-interface. Most programmers will find the current system to be ‘good enough’ and therefore will provide little impetus towards changing the system as most of the benefits of the change will be enjoyed by RFC-0005 and its increased throughput-efficiency.
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Reject 
+
+Joey Aiello: Reject
+
+Bruce Payette: Reject
+
+Steve Lee: Reject
+
+Hemant Mahawar: Reject
+
+### Majority Decision
+
+Commmittee agrees that this RFC does not provide sufficient details to move forward with an implementation.  PowerShell already supports IPC within PSRP (PowerShell Remoting Protocol).
+
+### Minority Decision
+
+N/A

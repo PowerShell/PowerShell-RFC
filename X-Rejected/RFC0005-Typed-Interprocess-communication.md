@@ -97,3 +97,25 @@ Example 1:
           (Tax_ID in Social_Security_Number) or
           (Tax_ID in EIN);
 
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Reject 
+
+Joey Aiello: Reject
+
+Bruce Payette: Reject
+
+Steve Lee: Reject
+
+Hemant Mahawar: Reject
+
+### Majority Decision
+
+Commmittee agrees that this RFC does not provide sufficient details to move forward with an implementation.  PowerShell already supports IPC within PSRP (PowerShell Remoting Protocol).
+
+### Minority Decision
+
+N/A
