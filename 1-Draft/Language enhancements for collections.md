@@ -3,7 +3,7 @@ RFC:
 Author: Aditya Patwardhan
 Status: Draft
 SupercededBy: 
-Version: 0.2
+Version: 1.0
 Area: LanguageAndParser
 Comments Due: 02/01/2017
 ---
@@ -26,11 +26,11 @@ Performing a search on GitHub for usage of collections we know which collection 
 
 | ClassName | Usage on GitHub | Search Uri
 --- |---:| ---
-ArrayList | 2352 | <https://github.com/search?l=PowerShell&q=%22New-Object+System.Collections.ArrayList%22+language%3APowerShell&ref=searchresults&type=Code&utf8=%E2%9C%93> 
-BitArray | 41 | <https://github.com/search?l=PowerShell&q=%22New-Object+System.Collections.BitArray%22+language%3APowerShell&ref=searchresults&type=Code&utf8=%E2%9C%93>
-Queue | 1260 | <https://github.com/search?l=PowerShell&q=%22New-Object+System.Collections.Queue%22+language%3APowerShell&ref=searchresults&type=Code&utf8=%E2%9C%93>
-SortedList | 52 | <https://github.com/search?l=PowerShell&q=%22New-Object+System.Collections.SortedList%22+language%3APowerShell&ref=searchresults&type=Code&utf8=%E2%9C%93>
-Stack | 71051 | <https://github.com/search?l=PowerShell&q=%22New-Object+System.Collections.stack%22+language%3APowerShell&ref=searchresults&type=Code&utf8=%E2%9C%93>
+ArrayList | 2352 | [ArrayList Usage](https://github.com/search?l=PowerShell&q=%22New-Object+System.Collections.ArrayList%22+language%3APowerShell&ref=searchresults&type=Code&utf8=%E2%9C%93)
+BitArray | 41 | [BitArray Usage](https://github.com/search?l=PowerShell&q=%22New-Object+System.Collections.BitArray%22+language%3APowerShell&ref=searchresults&type=Code&utf8=%E2%9C%93)
+Queue | 1260 | [Queue Usage](https://github.com/search?l=PowerShell&q=%22New-Object+System.Collections.Queue%22+language%3APowerShell&ref=searchresults&type=Code&utf8=%E2%9C%93)
+SortedList | 52 | [SortedList Usage](https://github.com/search?l=PowerShell&q=%22New-Object+System.Collections.SortedList%22+language%3APowerShell&ref=searchresults&type=Code&utf8=%E2%9C%93)
+Stack | 71051 | [Stack Usage](https://github.com/search?l=PowerShell&q=%22New-Object+System.Collections.stack%22+language%3APowerShell&ref=searchresults&type=Code&utf8=%E2%9C%93)
 
 
 ## Specification
