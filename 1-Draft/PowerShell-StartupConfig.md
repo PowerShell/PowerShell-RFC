@@ -11,14 +11,13 @@ Comments Due: <Date for submitting comments to current draft>
 
 Full PowerShell uses the registry to store a configuration data which controls many different behaviors when PowerShell starts.
 A number of different locations in the registry are used to store config which makes it difficult to manage and retrieve configuration.
-This is obviously a problem for non-Windows systems as they have no registry, but still have a requirement for system wide configuration.
-There is still a need for startup configuration to be read:
-
+This is obviously a problem for non-Windows systems as they have no registry, but still require system wide configuration.
 
 ## Motivation
 
 As a tester of PowerShell Core, I often need to have configuration set _before_ the PowerShell engine is running.
 As an admin, I would like to be able to control the execution policy of the shell as it starts.
+
 The registry exists only on Windows, non-Windows platforms still need a mechanism for creating settings
 
 ## Specification
@@ -28,12 +27,13 @@ This file would be read-only, e.g., current tools which currently write to these
 If the file $PSHOME/PowerShell.Config.psd1 is found, the configuration therein will be read and applied to configurable elements within the PowerShell engine.
 
 Initially, the .PSD1 would allow for only specific first level keys:
-    InternalTestHooks
-        This allows test configuration to be set before the PowerShell engine has started
-    WSMAN
-        This allows for configuration of WSMAN remoting
-    PowerShell
-        This allows for configuration of ExecutionPolicy, ConsolePrompting, DisablePromptForUpdateHelp
+
+    * InternalTestHooks
+        * This allows test configuration to be set before the PowerShell engine has started
+    * WSMAN
+        * This allows for configuration of WSMAN remoting
+    * PowerShell
+        * This allows for configuration of ExecutionPolicy, ConsolePrompting, DisablePromptForUpdateHelp
 
 The configuration file can be provided based on the platform.
 
@@ -112,5 +112,5 @@ The current proposal provides for those settings to be unalterable by a user whi
 ### Datafile Formats
 The format for the datafile could take many forms; XML, json, Linux Config, or .ini.
 I chose PowerShell Data format assuming that anyone that is configuring PowerShell is familiar with PowerShell constructs, and code is available to convert a PSD1 file to an object before the engine is started.
-The location of the config file is somewhat forced due to PowerShell's side-by-side requirements, so a global location (.e.g. `/etc/`) would greatly complicate the configuration file to cover multiple versions.
+The config file location is somewhat forced due to PowerShell's side-by-side requirements, so a global location (.e.g. `/etc/`) would greatly complicate the configuration file to cover multiple versions.
 
