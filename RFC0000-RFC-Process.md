@@ -1,5 +1,5 @@
 ---
-RFC: 0000
+RFC: RFC0000
 Author: Steve Lee
 Status: Draft
 Area: Process
@@ -31,7 +31,7 @@ RFC documents shall follow the following template:
 
 ```markdown
 ---
-RFC: <four digit unique incrementing number - assigned by Committee>
+RFC: RFC<four digit unique incrementing number - assigned by Committee>
 Author: <First Last>
 Status: <Draft | Experimental | Accepted | Rejected | Withdrawn | Final>
 SupercededBy: <link to another RFC>

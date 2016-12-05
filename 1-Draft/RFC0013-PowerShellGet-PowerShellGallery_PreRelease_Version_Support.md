@@ -1,14 +1,9 @@
---
-RFC: 0013
-
+---
+RFC: RFC0013
 Author: Keith Bankston, Manikyam Bavanda
-
 Status: Draft 
-
 Version: 0.2.0
-
 Area: PowerShellGet, PowerShell Gallery
-
 Comments Due: 12/23/2016
 ---
 

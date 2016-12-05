@@ -1,8 +1,8 @@
---
-RFC: 0012
+---
+RFC: RFC0012
 Author: Paul Higinbotham
 Status: Draft
-Version 0.1
+Version: 1.0
 Area: Remoting
 ---
 
