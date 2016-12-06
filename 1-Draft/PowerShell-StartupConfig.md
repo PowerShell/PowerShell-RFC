@@ -4,36 +4,44 @@ Author: James Truher
 Status: Draft
 Version: 0.1
 Area: Startup, Initial Configuration
-Comments Due: <Date for submitting comments to current draft>
+Comments Due: 1/1/2017
 ---
 
 # Startup Configuration Settings for PowerShell Core
 
-Full PowerShell uses the registry to store a configuration data which controls many different behaviors when PowerShell starts.
+Full PowerShell uses the registry to store configuration data which controls many different behaviors when PowerShell starts.
 A number of different locations in the registry are used to store config which makes it difficult to manage and retrieve configuration.
-This is obviously a problem for non-Windows systems as they have no registry, but still require system wide configuration.
+This is obviously a problem for non-Windows systems which require system wide configuration, but the registry is not present.
 
 ## Motivation
 
-As a tester of PowerShell Core, I often need to have configuration set _before_ the PowerShell engine is running.
-As an admin, I would like to be able to control the execution policy of the shell as it starts.
+* As a user, I would like to be sure that I do not have to set additional configuration (such as execution policy) when my shell starts.
+* As an admin, I would like to be able to control the execution policy and other settings of the shell as it starts.
+* As a tester, I often need to have configuration set _before_ the PowerShell engine is running to enable certain test behaviors.
 
-The registry exists only on Windows, non-Windows platforms still need a mechanism for creating settings
+The registry exists only on Windows, non-Windows platforms still need a mechanism for applying system configuration.
+
+Additionally, since PowerShell Core may have multiple installations on a single system, configuration must be specific to the version installed.
 
 ## Specification
 
-The file PowerShell.Config.psd1 shall contain the configuration to be used as startup, as a PowerShell data file.
+The file PowerShell.Config.psd1 shall contain the configuration to be used at startup, the format of which is a PowerShell data file.
 This file would be read-only, e.g., current tools which currently write to these locations in the registry would return an error if used.
+Also, changes would be read only at startup time, so changes made to the file would not affect any running sessions.
 If the file $PSHOME/PowerShell.Config.psd1 is found, the configuration therein will be read and applied to configurable elements within the PowerShell engine.
 
-Initially, the .PSD1 would allow for only specific first level keys:
+Additionally, a PowerShell.Config.psd1 file may be placed in the users $HOME directory.
+If a PowerShell.Config.psd1 file is found in the users $HOME directory, all configuration will be applied from that file in addition to that found in the file in $PSHOME.
+The precedence of the config files if found in both $HOME and $PSHOME shall be that the file $PSHOME/PowerShell.Config.psd1 will override any settings in $HOME/PowerShell.Config.psd1.
 
-    * InternalTestHooks
-        * This allows test configuration to be set before the PowerShell engine has started
-    * WSMAN
-        * This allows for configuration of WSMAN remoting
-    * PowerShell
-        * This allows for configuration of ExecutionPolicy, ConsolePrompting, DisablePromptForUpdateHelp
+Initially, the file would allow for only specific first level keys:
+
+* InternalTestHooks
+    * This allows test configuration to be set before the PowerShell engine has started
+* WSMAN
+    * This allows for configuration of WSMAN remoting
+* PowerShell
+    * This allows for configuration of ExecutionPolicy, ConsolePrompting, DisablePromptForUpdateHelp
 
 The configuration file can be provided based on the platform.
 
@@ -41,7 +49,14 @@ Keys which are not supported would generate a _warning_ and be ignored.
 
 Support for additional keys can be added when needed.
 
-### The configuration file
+The configuration file in $PSHOME would be applicable only to the PowerShell executable found there.   
+The configuration file in $HOME would be applicable to _all_ versions of PowerShell Core.
+
+### Additional Possibilities
+* A global PowerShell.Config.psd1 file could be placed in a common location (such as /etc or %ALLUSERSPROFILE%) which could be applicable to all PowerShell sessions, but that is not in scope for this proposal.
+* Tools to ease the creation/alteration/removal of settings could be created at a future date.
+
+### Sample configuration file
 ```
 @{
     InternalTestHooks = @{
