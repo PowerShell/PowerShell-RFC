@@ -36,6 +36,8 @@ The precedence of the config files if found in both $HOME and $PSHOME shall be t
 
 Initially, the file would allow for only specific first level keys:
 
+* Version
+    * The minimum version to which the configuration applies, if the version is less than specified, the configuration is ignored
 * InternalTestHooks
     * This allows test configuration to be set before the PowerShell engine has started
 * WSMAN
@@ -57,8 +59,9 @@ The configuration file in $HOME would be applicable to _all_ versions of PowerSh
 * Tools to ease the creation/alteration/removal of settings could be created at a future date.
 
 ### Sample configuration file
-```
+```powershell
 @{
+    Version = "6.0.0-alpha"
     InternalTestHooks = @{
         LogPipelineCommandToFile = $true
         PipelineLogFile = "C:/tmp/command.log"
@@ -71,8 +74,6 @@ The configuration file in $HOME would be applicable to _all_ versions of PowerSh
             "ScriptedDiagnostics"  = @{
                 ExecutionPolicy = "AllSigned"
             }
-
-        Config2 = "policy2"
         }
     WSMANConfig = @{
         PlugIn = @{ 
@@ -117,6 +118,65 @@ The configuration file in $HOME would be applicable to _all_ versions of PowerSh
     }
 }
 ```
+
+### Precedence
+
+If both $PSHOME configuration file defines PowerShell as follows:
+```powershell
+    PowerShell = @{
+        ShellId = @{ 
+            "Microsoft.PowerShell" = @{
+                ExecutionPolicy = "Restricted"
+                }
+            "ScriptedDiagnostics"  = @{
+                ExecutionPolicy = "AllSigned"
+            }
+        }
+```
+But $HOME configuration file defines it as:
+```powershell
+    PowerShell = @{
+        ShellId = @{ 
+            "Microsoft.PowerShell" = @{
+                ExecutionPolicy = "Unrestricted"
+                }
+            "ScriptedDiagnostics"  = @{
+                ExecutionPolicy = "Unrestricted"
+            }
+        }
+```
+The the resultant configuration will be as defined by the file in $PSHOME.
+
+However, if the configuration does not overlap then the settings will not be overridden:
+
+```powershell
+$PSHOME
+    PowerShell = @{
+        ShellId = @{ 
+            "Microsoft.PowerShell" = @{
+                ExecutionPolicy = "Restricted"
+                }
+        }
+
+$HOME
+    PowerShell = @{
+            "ScriptedDiagnostics"  = @{
+                ExecutionPolicy = "Unrestricted"
+            }
+        }
+```
+The resultant configuration would be:
+```powershell
+    PowerShell = @{
+        ShellId = @{ 
+            "Microsoft.PowerShell" = @{
+                ExecutionPolicy = "Restricted"
+            "ScriptedDiagnostics"  = @{
+                ExecutionPolicy = "Unrestricted"
+            }
+        }
+```
+
 
 ## Alternate Proposals and Considerations
 
