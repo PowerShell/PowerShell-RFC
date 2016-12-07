@@ -1,11 +1,12 @@
 ---
-RFC: xxxx
+RFC: RFC0016
 Author: Steve Lee
 Status: Draft
 SupercededBy: n/a
 Version: 0.1
 Area: Host
 Comments Due: 1/6/2016
+Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/#
 ---
 
 # PowerShell Census Telemetry
