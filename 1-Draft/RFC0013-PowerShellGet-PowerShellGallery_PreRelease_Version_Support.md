@@ -2,7 +2,7 @@
 RFC: RFC0013
 Author: Keith Bankston, Manikyam Bavanda
 Status: Draft 
-Version: 0.2.0
+Version: 0.3.0
 Area: PowerShellGet, PowerShell Gallery
 Comments Due: 12/23/2016
 ---
@@ -54,7 +54,9 @@ Modules to be published in the PowerShell Gallery MAY specify that it is a PreRe
 	}
 
 The PreRelease string in PSData MUST follow the [SemVer 1.0.0](http://semver.org/spec/v1.0.0.html) definition, and contain characters 0-9a-zA-Z only, with the exception that a hyphen ("-") MAY be added as the first character of the string. 
-Module authors MAY, and are encouraged to, use the strings "alpha", "beta", and "rc" to indicate less stable (alpha) to most stable (rc) pre-release versions. 
+Multiple prerelease versions of an item will be sorted in lexicographical order using the PreRelease string. 
+Module authors MAY, and are encouraged to, use the strings "alpha001", "beta001", and "rc001" to indicate less stable (alpha) to most stable (rc) pre-release versions, and to allow them to publish multiple iterations of a pre-release tagged with alpha, beta, or rc. 
+
 An example of a module manifest declaration that includes this option would be similar to:
 
 	#
@@ -69,7 +71,7 @@ An example of a module manifest declaration that includes this option would be s
 	...
 	PrivateData = @{
 	    PSData = @{
-	       PreRelease = '-alpha'
+	       PreRelease = '-alpha001'
 	    }
 	}
 
@@ -79,7 +81,7 @@ An example is shown below:
 
 	<#PSScriptInfo
 	
-	.VERSION 1.1.0-alpha
+	.VERSION 1.1.0-alpha003
 	
 	.GUID ...
 
@@ -106,18 +108,43 @@ The PowerShell Gallery UI will clearly identify pre-release items on the item pa
 _This item is identified as a pre-release by the module author_
  
 When displaying an item that specifies a PreRelease string, the PowerShell Gallery will include the string in the version number shown, as in:
-___include version history___
+
+__ContosoServer__ _3.02.0-alpha001_
+
+The PowerShellGallery displays previous versions of a module in sorted order, and will include pre-release versions in the list.
+The PreRelease string will be included in the sort criteria as a part of the version string, as in the following:
+
+Version History
+
+| Version Title | Downloads | Last Updated |
+| ------------- | --------- | ------------ |
+| ContosoServer 3.20.0-alpha001       _this version_ | 15 | Wednesday, November 30 2016 |
+| ContosoServer 3.19.32       _stable version_ | 327 | Wednesday, November 02 2016 |
+| ContosoServer 3.19.31       _stable version_ | 150 | SomeDay, October 13 2016 |
+| ContosoServer 3.10.-rc002       _pre-release version_ | 15 | SomeDay, SomeMonth ## #### |
+| ContosoServer 3.10.-rc001       _pre-release version_ | 15 | SomeDay, SomeMonth ## #### |
+| ContosoServer 3.10.-beta001       _pre-release version_ | 15 | SomeDay, SomeMonth ## #### |
+| ContosoServer 3.10.-alpha00       _pre-release version_ | 15 | SomeDay, SomeMonth ## #### |
+
 
 By default, the PowerShell Gallery will __exclude__ any PreRelease item in search results returned by the REST API, which is used by the PowerShellGet cmdlets. 
 This MAY be over-ridden by specifying a new AllowPreRelease option, at which time PreRelease items will be included in the results. 
 This behavior will also apply dependencies that are declared between items. 
 The list of items returned as dependencies for Find-, Install-, Save-, Update- cmdlets will exclude PreRelease items unless the AllowPreRelease is specified.
 
+When AllowPreRelease is specified in a REST API call, the PowerShell Gallery will include the pre-release string in sorting to identify which item in the gallery has the biggest version. 
+Using the example list above, the most recent version that would be returned 
+
+* If AllowPrelrelease is specified, would be ContosoServer 3.20.0-alpha001
+* If AllowPrelrelease is __not__ specified, would be ContosoServer 3.19.32
+    
 
 __Details for PowerShellGet Impact__
 
 Users who wish to see items identified by the author as PreRelease MUST specify -AllowPreRelease with the PowerShellGet Find-, Install-, Save-, and Update- cmdlets in order for the Gallery to return PreRelease items.
-Users with older versions of the cmdlets will not be able to see PreRelease items, as the -AllowPreRelease flag is not available. 
+Users with older versions of the cmdlets will not be able to see PreRelease items, as the -AllowPreRelease flag is not available.
+
+Using -RequiredVersion with a pre-release string will return the standard "No match was found..." message unless -AllowPreRelease is specified, even if the version identified by the user is present.
 
 An example using Find-Module, based on the gallery having ContosoServer versions 0.1.0, 1.0.0 and 1.1.0-alpha would look like the following:
 
@@ -134,6 +161,16 @@ An example using Find-Module, based on the gallery having ContosoServer versions
 	1.1.0-Alpha    ContosoServer           PSGallery            ContosoServer module
 	
 	
+	> Find-Module -Name ContosoServer -RequiredVersion '1.1.0-Alpha'
+	PackageManagement\Find-Package : No match was found for the specified search criteria and module name 'ContosoServer'. Try
+	Get-PSRepository to see all available registered module repositories.
+	At C:\Program Files (x86)\WindowsPowerShell\Modules\PowerShellGet\1.0.0.1\PSModule.psm1:1249 char:3
+	+         PackageManagement\Find-Package @PSBoundParameters | Microsoft ...
+	+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Microsoft.Power...ets.FindPackage:FindPackage) [Find-Package], Exception
+	+ FullyQualifiedErrorId : NoMatchFoundForCriteria,Microsoft.PowerShell.PackageManagement.Cmdlets.FindPackage
+
+
 	> Find-Module –Name ContosoServer -AllVersions
 	Version        Name                    Repository           Description
 	-------        ----                    ----------           -----------
@@ -150,7 +187,20 @@ An example using Find-Module, based on the gallery having ContosoServer versions
 The Find-Module metadata will include a PreRelease property that can be used as a filter.
 This will allow someone to, for example, enumerate all modules in the PowerShell Gallery by doing something like:
 
-	> Find-Module | Select-Object -Property PreRelease 
+	> Find-Module -AllowPrelrelease| Select-Object -Property PreRelease 
+
+On installation of a module, the pre-release string will not be included in the version portion of the folder structure. 
+As an example, installing the modules listed in the example immediately above would result in a folder structure like the following:
+
+	C:\Program Files\WindowsPowerShell\Modules\ContosoServer\1.1.0
+	C:\Program Files\WindowsPowerShell\Modules\ContosoServer\1.0.0
+	C:\Program Files\WindowsPowerShell\Modules\ContosoServer\0.1.0
+
+Note that this means it is not possible for multiple pre-release modules to be installed side-by-side, regardless of the PreRelease string identified.
+If a user attempts to install version 1.1.0-beta001 when they have version 1.1.0-alpha009, the installation will be equivalent to trying to do an update-module and fail because the versions are considered to be the same.
+Users must add a -Force to accomplish this example, so the command would look like:
+
+	Install-Module ContosoServer -AllowPrelrelease -Force
 
 
 Output from Get-InstalledModule MAY include the PreRelease property as well, if specified.
@@ -181,6 +231,16 @@ If we supported these new elements of SemVer 2.0.0, items could be posted to the
 This is consistent with SemVer, which treats versions starting with 0 as initial development, and describes PreReleases separately.  
 	* _An alternate design would be to treat versions 0.(anything) as PreRelease regardless of whether or not there is a PreRelease string defined. 
 The reason this alternate approach was not taken is that it would change the behavior for large numbers of existing modules that have the highest version as 0.(something), and also because SemVer treats initial development separately from PreRelease._
+* Regarding folder structure for module installations
+	* This spec assumes the PreRelease string will not be added to the version number in the folder structure.
+	The primary reason is that this would be incompatible with most existing PowerShell versions.
+	* The impact is that side-by-side installation of multiple pre-release versions is not supported. 
+	This means that installing a newer pre-release version when an older pre-release exists will follow the same rules as any Update-Module or Install-Module command where the user specifies the same version that is already on the local system (which means -Force is required). 
+	The newer version will over-write the previously-installed version in that instance. 
+	In updated versions of the PowerShellGet cmdlets, a verbose message will be displayed to indicate this had occurred.
+
+
+
 
 
 
