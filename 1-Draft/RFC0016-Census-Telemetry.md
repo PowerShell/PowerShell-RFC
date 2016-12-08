@@ -5,7 +5,7 @@ Status: Draft
 SupercededBy: n/a
 Version: 0.1
 Area: Host
-Comments Due: 1/6/2016
+Comments Due: 1/6/2017
 Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/#
 ---
 
