@@ -42,6 +42,7 @@ The authors of this RFC considered the following elements as important to the de
 * Module authors MUST be able to mark any item they can publish to the gallery as a pre-release.
 * Backwards compatibility with PowerShell versions 3, 4, and 5 is a high priority for the PowerShell Gallery and PowerShellGet. 
 * Having a solution support repositories based on Nuget version 2 server is a high priority, as those are frequently used for on-premise deployments.
+* The solution needs to include the impact on the PowerShellGet cmdlets for Find-, Save-, Install-, Update-, and Get-Installed (item type), where item type may be modules, scripts, or other item types supported by PowerShellGet cmdlets.  
 
 __Details for Specifying PreRelease Items__
 
@@ -127,21 +128,9 @@ Version History
 | ContosoServer 3.10.-alpha00       _pre-release version_ | 15 | SomeDay, SomeMonth ## #### |
 
 
-By default, the PowerShell Gallery will __exclude__ any PreRelease item in search results returned by the REST API, which is used by the PowerShellGet cmdlets. 
-This MAY be over-ridden by specifying a new AllowPreRelease option, at which time PreRelease items will be included in the results. 
-This behavior will also apply dependencies that are declared between items. 
-The list of items returned as dependencies for Find-, Install-, Save-, Update- cmdlets will exclude PreRelease items unless the AllowPreRelease is specified.
-
-When AllowPreRelease is specified in a REST API call, the PowerShell Gallery will include the pre-release string in sorting to identify which item in the gallery has the biggest version. 
-Using the example list above, the most recent version that would be returned 
-
-* If AllowPrelrelease is specified, would be ContosoServer 3.20.0-alpha001
-* If AllowPrelrelease is __not__ specified, would be ContosoServer 3.19.32
-    
-
 __Details for PowerShellGet Impact__
 
-Users who wish to see items identified by the author as PreRelease MUST specify -AllowPreRelease with the PowerShellGet Find-, Install-, Save-, and Update- cmdlets in order for the Gallery to return PreRelease items.
+Users of the PowerShellGet cmdlets who wish to see or interact with items identified by the author as PreRelease MUST specify -AllowPreRelease with the PowerShellGet Find-, Install-, Save-, and Update- cmdlets in order for the Gallery to return PreRelease items.
 Users with older versions of the cmdlets will not be able to see PreRelease items, as the -AllowPreRelease flag is not available.
 
 Using -RequiredVersion with a pre-release string will return the standard "No match was found..." message unless -AllowPreRelease is specified, even if the version identified by the user is present.
@@ -184,7 +173,7 @@ An example using Find-Module, based on the gallery having ContosoServer versions
 	1.0.0          ContosoServer           PSGallery            ContosoServer module
 	0.1.0          ContosoServer           PSGallery            ContosoServer module
 
-The Find-Module metadata will include a PreRelease property that can be used as a filter.
+The metadata available to the PowerShellGet cmdlets Find-, Save-, Install-, Update-, and Get-Installed (item type) will include a PreRelease property that can be used as a filter.
 This will allow someone to, for example, enumerate all modules in the PowerShell Gallery by doing something like:
 
 	> Find-Module -AllowPrelrelease| Select-Object -Property PreRelease 
@@ -203,7 +192,7 @@ Users must add a -Force to accomplish this example, so the command would look li
 	Install-Module ContosoServer -AllowPrelrelease -Force
 
 
-Output from Get-InstalledModule MAY include the PreRelease property as well, if specified.
+Output from Get-InstalledModule MUST include the PreRelease property as well, if it is specified by the module author.
 This allows administrators to find any installed modules that are identified as PreRelease versions, and take subsequent actions as needed. 
 
 	> Get-InstalledModule -Name ContosoServer | fl Name, Version, PreRelease 
@@ -238,13 +227,9 @@ The reason this alternate approach was not taken is that it would change the beh
 	This means that installing a newer pre-release version when an older pre-release exists will follow the same rules as any Update-Module or Install-Module command where the user specifies the same version that is already on the local system (which means -Force is required). 
 	The newer version will over-write the previously-installed version in that instance. 
 	In updated versions of the PowerShellGet cmdlets, a verbose message will be displayed to indicate this had occurred.
-
-
-
-
-
-
-
-
-
-
+* Filtering out pre-releases happens on client
+	* This RFC was initially written incorrectly stating that the filtering is in the REST layer.
+	That has been corrected in version 0.3.0 of this RFC.
+	* The reason for doing this on the client (in PowerShell Get) stems from the fact that PowerShell Gallery and PowerShellGet are based on Nuget, which provides the filtering for PreRelease items. 
+	Nuget handles this in the client layer, not in the REST API.
+	
