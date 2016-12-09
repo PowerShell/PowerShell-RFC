@@ -133,9 +133,9 @@ __Details for PowerShellGet Impact__
 Users of the PowerShellGet cmdlets who wish to see or interact with items identified by the author as PreRelease MUST specify -AllowPreRelease with the PowerShellGet Find-, Install-, Save-, and Update- cmdlets in order for the Gallery to return PreRelease items.
 Users with older versions of the cmdlets will not be able to see PreRelease items, as the -AllowPreRelease flag is not available.
 
-Using -RequiredVersion with a pre-release string will return the standard "No match was found..." message unless -AllowPreRelease is specified, even if the version identified by the user is present.
+Using any of the version specifiers (-RequiredVersion, -MinimumVersion, -MaximumVersion), with a pre-release string will generate an error informing the user that specifying a PreRelease string without specifying -AllowPreRelease is not allowed. 
 
-An example using Find-Module, based on the gallery having ContosoServer versions 0.1.0, 1.0.0 and 1.1.0-alpha would look like the following:
+An example using Find-Module, based on the gallery having ContosoServer versions 0.1.0, 1.0.0 and 1.1.0-alpha would look _very similar to_ the following:
 
 
 	> Find-Module -Name ContosoServer
@@ -151,13 +151,7 @@ An example using Find-Module, based on the gallery having ContosoServer versions
 	
 	
 	> Find-Module -Name ContosoServer -RequiredVersion '1.1.0-Alpha'
-	PackageManagement\Find-Package : No match was found for the specified search criteria and module name 'ContosoServer'. Try
-	Get-PSRepository to see all available registered module repositories.
-	At C:\Program Files (x86)\WindowsPowerShell\Modules\PowerShellGet\1.0.0.1\PSModule.psm1:1249 char:3
-	+         PackageManagement\Find-Package @PSBoundParameters | Microsoft ...
-	+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ObjectNotFound: (Microsoft.Power...ets.FindPackage:FindPackage) [Find-Package], Exception
-	+ FullyQualifiedErrorId : NoMatchFoundForCriteria,Microsoft.PowerShell.PackageManagement.Cmdlets.FindPackage
+	Error: Specifying a version with a pre-release string, without specyfing -AllowPreRelease, is not allowed.
 
 
 	> Find-Module –Name ContosoServer -AllVersions
@@ -178,7 +172,8 @@ This will allow someone to, for example, enumerate all modules in the PowerShell
 
 	> Find-Module -AllowPrelrelease| Select-Object -Property PreRelease 
 
-On installation of a module, the pre-release string will not be included in the version portion of the folder structure. 
+PowerShell version 5 and above support side-by-side installation of multiple versions of the same module by adding a folder with the version number to the folder hierarchy.  
+The pre-release string will not be included in the version portion of the folder structure when a pre-release module is installed.  
 As an example, installing the modules listed in the example immediately above would result in a folder structure like the following:
 
 	C:\Program Files\WindowsPowerShell\Modules\ContosoServer\1.1.0
@@ -186,11 +181,15 @@ As an example, installing the modules listed in the example immediately above wo
 	C:\Program Files\WindowsPowerShell\Modules\ContosoServer\0.1.0
 
 Note that this means it is not possible for multiple pre-release modules to be installed side-by-side, regardless of the PreRelease string identified.
-If a user attempts to install version 1.1.0-beta001 when they have version 1.1.0-alpha009, the installation will be equivalent to trying to do an update-module and fail because the versions are considered to be the same.
+If a user attempts to __install__ version 1.1.0-beta001 when they have version 1.1.0-alpha009, the installation will be equivalent to trying to do an in-place update and will fail because the versions are considered to be the same.
 Users must add a -Force to accomplish this example, so the command would look like:
 
 	Install-Module ContosoServer -AllowPrelrelease -Force
 
+Update-Module will also support -AllowPreRelease. 
+A user wishing to upgrade to version 1.1.0-beta001 from version 1.1.0-alpha009 can use the following command:
+ 
+	Update-Module -AllowPreRelease
 
 Output from Get-InstalledModule MUST include the PreRelease property as well, if it is specified by the module author.
 This allows administrators to find any installed modules that are identified as PreRelease versions, and take subsequent actions as needed. 
@@ -201,8 +200,9 @@ This allows administrators to find any installed modules that are identified as 
 	Version : 1.1.0
 	PreRelease : -alpha
 
-Users MAY specify a version number that includes a prerelease identifier with -RequiredVersion, -MaxVersion, and -MinVersion.
-Users MUST add -AllowPreRelease to see any pre-release items, even if the version they have supplied looks like a pre-release version. 
+Users MUST add -AllowPreRelease to see any pre-release items, even if a version they have supplied looks like a pre-release version.
+Users MAY specify a version number that includes a prerelease identifier with -RequiredVersion, -MaximumVersion, and -MinimumVersion, but only if they specify -AllowPrelrelease.
+ 
 
 ## Alternate Proposals and Considerations
 
@@ -222,7 +222,7 @@ This is consistent with SemVer, which treats versions starting with 0 as initial
 The reason this alternate approach was not taken is that it would change the behavior for large numbers of existing modules that have the highest version as 0.(something), and also because SemVer treats initial development separately from PreRelease._
 * Regarding folder structure for module installations
 	* This spec assumes the PreRelease string will not be added to the version number in the folder structure.
-	The primary reason is that this would be incompatible with most existing PowerShell versions.
+	The primary reason is that this would be incompatible with PowerShell version 5. 
 	* The impact is that side-by-side installation of multiple pre-release versions is not supported. 
 	This means that installing a newer pre-release version when an older pre-release exists will follow the same rules as any Update-Module or Install-Module command where the user specifies the same version that is already on the local system (which means -Force is required). 
 	The newer version will over-write the previously-installed version in that instance. 
