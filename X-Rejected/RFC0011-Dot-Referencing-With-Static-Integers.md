@@ -1,7 +1,7 @@
 ---
 RFC: 0011
 Author: Kirk Munro
-Status: Draft
+Status: Rejected
 SupercededBy: N/A
 Version: 0.1
 Area: Parsing Literal Numbers
