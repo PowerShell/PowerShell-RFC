@@ -266,3 +266,35 @@ Also, as a learning exercise, I decided to figure out how to fix this in the
 PowerShell Core project over the weekend. If you'd like to try the fix out,
 or if you would like to see the changes required for this fix, visit
 https://github.com/PowerShell/PowerShell/compare/master...KirkMunro:parsing-static-integers
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Reject 
+
+Joey Aiello: Reject
+
+Bruce Payette: Absent
+
+Steve Lee: Reject
+
+Hemant Mahawar: Reject
+
+### Majority Decision
+
+It is not uncommon to have files starting with numbers to maintain a list of a sequence of files to execute/open.
+For example:
+```
+1.Setup.ps1
+2.Demo.ps1
+3.Cleanup.ps1
+```
+
+On Linux, files may not have extensions.
+Implementing this RFC will break this usage and can introduce other unintended effects without introducing significant improvement to the experience (removing need for parenthesis for calling integers as objects).
+
+### Minority Decision
+
+N/A
