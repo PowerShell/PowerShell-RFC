@@ -20,48 +20,46 @@ This is obviously a problem for non-Windows systems which require system wide co
 * As a tester, I often need to have configuration set _before_ the PowerShell engine is running to enable certain test behaviors.
 
 The registry exists only on Windows, non-Windows platforms still need a mechanism for applying system configuration.
-
 Additionally, since PowerShell Core may have multiple installations on a single system, configuration must be specific to the version installed.
 
 ## Specification
 
-The file PowerShell.Config.psd1 shall contain the configuration to be used at startup, the format of which is a PowerShell data file.
-This file would be read-only, e.g., current tools which currently write to these locations in the registry would return an error if used.
-Also, changes would be read only at startup time, so changes made to the file would not affect any running sessions.
+The file $PSHOME/PowerShell.Config.psd1 shall contain the configuration to be used at startup, the format of which is a PowerShell data file.
 If the file $PSHOME/PowerShell.Config.psd1 is found, the configuration therein will be read and applied to configurable elements within the PowerShell engine.
+This file shall be read-only, e.g., current tools which currently write to these locations in the registry will return an error if used.
+Also, changes shall be read only at startup time, changes made to the file will not affect any running sessions.
 
-Additionally, a PowerShell.Config.psd1 file may be placed in the users $HOME directory.
-If a PowerShell.Config.psd1 file is found in the users $HOME directory, all configuration will be applied from that file in addition to that found in the file in $PSHOME.
-The precedence of the config files if found in both $HOME and $PSHOME shall be that the file $PSHOME/PowerShell.Config.psd1 will override any settings in $HOME/PowerShell.Config.psd1.
+Additionally, a PowerShell._version_.Config.psd1 file may be placed in the users $HOME directory.
+If a PowerShell._version_.Config.psd1 file is found in the users $HOME directory corresponding to the version of the PowerShell executable, all configuration will be applied from that file in addition to that found in the file in $PSHOME.
+The precedence of the config files if found in both $HOME and $PSHOME shall be that the file $HOME/PowerShell._version_.Config.psd1 will override any settings in $PSHOME/PowerShell.Config.psd1.
 
-Initially, the file would allow for only specific first level keys:
+Initially, the file shall allow for the following first level keys:
 
-* Version
-    * The minimum version to which the configuration applies, if the version is less than specified, the configuration is ignored
 * InternalTestHooks
     * This allows test configuration to be set before the PowerShell engine has started
-* WSMAN
-    * This allows for configuration of WSMAN remoting
 * PowerShell
-    * This allows for configuration of ExecutionPolicy, ConsolePrompting, DisablePromptForUpdateHelp
+    * This allows for configuration of ExecutionPolicy, ConsolePrompting, DisablePromptForUpdateHelp, PSModulePath
 
-The configuration file can be provided based on the platform.
+Additional keys and subkeys may be added as needed.
+Keys which are not supported shall generate a _warning_ and be ignored.
 
-Keys which are not supported would generate a _warning_ and be ignored. 
+The configuration file in $PSHOME shall be applicable only to the PowerShell executable found therein.
+The configuration file in $HOME (PowerShell._version_.Config.psd) shall be applicable to only to the matching version of PowerShell Core.
+Additionally, the parameter `-ConfigurationFile` shall be present in the PowerShell executable, which takes an array of strings which represent paths to config files.
+When the `-ConfigurationFile` parameter is present, those files only will be read for configuration data.
 
-Support for additional keys can be added when needed.
-
-The configuration file in $PSHOME would be applicable only to the PowerShell executable found there.   
-The configuration file in $HOME would be applicable to _all_ versions of PowerShell Core.
+The config file should have a published schema to aid in file creation.
 
 ### Additional Possibilities
 * A global PowerShell.Config.psd1 file could be placed in a common location (such as /etc or %ALLUSERSPROFILE%) which could be applicable to all PowerShell sessions, but that is not in scope for this proposal.
-* Tools to ease the creation/alteration/removal of settings could be created at a future date.
+* Tools to ease the creation/alteration/removal of settings should be created at a future date.
+
+### Additional Optional Work
+We should have a mechanism for creating default config files, we could easily modify existing code for New-PSSessionConfiguraitonFile to do this, however this is not a requirement.
 
 ### Sample configuration file
 ```powershell
 @{
-    Version = "6.0.0-alpha"
     InternalTestHooks = @{
         LogPipelineCommandToFile = $true
         PipelineLogFile = "C:/tmp/command.log"
@@ -70,50 +68,15 @@ The configuration file in $HOME would be applicable to _all_ versions of PowerSh
         ShellId = @{ 
             "Microsoft.PowerShell" = @{
                 ExecutionPolicy = "Unrestricted"
+                PSModulePath = @{
+                    Windows = "C:/PowerShellInstalls/6.0.0/Modules"
+                    Ubuntu  = "/PowerShellInstalls/6.0.0/Modules"
+                    MacOS   = "/PowerShellInstalls/6.0.0/Modules"
+                    }
                 }
             "ScriptedDiagnostics"  = @{
                 ExecutionPolicy = "AllSigned"
             }
-        }
-    WSMANConfig = @{
-        PlugIn = @{ 
-            "Microsoft.PowerShell.Workflow" = @"
-            <PlugInConfiguration xmlns="http://schemas.microsoft.com/wbem/wsman/1/config/PluginConfiguration" Name="microsoft.powershell.workflow" Filename="%windir%\system32\pwrshplugin.dll" SDKVersion="2" XmlRenderingType="text" UseSharedProcess="true" ProcessIdleTimeoutSec="1209600" RunAsUser="" RunAsPassword="" AutoRestart="false" Enabled="true" >
-            <InitializationParameters>
-            <Param Name="PSVersion" Value="5.1"/>Param Name="AssemblyName" Value="Microsoft.PowerShell.Workflow.ServiceCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL"/>
-            <Param Name="PSSessionConfigurationTypeName" Value="Microsoft.PowerShell.Workflow.PSWorkflowSessionConfiguration"/>
-            <Param Name="SessionConfigurationData" Value="&lt;SessionConfigurationData&gt;
-                &lt;Param Name=&quot;ModulesToImport&quot; Value=&quot;%windir%\system32\windowspowershell\v1.0\Modules\PSWorkflow&quot;/&gt;
-                &lt;Param Name=&quot;PrivateData&quot;&gt;
-                &lt;PrivateData&gt;
-                &lt;Param Name=&quot;enablevalidation&quot; Value=&quot;true&quot; /&gt;
-                &lt;/PrivateData&gt;
-                &lt;/Param&gt;
-                &lt;/SessionConfigurationData&gt;" />
-            </InitializationParameters>
-            <Resources>
-            <Resource ResourceUri="http://schemas.microsoft.com/powershell/microsoft.powershell.workflow" SupportsOptions="true" ExactMatch="true">
-            <Security xmlns="http://schemas.microsoft.com/wbem/wsman/1/config/PluginConfiguration" Uri="http://schemas.microsoft.com/powershell/microsoft.powershell.workflow" ExactMatch="true" Sddl="O:NSG:BAD:P(A;;GA;;;BA)(A;;GA;;;RM)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"/>
-            <Capability Type="Shell"/>
-            </Resource>
-            </Resources>
-            <Quotas MaxMemoryPerShellMB="2147483647" MaxIdleTimeoutms="2147483647" MaxConcurrentUsers="2147483647" IdleTimeoutms="7200000" MaxProcessesPerShell="2147483647" MaxConcurrentCommandsPerShell="2147483647" MaxShells="2147483647" MaxShellsPerUser="2147483647"/>
-            </PlugInConfiguration>
-"@
-        "Microsoft.PowerShell" = @"
-             <PlugInConfiguration xmlns="http://schemas.microsoft.com/wbem/wsman/1/config/PluginConfiguration" Name="microsoft.powershell" Filename="%windir%\system32\pwrshplugin.dll" SDKVersion="2" XmlRenderingType="text" Enabled="true" >
-             <InitializationParameters>
-             <Param Name="PSVersion" Value="5.1"/>
-             </InitializationParameters>
-             <Resources>
-             <Resource ResourceUri="http://schemas.microsoft.com/powershell/microsoft.powershell" SupportsOptions="true" ExactMatch="true">
-             <Security xmlns="http://schemas.microsoft.com/wbem/wsman/1/config/PluginConfiguration" Uri="http://schemas.microsoft.com/powershell/microsoft.powershell" ExactMatch="true" Sddl="O:NSG:BAD:P(A;;GA;;;BA)(A;;GA;;;IU)(A;;GA;;;RM)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"/>
-             <Capability Type="Shell"/>
-             </Resource>
-             </Resources>
-             <Quotas MaxMemoryPerShellMB="2147483647" MaxIdleTimeoutms="2147483647" MaxConcurrentUsers="2147483647" IdleTimeoutms="7200000" MaxProcessesPerShell="2147483647" MaxConcurrentCommandsPerShell="2147483647" MaxShells="2147483647" MaxShellsPerUser="2147483647"/>
-             </PlugInConfiguration>
-"@
         }
     }
 }
@@ -133,7 +96,7 @@ If both $PSHOME configuration file defines PowerShell as follows:
             }
         }
 ```
-But $HOME configuration file defines it as:
+And $HOME configuration file defines it as:
 ```powershell
     PowerShell = @{
         ShellId = @{ 
@@ -145,7 +108,7 @@ But $HOME configuration file defines it as:
             }
         }
 ```
-The the resultant configuration will be as defined by the file in $PSHOME.
+The the resultant configuration will be as defined by the file in $HOME.
 
 However, if the configuration does not overlap then the settings will not be overridden:
 
@@ -178,6 +141,10 @@ The resultant configuration would be:
 ```
 
 
+## Out of Scope
+This specification is applicable only to startup preferences and does not apply to setting Policy.
+Setting Policy behavior, such as found via GroupPolicy, may be addressed in a later specification, if desired.
+
 ## Alternate Proposals and Considerations
 
 ### EnvironmentalVariables used to set configuration
@@ -185,7 +152,8 @@ This has a number of problems, the foremost is that environment variables may be
 The current proposal provides for those settings to be unalterable by a user which does not have permission to alter the file contents.
 
 ### Datafile Formats
-The format for the datafile could take many forms; XML, json, Linux Config, or .ini.
+The format for the datafile could take many forms; XML, json, Linux Config, .yml, or .ini.
 I chose PowerShell Data format assuming that anyone that is configuring PowerShell is familiar with PowerShell constructs, and code is available to convert a PSD1 file to an object before the engine is started.
-The config file location is somewhat forced due to PowerShell's side-by-side requirements, so a global location (.e.g. `/etc/`) would greatly complicate the configuration file to cover multiple versions.
+Also, PSD1 files may conin comments, which may be very helpful in describing the settings.
+The config file location is somewhat forced due to PowerShell's side-by-side requirements, so a global location (.e.g., `/etc/`) would greatly complicate the configuration file to cover multiple versions.
 
