@@ -1,7 +1,7 @@
 ---
 RFC: 10
 Author: Paul Higinbotham
-Status: Draft
+Status: Experimental-Accepted
 Version: 0.1
 Area: Remoting
 Comments Due: October 28, 2016
@@ -166,3 +166,29 @@ Pros:
 Cons:
  + New cmdlets would be very similar to existing WinRM cmdlets and duplicate much of the functionality.
  + Increases the number of remoting cmdlets.
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Accept 
+
+Joey Aiello: Accept
+
+Bruce Payette: Absent
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+### Majority Decision
+
+We covered alternatives in regards to an enum for -Transport and this brought up a need to revisit both authoring and displaying complex parameter sets.
+Decided that the current RFC is sufficient for current implementation needs.
+Should consider a wrapper cmdlet to simplify usage of SSH remoting with PowerShell.
+
+
+### Minority Decision
+
+N/A
