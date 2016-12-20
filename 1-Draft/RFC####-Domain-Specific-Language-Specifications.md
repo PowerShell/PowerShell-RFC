@@ -40,7 +40,8 @@ This RFC proposes a domain-specific language definition syntax
 for PowerShell, with a DSL defined in a file and loaded in with
 the `using module` syntax.
 
-Currently a schema is defined using XML, for example:
+As an example, a complex format definition must currently be
+specified in XML, as below:
 ```xml
 <Configuration>
   <Controls>
@@ -135,5 +136,40 @@ Currently a schema is defined using XML, for example:
   </ViewDefinitions>
 </Configuration>
 ``` 
+
+Using a DSL defintion, we would define a schema for this:
+```powershell
+DSL
+{
+    Keyword Formats -Name NoName -Body ScriptBlock
+    {
+        Keyword ListFormat -Name Required -Body Command
+        {
+            Keywords =
+            {
+                Keyword Property -Name Required -Body Command
+                {
+                    Parameters =
+                    {
+                        ScriptBlock = Parameter { Type = [scriptblock ] }
+                    }
+                }
+            }
+        }
+
+        Keyword TableFormat -Name Required -Body Command
+        {
+        }
+
+        Keyword CustomFormat -Name Required -Body Command
+        {
+        }
+
+        Keyword WideFormat -Name Required -Body Command
+        {
+        }
+    }
+}
+```
 
 ## Alternate Proposals and Considerations
