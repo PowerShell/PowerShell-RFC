@@ -6,29 +6,43 @@ Area: Domain Specific Languages, Object Schemas
 Comments Due:
 ---
 
-# Domain Specific Language Specifications
+# Domain-Specific Language Specifications
 
-Frequently in PowerShell contexts there is a need to define a common
-layout or schema for PowerShell objects. Examples of such needs
-include defining object types, `Format` specifications, creating
-repeatable configurations, and specifying testing harnesses.
+PowerShell supports rich metaprogramming features and runtime reflection,
+but currently lacks a true way to add new keywords to the language. This is
+closely related to the fact that a key
+metaprogramming functionality &mdash; specifying and amending types &mdash;
+is presently only available through the definition of a `.ps1xml` file, in XML format.
+Such files are currently used for applications like:
 
-Such definitions may currently be accomplished with XML-defined
-schemas, frequently in a `.ps1xml` file. Notably, there is native
-support for DSC configuration modules (`.schema.ps1` files), but
-this functionality is not yet generalized.
+  * `Format` data and defintions
+  * Type definitions
+  * Resource configurations
+  * Testing configurations
 
-A PowerShell DSL specification would allow previously XML-bound
-schemas to be written with a PowerShell syntax and to hook in to the
-PowerShell engine to provide semantic checking, syntax highlighting
-and autocompletion. This would allow the enforcement of a notion of
-"typing" across objects, allowing the PowerShell engine to manage
-the complexity of larger schemas and prevent misconfigurations.
+Introducing domain-specific (DSL) specifications to PowerShell would allow
+users to specify their own language keywords and semantics, and obviate the need
+for XML-based configurations.
+
+This would confer the following benefits:
+
+  * Syntax highlighting
+  * Autocompletion
+  * Semantic checking
+  * Better readability
+  * Reproducible, schema-based formats
+  * Informative error messages
+  * Less XML
+  * Specification of parse-time functionality
+
+While not allowing arbitrary changes to the PowerShell language, a DSL mechanism
+would seek to let users define their own language functionality, especially with
+respect to types, with a well-defined and standardized syntax.
 
 ## Motivation
 
-### User Story
-As an IT administrator, I can specify a (print format | xml document |
+As a PowerShell user, I can create a domain-specific language
+to specify a (print format | xml document | object-type
 resource configuration | testing setup) schema
 using a familiar PowerShell syntax, so that I can repeatably
 instantiate that schema and leverage PowerShell's semantic
@@ -40,136 +54,175 @@ This RFC proposes a domain-specific language definition syntax
 for PowerShell, with a DSL defined in a file and loaded in with
 the `using module` syntax.
 
-As an example, a complex format definition must currently be
-specified in XML, as below:
-```xml
-<Configuration>
-  <Controls>
-    <Name>FileSystemTypes-GroupingFormat</Name>
-    <CustomControl>
-      <CustomEntries>
-        <CustomEntry>
-          <CustomItem>
-            <Frame>
-              <LeftIndent>4</LeftIndent>
-              <CustomItem>
-                <ExpressionBinding>
-                  <ScriptBlock>
-                    "Directory: $($_.PSParentPath.Replace('Microsoft.PowerShell.Core\FileSystem::', ''))"
-                  </ScriptBlock>
-                </ExpressionBinding>
-                <NewLine/>
-              </CustomItem>
-            </Frame>
-          </CustomItem>
-        </CustomEntry>
-      </CustomEntries>
-    </CustomControl>
-  </Controls>
+A new DSL is defined with the `DSL` keyword, with keywords within that DSL defined with
+the `Keyword` keyword. Terms not following the `Keyword` keyword are properties. Every DSL
+keyword (including the top-level keyword following `DSL`) can have an arbitrary number of
+keywords and properties, which are scope dependent.
 
-  <ViewDefinitions>
-    <View>
-      <Name>children</Name>
-      <ViewSelectedBy>
-        <SelectionSetName>FileSystemTypes</SelectionSetName>
-      </ViewSelectedBy>
-      <Groupby>
-        <PropertyName>PSParentPath</PropertyName>
-        <CustomControlName>FileSystemTypes-GroupingFormat</CustomControlName>
-      </Groupby>
-      <TableControl>
-        <TableHeaders>
-          <TableColumnHeader>
-            <Label>Mode</Label>
-            <Width>7</Width>
-            <Alignment>left</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>LastWriteTime</Label>
-            <Width>25</Width>
-            <Alignment>right</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>Length</Label>
-            <Width>14</Width>
-            <Alignment>right</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>Name</Label>
-          </TableColumnHeader>
-        </TableHeaders>
-        <TableRowEntries>
-          <TableRowEntry>
-            <Wrap/>
-            <TableColumnItems>
-              <TableColumnItem>
-                <PropertyName>Mode</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <ScriptBlock>
-                  [String]::Format("{0,10} {1,8}", $_.LastWriteTime.ToString("d"), $_.LastWriteTimeToString("t"))
-                </ScriptBlock>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>Length</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <ScriptBlock>
-                  if ($host.UI.SupportsVirtualTerminal)
-                  {
-                      $ext = [System.IO.Path]::GetExtension($_.Name)
-                      if ($ext -eq '.exe')
-                      {
-                          $esc = [char]0x1B
-                          "${esc}[93m$($_.Name)${esc}[0m"
-                          return
-                      }
-                  }
-                  $_.Name
-                </ScriptBlock>
-              </TableColumnItem>
-            </TableColumnItems>
-          </TableRowEntry>
-        </TableRowEntries>
-      </TableControl>
-    </View>
-  </ViewDefinitions>
-</Configuration>
-``` 
+A DSL keyword is parametrized in `Name`, `Body` and `Use`:
+
+| Parameter | Variants                              | Default   | Meaning                        |
+| :-------: | :-----------------------------------: | :-------: | :----------------------------: |
+| `Name`    | `NoName`, `Required`, `Optional`      | `NoName`  | Whether the keyword has a name |
+| `Body`    | `Command`, `ScriptBlock`, `Hashtable` | `Command` | The syntax of the expression following the keyword |
+| `Use`     | `Required`, `Optional`, `RequiredMany`, `OptionalMany` | `Required` | How many times the keyword may occur |
+
+As an example, a part of a typical `types.ps1xml` might look as follows:
+
+```xml
+<Types>
+  <Type>
+    <Name>System.Array</Name>
+    <Members>
+      <AliasProperty>
+        <Name>Count</Name>
+        <ReferencedMemberName>Length</ReferencedMemberName>
+      </AliasProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>System.Xml.XmlNode</Name>
+    <Members>
+      <CodeMethod>
+        <Name>ToString</Name>
+        <CodeReference>
+          <TypeName>Microsoft.PowerShell.ToStringCodeMethods</TypeName>
+          <MethodName>XmlNodeList</MethodName>
+        </CodeReference>
+      </CodeMethod>
+    </Members>
+  </Type>
+  <Type>
+    <Name>System.Management.Automation.PSDriveInfo</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Used</Name>
+        <GetScriptBlock>
+          ## Ensure that this is a FileSystem drive
+          if($this.Provider.ImplementingType -eq
+          [Microsoft.PowerShell.Commands.FileSystemProvider])
+          {
+          $driveRoot = ([System.IO.DirectoryInfo] $this.Root).Name.Replace('\','')
+          $drive = Get-WmiObject Win32_LogicalDisk -Filter "DeviceId='$driveRoot'"
+          $drive.Size - $drive.FreeSpace
+          }
+        </GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+</Types>
+```
 
 Using a DSL defintion, we would define a schema for this:
+
 ```powershell
-DSL
+DSL Types
 {
-    Keyword Formats -Name NoName -Body ScriptBlock
+    Keyword Type -Name Required -Use RequiredMany
     {
-        Keyword ListFormat -Name Required -Body Command
+        Keyword Members
         {
-            Keywords =
+            Keyword AliasProperty -Name Required -Use OptionalMany
             {
-                Keyword Property -Name Required -Body Command
+                ReferencedMemberName -Type [string]
+            }
+
+            Keyword CodeMethod -Name Required -Use Optional
+            {
+                Keyword CodeReference
                 {
-                    Parameters =
-                    {
-                        ScriptBlock = Parameter { Type = [scriptblock ] }
-                    }
+                    TypeName -Type [string]
+                    MethodName -Type [string]
+                }
+            }
+
+            Keyword ScriptProperty -Name Required -Use OptionalMany -Number
+            {
+                GetScriptBlock -Type [scriptblock]
+            }
+        }        
+    }
+}
+```
+
+Then, to recreate the specific `types` XML file from earlier, we could instance it as so:
+
+```powershell
+using module Types
+
+$typeSpec = Types
+{
+    Type -Name System.Array
+    {
+        Members
+        {
+            AliasProperty -Name Count
+            {
+                ReferencedMemberName = Length
+            }
+        }
+    }
+
+    Type -Name System.Xml.Node
+    {
+        Members
+        {
+            CodeMethod -Name ToString
+            {
+                CodeReference
+                {
+                    TypeName = Microsoft.PowerShell.ToStringCodeMethods
+                    MethodName = XmlNodeList
                 }
             }
         }
+    }
 
-        Keyword TableFormat -Name Required -Body Command
+    Type -Name System.Management.Automation.PSDriveInfo
+    {
+        Members
         {
-        }
-
-        Keyword CustomFormat -Name Required -Body Command
-        {
-        }
-
-        Keyword WideFormat -Name Required -Body Command
-        {
+            ScriptProperty -Name Used
+            {
+              GetScriptBlock =
+              {
+                  ## Ensure that this is a FileSystem drive
+                  if ($this.Provider.ImplementingType -eq
+                      [Microsoft.PowerShell.Commands.FileSystemProvider])
+                  {
+                      $driveRoot = ([System.IO.DirectoryInfo] $this.Root).Name.Replace('\','')
+                      $drive = Get-WmiObject Win32_LogicalDisk -Filter "DeviceId='$driveRoot'"
+                      $drive.Size - $drive.FreeSpace
+                  }
+            }
         }
     }
 }
 ```
 
+
+
 ## Alternate Proposals and Considerations
+
+### DSC modules and CIM configurations
+Small DSL specification language already exists in PowerShell for DSC module
+files (`.schema.psm1`) and CIM configurations. These may be of consideration
+both as a guide for a more general implementation, and in terms of conflicts
+and code duplication &mdash; although there are certain specific functionalities
+that are tied to these language features.
+
+### XML interoperability
+The current proposal makes some assumptions about common properties and how innate
+they should be to a DSL specification, especially the `Name` parameter, which is
+present in the XML an ordinary node, but is a standard parameter to DSL keywords.
+The current proposal may need to be changed to support more flexible translation of
+XML formats.
+
+The other feature missing from the proposed DSL specification format is the ability
+to translate XML attributes. These could either be specified as extra, ad-hoc keyword
+parameters, or within the block of the keyword with another syntax.
+
+### Syntax flexibility
+Further to the above point, alternate syntaxes may be preferable for both DSL
+definition and instantiation. A more hashtable-like syntax (employing the `=`
+symbol) may be more appropriate.
