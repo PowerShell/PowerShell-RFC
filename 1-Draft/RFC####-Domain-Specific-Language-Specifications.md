@@ -184,16 +184,17 @@ $typeSpec = Types
         {
             ScriptProperty -Name Used
             {
-              GetScriptBlock =
-              {
-                  ## Ensure that this is a FileSystem drive
-                  if ($this.Provider.ImplementingType -eq
-                      [Microsoft.PowerShell.Commands.FileSystemProvider])
-                  {
-                      $driveRoot = ([System.IO.DirectoryInfo] $this.Root).Name.Replace('\','')
-                      $drive = Get-WmiObject Win32_LogicalDisk -Filter "DeviceId='$driveRoot'"
-                      $drive.Size - $drive.FreeSpace
-                  }
+                GetScriptBlock =
+                {
+                    ## Ensure that this is a FileSystem drive
+                    if ($this.Provider.ImplementingType -eq
+                        [Microsoft.PowerShell.Commands.FileSystemProvider])
+                    {
+                        $driveRoot = ([System.IO.DirectoryInfo] $this.Root).Name.Replace('\','')
+                        $drive = Get-WmiObject Win32_LogicalDisk -Filter "DeviceId='$driveRoot'"
+                        $drive.Size - $drive.FreeSpace
+                    }
+                }
             }
         }
     }
