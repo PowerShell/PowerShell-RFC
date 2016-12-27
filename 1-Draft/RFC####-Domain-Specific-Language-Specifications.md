@@ -223,6 +223,12 @@ The other feature missing from the proposed DSL specification format is the abil
 to translate XML attributes. These could either be specified as extra, ad-hoc keyword
 parameters, or within the block of the keyword with another syntax.
 
+Conversely, it may be preferable to discard certain common parts of existing
+XML schemas, such as `<Members>`, `<MemberSet>`, `<GetScriptBlock>`, etc. and
+make them implicit to prevent needless verbosity. However, this would limit
+non-XML applications. A workaround might be to include either a flag or extra parameters
+to configure whether a user wants this functionality.
+
 ### Syntax flexibility
 Further to the above point, alternate syntaxes may be preferable for both DSL
 definition and instantiation. A more hashtable-like syntax (employing the `=`
