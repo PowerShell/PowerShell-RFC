@@ -59,12 +59,11 @@ the `Keyword` keyword. Terms not following the `Keyword` keyword are properties.
 keyword (including the top-level keyword following `DSL`) can have an arbitrary number of
 keywords and properties, which are scope dependent.
 
-A DSL keyword is parametrized in `Name`, `Body` and `Use`:
+A DSL keyword is parametrized in `Name` and `Use`:
 
 | Parameter | Variants                              | Default   | Meaning                        |
 | :-------: | :-----------------------------------: | :-------: | :----------------------------: |
 | `Name`    | `NoName`, `Required`, `Optional`      | `NoName`  | Whether the keyword has a name |
-| `Body`    | `Command`, `ScriptBlock`, `Hashtable` | `Command` | The syntax of the expression following the keyword |
 | `Use`     | `Required`, `Optional`, `RequiredMany`, `OptionalMany` | `Required` | How many times the keyword may occur |
 
 As an example, a part of a typical `types.ps1xml` might look as follows:
