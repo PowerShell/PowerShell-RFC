@@ -48,6 +48,13 @@ using a familiar PowerShell syntax, so that I can repeatably
 instantiate that schema and leverage PowerShell's semantic
 functionality for field checking and autocompletion.
 
+### Examples of Motivating DSLs in PowerShell
+
+* [Pester](https://github.com/pester/pester) &mdash; testing framework
+* [psake](https://github.com/JamesKovacs/psake) &mdash; build automation
+* [simplex](https://github.com/beefarino/simplex) &mdash; PowerShell providers
+* [ShowUI](https://showui.codeplex.com/) &mdash; WPF UI specification
+
 ## Specifications
 
 This RFC proposes a domain-specific language definition syntax
