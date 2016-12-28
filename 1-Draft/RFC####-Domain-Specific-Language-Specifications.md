@@ -231,4 +231,21 @@ to configure whether a user wants this functionality.
 ### Syntax flexibility
 Further to the above point, alternate syntaxes may be preferable for both DSL
 definition and instantiation. A more hashtable-like syntax (employing the `=`
-symbol) may be more appropriate.
+symbol) common to both may be simpler for the language:
+
+```powershell
+Keyword Bar =
+{
+    ...
+}
+```
+
+Another area to change syntax is in attribute specification, where a
+type constraint could be specified in a more parameter-like way:
+
+```powershell
+Keyword Foo
+{
+    [string] MyAttribute
+}
+```
