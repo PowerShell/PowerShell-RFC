@@ -8,23 +8,14 @@ Comments Due:
 
 # Domain-Specific Language Specifications
 
-PowerShell supports rich metaprogramming features and runtime reflection,
-but currently lacks a true way to add new keywords to the language. This is
-closely related to the fact that a key
-metaprogramming functionality &mdash; specifying and amending types &mdash;
-is presently only available through the definition of a `.ps1xml` file, in XML format.
-Such files are currently used for applications like:
+PowerShell provides rich metaprogramming features with a natural-language-oriented
+interface, but currently lacks a true, simple mechanism for language extensions and
+keyword addition.
 
-  * `Format` data and defintions
-  * Type definitions
-  * Resource configurations
-  * Testing configurations
-
-Introducing domain-specific (DSL) specifications to PowerShell would allow
-users to specify their own language keywords and semantics, and obviate the need
-for XML-based configurations.
-
-This would confer the following benefits:
+Users have already created their own domain-specific languages (DSLs) in PowerShell
+to suit their needs using a variety of language features, however a canonical DSL
+definition mechanism could standardize this, in addition to providing more natural
+operability within PowerShell, such as:
 
   * Syntax highlighting
   * Autocompletion
@@ -32,7 +23,7 @@ This would confer the following benefits:
   * Better readability
   * Reproducible, schema-based formats
   * Informative error messages
-  * Less XML
+  * Less XML (in the case of `.ps1xml` files)
   * Specification of parse-time functionality
 
 While not allowing arbitrary changes to the PowerShell language, a DSL mechanism
@@ -54,6 +45,10 @@ functionality for field checking and autocompletion.
 * [psake](https://github.com/JamesKovacs/psake) &mdash; build automation
 * [simplex](https://github.com/beefarino/simplex) &mdash; PowerShell providers
 * [ShowUI](https://showui.codeplex.com/) &mdash; WPF UI specification
+* [Types.ps1xml](https://msdn.microsoft.com/en-us/library/dd878306(v=vs.85).aspx) &mdash; type addition to PowerShell
+* [Format.ps1xml](https://msdn.microsoft.com/en-us/library/dd878339(v=vs.85).aspx)
+* [PowerShell `configuration` modules](https://blogs.msdn.microsoft.com/powershell/2013/11/05/understanding-configuration-keyword-in-desired-state-configuration/)
+* [PowerShell Data Files](http://ramblingcookiemonster.github.io/PowerShell-Configuration-Data/)
 
 ## Specifications
 
