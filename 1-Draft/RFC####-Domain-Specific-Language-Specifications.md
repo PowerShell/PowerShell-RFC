@@ -50,25 +50,21 @@ functionality for field checking and autocompletion.
 * [PowerShell `configuration` modules](https://blogs.msdn.microsoft.com/powershell/2013/11/05/understanding-configuration-keyword-in-desired-state-configuration/)
 * [PowerShell Data Files](http://ramblingcookiemonster.github.io/PowerShell-Configuration-Data/)
 
+The goal, then, would be to create a standard mechanism for PowerShell that all of these DSLs
+could be written and maintained in.
+
 ## Specifications
 
-This RFC proposes a domain-specific language definition syntax
-for PowerShell, with a DSL defined in a file and loaded in with
+This RFC proposes two mechanisms for defining a DSL for PowerShell, one PowerShell-native and
+one in C#. In both cases, the DSL is defined in a file and loaded in with
 the `using module` syntax.
 
-A new DSL is defined with the `DSL` keyword, with keywords within that DSL defined with
-the `Keyword` keyword. Terms not following the `Keyword` keyword are properties. Every DSL
-keyword (including the top-level keyword following `DSL`) can have an arbitrary number of
-keywords and properties, which are scope dependent.
+Two possibilities currently exist: to define DSL specification language within the PowerShell
+language itself, or leveraging existing C# schema parsing so that DSLs are specified in C#
+and then loaded into PowerShell.
 
-A DSL keyword is parametrized in `Name` and `Use`:
-
-| Parameter | Variants                              | Default   | Meaning                        |
-| :-------: | :-----------------------------------: | :-------: | :----------------------------: |
-| `Name`    | `NoName`, `Required`, `Optional`      | `NoName`  | Whether the keyword has a name |
-| `Use`     | `Required`, `Optional`, `RequiredMany`, `OptionalMany` | `Required` | How many times the keyword may occur |
-
-As an example, a part of a typical `types.ps1xml` might look as follows:
+As an example to describe the two proposals, a part of a typical `types.ps1xml` might look
+as follows:
 
 ```xml
 <Types>
@@ -114,37 +110,96 @@ As an example, a part of a typical `types.ps1xml` might look as follows:
 </Types>
 ```
 
-Using a DSL defintion, we would define a schema for this:
+### C# DSL Specifications
+
+Using C#'s existing attribute parsing capabilities, we can define a DSL using an annotated
+C# `class` definition and then load it in to PowerShell as described above. This has the
+advantages of being simple, well-documented and easy to maintain.
+
+Using the example above, we might define a schema in C# as follows:
+
+```csharp
+[PsDsl]
+public class Types
+{
+    [PsKeyword(Name = PsKeywordNameMode.Required, Use = PsKeywordUseMode.RequiredMany)]
+    public class Type
+    {
+        [PsKeyword(Name = PsKeywordNameMode.Required, Use = PsKeywordUseMode.OptionalMany)]
+        public class AliasProperty
+        {
+            [PsProperty]
+            public string ReferencedMemberName;
+        }
+
+        [PsKeyword(Name = PsKeywordNameMode.Required, Use = PsKeywordUseMode.Optional)]
+        public class CodeMethod
+        {
+            [PsProperty]
+            public string TypeName;
+
+            [PsProperty]
+            public string MethodName;
+        }
+
+        [PsKeyword(Name = PsKeywordNameMode.Required, Use = PsKeywordUseMode.OptionalMany)]
+        public class ScriptProperty
+        {
+            [PsProperty]
+            public System.Management.Automation.ScriptBlock GetScriptBlock;
+        }
+    }
+}
+```
+
+### PowerShell-native DSL Syntax
+
+The other proposed solution is to extend the PowerShell language itself to allow the definition
+of a DSL in a PowerShell syntax, e.g. in a `.psm1` file.
+
+In this scheme, a new DSL is defined with the `DSL` keyword, with keywords within that DSL
+defined with the `Keyword` keyword. Terms not following the `Keyword` keyword are properties.
+Every DSL keyword (including the top-level keyword following `DSL`) can have an arbitrary
+number of keywords and properties, which are scope dependent.
+
+A DSL keyword is parametrized in `Name`, `Body` and `Use`:
+
+| Parameter | Variants                              | Default   | Meaning                        |
+| :-------: | :-----------------------------------: | :-------: | :----------------------------- |
+| `Name`    | `NoName`, `Required`, `Optional`      | `NoName`  | Whether the keyword has a name |
+| `Body`    | `Command`, `ScriptBlock`, `Hashtable` | `Command` | The syntax of the expression/block following the keyword
+| `Use`     | `Required`, `Optional`, `RequiredMany`, `OptionalMany` | `Required` | How many times the keyword may occur |
+
+Using a DSL defintion, we would define a schema for the example above as:
 
 ```powershell
 DSL Types
 {
     Keyword Type -Name Required -Use RequiredMany
     {
-        Keyword Members
+        Keyword AliasProperty -Name Required -Use OptionalMany
         {
-            Keyword AliasProperty -Name Required -Use OptionalMany
-            {
-                ReferencedMemberName -Type [string]
-            }
+            ReferencedMemberName -Type [string]
+        }
 
-            Keyword CodeMethod -Name Required -Use Optional
+        Keyword CodeMethod -Name Required -Use Optional
+        {
+            Keyword CodeReference
             {
-                Keyword CodeReference
-                {
-                    TypeName -Type [string]
-                    MethodName -Type [string]
-                }
+                TypeName -Type [string]
+                MethodName -Type [string]
             }
+        }
 
-            Keyword ScriptProperty -Name Required -Use OptionalMany -Number
-            {
-                GetScriptBlock -Type [scriptblock]
-            }
-        }        
+        Keyword ScriptProperty -Name Required -Use OptionalMany -Number
+        {
+            GetScriptBlock -Type [scriptblock]
+        }
     }
 }
 ```
+
+### Importing a PowerShell Module
 
 Then, to recreate the specific `types` XML file from earlier, we could instance it as so:
 
