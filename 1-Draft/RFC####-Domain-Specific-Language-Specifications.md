@@ -269,3 +269,21 @@ Keyword Foo
     [string] MyAttribute
 }
 ```
+
+### Existing Implementations for Dynamic Keywords in PowerShell
+The PowerShell parser and AST already support the concept of a
+`DynamicKeyword`, which this proposal is built around. The following table
+attempts to draw an equivalence between desired DSL features, current dynamic
+keyword support, and proposed C# syntax:
+
+| DSL Function            | `DynamicKeyword` Property            | C# Syntax               |
+| :---------------------: | :----------------------------------: | :---------------:       |
+| Keywords                | `Name`                               | `Name = ...` attr       |
+| Nested keywords         | Keyword stack                        | Inner class             |
+| Keyword use constraints | ? (Semantics check?)                 | ?                       |
+| Body syntax             | `BodyMode`                           | `Body = ...` attr       |
+| Arguments               | `DynamicKeywordProperty`             | `[PSKeywordArgument]`   |
+| Parameters              | `DynamicKeywordParameter`            | `[PSKeywordParameter]`  |
+| Custom types (enums)    | `DynamicKeywordProperty.Values`      | `enum`                  |
+| Action                  | `DynamicKeyword.(Pre|Post)Parse`     | C# code/interface       |
+| Semantics check         | `DynamicKeyword.SemanticCheck`       | C# code/interface       |
