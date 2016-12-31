@@ -63,51 +63,28 @@ Two possibilities currently exist: to define DSL specification language within t
 language itself, or leveraging existing C# schema parsing so that DSLs are specified in C#
 and then loaded into PowerShell.
 
-As an example to describe the two proposals, a part of a typical `types.ps1xml` might look
-as follows:
+As an example for either proposal, take a short Pester script (from [here](https://github.com/pester/Pester/blob/master/Examples/Validator/Validator.Tests.ps1)):
 
-```xml
-<Types>
-  <Type>
-    <Name>System.Array</Name>
-    <Members>
-      <AliasProperty>
-        <Name>Count</Name>
-        <ReferencedMemberName>Length</ReferencedMemberName>
-      </AliasProperty>
-    </Members>
-  </Type>
-  <Type>
-    <Name>System.Xml.XmlNode</Name>
-    <Members>
-      <CodeMethod>
-        <Name>ToString</Name>
-        <CodeReference>
-          <TypeName>Microsoft.PowerShell.ToStringCodeMethods</TypeName>
-          <MethodName>XmlNodeList</MethodName>
-        </CodeReference>
-      </CodeMethod>
-    </Members>
-  </Type>
-  <Type>
-    <Name>System.Management.Automation.PSDriveInfo</Name>
-    <Members>
-      <ScriptProperty>
-        <Name>Used</Name>
-        <GetScriptBlock>
-          ## Ensure that this is a FileSystem drive
-          if($this.Provider.ImplementingType -eq
-          [Microsoft.PowerShell.Commands.FileSystemProvider])
-          {
-          $driveRoot = ([System.IO.DirectoryInfo] $this.Root).Name.Replace('\','')
-          $drive = Get-WmiObject Win32_LogicalDisk -Filter "DeviceId='$driveRoot'"
-          $drive.Size - $drive.FreeSpace
-          }
-        </GetScriptBlock>
-      </ScriptProperty>
-    </Members>
-  </Type>
-</Types>
+```powershell
+function MyValidator($thingToValidate)
+{
+    $thingToValidate.StartsWith("s")
+}
+
+Describe "MyValidator"
+{
+    It "passes things that start with the letter S"
+    {
+        $result = MyValidator "summer"
+        $result | Should Be $true
+    }
+
+    It "does not pass a param that does not start with S"
+    {
+        $result = MyValidator "bummer"
+        $result | Should Be $false
+    }
+}
 ```
 
 ### C# DSL Specifications
@@ -119,34 +96,31 @@ advantages of being simple, well-documented and easy to maintain.
 Using the example above, we might define a schema in C# as follows:
 
 ```csharp
-[PsDsl]
-public class Types
+[PSDsl]
+class Pester
 {
-    [PsKeyword(Name = PsKeywordNameMode.Required, Use = PsKeywordUseMode.RequiredMany)]
-    public class Type
+    [PSKeyword(Name = NameMode.Required, Body = BodyMode.ScriptBlock)]
+    class Describe
     {
-        [PsKeyword(Name = PsKeywordNameMode.Required, Use = PsKeywordUseMode.OptionalMany)]
-        public class AliasProperty
+        [PSKeyword(Name = NameMode.Required, Body = BodyMode.ScriptBlock)]
+        class It
         {
-            [PsProperty]
-            public string ReferencedMemberName;
-        }
+            [PSKeywordParameterType]
+            enum Assertion
+            {
+                Be,
+                BeExactly
+            }
 
-        [PsKeyword(Name = PsKeywordNameMode.Required, Use = PsKeywordUseMode.Optional)]
-        public class CodeMethod
-        {
-            [PsProperty]
-            public string TypeName;
+            [PSKeyword]
+            class Should
+            {
+                [PSKeywordArgument]
+                Assertion assertion;
 
-            [PsProperty]
-            public string MethodName;
-        }
-
-        [PsKeyword(Name = PsKeywordNameMode.Required, Use = PsKeywordUseMode.OptionalMany)]
-        public class ScriptProperty
-        {
-            [PsProperty]
-            public System.Management.Automation.ScriptBlock GetScriptBlock;
+                [PSKeywordArgument]
+                
+            }
         }
     }
 }
