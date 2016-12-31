@@ -119,7 +119,7 @@ class Pester
                 Assertion assertion;
 
                 [PSKeywordArgument]
-                
+                System.Management.Automation.PSObject expectedOutput;
             }
         }
     }
@@ -147,27 +147,16 @@ A DSL keyword is parametrized in `Name`, `Body` and `Use`:
 Using a DSL defintion, we would define a schema for the example above as:
 
 ```powershell
-DSL Types
+DSL Pester
 {
-    Keyword Type -Name Required -Use RequiredMany
+    Keyword Describe -Name Required -Body ScriptBlock
     {
-        Keyword AliasProperty -Name Required -Use OptionalMany
+        Keyword It -Name Required -Body ScriptBlock
         {
-            ReferencedMemberName -Type [string]
-        }
-
-        Keyword CodeMethod -Name Required -Use Optional
-        {
-            Keyword CodeReference
+            Keyword Should
             {
-                TypeName -Type [string]
-                MethodName -Type [string]
+                param($assertion, $expectedOutput)
             }
-        }
-
-        Keyword ScriptProperty -Name Required -Use OptionalMany -Number
-        {
-            GetScriptBlock -Type [scriptblock]
         }
     }
 }
