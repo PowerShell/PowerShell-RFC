@@ -87,15 +87,23 @@ Describe "MyValidator"
 }
 ```
 
+A DSL keyword is parametrized in `Name`, `Body` and `Use`:
+
+| Parameter | Variants                              | Default   | Meaning                        |
+| :-------: | :-----------------------------------: | :-------: | :----------------------------- |
+| `Name`    | `NoName`, `Required`, `Optional`      | `NoName`  | Whether the keyword has a name |
+| `Body`    | `Command`, `ScriptBlock`, `Hashtable` | `Command` | The syntax of the expression/block following the keyword
+| `Use`     | `Required`, `Optional`, `RequiredMany`, `OptionalMany` | `Required` | How many times the keyword may occur |
+
 ### C# DSL Specifications
 
 Using C#'s existing attribute parsing capabilities, we can define a DSL using an annotated
 C# `class` definition and then load it in to PowerShell as described above. This has the
 advantages of being simple, well-documented and easy to maintain.
 
-Since a PowerShell keyword must also have a semantic action, defined keywords must
-also implement the `IPSDslKeyword` interface, which specifies delegate properties
-for the keyword. Rather than being methods, these are specified as nullable delegates.
+Since a PowerShell keyword must have a semantic action, defined keywords must
+also implement the `IPSDslKeyword` interface.
+Rather than being methods, these are specified as nullable delegates.
 However, since the keyword must have some action, if both are `null` this should be an error.
 
 Using the example above, we might define a schema in C# as follows:
@@ -198,14 +206,6 @@ In this scheme, a new DSL is defined with the `DSL` keyword, with keywords withi
 defined with the `Keyword` keyword. Terms not following the `Keyword` keyword are properties.
 Every DSL keyword (including the top-level keyword following `DSL`) can have an arbitrary
 number of keywords and properties, which are scope dependent.
-
-A DSL keyword is parametrized in `Name`, `Body` and `Use`:
-
-| Parameter | Variants                              | Default   | Meaning                        |
-| :-------: | :-----------------------------------: | :-------: | :----------------------------- |
-| `Name`    | `NoName`, `Required`, `Optional`      | `NoName`  | Whether the keyword has a name |
-| `Body`    | `Command`, `ScriptBlock`, `Hashtable` | `Command` | The syntax of the expression/block following the keyword
-| `Use`     | `Required`, `Optional`, `RequiredMany`, `OptionalMany` | `Required` | How many times the keyword may occur |
 
 Using a DSL defintion, we would define a schema for the example above as:
 
@@ -315,6 +315,12 @@ of both declaring the `[PSKeyword]` attribute and implementing the `IPSDslKeywor
 interface. Ideally, only one of these would be used, but in a way that most
 helpfully specifies the properties required, while still being consistent with
 the rest of the specification scheme.
+
+### Properties vs methods on `IPSDslKeyword` interface
+Currently the `IPSDslKeyword` interface specifies parse-time actions be
+provided as nullable delegates, so users can communicate when no action exists.
+The possibly simpler alternative is to implement a method that the parser simply calls,
+and which the user can leave empty if they wish no action to take place.
 
 ### Existing Implementations for Dynamic Keywords in PowerShell
 The PowerShell parser and AST already support the concept of a
