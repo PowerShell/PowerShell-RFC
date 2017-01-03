@@ -93,6 +93,11 @@ Using C#'s existing attribute parsing capabilities, we can define a DSL using an
 C# `class` definition and then load it in to PowerShell as described above. This has the
 advantages of being simple, well-documented and easy to maintain.
 
+Since a PowerShell keyword must also have a semantic action, defined keywords must
+also implement the `IPSDslKeyword` interface, which specifies delegate properties
+for the keyword. Rather than being methods, these are specified as nullable delegates.
+However, since the keyword must have some action, if both are `null` this should be an error.
+
 Using the example above, we might define a schema in C# as follows:
 
 ```csharp
@@ -100,7 +105,7 @@ Using the example above, we might define a schema in C# as follows:
 class Pester
 {
     [PSKeyword(Name = NameMode.Required, Body = BodyMode.ScriptBlock)]
-    class Describe
+    class Describe : IPSDslKeyword
     {
         [PSKeyword(Name = NameMode.Required, Body = BodyMode.ScriptBlock)]
         class It
@@ -120,6 +125,64 @@ class Pester
 
                 [PSKeywordArgument]
                 System.Management.Automation.PSObject expectedOutput;
+
+                Func<DynamicKeyword, ParseError[]> PreParse
+                {
+                    get
+                    {
+                        return (dynamicKeyword) => {
+                            // Pre-parse action code...
+                        };
+                    }
+                }
+
+                Func<DynamicKeywordStatementAst, ParseError[]> PostParse
+                {
+                    get
+                    {   return (dynamicKeywordStatementAst) => {
+                            // Post-parse action code...
+                        };
+                    }
+                }
+
+                Func<DynamicKeywordStatementAst, ParseError[]> SemanticCheck
+                {
+                    get
+                    {
+                        return (dynamicKeywordStatementAst) => {
+                            // Semantic checking code...
+                        }
+                    }
+            }
+            }
+
+            Func<DynamicKeyword, ParseError[]> PreParse
+            {
+                get
+                {
+                    return (dynamicKeyword) => {
+                        // Pre-parse action code...
+                    };
+                }
+            }
+
+            Func<DynamicKeywordStatementAst, ParseError[]> PostParse
+            {
+                get
+                {   return (dynamicKeywordStatementAst) => {
+                        // Post-parse action code...
+                    };
+                }
+            }
+
+            Func<DynamicKeywordStatementAst, ParseError[]> SemanticCheck
+            {
+                get
+                {
+                    return (dynamicKeywordStatementAst) => {
+                        // Semantic checking code...
+                    }
+                }
             }
         }
     }
@@ -157,69 +220,45 @@ DSL Pester
             {
                 param($assertion, $expectedOutput)
             }
+
+            PreParse
+            {
+                param([DynamicKeyword] $dynamicKeyword)
+
+                # Pre-parse action code...
+            }
+
+            PostParse
+            {
+                param([DynamicKeywordStatementAst] $dynamicKeywordStatementAst)
+
+                # Post-parse action code...
+            }
+
+            SemanticCheck
+            {
+                param([DynamicKeywordStatementAst] $dynamicKeywordStatementAst)
+
+                # Semantic checking code...
+            }
         }
     }
 }
 ```
 
-### Importing a PowerShell Module
-
-Then, to recreate the specific `types` XML file from earlier, we could instance it as so:
+### Importing a `DynamicKeyword` definition module
 
 ```powershell
-using module Types
+using module Pester
 
-$typeSpec = Types
+$tests = Pester
 {
-    Type -Name System.Array
+    Describe "MyValidator"
     {
-        Members
-        {
-            AliasProperty -Name Count
-            {
-                ReferencedMemberName = Length
-            }
-        }
-    }
-
-    Type -Name System.Xml.Node
-    {
-        Members
-        {
-            CodeMethod -Name ToString
-            {
-                CodeReference
-                {
-                    TypeName = Microsoft.PowerShell.ToStringCodeMethods
-                    MethodName = XmlNodeList
-                }
-            }
-        }
-    }
-
-    Type -Name System.Management.Automation.PSDriveInfo
-    {
-        Members
-        {
-            ScriptProperty -Name Used
-            {
-                GetScriptBlock =
-                {
-                    ## Ensure that this is a FileSystem drive
-                    if ($this.Provider.ImplementingType -eq
-                        [Microsoft.PowerShell.Commands.FileSystemProvider])
-                    {
-                        $driveRoot = ([System.IO.DirectoryInfo] $this.Root).Name.Replace('\','')
-                        $drive = Get-WmiObject Win32_LogicalDisk -Filter "DeviceId='$driveRoot'"
-                        $drive.Size - $drive.FreeSpace
-                    }
-                }
-            }
-        }
+        # ... as in the original example above
     }
 }
 ```
-
 
 
 ## Alternate Proposals and Considerations
@@ -270,6 +309,13 @@ Keyword Foo
 }
 ```
 
+### Attributes vs interface implementation for C# Specifications
+In the current draft above, specification of a DSL keyword involves the redundancy
+of both declaring the `[PSKeyword]` attribute and implementing the `IPSDslKeyword`
+interface. Ideally, only one of these would be used, but in a way that most
+helpfully specifies the properties required, while still being consistent with
+the rest of the specification scheme.
+
 ### Existing Implementations for Dynamic Keywords in PowerShell
 The PowerShell parser and AST already support the concept of a
 `DynamicKeyword`, which this proposal is built around. The following table
@@ -277,7 +323,7 @@ attempts to draw an equivalence between desired DSL features, current dynamic
 keyword support, and proposed C# syntax:
 
 | DSL Function            | `DynamicKeyword` Property            | C# Syntax               |
-| :---------------------: | :----------------------------------: | :---------------:       |
+| :---------------------  | :----------------------------------  | :---------------       |
 | Keywords                | `Name`                               | `Name = ...` attr       |
 | Nested keywords         | Keyword stack                        | Inner class             |
 | Keyword use constraints | ? (Semantics check?)                 | ?                       |
