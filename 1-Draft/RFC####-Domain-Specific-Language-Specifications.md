@@ -322,6 +322,14 @@ provided as nullable delegates, so users can communicate when no action exists.
 The possibly simpler alternative is to implement a method that the parser simply calls,
 and which the user can leave empty if they wish no action to take place.
 
+### Argument types for `IPDslKeyword` methods
+Currently the `IPDslKeyword` interface specifies its arguments with types internal
+to the PowerShell parser, but it may be preferable to not expose these internal types
+as a user interface directly. However, since we wish to provide a customizable DSL,
+most of the internals of a `DynamicKeyword` and its AST will need to be exposed in some
+way, and `DynamicKeywordStatementAst` is exactly the type conceived to encapsulate
+that information.
+
 ### Existing Implementations for Dynamic Keywords in PowerShell
 The PowerShell parser and AST already support the concept of a
 `DynamicKeyword`, which this proposal is built around. The following table
