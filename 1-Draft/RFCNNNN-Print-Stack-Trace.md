@@ -39,19 +39,23 @@ than setting a variable in the remote session.
 In the file $PSHOME\PowerShellCore.format.ps1xml in the entry for 
 $PSHOME\PowerShellCore.format.ps1xml add one more ExpressionBinding block:
 
+```
 <ExpressionBinding>
     <ScriptBlock>
         if ($PSPrintStack) { $_.ScriptStackTrace }
     </ScriptBlock>
 </ExpressionBinding>
+```
 
 Also, it happens that the current output of the formatter is not always properly
-terminated by a "`n", so to avoid sticking the stack trace to the end of the
-previous line, fix the preceding code to add "`n":
+terminated by a "\`n", so to avoid sticking the stack trace to the end of the
+previous line, fix the preceding code to add "\`n":
 
+```
     elseif (! $_.ErrorDetails -or ! $_.ErrorDetails.Message) {
         $_.Exception.Message + $posmsg + "`n"  # SB-changed
     } else {
         $_.ErrorDetails.Message + $posmsg + "`n" # SB-changed
     }
+```
 
