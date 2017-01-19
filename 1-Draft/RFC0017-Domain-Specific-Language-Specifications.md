@@ -41,14 +41,19 @@ functionality for field checking and autocompletion.
 
 ### Examples of Motivating DSLs in PowerShell
 
+#### Examples pre-existing in PowerShell
+
+* [PowerShell `configuration` modules](https://blogs.msdn.microsoft.com/powershell/2013/11/05/understanding-configuration-keyword-in-desired-state-configuration/) &mdash; DSC configuration modules (Note: this already uses the `DynamicKeyword` mechanisms)
 * [Pester](https://github.com/pester/pester) &mdash; testing framework
 * [psake](https://github.com/JamesKovacs/psake) &mdash; build automation
 * [simplex](https://github.com/beefarino/simplex) &mdash; PowerShell providers
 * [ShowUI](https://showui.codeplex.com/) &mdash; WPF UI specification
+* [PowerShell Data Files](http://ramblingcookiemonster.github.io/PowerShell-Configuration-Data/) &mdash; PowerShell-native data specification format
+
+#### Motivating candidates for porting to a PowerShell DSL
+
 * [Types.ps1xml](https://msdn.microsoft.com/en-us/library/dd878306(v=vs.85).aspx) &mdash; type addition to PowerShell
-* [Format.ps1xml](https://msdn.microsoft.com/en-us/library/dd878339(v=vs.85).aspx)
-* [PowerShell `configuration` modules](https://blogs.msdn.microsoft.com/powershell/2013/11/05/understanding-configuration-keyword-in-desired-state-configuration/)
-* [PowerShell Data Files](http://ramblingcookiemonster.github.io/PowerShell-Configuration-Data/)
+* [Format.ps1xml](https://msdn.microsoft.com/en-us/library/dd878339(v=vs.85).aspx) &mdash; format/presentation specification for PowerShell types and resources
 
 The goal, then, would be to create a standard mechanism for PowerShell that all of these DSLs
 could be written and maintained in.
