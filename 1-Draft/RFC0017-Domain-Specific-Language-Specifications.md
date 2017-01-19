@@ -294,6 +294,13 @@ of both declaring the `[Keyword]` attribute and extending the `Keyword`
 class. This is also the scheme used by `Cmdlet`, however for this reduced case it
 may not be necessary.
 
+### Runtime Behavior Specification
+
+Currently there is no suggestion as to the design or implementation of specifying
+the runtime behavior of a keyword -- what the keyword actually does when executed.
+Runtime behavior can presently be added using PowerShell itself, but specification
+in C# may be a better subject of a different RFC.
+
 ### Existing Implementations for Dynamic Keywords in PowerShell
 
 The PowerShell parser and AST already support the concept of a
