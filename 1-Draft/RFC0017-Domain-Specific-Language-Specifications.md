@@ -140,7 +140,7 @@ To define this language, a `Keyword` class is instantiated as follows:
 ```csharp
 using System.Management.Automation.Language;
 
-[Keyword(Body = KeywordBodyMode.ScriptBlock)]
+[Keyword(Body = DynamicKeywordBodyMode.ScriptBlock)]
 class TypeExtension : Keyword
 {
     public TypeExtension(Type extendedType)
@@ -307,8 +307,9 @@ keyword support, and proposed C# syntax:
 | Nested keywords         | Keyword stack                        | Inner class             |
 | Keyword use constraints | ? (Semantics check?)                 | `Use = ...` attr                       |
 | Body syntax             | `BodyMode`                           | `Body = ...` attr       |
-| Arguments               | `DynamicKeywordProperty`             | `[PSKeywordArgument]`   |
-| Parameters              | `DynamicKeywordParameter`            | `[PSKeywordParameter]`  |
+| Arguments               | `DynamicKeywordProperty`             | `[Property]`            |
+| Parameters              | `DynamicKeywordParameter`            | `[Parameter]`           |
 | Custom types (enums)    | `DynamicKeywordProperty.Values`      | `enum`                  |
-| Action                  | `DynamicKeyword.(Pre|Post)Parse`     | C# code/interface       |
+| Parse time action       | `DynamicKeyword.(Pre|Post)Parse`     | C# code/interface       |
 | Semantics check         | `DynamicKeyword.SemanticCheck`       | C# code/interface       |
+| Runtime action          | None                                 | Out of scope            |
