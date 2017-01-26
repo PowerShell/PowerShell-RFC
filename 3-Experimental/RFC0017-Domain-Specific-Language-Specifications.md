@@ -1,7 +1,7 @@
 ---
 RFC: RFC0017
 Author: Robert Holt
-Status: Draft
+Status: Experimental
 Area: Domain Specific Languages, Object Schemas
 Comments Due:
 ---
@@ -325,3 +325,26 @@ keyword support, and proposed C# syntax:
 | Parse time action       | `DynamicKeyword.(Pre|Post)Parse`     | C# code/interface       |
 | Semantics check         | `DynamicKeyword.SemanticCheck`       | C# code/interface       |
 | Runtime action          | None                                 | Out of scope            |
+
+-----
+PowerShell Committee Decision
+
+Voting Results
+
+Jason Shirk: Accept
+
+Joey Aiello: Accept
+
+Bruce Payette: Accept
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+Majority Decision
+
+Commmittee agrees that this RFC is sufficient to move to experimental stage and begin prototype code for further feedback.
+
+Minority Decision
+
+N/A
