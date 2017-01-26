@@ -1,7 +1,7 @@
 ---
 RFC: 10
 Author: Paul Higinbotham
-Status: Draft
+Status: Experimental-Accepted
 Version: 0.1
 Area: Remoting
 Comments Due: October 28, 2016
@@ -33,9 +33,14 @@ As an IT administrator, I can use existing PowerShell remoting cmdlets to start 
 
 The proposal is to add two new parameter sets to the three primary remoting cmdlets (New-PSSession, Enter-PSSession, Invoke-Command) that provide for SSH password prompt and key authentication connection semantics.  The first parameter set is intended more for interactive command line use.  The second parameter set is designed for automation fan-out where SSH connection information can be specified for each target computer.
 
+### Specification Update
+<blockquote>
+<p>After discussing comments and experimenting with parameter set variations I have the final parameter set specification.  Ideally the SSH based remoting parameter sets would be a simple extension of the existing WinRM based remoting parameter sets.  However, SSH remoting is significantly different from WinRM remoting and trying to combine the two parameter sets results in a confusing mishmash. So we will keep the separate parameter sets.  Another issue I ran into was while trying to use "ComputerName" in all parameter sets.  Unfortunately this resulted in breaking positional based use of the existing parameter sets and I ultimately had to use "HostName" instead of "ComputerName" for SSH parameter sets. On reflection I feel this is actually a good thing.  SSH based remoting is different enough from WinRM remoting where I feel making the SSH remoting cmdlet parameter sets distinct is less confusing.  
+</p>
+</blockquote>
+
 First Parameter Set  
-- ComputerName parameter
-   + Alias: HostName.
+- HostName parameter
    + Specifies one or more target computers.
    + This parameter is required.
 - UserName parameter
@@ -43,7 +48,7 @@ First Parameter Set
    + If not specified the current log on user name is used.
    + A password prompt will occur if SSHD service is configured for it, otherwise SSH key authentication must be configured.
 - KeyFilePath parameter
-   + Alias: IdentityFile.
+   + Alias: IdentityFilePath.
    + Specifies an optional private key file path used to authenticate a user account on each target machine.
       + This is equivalent to the SSH program -identity_file parameter.
       + Password prompt fallback occurs on key authentication failure if SSHD service is configured for it.
@@ -51,20 +56,38 @@ First Parameter Set
 - SSHTransport parameter
    + This is a switch parameter that specifies using the SSH transport.
    + It is needed to distinguish the SSH parameter set from other WinRM parameter sets.
-   + This parameter is required.
 
 Second ParameterSet
 - SSHConnection parameter
    + Takes a HashTable object that specifies connection information.
-      - ComputerName (HostName)           (required).
+      - HostName (ComputerName)           (required).
       - UserName                          (optional).
       - KeyFilePath (IdentityFilePath)    (optional).
 
 Examples:
 
+Parameter set syntax
+```powershell
+New-PSSession [-HostName] <string[]> [-Name <string[]>] [-UserName <string>] [-KeyFilePath <string>] [-SSHTransport] [<CommonParameters>]
+
+New-PSSession -SSHConnection <hashtable[]> [-Name <string[]>] [<CommonParameters>]
+
+
+Invoke-Command -ScriptBlock <scriptblock> -HostName <string[]> [-AsJob] [-HideComputerName] [-UserName <string>] [-KeyFilePath <string>] [-SSHTransport] [-InputObject <psobject>] [-ArgumentList <Object[]>] [<CommonParameters>]
+
+Invoke-Command -ScriptBlock <scriptblock> -SSHConnection <hashtable[]> [-AsJob] [-HideComputerName] [-InputObject <psobject>] [-ArgumentList <Object[]>] [<CommonParameters>]
+
+Invoke-Command -FilePath <string> -HostName <string[]> [-AsJob] [-HideComputerName] [-UserName <string>] [-KeyFilePath <string>] [-SSHTransport] [-InputObject <psobject>] [-ArgumentList <Object[]>] [<CommonParameters>]
+
+Invoke-Command -FilePath <string> -SSHConnection <hashtable[]> [-AsJob] [-HideComputerName] [-InputObject <psobject>] [-ArgumentList <Object[]>] [<CommonParameters>]
+
+
+Enter-PSSession [-HostName] <string> [-UserName <string>] [-KeyFilePath <string>] [-SSHTransport] [<CommonParameters>]
+```
+
 Interactive session with implicit user
 ```PowerShell
-PS C:\> Enter-PSSession -SSHTransport -ComputerName WindowsVM1
+PS C:\> Enter-PSSession -SSHTransport -HostName WindowsVM1
 [WindowsVM1]: PS C:\> whoami
 Domain\CurrentUser
 [WindowsVM1]: PS C:\>
@@ -72,7 +95,7 @@ Domain\CurrentUser
 
 Interactive session with explicit user
 ```PowerShell
-PS C:\> Enter-PSSession -SSHTransport -ComputerName LinuxVM1 -UserName LinuxUser
+PS C:\> Enter-PSSession -SSHTransport -HostName LinuxVM1 -UserName LinuxUser
 LinuxUser@LinuxVM1's password:
 [LinuxVM1]: PS C:\> whoami
 LinuxUser
@@ -89,7 +112,7 @@ LinuxUser
 
 Interactive session with persisted session
 ```PowerShell
-$session = New-PSSession -SSHTransport -ComputerName WindowsVM1
+$session = New-PSSession -SSHTransport -HostName WindowsVM1
 Invoke-Command -Session $session -ScriptBlock { $MyVariable = "Hello!" }
 Enter-PSSession -Session $session
 [WindowsVM1]: PS C:\> $MyVariable
@@ -143,3 +166,29 @@ Pros:
 Cons:
  + New cmdlets would be very similar to existing WinRM cmdlets and duplicate much of the functionality.
  + Increases the number of remoting cmdlets.
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Accept 
+
+Joey Aiello: Accept
+
+Bruce Payette: Absent
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+### Majority Decision
+
+We covered alternatives in regards to an enum for -Transport and this brought up a need to revisit both authoring and displaying complex parameter sets.
+Decided that the current RFC is sufficient for current implementation needs.
+Should consider a wrapper cmdlet to simplify usage of SSH remoting with PowerShell.
+
+
+### Minority Decision
+
+N/A

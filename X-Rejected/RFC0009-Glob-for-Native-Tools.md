@@ -1,7 +1,7 @@
 ---
 RFC: 0009
 Author: Andrew Schwartzmeyer
-Status: Draft
+Status: Rejected
 Version: 0.1
 Area: Globbing
 ---
@@ -208,3 +208,33 @@ which are an accepted input.
 
 Thus, at least for the initial implementation,
 there does not seem to be a requirement to implement globbing on Windows.
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Reject 
+
+Joey Aiello: Reject
+
+Bruce Payette: Absent
+
+Steve Lee: Reject
+
+Hemant Mahawar: Reject
+
+### Majority Decision
+
+We want to optimize for the future and not the past.
+Create an environment where native commands can assume globbing will be handled for it on both Windows and Linux in a consistent way.
+Current Windows policy is that cmd.exe is for heritage scripts and therefore we only need to solve this for PowerShell.
+Recommendation is for PowerShell to implement globbing consistent with man glob(7).
+To deal with native commands that use globbing characters, we provide an exclusion list that is user extensible.
+
+Globbing must work for PowerShell Core 6.0.
+The gcc and git use cases must work.
+
+### Minority Decision
+
+N/A
