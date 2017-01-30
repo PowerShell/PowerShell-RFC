@@ -39,6 +39,23 @@ With the new cmdlet users can get hashes which:
 
 ## Specification
 
+### Output
+
+The cmdlet output objects of `StringHashInfo` type:
+
+```powershell
+public class StringHashInfo
+{
+    public string Algorithm { get; set;}
+    public string Hash { get; set;}
+    public string Encoding { get; set;}
+    public string HashedString { get; set;}
+}
+```
+`Hash` is a hash of the `HashedString` string calculated with `Algorithm` algorithm.
+
+`Encoding` is a encoding of the `HashedString` string.
+
 ### Parameters
 
 1. InputString
