@@ -2,15 +2,15 @@
 RFC: RFC0014
 Author: Aditya Patwardhan
 Status: Draft
-SupercededBy: 
+SupercededBy:
 Version: 1.0
 Area: LanguageAndParser
 Comments Due: 02/01/2017
 ---
 
-# Language enhancements for collections 
+# Language enhancements for collections
 
-System.Collections namespace has many collections that are frequently used in PowerShell scripts. To instantiate objects of these classes, New-Object and the type name has to be used. With Powershell v5 and above the ```[typename]::new() ``` can be used, by still needs the full type name. This RFC proposes a way to simplify the instantiation of types in System.Collections namespace. 
+System.Collections namespace has many collections that are frequently used in PowerShell scripts. To instantiate objects of these classes, New-Object and the type name has to be used. With Powershell v5 and above the ```[typename]::new() ``` can be used, by still needs the full type name. This RFC proposes a way to simplify the instantiation of types in System.Collections namespace.
 
 ## Motivation
 
@@ -20,7 +20,7 @@ The various ways user can instantiate these classes currently is as follows:
 $list = New-Object System.Collections.ArrayList
 $list = [System.Collections.ArrayList]::new()
 ```
-Collections are used frequently in PowerShell scripts, we can make the instantiating collections easier. 
+Collections are used frequently in PowerShell scripts, we can make the instantiating collections easier.
 
 Performing a search on GitHub for usage of collections we know which collection type is used more frequently.
 
@@ -65,10 +65,14 @@ $stack = [stack] @(1,2,3)
 
 ### New operator for list, queue and stack
 
-A new operator can be proposed which creates a list, say @[] / @<> etc. This would mean we would need to make changes to the Parser to support the new operator. Since all the collections are single dimensional and an array operator is very familiar to users, adding a new operator would have a learning curve and discoverability issue. 
+A new operator can be proposed which creates a list, say @[] / @<> etc. This would mean we would need to make changes to the Parser to support the new operator. Since all the collections are single dimensional and an array operator is very familiar to users, adding a new operator would have a learning curve and discoverability issue.
 
 ### Alternative names for collections
 
-The RFC proposes to use list, queue and stack for System.Collections.ArrayList, System.Collections.Queue and System.Collections.Stack respectively. Type accelerator names for Queue and Stack are same as class names. 
-Using 'list' is proposed for System.Collections.ArrayList instead of 'ArrayList' for brevity, 'ArrayList' is too long.  
+The RFC proposes to use list, queue and stack for System.Collections.ArrayList, System.Collections.Queue and System.Collections.Stack respectively. Type accelerator names for Queue and Stack are same as class names.
+Using 'list' is proposed for System.Collections.ArrayList instead of 'ArrayList' for brevity, 'ArrayList' is too long.
 
+
+### Scope
+
+Type accelerators for generic types for collections are out of scope for this RFC. They might be addressed in future RFCs.
