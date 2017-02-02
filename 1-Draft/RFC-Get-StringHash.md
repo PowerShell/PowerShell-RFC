@@ -1,11 +1,11 @@
 ---
-RFC: 
+RFC: 0018
 Author: Ilya Sazonov
 Status: Draft
 SupercededBy: n/a
 Version: 0.1
 Area: Cmdlet
-Comments Due:
+Comments Due: 3/2/2017
 ---
 
 # Get-StringHash cmdlet
