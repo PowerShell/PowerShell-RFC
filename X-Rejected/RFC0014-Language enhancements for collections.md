@@ -1,7 +1,7 @@
 ---
 RFC: RFC0014
 Author: Aditya Patwardhan
-Status: Draft
+Status: Rejected
 SupercededBy:
 Version: 1.0
 Area: LanguageAndParser
@@ -76,3 +76,32 @@ Using 'list' is proposed for System.Collections.ArrayList instead of 'ArrayList'
 ### Scope
 
 Type accelerators for generic types for collections are out of scope for this RFC. They might be addressed in future RFCs.
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Reject 
+
+Joey Aiello: Reject
+
+Bruce Payette: Reject
+
+Steve Lee: Reject
+
+Hemant Mahawar: Reject
+
+### Majority Decision
+
+The committee reviewed this and rejected this RFC because:
+
+- `using namespace System.Collections` would solve most of the examples in this RFC
+- The parser already has syntax for `using type list = System.Collections.ArrayList` for user defined accelerators although the implementation is not complete currently
+
+Because there is an existing solution to save from typing the fully qualified typename and an existing design to enable user defined type accelerators, we decided to not accept this RFC.
+We should continue to look at usage data to determine if in the future we add new default accelerators.
+
+### Minority Decision
+
+N/A
