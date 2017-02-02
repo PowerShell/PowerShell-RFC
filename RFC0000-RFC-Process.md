@@ -63,8 +63,11 @@ RFCs go through applicable stages:
 * Draft
 
 This is the initial draft of a RFC posted for comments and considered a work-in-progress.
-An issue is created for this RFC and used for collection and response to comments.
-Typically, two months is allowed for comments.
+New proposed drafts should be submitted as a Pull Request from your fork.
+Ensure the 'modifiable by maintainers' is checked so that the maintainers can assign the next RFC number.
+Maintainers only ensure that the RFC adheres to the template and process.
+Maintainers will ask the author to create an issue for this RFC and used for collection and response to comments (author creates it so that they get notified of new comments instead of the maintainer).
+Typically, one or two months is allowed for comments.
 When the author is ready to submit to the committee for voting, they submit a Pull Request and indicate they are ready for voting.
 
 * Draft-Accepted
