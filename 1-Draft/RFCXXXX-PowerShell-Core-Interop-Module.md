@@ -14,7 +14,7 @@ Area: Standard Modules
 Comments Due: 5/1/2017
 ---
 
-# Interop Module Which Emulates Windows On PowerShell Core On Non-Windows
+# Interop Module Which Patches PowerShell Core Environment to Match The "Developed On" Platform of the Code
 
 I have written one script for configuring security for AWS which runs, without modification, on Linux or Windows.
 
@@ -49,9 +49,10 @@ to "windowize" the Linux platform and would be confusing for Linux professionals
 - Standard shipped-with PowerShell Core module
 - Written as a script
 - That "fixes up" a target environment (Windows or PowerShell)
-- with common standard pointers 
+- with common standard pointers for the "Developed on" platform
 - or code samples for common things that need to be done from the "developed on" platform
-- including code samples of methods that simply work on both platforms unchanged
+- using existing reference technology common to both platforms and available in PowerShell (e.g. Environment Variables & PowerShell Variables)
+- and includes code samples of methods that simply work on both platforms unchanged (e.g. A way to check bitness that works unmodified on both platforms - even though there is not a PowerShell standard for exposing this information)
 - that requires some action from an administrator to enable (e.g. run a CMDLet in their script or a machine based profile)
 
 ###Example
