@@ -14,7 +14,7 @@ Area: Standard Modules
 Comments Due: 5/1/2017
 ---
 
-# Interop Module Which Patches PowerShell Core Environment to Match The "Developed On" Platform of the Code
+# Interop Module(s) Which Patch(es) a PowerShell Runspace to Match The "Developed On" Platform of the PowerShell Code
 
 I have written one script for configuring security for AWS which runs, without modification, on Linux or Windows.
 
