@@ -45,7 +45,7 @@ to "windowize" the Linux platform and would be confusing for Linux professionals
 ###example
 Only tested on CentOS - so may need improvement for other distros
 
-`
+~~~~
 $RunningOnWindows = $true
 If ((Test-Path variable:IsWindows) -AND !$IsWindows)
 {
@@ -69,7 +69,8 @@ If ([System.IntPtr]::Size -eq 8)
 {
   $PROCBitness = 64
 }
-`
+~~~~
+
 ## Alternate Proposals and Considerations
 
 Alternatively any individual who has the need for such functionality will generally pursue it on their own, resulting in many custom solutions and lacking the value of community collaboration.
