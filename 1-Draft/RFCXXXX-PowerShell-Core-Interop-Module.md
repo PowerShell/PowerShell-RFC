@@ -41,7 +41,7 @@ to "windowize" the Linux platform and would be confusing for Linux professionals
     (or vice versa) I can port scripts, snippets and modules that that contain 
     popular references on my initial development platform (eg environment variables) 
     to the other platform without changing every reference, so that I can save work 
-    by reusing as much of my initial platform PowerShell code as possible, and 
+    by reusing as much of my "Developed On" platform PowerShell code as possible, and 
     where desirable, create scripts that run on both Windows and Linux unmodified.
 
 ## Specification
