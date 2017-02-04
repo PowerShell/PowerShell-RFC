@@ -54,11 +54,11 @@ to "windowize" the Linux platform and would be confusing for Linux professionals
 - including code samples of methods that simply work on both platforms unchanged
 - that requires some action from an administrator to enable (e.g. run a CMDLet in their script or a machine based profile)
 
-###example
-Only tested on CentOS - so may need improvement for other distros
+###Example
 
 ~~~~PowerShell
 #Code that adapts Windows PowerShell to Linux
+#NOTE: Only tested on CentOS - so may need improvement for other distros
 $RunningOnWindows = $true
 If ((Test-Path variable:IsWindows) -AND !$IsWindows)
 {
