@@ -55,6 +55,7 @@ to "windowize" the Linux platform and would be confusing for Linux professionals
 - or code samples for common things that need to be done from the "developed on" platform
 - using existing reference technology common to both platforms and available in PowerShell (e.g. Environment Variables & PowerShell Variables)
 - and includes code samples of methods that simply work on both platforms unchanged (e.g. A way to check bitness that works unmodified on both platforms - even though there is not a PowerShell standard for exposing this information)
+- that can work under all Windows PowerShell editions (not just Core - even if only distributed with Core)
 - that requires some action from an administrator to enable (e.g. run a CMDLet in their script or a machine based PowerShell profile)
 
 ###Example
