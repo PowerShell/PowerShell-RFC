@@ -48,12 +48,14 @@ to "windowize" the Linux platform and would be confusing for Linux professionals
 
 - Standard shipped-with PowerShell Core module
 - Written as a script
-- That "fixes up" a target environment (Windows or PowerShell)
+- That "fixes up" a target environment
+- dynamically (does not make persistent changes)
+- within the PowerShell session (does not dynamically change things beyond the current session)
 - with common standard pointers for the "Developed on" platform
 - or code samples for common things that need to be done from the "developed on" platform
 - using existing reference technology common to both platforms and available in PowerShell (e.g. Environment Variables & PowerShell Variables)
 - and includes code samples of methods that simply work on both platforms unchanged (e.g. A way to check bitness that works unmodified on both platforms - even though there is not a PowerShell standard for exposing this information)
-- that requires some action from an administrator to enable (e.g. run a CMDLet in their script or a machine based profile)
+- that requires some action from an administrator to enable (e.g. run a CMDLet in their script or a machine based PowerShell profile)
 
 ###Example
 
