@@ -1,16 +1,10 @@
-
-RFC: RFC<four digit unique incrementing number - assigned by Committee>
-
+---
+RFC: RFC0019
 Author: Darwin Sanoy
-
 Status: Draft
-
 SupercededBy:
-
 Version: 0.1
-
 Area: Standard Modules
-
 Comments Due: 5/1/2017
 ---
 
