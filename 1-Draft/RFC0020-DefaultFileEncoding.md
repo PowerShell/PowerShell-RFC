@@ -1,5 +1,5 @@
 ---
-RFC: Default File Encoding
+RFC: RFC0020
 Author: James Truher
 Status: Draft
 Area: FileSystem
