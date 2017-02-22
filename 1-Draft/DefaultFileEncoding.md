@@ -62,11 +62,10 @@ The following is the complete list of `FileSystemCmdletProviderEncoding` members
 * UTF8
 * UTF8NoBOM
 
-When `$PSDefaultFileEncoding` is set to `UTF8NoBOM`, the file will be created with UTF8 encoding but a BOM will not be added.
+When `$PSDefaultFileEncoding` is set to `UTF8NoBOM`, the file shall be created with UTF8 encoding and no BOM shall be written.
 
-When `$PSDefaultFileEncoding` is set to `Legacy`, the behavior will change based on the platform:
+When `$PSDefaultFileEncoding` is set to `Legacy`, the behavior shall be:
 
-**Windows**
 ```
 CmdletName       Encoding
 ----------       --------
@@ -78,25 +77,17 @@ Set-Content      ASCII
 Export-PSSession UTF8 (with BOM)
 Redirection      UTF16
 ```
+This persists the irregular file encoding on non-Windows platforms, and allows Linux files to be used on Windows with the same encoding as exists in previous releases of PowerShell.
 
-**Non-Windows**
-```
-CmdletName       Encoding
-----------       --------
-Add-Content      UTF8 (no BOM)
-Export-Clixml    UTF8 (no BOM)
-Export-CSV       UTF8 (no BOM)
-Out-File         UTF8 (no BOM)
-Set-Content      UTF8 (no BOM)
-Export-PSSession UTF8 (no BOM)
-Redirection      UTF8 (no BOM)
-```
 The default on Windows systems shall remain unchanged (the value for `$PSDefaultFileEncoding` shall be set to `Legacy`), non-Windows platforms shall set `$PSDefaultFileEncoding` to `UTF8NoBOM`.
-If the `$PSDefaultFileEncoding` is not set, `UTF8NoBOM` shall be the default for non-Windows systems, and the current behavior (`Legacy`) on Windows.
+If the `$PSDefaultFileEncoding` is not set, `UTF8NoBOM` shall be the default for non-Windows systems, and `Legacy` (the current behavior) on Windows.
+
+Naturally, specific use of the `-encoding` parameter when invoking the cmdlet shall override `$PSDefaultFileEncoding`. 
 
 ### Exclusions
 
 Cmdlets which do not create a file are excluded from this change, so the `*-WebRequest` and `*-RestMethod` cmdlets shall not be changed.
+Only those cmdlets listed in the table above are to be changed, any other cmdlet which create files with a specific encoding are out of scope.
 Remoting protocol cmdlets shall also be unaffected with this change. 
 
 ### Optional
