@@ -1,5 +1,5 @@
 ---
-RFC: RFC<four digit unique incrementing number - assigned by Committee>
+RFC: RFC0021
 Author: Steve Lee
 Status: Draft
 SupercededBy: N/A
