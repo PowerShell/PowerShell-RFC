@@ -1,0 +1,382 @@
+[‎1/‎26/‎2017 9:05 AM]  Drew Burt:  
+Drew First time calller
+ 
+[‎1/‎26/‎2017 9:07 AM]  Bobby Cannon:  
+yes
+ 
+[‎1/‎26/‎2017 9:07 AM]  Iain Brighton:  
+(y)
+ 
+[‎1/‎26/‎2017 9:07 AM]  Keith Hill:  
+yes
+ 
+[‎1/‎26/‎2017 9:07 AM]  alx9r:  
+yep
+ 
+[‎1/‎26/‎2017 9:07 AM]  Per Rydell:  
+looks great
+ 
+[‎1/‎26/‎2017 9:07 AM]  Allan Miller:  
+were we going to record?
+ 
+[‎1/‎26/‎2017 9:07 AM]  jboberg:  
+(y)
+ 
+[‎1/‎26/‎2017 9:11 AM]  Eugene Bekker:  
+That would be on Windows too?
+ 
+[‎1/‎26/‎2017 9:12 AM]  Eugene Bekker:  
+Job control
+ 
+[‎1/‎26/‎2017 9:12 AM]  Jason Shirk:  
+Probably not.
+ 
+[‎1/‎26/‎2017 9:12 AM]  Eugene Bekker:  
+OK, that's what I would expect, just checking
+ 
+[‎1/‎26/‎2017 9:13 AM]  Keith Hill:  
++1 for iwr/irm enhancements
+ 
+[‎1/‎26/‎2017 9:13 AM]  Jonas Sommer Nielsen:  
+You cant hear my music right? 
+ 
+[‎1/‎26/‎2017 9:13 AM]  Bobby Cannon:  
+No we cannot.
+ 
+[‎1/‎26/‎2017 9:13 AM]  Eugene Bekker:  
+nope (on your music)
+ 
+[‎1/‎26/‎2017 9:13 AM]  Jonas Sommer Nielsen:  
+Good thanks :) 
+ 
+[‎1/‎26/‎2017 9:14 AM]  Johan Åkerström:  
+ctrl-z for win...please ... if possible.
+ 
+[‎1/‎26/‎2017 9:14 AM]  Eugene Bekker:  
+Maybe job control on windows == -AsJob
+ 
+[‎1/‎26/‎2017 9:16 AM]  Eugene Bekker:  
+One proto that would work across both platforms would be nice
+ 
+[‎1/‎26/‎2017 9:16 AM]  Mitch:  
+I have plans to use Posh remoting very soon
+ 
+[‎1/‎26/‎2017 9:16 AM]  Bobby Cannon:  
+No comment on the remoting question
+ 
+[‎1/‎26/‎2017 9:16 AM]  Drew Burt:  
+PSRP over OpenSSH for other endpoints like Storage controllers
+ 
+[‎1/‎26/‎2017 9:17 AM]  Eugene Bekker:  
+All our Linux (CentOS) hosts are AD-joined
+ 
+[‎1/‎26/‎2017 9:17 AM]  Bart:  
+We want to be able to write a complex script locally and then launch that script over some kind of remoting protocol. Currently, WinRM doesn't support this very well if at all. I'm hoping that SSH will give us that. 
+ 
+[‎1/‎26/‎2017 9:17 AM]  Drew Burt:  
+HPE 3PAR has an ugly Imp
+ 
+[‎1/‎26/‎2017 9:18 AM]  Eugene Bekker:  
+Is the plan for NTLM/Kerberos support to be implemented in managed code or P/Invoke out to native?
+ 
+[‎1/‎26/‎2017 9:19 AM]  Eugene Bekker:  
+GSS is what's used by OpenSSH and others
+ 
+[‎1/‎26/‎2017 9:19 AM]  alx9r:  
+It would be nice to be able to remote in and run as NT Authority\System without using CredSSP and PSExec (there's a double-hop problem).
+ 
+[‎1/‎26/‎2017 9:20 AM]  Eugene Bekker:  
+:-)
+ 
+[‎1/‎26/‎2017 9:20 AM]  alx9r:  
+Mainly for testing and troubleshooting.
+ 
+[‎1/‎26/‎2017 9:21 AM]  alx9r:  
+DSC LCM runs in NT Authority\System
+ 
+[‎1/‎26/‎2017 9:22 AM]  Ryan Manly:  
+All our Macs are joined to domain. But I am a powershell nüb. Just started managing Windows recently. I don't think Mac folks that happen to manage windows would use over shell script or python etc. But windows guys that now manage Macs might use. *shrug* 
+ 
+[‎1/‎26/‎2017 9:23 AM]  Johan Åkerström:  
+@alx9r, try my Invoke-AsSystem in a remoting session http://pastebin.com/XVurHhDs 
+ 
+[‎1/‎26/‎2017 9:24 AM]  Bobby Cannon:  
+I'm all about giving telemetry, just be clear on what is shared.
+ 
+[‎1/‎26/‎2017 9:24 AM]  Drew Burt:  
+-Telemetry switch on / off?
+ 
+[‎1/‎26/‎2017 9:25 AM]  alx9r:  
+Thanks @johan
+ 
+[‎1/‎26/‎2017 9:25 AM]  Bobby Cannon:  
+I love the idea of sharing that data!
+ 
+[‎1/‎26/‎2017 9:25 AM]  Bobby Cannon:  
+I'd love to see that myself.
+ 
+[‎1/‎26/‎2017 9:25 AM]  Bobby Cannon:  
+That is excellent.
+ 
+[‎1/‎26/‎2017 9:25 AM]  Drew Burt:  
+-Telemetry -Verbose returns what's collected?
+ 
+[‎1/‎26/‎2017 9:28 AM]  Eugene Bekker:  
+True -- same script that uses 'ls' won't work equally well on different platforms
+ 
+[‎1/‎26/‎2017 9:28 AM]  Keith Hill:  
++1 for Add-DefaultAlias -Windows -Unix
+ 
+[‎1/‎26/‎2017 9:28 AM]  Drew Burt:  
+Alais Priority order Native Vs POSH
+ 
+[‎1/‎26/‎2017 9:28 AM]  Keith Hill:  
+er -Linux
+ 
+[‎1/‎26/‎2017 9:28 AM]  Eugene Bekker:  
+That's true too!
+ 
+[‎1/‎26/‎2017 9:28 AM]  Jason Milczek:  
+...or get rid of aliases all together
+ 
+[‎1/‎26/‎2017 9:28 AM]  Jonas Sommer Nielsen:  
+Sorry, I'm in a pool 🎱 hall with the team. Have to drop off ... Burgers on the way.. It's 18:30 pm here. But great call. Keep up the good work :D 
+ 
+[‎1/‎26/‎2017 9:28 AM]  Iain Brighton:  
+Don't add non PowerShell-specific aliases, people can add them if required.
+ 
+[‎1/‎26/‎2017 9:29 AM]  Larry Turkin:  
+Already Lunch time in the Northeast
+ 
+[‎1/‎26/‎2017 9:30 AM]  Johan Åkerström:  
++1
+ 
+[‎1/‎26/‎2017 9:30 AM]  Keith Hill:  
+This helps with scripts that use ls because if user has ls alias for GCI, how do you get to native ls.
+ 
+[‎1/‎26/‎2017 9:31 AM]  Keith Hill:  
+Not sure about path , still a Linux n00b
+OK yeah it is /bin/ls
+ 
+[‎1/‎26/‎2017 9:33 AM]  Ryan Yates:  
+Unfortunately Joel is in another meeting - I have to drop off to join in
+ 
+[‎1/‎26/‎2017 9:34 AM]  Keith Hill:  
++1 for apt-get - yay!
+ 
+[‎1/‎26/‎2017 9:34 AM]  Ryan Manly:  
+Use native packagers! 
+ 
+[‎1/‎26/‎2017 9:35 AM]  Bobby Cannon:  
+It's done... except (nope not done) :)
+ 
+[‎1/‎26/‎2017 9:36 AM]  Steve Lee (POWERSHELL):  
+https://github.com/powershell/psl-omi-provider  for wsman remoting on non-Windows
+ 
+[‎1/‎26/‎2017 9:36 AM]  Wiedmeyer, Martin - NTT:  
+Great, thanks
+ 
+[‎1/‎26/‎2017 9:37 AM]  Eugene Bekker:  
+Multiple/Remote Sessions too?
+ 
+[‎1/‎26/‎2017 9:37 AM]  Eugene Bekker:  
+Cool!
+ 
+[‎1/‎26/‎2017 9:37 AM]  Drew Burt:  
++1 VS Code
+ 
+[‎1/‎26/‎2017 9:37 AM]  Larry Turkin:  
+What about extension for Visual Studio?
+ 
+[‎1/‎26/‎2017 9:37 AM]  Wiedmeyer, Martin - NTT:  
+What will be the future of ISE?
+ 
+[‎1/‎26/‎2017 9:37 AM]  Jason Milczek:  
+Any talk of replacing ISE with VSCode?
+ 
+[‎1/‎26/‎2017 9:38 AM]  Johan Åkerström:  
+@alx9r, Also try my Invoke-AsService... If you want to impersonate any service. Such as trustedinstaller :D
+
+http://pastebin.com/4zmccTCu 
+ 
+[‎1/‎26/‎2017 9:38 AM]  Keith Hill:  
+Def +1 for PowerShell extension for VS Code. It's been my main PS IDE for the past year.
+ 
+[‎1/‎26/‎2017 9:38 AM]  Jason Milczek:  
+...but maybe it should be
+ 
+[‎1/‎26/‎2017 9:39 AM]  Drew Burt:  
+F8 F5 Full functionality ISE Done...
+ 
+[‎1/‎26/‎2017 9:39 AM]  Keith Hill:  
+Yeah, default terminal in VS Code on Windows is not PoweShell as of 1.9.0 insiders
+er is **now** PowerShell
+ 
+[‎1/‎26/‎2017 9:39 AM]  Drew Burt:  
+yep just added it
+ 
+[‎1/‎26/‎2017 9:40 AM]  Keith Hill:  
+You added that?
+ 
+[‎1/‎26/‎2017 9:40 AM]  Drew Burt:  
+no there are some blogs where it states they added it as Primary terminal default
+ 
+[‎1/‎26/‎2017 9:41 AM]  Keith Hill:  
+OK some community guy submitted that PR and it got accepted to VS Code. +1 for that guy. :-)
+ 
+[‎1/‎26/‎2017 9:41 AM]  alx9r:  
+@johan Do you have a repo somewhere where you are maintaining those?
+ 
+[‎1/‎26/‎2017 9:41 AM]  Steve Lee (POWERSHELL):  
+(y)
+ 
+[‎1/‎26/‎2017 9:41 AM]  Jason Shirk:  
+PS default in VS Code: https://github.com/Microsoft/vscode/pull/18493 
+ 
+[‎1/‎26/‎2017 9:42 AM]  Johan Åkerström:  
+@alx9r, no :(
+ 
+[‎1/‎26/‎2017 9:44 AM]  alx9r:  
+@johan Do you hold the copyright? Can you publish it with a license somewhere so I can use in good conscience?
+ 
+[‎1/‎26/‎2017 9:45 AM]  Bobby Cannon:  
+no
+ 
+[‎1/‎26/‎2017 9:46 AM]  Keith Hill:  
++1 for jchadwick for making PS the default in VS Code!
+ 
+[‎1/‎26/‎2017 9:46 AM]  Jason Milczek:  
+please do
+ 
+[‎1/‎26/‎2017 9:47 AM]  Johan Åkerström:  
+@alx9r,
+
+I'll pop them in a new repo on github. 
+https://github.com/CosmosKey 
+ 
+[‎1/‎26/‎2017 9:47 AM]  alx9r:  
+@johan Awesome. Thanks!
+ 
+[‎1/‎26/‎2017 9:49 AM]  Jason Milczek:  
+Ha, juneb
+ 
+[‎1/‎26/‎2017 9:50 AM]  Drew Burt:  
+Jaykul (Joel)
+ 
+[‎1/‎26/‎2017 9:56 AM]  Eugene Bekker:  
+Sorry if I missed this already or last call, but I didn't see DSC on the plan list
+ 
+[‎1/‎26/‎2017 9:56 AM]  alx9r:  
+I'm interested in PowerShell 6 because I'm running into bugs in 5.0 and 5.1
+ 
+[‎1/‎26/‎2017 9:56 AM]  Eugene Bekker:  
+Is there any plan for moving DSC to Linux in "full" form?
+ 
+[‎1/‎26/‎2017 9:56 AM]  Keith Hill:  
+Installing on Ubuntu 14.04 for embedded Linux development (using yotco cross compilers)
+ 
+[‎1/‎26/‎2017 9:56 AM]  Ryan Manly:  
+Paul Bowden from the Office team might be able to help you with the macOS packaging. He's even presented at some of our cons. ;) pbowden@microsoft.com 
+ 
+[‎1/‎26/‎2017 9:57 AM]  Eugene Bekker:  
+But, idea is to tackle after 6.0 is released?
+ 
+[‎1/‎26/‎2017 9:57 AM]  Bobby Cannon:  
+I used PS on Windows to do daily development, side scripts for cleaning, building, etc, I also use it for building windows images using DISM, basically PowerShell is first thing I start followed by VS.
+ 
+[‎1/‎26/‎2017 9:57 AM]  Eugene Bekker:  
+Got it
+ 
+[‎1/‎26/‎2017 9:57 AM]  Wiedmeyer, Martin - NTT:  
+And any plans for UNIX posh? e.g. on Solaris
+ 
+[‎1/‎26/‎2017 9:57 AM]  Drew Burt:  
+Tool Building over all Env management Hate Guis
+ 
+[‎1/‎26/‎2017 9:57 AM]  Bobby Cannon:  
+I also use PS to manage all our Azure / Office 365 resources.
+ 
+[‎1/‎26/‎2017 9:58 AM]  Eugene Bekker:  
+I thought Oracle just cancelled Solaris recently?  ;-)
+ 
+[‎1/‎26/‎2017 9:58 AM]  Keith Hill:  
+I'm trying to use PS daily on Ubuntu instead of bash except that the PSReadline bug messing up my prompt it getting annoying. But removing PSReadline makes using PS even more annoying. :-)
+ 
+[‎1/‎26/‎2017 9:58 AM]  Johan Åkerström:  
+Plan 9 :)
+ 
+[‎1/‎26/‎2017 9:58 AM]  Schill, Mark:  
++1 on fixing that PSReadline bug
+ 
+[‎1/‎26/‎2017 9:58 AM]  Drew Burt:  
+PowerShell is now my first Choice for everything
+ 
+[‎1/‎26/‎2017 9:58 AM]  Justino Garcia:  
+Any plans for a version that Richard stallman will support :)  
+Kiddibg 
+ 
+[‎1/‎26/‎2017 9:58 AM]  Keith Hill:  
+Really? What's the simple fix?
+ 
+[‎1/‎26/‎2017 9:59 AM]  Jason Shirk:  
+Not simple.
+ 
+[‎1/‎26/‎2017 9:59 AM]  Keith Hill:  
+Ah, ok.
+Doh!
+ 
+[‎1/‎26/‎2017 10:00 AM]  Larry Turkin:  
+Using Powershell in relation to Microsoft Identity Manager for porting users through the MIM Portal.
+ 
+[‎1/‎26/‎2017 10:00 AM]  Steve Lee (POWERSHELL):  
+Thanks everyone.  Signing off.
+ 
+[‎1/‎26/‎2017 10:00 AM]  alx9r:  
+Thank you!
+ 
+[‎1/‎26/‎2017 10:00 AM]  Mark Hays:  
+Thank You!
+ 
+[‎1/‎26/‎2017 10:00 AM]  Johan Åkerström:  
+Link?
+ 
+[‎1/‎26/‎2017 10:00 AM]  Drew Burt:  
+Thanks For all you Do 
+ 
+[‎1/‎26/‎2017 10:00 AM]  Bobby Cannon:  
+Thank you so much
+ 
+[‎1/‎26/‎2017 10:00 AM]  Larry Turkin:  
+Thanks everyone!!!
+ 
+[‎1/‎26/‎2017 10:00 AM]  Keith Hill:  
+Thanks!
+ 
+[‎1/‎26/‎2017 10:00 AM]  Ryan Manly:  
+(y) 
+ 
+[‎1/‎26/‎2017 10:00 AM]  Jason Milczek:  
+ty
+ 
+[‎1/‎26/‎2017 10:01 AM]  Mitch:  
+Thanks
+ 
+[‎1/‎26/‎2017 10:01 AM]  Jonathan Medd:  
+Thank you :-)
+ 
+[‎1/‎26/‎2017 10:01 AM]  Larry Turkin:  
+I appreciate your time.
+ 
+[‎1/‎26/‎2017 10:01 AM]  Wiedmeyer, Martin - NTT:  
+Good stuff
+ 
+[‎1/‎26/‎2017 10:01 AM]  Per Rydell:  
+Thx!
+ 
+[‎1/‎26/‎2017 10:01 AM]  Jose, Sajen:  
+Thanks You
+ 
+[‎1/‎26/‎2017 10:01 AM]  Eugene Bekker:  
+(sun)
+ 
+You were removed from the conversation. 
