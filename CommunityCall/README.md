@@ -1,7 +1,7 @@
 # PowerShell Core Community Call
 
 The PowerShell Core Community Call is held on the 3rd Thursday of every month.
-Use [this ICS file](RecurringCommunityCall.ics) (right-click Raw -> Save Target/Link As in order to download the file) to put this recurring event on your calendar. 
+Use [this ICS file](RecurringCommunityCall.ics) (right-click `Raw` and select `Save Target/Link As` in order to download the file correctly) to put this recurring event on your calendar.
 
 ## Notes
 
