@@ -22,8 +22,9 @@ All members of the community are allowed to author new RFCs and can provide feed
 
 ## RFC Naming Convention
 
-RFC documents shall follow the naming convention of "RFC####-Title.md" where #### is the RFC number and Title is the title of the document.
-Authors of RFCs do not assign an RFC number.  The Committee will assign an RFC number and update the title accordingly.
+RFC documents shall follow the naming convention of "RFCNNNN-Title.md".
+Authors of RFCs do not assign an RFC number.
+When the Pull Request is submitted, ensure `Allow edits from maintainers` is checked so that the Committee can add the RFC number to the draft and also update the title accordingly.
 
 ## RFC Template
 
