@@ -1,7 +1,7 @@
 ---
 RFC: RFC0021
 Author: Steve Lee
-Status: Draft
+Status: Draft-Accepted
 SupercededBy: N/A
 Version: 0.1
 Area: Cmdlets
@@ -48,3 +48,28 @@ For use cases that have to throttle REST API calls (such as querying GitHub API)
 ## Alternate Proposals and Considerations
 
 None
+
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Accept 
+
+Joey Aiello: Accept
+
+Bruce Payette: Accept
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+### Majority Decision
+
+Commmittee agrees that this RFC satisfies the motivation for pagination in webcmdlets.  Requests:
+
+- Resolve relative URLs to absolute URLs for Invoke-WebRequest which is needed for Invoke-RestMethod capability
+- `-FollowRelLink` should have a way to limit the number of links to follow, default should be MaxInt.  When non-success code is received, it should output where it stopped.
+
+### Minority Decision
+
+N/A
