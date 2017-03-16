@@ -1,7 +1,7 @@
 ---
 RFC: 0018
 Author: Ilya Sazonov
-Status: Draft
+Status: Draft-Accepted
 SupercededBy: n/a
 Version: 0.1
 Area: Cmdlet
@@ -178,3 +178,26 @@ Best behavior is to create null as result hash for null string and generate non-
 We cosider `Base64` as special encoding and not a hash. It is recomended to implement `Base64` encoding in some `ConvertTo-Base64` and `ConvertFrom-Base64` cmdlets.
 
 We could split the `Get-Hash` functionality on `Get-FileHash` and `Get-StringHash` cmdlets or even `Get-FileHash`, `Get-StreamHash` and `Get-StringHash`.
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Accept 
+
+Joey Aiello: Accept
+
+Bruce Payette: Accept
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+### Majority Decision
+
+Commmittee agrees that this RFC satisfies the motivation for supporting hashing of objects other than files.  Request is to ensure default parameter set matches existing `Get-FileHash` to maintain compatibility.  This should be in Microsoft.PowerShell.Utility module.
+
+### Minority Decision
+
+N/A
