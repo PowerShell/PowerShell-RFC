@@ -18,7 +18,9 @@ This process was adapted from the Chef RFC process as well as from DMTF.org proc
 
 ## Roles
 
-All members of the community are allowed to author new RFCs and can provide feedback to any RFC.
+- **Author** - All members of the community are allowed to author new RFCs and can provide feedback to any RFC.
+- **Maintainer** - Owner of the RFC process.
+- **Maintainer's committee** - Committee of Maintainers to vote and to make conclusion about accept/reject RFC.
 
 ## RFC Naming Convention
 
@@ -38,7 +40,7 @@ Status: <Draft | Experimental | Accepted | Rejected | Withdrawn | Final>
 SupercededBy: <link to another RFC>
 Version: <Major>.<Minor>
 Area: <Area within the PowerShell language>
-Comments Due: <Date for submitting comments to current draft>
+Comments Due: <Date for submitting comments to current draft. Minimum 1 month>
 ---
 
 # Title
@@ -64,17 +66,32 @@ RFCs go through applicable stages:
 * Draft
 
 This is the initial draft of a RFC posted for comments and considered a work-in-progress.
-New proposed drafts should be submitted as a Pull Request from your fork.
-Ensure the 'modifiable by maintainers' is checked so that the maintainers can assign the next RFC number.
-Maintainers only ensure that the RFC adheres to the template and process.
-Maintainers will ask the author to create an issue for this RFC and used for collection and response to comments (author creates it so that they get notified of new comments instead of the maintainer).
-Typically, one or two months is allowed for comments.
-When the author is ready to submit to the committee for voting, they submit a Pull Request and indicate they are ready for voting.
+
+New proposed drafts should be submitted as a Pull Request from Author's fork.
+Author must ensure the 'modifiable by maintainers' is checked so that the Maintainers can assign the next RFC number.
+
+Maintainers only ensure that the RFC adheres to the template and the RFC process and then merge the PRPull Request.
+
+After that Maintainers will ask the Author to create an issue for this RFC and used for collection and response to comments (Author creates it so that they get notified of new comments instead of the Maintainer).
+Typically, one or two months is allowed for comments (see above `Comments Due`).
+
+Community discuss the RFC.
+
+After `Comments Due` date the Author summarizes comments, submit new Pull Request to make the final RFC Draft and ask the Maintainer's committee to vote.
+
+Maintainers merge the Pull Request.
+
+The Maintainer's committee vote for the RFC Draft and make a conclusion: reject, return for discussion, accept.
 
 * Draft-Accepted
 
-Comments have been reviewed and new comments are not being sought.
+The Maintainer's committee reviewed the RFC Draft and comments, voted and accepted the RFC Draft.
+
+New comments are not being sought.
+
 Code work has not started/planned or not needed.
+
+Community is invited to use and implement the RFC.
 
 * Experimental
 
