@@ -3,9 +3,9 @@ RFC: RFC0016
 Author: Steve Lee, Jim Truher
 Status: Draft
 SupercededBy: n/a
-Version: 0.1
+Version: 0.2
 Area: Host
-Comments Due: 1/6/2017
+Comments Due: 4/22/2017
 Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/#
 ---
 
