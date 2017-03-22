@@ -17,48 +17,23 @@ Add basic census telemetry to PowerShell.
 
 Downloads numbers do not tell us if we are successful in growing usage of PowerShell.
 The platform (Windows, Linux, Mac) usage data helps to prioritize new feature work and investments.
-Version checks in applications are common and also provide a way to inform the user if a newer version is available.
-Send basic PowerShell and OS version information as part of version check request.
 
 ## Specification
 
-On startup of PowerShell, the host does a check if a version check has happened that day, if so, we skip.
-With interactive session, user is informed there is a newer version and how to update (e.g. apt-get, update-package)
-A HTTP GET is performed to a well known https address (TBD) to obtain latest version information.
-SSL cert is validated to avoid spoofing server.
+On every startup of the PowerShell Console host, telemetry will be sent via [ApplicationInsights](https://azure.microsoft.com/en-us/services/application-insights/) to collect the following information:
+- A SHA256 hash of System.Management.Automation.dll
+- Environment.OSVersion.VersionString
+- GitCommitId (from $psversiontable)
 
-### HTTP Request
+## Design
 
-```
-GET /powershell/core/latestversion HTTP/1.1
-Accept: application/json
-User-Agent: PowerShell/<<$psversiontable.psedition>>/<<$psversiontable.gitcommitid>>; <<$psversiontable.osversion>>
-```
+ApplicationInsights provides a mechanism for sending a [`CustomEvent`](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-api-custom-events-metrics) which is essentially three elements:
+- The name of the event
+- A dictionary of properties
+- A dictionary of metrics
 
-Note that `$psversiontable.osversion` is dependent on [#1635](https://github.com/PowerShell/PowerShell/issues/1635) getting addressed.
-
-### HTTP Response
-
-```
-HTTP/1.1 200 Ok
-Content-Type: application/json
-Content-Length: nn
-Connection: close
-
-{"psedition":"Core","latestversion":"6.0.0-alpha.12","severity":"critical"}
-```
-
-Severity:
-- `Critical` indicates a security fix
-- `Optional` indicates general bug fixes/features
-
-### Configuration
-
-Telemetry is on by default with a means to opt-out.
-Since this is not the only configuration we would expose for PowerShell, we should have a [general configuration RFC] (https://github.com/PowerShell/PowerShell-RFC/blob/master/1-Draft/RFC0015-PowerShell-StartupConfig.md) to solve that, but this RFC assumes standard .config file format.
-
-The census telemetry (sending `User-Agent` information) would be a specific configuration setting: `SendUserAgent=$false`.
-Disabling the version check request would be a different configuration setting: `PerformVersionCheck=$false`.
+For PowerShell Core purposes we will send only the name of the event and a dictionary of properties consisting of the list shown in the the specification.
+Initially, we will not provide any metrics, although we can easily do so at a later time.
 
 ## Alternate Proposals and Considerations
 
