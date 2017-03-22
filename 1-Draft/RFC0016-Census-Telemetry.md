@@ -1,6 +1,6 @@
 ---
 RFC: RFC0016
-Author: Steve Lee
+Author: Steve Lee, Jim Truher
 Status: Draft
 SupercededBy: n/a
 Version: 0.1
