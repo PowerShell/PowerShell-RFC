@@ -90,7 +90,7 @@ The PowerShell Committee has reviewed the RFC Draft and comments, and has voted 
 
 At this point, new comments are not being sought.
 
-Code work has not started and is not planned or not needed.
+No one has begun implementing the RFC, and there are no current plans to implement the RFC.
 
 The community is invited to implement the RFC.
 
