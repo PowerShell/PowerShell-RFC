@@ -3,7 +3,7 @@ RFC: RFC0000
 Author: Steve Lee
 Status: Draft
 Area: Process
-Version: 1.3
+Version: 1.3.1
 Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/5
 ---
 
@@ -18,7 +18,10 @@ This process was adapted from the Chef RFC process as well as from DMTF.org proc
 
 ## Roles
 
-All members of the community are allowed to author new RFCs and can provide feedback to any RFC.
+* **Author**: All members of the community are allowed to author new RFCs and can provide feedback to any RFC.
+* **PowerShell Committee**: The design committe that votes to accept or reject an RFC.
+(Learn more about the PowerShell Committee [here](https://github.com/PowerShell/PowerShell/blob/master/docs/community/governance.md#powershell-committee).)
+* **Committee Member**: An individual member of the PowerShell Committee.
 
 ## RFC Naming Convention
 
@@ -38,7 +41,7 @@ Status: <Draft | Experimental | Accepted | Rejected | Withdrawn | Final>
 SupercededBy: <link to another RFC>
 Version: <Major>.<Minor>
 Area: <Area within the PowerShell language>
-Comments Due: <Date for submitting comments to current draft>
+Comments Due: <Date for submitting comments to current draft (minimum 1 month)>
 ---
 
 # Title
@@ -64,17 +67,32 @@ RFCs go through applicable stages:
 * Draft
 
 This is the initial draft of a RFC posted for comments and considered a work-in-progress.
-New proposed drafts should be submitted as a Pull Request from your fork.
-Ensure the 'modifiable by maintainers' is checked so that the maintainers can assign the next RFC number.
-Maintainers only ensure that the RFC adheres to the template and process.
-Maintainers will ask the author to create an issue for this RFC and used for collection and response to comments (author creates it so that they get notified of new comments instead of the maintainer).
-Typically, one or two months is allowed for comments.
-When the author is ready to submit to the committee for voting, they submit a Pull Request and indicate they are ready for voting.
+
+New proposed drafts should be submitted as a Pull Request from the Author's fork.
+The Author must ensure that 'Allow edits from maintainers' is checked so that a Committee Member can assign the next RFC number.
+
+Committee Members also ensure that the RFC adheres to the template and the RFC process before merging the Pull Request.
+
+After the Pull Request is merged, Maintainers will ask the Author to create an issue for this RFC to collect and respond to feedback on the RFC.
+(The Author should create issue so that they get notified of new comments instead of the Committee Member.)
+Typically, one or two months is allowed for comments (see `Comments Due` above).
+
+At this point, the community discusses the RFC.
+
+After the `Comments Due` date, the Author summarizes the comments, submits a new Pull Request to make the final RFC Draft, and asks the PowerShell Committee to vote.
+
+Just before voting, the PowerShell Comittee merges the Pull Request.
+The PowerShell Committee then votes to accept or reject the RFC Draft.
 
 * Draft-Accepted
 
-Comments have been reviewed and new comments are not being sought.
-Code work has not started/planned or not needed.
+The PowerShell Committee has reviewed the RFC Draft and comments, and has voted to accept the RFC Draft.
+
+At this point, new comments are not being sought.
+
+No one has begun implementing the RFC, and there are no current plans to implement the RFC.
+
+The community is invited to implement the RFC.
 
 * Experimental
 
@@ -105,3 +123,5 @@ Added Draft-Accepted state and Version header property.
 v1.2 - 8-18-2016 - Open submitting RFCs to the community and update formatting.
 
 v1.3 - 9-26-2016 - Added Withdrawn stage.  Comments Due field to template.  Updated guidance on RFC numbering.
+
+v1.3.1 - 3-22-2017 - Cleaned up language and made explicit clarifications to process
