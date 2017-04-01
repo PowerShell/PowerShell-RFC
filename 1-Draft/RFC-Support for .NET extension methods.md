@@ -31,19 +31,21 @@ Simplicity of use
     [func[int,string]] $f = {param([int]$i) ($i * 2).ToString()}
     $a.Select($f) # [int,string] will be deduced.
     
-    $a.Select(param($i) $i * 2) #  [object,object] will be deduced.
+    $a.Select({param($i) $i * 2}) #  [object,object] will be deduced.
 ```
 
 Simplication of 'Magic' methods
 The `Foreach` and `Where` methods that are added to collections are a hack which could be solved more elegantly by making extension methods of the EnumerableOps methods.
 By doing this, they wouldn't need to be special cased. Normal method resolution would make it work, and would also make `List[T].Foreach` not hide the extension methods.
+The current implementations would still be used for non-.NET objects such as COM. No special work needs to be done for that since they are used as a fallback when no other 
+methods has been resolved.
 
 ```csharp
 public static class EnumerableOps {
-    static IEnumerable<T> Foreach<T>(this IEnumerable<T> c, ScriptBlock sb){}
-    static IEnumerable<T> Foreach<T>(this IEnumerable<T> c, ScriptBlock sb, WhereOperatorSelectionMode mode){}
-    static IEnumerable<T> Foreach<T>(this IEnumerable<T> c, ScriptBlock sb, WhereOperatorSelectionMode mode, int count){}
-    static IEnumerable<T> Foreach<T>(this IEnumerable<T> c, object expression, object[] args){}
+    static IEnumerable<TResult> Foreach<TInput,TResult>(this IEnumerable<TInput> c, ScriptBlock sb){}
+    static IEnumerable<TResult> Foreach<TInput,TResult>(this IEnumerable<TInput> c, ScriptBlock sb, WhereOperatorSelectionMode mode){}
+    static IEnumerable<TResult> Foreach<TInput,TResult>(this IEnumerable<TInput> c, ScriptBlock sb, WhereOperatorSelectionMode mode, int count){}
+    static IEnumerable<TResult> Foreach<TInput,TResult>(this IEnumerable<TInput> c, object expression, object[] args){}
 
     static IEnumerable<T> Where<T>(this IEnumerable<T> c, ScriptBlock sb){}
     static IEnumerable<T> Where<T>(this IEnumerable<T> c, ScriptBlock sb, WhereOperatorSelectionMode mode){}
@@ -69,6 +71,18 @@ If multiple methods are an equally good match, an error is produced. To call suc
 [Linq.Enumerable]::Select($a, $f)
 
 ```
+
+## .NET Extension Methods
+1. Extension methods must define in top-level, non-generic, static class:
+    `type.IsSealed && type.IsStatic && !type.IsGenericType && !type.IsNested`
+2. A class contains extension methods is decorated with ExtensionAttribute, the extension methods are also decorated with ExtensionAttribute.
+3. The first parameter of the extension method should be the type that is interested in.
+4. The resolution of extension methods: 
+    * Search extension methods in the enclosing namespace, starting from the closest namespace.
+    * Search extension methods based on the using directives.
+    * The extension methods found in the same namespace are the candidate sets. The resolution is similar to the overload resolution: 
+        * Most derived parameter type
+        * Most derived this parameter type
 
 ## Alternate Proposals and Considerations
 
