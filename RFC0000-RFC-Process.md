@@ -27,7 +27,7 @@ This process was adapted from the Chef RFC process as well as from the DMTF.org 
 
 * When submitted, RFC documents shall follow the naming convention of `RFCNNNN-<Title>.md`.
 * Authors of RFCs shall not assign the RFC number (leave the `NNNN` in the filename).
-* When the Pull Request is submitted, the author shall select `Allow edits from maintainers` is checked so that the Committee can add the RFC number to the draft, update the title, and fix the filename.
+* When the Pull Request is submitted, the author shall check `Allow edits from maintainers` so that the Committee can add the RFC number to the draft, update the title, and fix the filename.
 
 ## RFC Template
 
@@ -71,9 +71,9 @@ This is the initial draft of an RFC posted for comments and considered a work-in
 * New proposed drafts should be submitted as a Pull Request from the Author's fork into the `Draft-Accepted` folder.
 * The Author shall ensure that the `Allow edits from maintainers` box is checked so that a Committee Member can assign the next RFC number.
 * If the Pull Request has followed the correct template and process, a Committee Member will assign the label `Review - Open for comments` to the Pull Request to indicate that anyone can comment on the content of the submission.
-Typically, one or two months is allowed for comments, though this may be extended if a submission is particularly conentious or hasn't received enough feedback for the Committee to feel comfortable making a decision.
-* When the Committee closes the comment period, the Author should update the RFC and Pull Request to address the comments.
-* The Committee shall vote to accept or reject the RFC and accept/close the Pull Request accordingly.
+Typically, one or two months is allowed for comments, though this may be extended if a submission is particularly contentious or hasn't received enough feedback for the Committee to feel comfortable making a decision.
+* When the Committee closes the comment period, the Author should update the RFC and Pull Request with a new commit to address the comments.
+* The Committee shall vote to merge or reject the RFC.
 
 ### Draft-Accepted
 
