@@ -1,6 +1,6 @@
 ---
 RFC: RFC0000
-Author: Steve Lee
+Author: Steve Lee, Joey Aiello
 Status: Draft
 Area: Process
 Version: 1.4
@@ -35,13 +35,14 @@ RFC documents shall follow the following template:
 
 ```markdown
 ---
-RFC: RFC<four digit unique incrementing number assigned by Committee, this should be left blank by the author>
+RFC: RFC<four digit unique incrementing number assigned by Committee, this shall be left blank by the author>
 Author: <First Last>
 Status: <Draft | Experimental | Accepted | Rejected | Withdrawn | Final>
 SupercededBy: <link to another RFC>
 Version: <Major>.<Minor>
 Area: <Area within the PowerShell language>
 Comments Due: <Date for submitting comments to current draft (minimum 1 month)>
+Plan to implement: <Yes | No>
 ---
 
 # Title
@@ -74,6 +75,7 @@ This is the initial draft of an RFC posted for comments and considered a work-in
 Typically, one or two months is allowed for comments, though this may be extended if a submission is particularly contentious or hasn't received enough feedback for the Committee to feel comfortable making a decision.
 * When the Committee closes the comment period, the Author should update the RFC and Pull Request with a new commit to address the comments.
 * The Committee shall vote to merge or reject the RFC.
+Note: the Comittee may be slower to respond to RFCs where the Author has indicated that they do not plan to implement the RFC.
 
 ### Draft-Accepted
 
@@ -81,7 +83,7 @@ The PowerShell Committee has reviewed the RFC and comments, and has voted to acc
 
 * New comments are not being sought.
 * No one has begun implementing the RFC, and there are no current plans to implement the RFC.
-* The community is invited to implement the RFC (unless explicitly stated in the RFC).
+In this case, the Comittee will create `up-for-grabs` Issues in the [PowerShell](https://github.com/PowerShell/PowerShell) repository.
 
 ### Experimental
 
@@ -109,6 +111,7 @@ RFCs in the `Withdrawn` state were rescinded by the RFC Author.
 
 RFCs in the `Final` state are considered fully complete and implemented in PowerShell.
 Any proposed changes should be made through a new RFC or via an Issue in the [PowerShell/PowerShell repository](https://github.com/powershell/powershell).
+New RFCs should reference old RFCs where applicable.
 
 ## History
 v1.1 - 5-20-2016 - Updated to enable RFCs for design changes that don't require code changes.
