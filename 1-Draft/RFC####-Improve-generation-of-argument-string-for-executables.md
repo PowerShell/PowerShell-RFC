@@ -40,31 +40,32 @@ The decision if an argument needs to be quoted, will be simplified: Any Argument
 
 ### Verbatim Argument
 
-TODO:
-`--=` next argument is copied to cmdline as is, symbol detected in parser
+When the parser detects the 'Verbatim-Argument-Symbol' (`--=`), the next argument is copied to the argument-string exactly as it is, without escaping or adding quotes around the argument. The symbol is detected in the parser, so the string literal `'--='` or any other object that expands to that string is not interpreted as 'Verbatim-Argument-Symbol'.
 
 ### Preference Variable
+
+If the Preference Variable `$PsUseLegacyInconsistentArgumentStringGeneration` is set to true, the quoting is done as it is now. (Only for compatibility with old Scripts). The Variable is false by default.
 
 ## Alternate Proposals and Considerations
 
 ### Other shells
 
-TODO:
-
-Therefore Powershell should build the Commandline in a way, that matches those rules instead of just sometimes adding quotes around arguments.
-Almost every other modern Commandshell on windows does this:
-- https://www.hamiltonlabs.com/Cshell.htm (not documented)
+Maybe this is not the strongest argument ever, but many other modern Commandshells on windows create the argument-string compatible to [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx):
+- https://www.hamiltonlabs.com/Cshell.htm (not documented, but escapes correctly)
 - [Cygwin](https://cygwin.com/git/gitweb.cgi?p=newlib-cygwin.git;a=blob;f=winsup/cygwin/winf.cc;hb=HEAD) (see `linebuf::fromargv`)
 - [Python](https://svn.python.org/projects/python/trunk/Lib/subprocess.py) (see `list2cmdline`)
 - [Tcl](https://github.com/tcltk/tcl/blob/master/win/tclWinPipe.c) (see `BuildCommandLine`, Comment: "N backslashes followed a quote -> insert N * 2 + 1 backslashes then a quote.")
-### Accepted
 
-TODO:
-msvc, mingw, .net, winapi, .netcore on linux
+### [These rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) are widely accepted
+
+Most Compilers on Windows generate executables, that split the CommandLine compatible to [those rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx), for example the compiler shiped with VisualStudio as well as the `mingw` compiler suite.
+The .Net runtime also splits the CommandLine in a way that is compatible to those rules. The Windows API function [`CommandLineToArgvW`](https://msdn.microsoft.com/en-us/library/windows/desktop/bb776391.aspx) is (although incorrectly documented) also compatible to those rules.
+Therefore Powershell should build the Commandline in a way, that matches those rules instead of just sometimes adding quotes around arguments.
 
 ### Batch files
 
 ### Linux
+.netcore on linux
 TODO:
 Not Part of this RFC:
 - might depricate `--%` and `--=` on linux
