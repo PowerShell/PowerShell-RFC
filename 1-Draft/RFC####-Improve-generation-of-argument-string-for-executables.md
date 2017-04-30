@@ -10,23 +10,23 @@ Plan to implement: Yes
 
 # Improve generation of argument-string for executables
 
-When Powershell calls an external executable, the
+When PowerShell calls an external executable, the
 [NativeCommandParameterBinder](https://github.com/PowerShell/PowerShell/blob/master/src/System.Management.Automation/engine/NativeCommandParameterBinder.cs)
 takes all parameters of the command and generates the argument-string (also called "CommandLine") that is sent to the executable (as [ProcessStartInfo.Arguments](https://msdn.microsoft.com/en-us/library/system.diagnostics.processstartinfo.arguments.aspx)).
-It seems as if the NativeCommandParameterBinder trys to generate an argument-string, such that `argv[]` of the called executable contains the arguments, that were given as parameters to the command. This works well, if an argument contains spaces. In this case the NativeCommandParameterBinder adds quotes arround the argument, so it reaches `argv[]` as one argument (not splited into parts).
-However if the argument itself contains quotes, those are not escaped. Therefor the corrosponding element in `argv[]` has no quotes and (depending on the actual argument) the argument can be splitted into multiple `argv[]` elements. It can even occur that the following arguments are not handled correctly.
+It seems as if the NativeCommandParameterBinder tries to generate an argument-string, such that `argv[]` of the called executable contains the arguments, that were given as parameters to the command. This works well, if an argument contains spaces. In this case the NativeCommandParameterBinder adds quotes around the argument, so it reaches `argv[]` as one argument (not split into parts).
+However, if the argument itself contains quotes, those are not escaped. Therefor the corresponding element in `argv[]` has no quotes and (depending on the actual argument) the argument can be split into multiple `argv[]` elements. It can even occur that the following arguments are not handled correctly.
 
 This RFC suggests to make the NativeCommandParameterBinder compatible to
 [the typical CommandLine escaping rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx).
-Additionally it suggests to add a verbose-symbol to add a custom formated string to the CommandLine (for executables, that don't follow the typical escaping rules.)
+Additionally, it suggests to add a verbose-symbol to add a custom formatted string to the CommandLine (for executables, that don't follow the typical escaping rules.)
 
 This is basically a bugfix for https://github.com/PowerShell/PowerShell/issues/1995 and https://github.com/PowerShell/PowerShell/issues/3049 and on stackoverflow (["This seems like a bug to me. If I am passing the correct escaped strings to PowerShell, then PowerShell should take care of whatever escaping may be necessary for however it invokes the command."](http://stackoverflow.com/questions/6714165/powershell-stripping-double-quotes-from-command-line-arguments)
 and ["... and I think this is a bug Powershell doesn't escape any double quotes that appear inside the arguments."](http://stackoverflow.com/a/21334121/2770331)).
-However, as this is a very longstanding bug, there are workarounds for some cases. These will no longer work if this is corrected, therefor this document suggests to add a preference variable to get the old behaviour back if somebody needs it.
+However, as this is a very longstanding bug, there are workarounds for some cases. These will no longer work if this is corrected, therefor this document suggests to add a preference variable to get the old behavior back if somebody needs it.
 
 ## Motivation
 
-    As a powershell user who wants to call external executables,
+    As a PowerShell user who wants to call external executables,
     I can pass any arguments to those executables,
     so that these arguments reach the `argv[]` array unchanged.
 
@@ -59,21 +59,21 @@ Maybe this is not the strongest argument ever, but many other modern Commandshel
 
 ### [These rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) are widely accepted
 
-Most Compilers on Windows generate executables, that split the CommandLine compatible to [those rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx), for example the compiler shiped with VisualStudio as well as the `mingw` compiler suite.
+Most Compilers on Windows generate executables, that split the CommandLine compatible to [those rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx), for example the compiler shipped with VisualStudio as well as the `mingw` compiler suite.
 The .Net runtime also splits the CommandLine in a way that is compatible to those rules. The Windows API function [`CommandLineToArgvW`](https://msdn.microsoft.com/en-us/library/windows/desktop/bb776391.aspx) is (although incorrectly documented) also compatible to those rules.
-Therefore Powershell should build the Commandline in a way, that matches those rules instead of just sometimes adding quotes around arguments.
+Therefore, PowerShell should build the CommandLine in a way, that matches those rules instead of just sometimes adding quotes around arguments.
 
 ### Linux
 
-While this change is important on windows, it's absolutely necessary on Linux: On Windows the CommandLine is splitted by the next executable and most executables follow the described rules. On Linux the CommandLine is not splitted by the called executable -- the .Net Core runtime splits the string. Therefor on Linux the described rules do not only apply to many calls of external executables, they apply to ALL calls of external executables. When the proposed changes are implemented, the arguments from within powershell always arive -- as expected -- as the `argv[]` array in called executables.
+While this change is important on windows, it's absolutely necessary on Linux: On Windows the CommandLine is split by the next executable and most executables follow the described rules. On Linux the CommandLine is not split by the called executable -- the .Net Core runtime splits the string. Therefor on Linux the described rules do not only apply to many calls of external executables, they apply to ALL calls of external executables. When the proposed changes are implemented, the arguments from within PowerShell always arrive -- as expected -- as the `argv[]` array in called executables.
 
 ### Batch files
 
-Sadly, one of the few exeptions to those typical parsing rules is `cmd.exe`. Because of this, one cannot reliably call batch files with arbitrary arguments. (This is no problem of powershell, it's a cmd design problem.) Some arguments are impossible -- an uneven number of double quotes can only be sent in the last argument. To my knowledge there is no clean way to deal with this, therefor I think using the typical escaping rules is still the way to go. In many cases this is the correct way, as many batch files simply redirct their arguments to other executable and in those cases [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) are applying. 
+Sadly, one of the few exceptions to those typical parsing rules is `cmd.exe`. Because of this, one cannot reliably call batch files with arbitrary arguments. (This is no problem of PowerShell, it's a cmd design problem.) Some arguments are impossible -- an uneven number of double quotes can only be sent in the last argument. To my knowledge there is no clean way to deal with this, therefor I think using the typical escaping rules is still the way to go. In many cases this is the correct way, as many batch files simply redirect their arguments to other executable and in those cases [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) are applying. 
 
 ### Considerations outside of the scope of this RFC
 
-Maybe on Linux `--%` and `--=` can be depricated, as they dont make much sense on Linux -- the CommandLine always needs to be escaped acording to [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) (see paragraph "Linux").
+Maybe on Linux `--%` and `--=` can be deprecated, as they don't make much sense on Linux -- the CommandLine always needs to be escaped acording to [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) (see paragraph "Linux").
 
-As the main purpose of `--%` was (as far as I know) not the possibility to influence the CommandLine directly but instead a way to disable many special characters in a powershell command. In the future one could possibly add a `--$` token that disables all special characters exept quotes and `$` -- a clean way of what `--%` was originally meant for.
+As the main purpose of `--%` was (as far as I know) not the possibility to influence the CommandLine directly but instead a way to disable many special characters in a PowerShell command. In the future one could possibly add a `--$` token that disables all special characters except quotes and `$` -- a clean way of what `--%` was originally meant for.
 
