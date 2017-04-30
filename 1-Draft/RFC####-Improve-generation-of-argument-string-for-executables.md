@@ -62,11 +62,17 @@ Most Compilers on Windows generate executables, that split the CommandLine compa
 The .Net runtime also splits the CommandLine in a way that is compatible to those rules. The Windows API function [`CommandLineToArgvW`](https://msdn.microsoft.com/en-us/library/windows/desktop/bb776391.aspx) is (although incorrectly documented) also compatible to those rules.
 Therefore Powershell should build the Commandline in a way, that matches those rules instead of just sometimes adding quotes around arguments.
 
+### Linux
+
+While this change is important on windows, it's absolutely necessary on Linux: On Windows the CommandLine is splitted by the next executable and most executables follow the described rules. On Linux the CommandLine is not splitted by the called executable -- the .Net Core runtime splits the string. Therefor on Linux the described rules do not only apply to many calls of external executables, they apply to ALL calls of external executables. When the proposed changes are implemented, the arguments from within powershell always arive -- as expected -- as the `argv[]` array in called executables.
+
 ### Batch files
 
-### Linux
-.netcore on linux
-TODO:
-Not Part of this RFC:
-- might depricate `--%` and `--=` on linux
-- might add `--$` to only evaluate `$...` and string literals, but treat everything else as verbose text arguments
+Sadly, one of the few exeptions to those typical parsing rules is `cmd.exe`. Because of this, one cannot reliably call batch files with arbitrary arguments. (This is no problem of powershell, it's a cmd design problem.) Some arguments are impossible -- an uneven number of double quotes can only be sent in the last argument. To my knowledge there is no clean way to deal with this, therefor I think using the typical escaping rules is still the way to go. In many cases this is the correct way, as many batch files simply redirct their arguments to other executable and in those cases [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) are applying. 
+
+### Considerations outside of the scope of this RFC
+
+Maybe on Linux `--%` and `--=` can be depricated, as they dont make much sense on Linux -- the CommandLine always needs to be escaped acording to [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) (see paragraph "Linux").
+
+As the main purpose of `--%` was (as far as I know) not the possibility to influence the CommandLine directly but instead a way to disable many special characters in a powershell command, in the future one could possibly add a `--$` token that disables all special characters exept quotes and `$` -- a clean way of what `--%` was originally meant for.
+
