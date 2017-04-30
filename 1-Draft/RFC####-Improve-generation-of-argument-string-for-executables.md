@@ -1,10 +1,11 @@
 ---
-RFC: RFC
+RFC: 
 Author: Timo Schwarte
 Status: Draft
 Version: 1.0
 Area: Calling external executables
 Comments Due: 2017-XX-XX
+Plan to implement: Yes 
 ---
 
 # Improve generation of argument-string for executables
@@ -12,12 +13,12 @@ Comments Due: 2017-XX-XX
 When Powershell calls an external executable, the
 [NativeCommandParameterBinder](https://github.com/PowerShell/PowerShell/blob/master/src/System.Management.Automation/engine/NativeCommandParameterBinder.cs)
 takes all parameters of the command and generates the argument-string (also called "CommandLine") that is sent to the executable (as [ProcessStartInfo.Arguments](https://msdn.microsoft.com/en-us/library/system.diagnostics.processstartinfo.arguments.aspx)).
-It seems as if the NativeCommandParameterBinder trys to generate an argument-string, such that `argv[]` of the called executable contains the arguments, that were given as parameters to the command. This works well, if an argument contains spaces. In this case the NativeCommandParameterBinder adds quotes arround the argument, so it reaches `argv[]` as one argument (not split into parts).
-However if the argument itself contains quotes, those are not escaped. Therefor the corrosponding element in `argv[]` has no quotes and (depending on the actual argument) the argument can be splitted into multiple `argv[]` elements and it can even occur that the following arguments are not handled correctly.
+It seems as if the NativeCommandParameterBinder trys to generate an argument-string, such that `argv[]` of the called executable contains the arguments, that were given as parameters to the command. This works well, if an argument contains spaces. In this case the NativeCommandParameterBinder adds quotes arround the argument, so it reaches `argv[]` as one argument (not splited into parts).
+However if the argument itself contains quotes, those are not escaped. Therefor the corrosponding element in `argv[]` has no quotes and (depending on the actual argument) the argument can be splitted into multiple `argv[]` elements. It can even occur that the following arguments are not handled correctly.
 
 This RFC suggests to make the NativeCommandParameterBinder compatible to
 [the typical CommandLine escaping rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx).
-Additionally it suggests to add a verbose-symbol, to add a custom formated string to the CommandLine (for executables, that don't follow the typical escaping rules.)
+Additionally it suggests to add a verbose-symbol to add a custom formated string to the CommandLine (for executables, that don't follow the typical escaping rules.)
 
 This is basically a bugfix for https://github.com/PowerShell/PowerShell/issues/1995 and https://github.com/PowerShell/PowerShell/issues/3049 and on stackoverflow (["This seems like a bug to me. If I am passing the correct escaped strings to PowerShell, then PowerShell should take care of whatever escaping may be necessary for however it invokes the command."](http://stackoverflow.com/questions/6714165/powershell-stripping-double-quotes-from-command-line-arguments)
 and ["... and I think this is a bug Powershell doesn't escape any double quotes that appear inside the arguments."](http://stackoverflow.com/a/21334121/2770331)).
@@ -26,7 +27,7 @@ However, as this is a very longstanding bug, there are workarounds for some case
 ## Motivation
 
     As a powershell user who wants to call external executables,
-    I can pass any arguments to those executable,
+    I can pass any arguments to those executables,
     so that these arguments reach the `argv[]` array unchanged.
 
 ## Specification
@@ -52,9 +53,9 @@ If the Preference Variable `$PsUseLegacyInconsistentArgumentStringGeneration` is
 
 Maybe this is not the strongest argument ever, but many other modern Commandshells on windows create the argument-string compatible to [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx):
 - https://www.hamiltonlabs.com/Cshell.htm (not documented, but escapes correctly)
-- [Cygwin](https://cygwin.com/git/gitweb.cgi?p=newlib-cygwin.git;a=blob;f=winsup/cygwin/winf.cc;hb=HEAD) (see `linebuf::fromargv`)
-- [Python](https://svn.python.org/projects/python/trunk/Lib/subprocess.py) (see `list2cmdline`)
-- [Tcl](https://github.com/tcltk/tcl/blob/master/win/tclWinPipe.c) (see `BuildCommandLine`, Comment: "N backslashes followed a quote -> insert N * 2 + 1 backslashes then a quote.")
+- [Cygwin](https://cygwin.com/git/gitweb.cgi?p=newlib-cygwin.git;a=blob;f=winsup/cygwin/winf.cc;hb=HEAD#l66) (see `linebuf::fromargv`)
+- [Python](https://github.com/python/cpython/blob/master/Lib/subprocess.py#L424) (see `list2cmdline`)
+- [Tcl](https://github.com/tcltk/tcl/blob/master/win/tclWinPipe.c#L1503) (see `BuildCommandLine`, Comment: "N backslashes followed a quote -> insert N * 2 + 1 backslashes then a quote.")
 
 ### [These rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) are widely accepted
 
@@ -74,5 +75,5 @@ Sadly, one of the few exeptions to those typical parsing rules is `cmd.exe`. Bec
 
 Maybe on Linux `--%` and `--=` can be depricated, as they dont make much sense on Linux -- the CommandLine always needs to be escaped acording to [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) (see paragraph "Linux").
 
-As the main purpose of `--%` was (as far as I know) not the possibility to influence the CommandLine directly but instead a way to disable many special characters in a powershell command, in the future one could possibly add a `--$` token that disables all special characters exept quotes and `$` -- a clean way of what `--%` was originally meant for.
+As the main purpose of `--%` was (as far as I know) not the possibility to influence the CommandLine directly but instead a way to disable many special characters in a powershell command. In the future one could possibly add a `--$` token that disables all special characters exept quotes and `$` -- a clean way of what `--%` was originally meant for.
 
