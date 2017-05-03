@@ -3,9 +3,9 @@ RFC: RFC0016
 Author: Steve Lee, Jim Truher
 Status: Draft
 SupercededBy: n/a
-Version: 0.2
+Version: 0.3
 Area: Host
-Comments Due: 4/22/2017
+Comments Due: Done
 Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/#
 ---
 
@@ -21,9 +21,14 @@ The platform (Windows, Linux, Mac) usage data helps to prioritize new feature wo
 ## Specification
 
 On every startup of the PowerShell Console host, telemetry will be sent via [ApplicationInsights](https://azure.microsoft.com/en-us/services/application-insights/) to collect the following information:
-- A SHA256 hash of System.Management.Automation.dll
-- Environment.OSVersion.VersionString
+- [System.Runtime.InteropServices.RuntimeInformation]::OSDescription (equivalent to `uname -a` on Unix)
 - GitCommitId (from $psversiontable)
+
+Performance will be measured to ensure collecting and sending telemetry does not have an impact to PowerShell startup time.
+Target is <5ms impact.
+
+Telemetry is only collected if the file DELETE_ME_TO_DISABLE_CONSOLEHOST_TELEMETRY exists in $PSHome.
+Eventually, we want to adopt [RFC0015 Startup Configuration](https://github.com/PowerShell/PowerShell-RFC/blob/master/1-Draft/RFC0015-PowerShell-StartupConfig.md) as the way to enable/disable telemetry.
 
 ## Design
 
