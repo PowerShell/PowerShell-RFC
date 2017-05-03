@@ -27,6 +27,9 @@ On every startup of the PowerShell Console host, telemetry will be sent via [App
 Telemetry is only collected if the file DELETE_ME_TO_DISABLE_CONSOLEHOST_TELEMETRY exists in $PSHome.
 Eventually, we want to adopt [RFC0015 Startup Configuration](https://github.com/PowerShell/PowerShell-RFC/blob/master/1-Draft/RFC0015-PowerShell-StartupConfig.md) as the way to enable/disable telemetry.
 
+Performance will be measured to ensure collecting and sending telemetry does not have an impact to PowerShell startup time.
+Target is <10ms impact.
+
 ## Design
 
 ApplicationInsights provides a mechanism for sending a [`CustomEvent`](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-api-custom-events-metrics) which is essentially three elements:
