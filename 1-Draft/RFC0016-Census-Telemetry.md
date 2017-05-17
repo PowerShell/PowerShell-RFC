@@ -21,7 +21,7 @@ The platform (Windows, Linux, Mac) usage data helps to prioritize new feature wo
 ## Specification
 
 On every startup of the PowerShell Console host, telemetry will be sent via [ApplicationInsights](https://azure.microsoft.com/en-us/services/application-insights/) to collect the following information:
-- [System.Runtime.InteropServices.RuntimeInformation]::OSDescription (equivalent to `uname -a` on Unix)
+- `[System.Runtime.InteropServices.RuntimeInformation]::OSDescription` (equivalent to `uname -a` on Unix)
 - GitCommitId (from $psversiontable)
 
 Performance will be measured to ensure collecting and sending telemetry does not have an impact to PowerShell startup time.
