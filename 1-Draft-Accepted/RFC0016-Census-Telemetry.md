@@ -1,7 +1,7 @@
 ---
 RFC: RFC0016
 Author: Steve Lee, Jim Truher
-Status: Draft
+Status: Draft-Accepted
 SupercededBy: n/a
 Version: 0.3
 Area: Host
@@ -44,3 +44,25 @@ Initially, we will not provide any metrics, although we can easily do so at a la
 
 None
  
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Accept 
+
+Joey Aiello: Accept
+
+Bruce Payette: Accept
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+### Majority Decision
+
+Commmittee agrees that this RFC satisfies the initial telemetry for census data.  Future telemetry changes will be new RFCs.
+
+### Minority Decision
+
+N/A
