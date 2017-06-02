@@ -67,15 +67,16 @@ When `$PSDefaultFileEncoding` is set to `UTF8NoBOM`, the file shall be created w
 When `$PSDefaultFileEncoding` is set to `Legacy`, the behavior shall be:
 
 ```
-CmdletName       Encoding
-----------       --------
-Add-Content      ASCII
-Export-Clixml    UTF16
-Export-CSV       ASCII
-Out-File         UTF16
-Set-Content      ASCII
-Export-PSSession UTF8 (with BOM)
-Redirection      UTF16
+CmdletName          Encoding
+----------          --------
+Add-Content         ASCII
+Export-Clixml       UTF16
+Export-CSV          ASCII
+Out-File            UTF16
+New-ModuleManifest  UTF16
+Set-Content         ASCII
+Export-PSSession    UTF8 (with BOM)
+Redirection         UTF16
 ```
 This persists the irregular file encoding on non-Windows platforms, and allows Linux files to be used on Windows with the same encoding as exists in previous releases of PowerShell.
 
