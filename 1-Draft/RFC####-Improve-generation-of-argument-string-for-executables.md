@@ -4,7 +4,7 @@ Author: Timo Schwarte
 Status: Draft
 Version: 1.0
 Area: Calling external executables
-Comments Due: 2017-07-01
+Comments Due: 2017-07-07
 Plan to implement: Yes 
 ---
 
@@ -57,6 +57,8 @@ Maybe this is not the strongest argument ever, but many other modern Commandshel
 - [Python](https://github.com/python/cpython/blob/master/Lib/subprocess.py#L424) (see `list2cmdline`)
 - [Tcl](https://github.com/tcltk/tcl/blob/master/win/tclWinPipe.c#L1503) (see `BuildCommandLine`, Comment: "N backslashes followed a quote -> insert N * 2 + 1 backslashes then a quote.")
 
+[Wine](https://source.winehq.org/git/wine.git/blob/refs/heads/master:/dlls/kernel32/process.c#l730) - although not a shell - also faced this problem and also creates the CommandLine compatible to [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx).
+
 ### [These rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) are widely accepted
 
 Most Compilers on Windows generate executables that split the CommandLine compatible to [those rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx), for example the compiler shipped with VisualStudio or the `mingw` compiler suite.
@@ -69,11 +71,15 @@ While this change is important on windows, it's absolutely necessary on Linux: O
 
 ### Batch files
 
-Sadly, one of the few exceptions to those typical parsing rules is `cmd.exe`. Because of this, one cannot reliably call batch files with arbitrary arguments. (This is no problem of PowerShell, it's a cmd design problem.) Some arguments are impossible -- an uneven number of double quotes can only be sent in the last argument. To my knowledge there is no clean way to deal with this, therefore I think using the typical escaping rules is still the way to go. In many cases this is the correct way, as many batch files simply redirect their arguments to other executable and in those cases [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) apply. 
+Sadly, one of the few exceptions to those typical parsing rules is `cmd.exe`. Because of this, one cannot reliably call batch files with arbitrary arguments. (This is no problem of PowerShell, it's a cmd design problem.) Some arguments are impossible -- an uneven number of double quotes can only be sent in the last argument. To my knowledge there is no clean way to deal with this, therefore I think using the typical escaping rules is still the way to go. In many cases this is the correct way, as many batch files simply redirect their arguments to other executables and in those cases [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) apply.
+
+**Edit:**
+Optionally a special rule for batch files could be added: `"` in arguments of batch files won't be escaped according to the rules described in [Specification->Quoting](#quoting) -- instead, each literal `"` will be replaced by `""`. Many batch files seem to expect this and this way arguments won't be split into multiple `%1`,`%2`,... variables.  
+**End edit**
 
 ### Considerations outside of the scope of this RFC
 
-Maybe on Linux `--%` and `--=` can be deprecated, as they don't make much sense on Linux -- the CommandLine always needs to be escaped according to [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) (see paragraph "Linux").
+Maybe on Linux `--%` and `--=` can be deprecated, as they don't make much sense on Linux -- the CommandLine always needs to be escaped according to [these rules](https://msdn.microsoft.com/en-us/library/17w5ykft.aspx) (see paragraph "[Linux](#linux)").
 
-As the main purpose of `--%` was (as far as I know) not the possibility to influence the CommandLine directly, but instead a way to disable many special characters in a PowerShell command. In the future one could possibly add a `--$` token that disables all special characters except quotes and `$` -- a proper option that does what `--%` was originally meant for.
+The main purpose of `--%` was (as far as I know) not the possibility to influence the CommandLine directly, but instead a way to disable many special characters in a PowerShell command. In the future one could possibly add a `--$` token that disables all special characters except quotes and `$` -- a proper option that does what `--%` was originally meant for.
 
