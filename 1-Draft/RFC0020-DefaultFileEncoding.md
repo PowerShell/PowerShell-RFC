@@ -79,10 +79,8 @@ Redirection      UTF16
 ```
 This persists the irregular file encoding on non-Windows platforms, and allows Linux files to be used on Windows with the same encoding as exists in previous releases of PowerShell.
 
-The default on Windows systems shall remain unchanged (the value for `$PSDefaultFileEncoding` shall be set to `Legacy`), non-Windows platforms shall set `$PSDefaultFileEncoding` to `UTF8NoBOM`.
-If the `$PSDefaultFileEncoding` is not set, `UTF8NoBOM` shall be the default for non-Windows systems, and `Legacy` (the current behavior) on Windows.
-
-Naturally, specific use of the `-encoding` parameter when invoking the cmdlet shall override `$PSDefaultFileEncoding`. 
+The default on all platforms shall be `UTF8NOBOM` (including when `$PSDefaultFileEncoding` is not set).
+Naturally, specific use of the `-Encoding` parameter when invoking the cmdlet shall override `$PSDefaultFileEncoding`. 
 
 ### Exclusions
 
