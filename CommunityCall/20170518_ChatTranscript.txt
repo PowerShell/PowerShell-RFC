@@ -1,0 +1,295 @@
+Sean Wheeler 9:30 AM: 
+yes
+Jay Carper 9:31 AM: 
+yep
+Fabretti, Douglas 9:31 AM: 
+yep
+Eugene Bekker 9:34 AM: 
+(Sorry, trying to fix my audio :-))
+Trevor Sullivan 9:34 AM: 
+Is the OMI / PSRP remoting component going to be "built-in" to PowerShell, or will it stay as a separate package?
+Trevor Sullivan 9:34 AM: 
+Sorry can&apos;t unmute
+Trevor Sullivan 9:34 AM: 
+In another meeting.
+Trevor Sullivan 9:34 AM: 
+Just looking to see how easy it is to simplify deployment.
+Trevor Sullivan 9:34 AM: 
+Yep anywhere, client server
+Trevor Sullivan 9:35 AM: 
+WS-Man and SSH based
+Trevor Sullivan 9:35 AM: 
+eg. WS-Man outbound to Windows Server
+Trevor Sullivan 9:35 AM: 
+or SSH based to Linux or Mac
+Trevor Sullivan 9:36 AM: 
+Is this exclusive to Core Edition? Or does it work across Desktop and Core?
+Trevor Sullivan 9:37 AM: 
+I&apos;ve heard remoting is working today, but haven&apos;t seen how to actually use it. Looks complex to set up at the moment.
+Trevor Sullivan 9:37 AM: 
+Both
+Staffan Gustafsson 9:37 AM: 
++1
+Ben Gelens 9:37 AM: 
++1
+Joel Bennett 9:37 AM: 
++1 Critical
+Fabretti, Douglas 9:37 AM: 
++1
+Constantin Hager 9:37 AM: 
++1
+Eugene Bekker 9:37 AM: 
++1
+Iain Brighton 9:37 AM: 
++1
+Trevor Sullivan 9:37 AM: 
+Only done Windows remoting in the past. Would like to learn how to actually do what David Wilson demo&apos;d at PSSummit.
+Castillo, Joshua 9:38 AM: 
++10
+Joey Aiello 9:38 AM: 
+https://github.com/PowerShell/PowerShell/tree/master/demos/SSHRemoting
+Trevor Sullivan 9:39 AM: 
+Here&apos;s an example scenario: I would like to deploy a Docker-on-Linux microservice that remotely triggers jobs on Windows Server.
+Trevor Sullivan 9:39 AM: 
+Thanks for the link. I&apos;ll have to try that out.
+Trevor Sullivan 9:40 AM: 
+Doable today? WOW, awesome.
+Joey Aiello 9:40 AM: 
+https://github.com/PowerShell/PowerShell-RFC/blob/master/1-Draft/RFC0012-Enable-SSH-Remoting.md
+Trevor Sullivan 9:40 AM: 
+I&apos;ll take a look at the RFC. Wasn&apos;t aware of it. Thanks!
+Trevor Sullivan 9:41 AM: 
+So Linux --> Windows is NTLM?
+Trevor Sullivan 9:41 AM: 
+Cool
+Joel Bennett 9:41 AM: 
+It worries me that the "server" story is SSH Remoting, but that there's no plan on shipping the ssh remoting client end to Windows -- even after you ship OpenSSH in the box!!!?
+Joel Bennett 9:42 AM: 
+One other thing -- I mentioned the other day in Slack that PowerShell 6 is not ever going to ship "in the box" and some of the knowledgeable geeks did not know that. I actually had one of our regulars call me out and ask me to cite sources ... which I had a *very* hard time doing. Can we make that clearer?
+Trevor Sullivan 9:42 AM: 
+My earlier question around Desktop vs. Core Edition was more along the lines of ... can I do Windows --> Linux via Desktop Edition or do I have to use Core Edition for that? A text answer would suffice while you&apos;re responding to Joel.
+Joel Bennett 9:44 AM: 
+Can we ship it as a store app? ;-)
+Darwin Sanoy (Infor) 9:44 AM: 
+I have a chocolatey installer out there - but it does not show on public search due to the pre-release version being used.
+Darwin Sanoy (Infor) 9:44 AM: 
+https://chocolatey.org/packages/powershell-core
+Eugene Bekker 9:44 AM: 
+Is it is a side-by-side problem with WinPOSH?
+Castillo, Joshua 9:44 AM: 
+msi  :(
+Darwin Sanoy (Infor) 9:46 AM: 
+If you use the .zip you can do side by side
+Darwin Sanoy (Infor) 9:46 AM: 
+MSI is a four letter word ;)
+Darwin Sanoy (Infor) 9:47 AM: 
+choco install powershell-core -y -pre
+Trevor Sullivan 9:48 AM: 
+Thanks for distributing Docker containers. This is a perfect story for side-by-side versioning.
+Joel Bennett 9:48 AM: 
+Well, if I can't remote to my Linux boxes because of missing SSH ... PowerShell 6 inside the store sandbox would be useful -- if it could do SSH :-P
+Trevor Sullivan 9:49 AM: 
+Could you guys ship a PowerShell container with the OMI / PSRP pre-installed? I would like to debug PowerShell applications running in containers.
+Joel Bennett 9:49 AM: 
++1
+Joel Bennett 9:49 AM: 
+Would use.
+Trevor Sullivan 9:50 AM: 
+Not sure if SSH or WS-Man. I&apos;m confused ... is WS-Man supported on Linux??
+Trevor Sullivan 9:50 AM: 
+Oh, so SSH remoting is built-in?
+Castillo, Joshua 9:50 AM: 
++1 docker container/omi...
+Trevor Sullivan 9:50 AM: 
+Huh ....
+Trevor Sullivan 9:50 AM: 
+I opened an issue on OMI already
+Ben Gelens 9:50 AM: 
+Client is build in. Server is not
+Trevor Sullivan 9:50 AM: 
+Paul H. responded to me, but didn&apos;t have time to try his suggestion.
+Darwin Sanoy (Infor) 9:50 AM: 
+Can I get volunteers to test the IOS installer in my pull request? I have no idea if it works :) (https://github.com/PowerShell/PowerShell/pull/3608)
+Trevor Sullivan 9:51 AM: 
+What I&apos;m trying to accomplish: debug PowerShell in containers. :)
+Trevor Sullivan 9:52 AM: 
+I&apos;d like to fire up a container, çreate a remote session to it, and then do the typical Enter-PSHostProcess debugging, or attach VSCode-PowerShell extension to it, so I can step through execution.
+Castillo, Joshua 9:52 AM: 
+Not sure if the debugger is decuppled from vscode, but it needs some love
+Jonathan Medd 9:52 AM: 
++1 on a blog post / Github reference around the 6.0 core no plans for shipping out of the box and options for installing on Windows
+Castillo, Joshua 9:54 AM: 
+Hit it right on the head
+Trevor Sullivan 9:54 AM: 
+Thanks Joey. :) Don&apos;t care if SSH or WS-Man at this point.
+Darwin Sanoy (Infor) 9:56 AM: 
+FYI - Latest vscode install wanted to end all my virus protection to install properly. Maybe it was the fault of Restart Manager + my specific machine state and nothing directly to do with the installer?
+Ben Gelens 9:56 AM: 
+Dsc can be debugged interactive now. Works great for me
+Staffan Gustafsson 9:56 AM: 
+I have quite a lot of crashes debugging with VS code to
+Darwin Sanoy (Infor) 9:57 AM: 
+Since it&apos;s probably not a good idea to put PSH 6.0 on the path on a Windows machine - maybe a "PSH6PATH" environment variable (hey let&apos;s do JAVA_HOME all over again :D )
+Castillo, Joshua 9:57 AM: 
+Great, thanks.
+Castillo, Joshua 9:58 AM: 
++1 on hosing vscode a few times
+Trevor Sullivan 9:58 AM: 
+From Mac OS X, I&apos;m trying to remote into a Windows Server instance, and I just get "MI_RESULT_ACCESS_DENIED," even when I specify -Credential. Anyone see this?
+Ashley McGlone (GOATEEPFE) 9:59 AM: 
+Mac to Windows over SSH works OK for me
+Ashley McGlone (GOATEEPFE) 9:59 AM: 
+My Windows target was Win10 with OpenSSH
+Trevor Sullivan 9:59 AM: 
+Enter-PSSession -ComputerName FQDN -Credential (Get-Credential) <--- anything else?
+Ashley McGlone (GOATEEPFE) 10:00 AM: 
+That would be Wsman, i've not tried that
+Ashley McGlone (GOATEEPFE) 10:00 AM: 
+Enter-PSSession -Hostname FQDN -Username foo -SSHTransport
+Ben Gelens 10:01 AM: 
+@trevor, should use authentication basic / nego when doing wsman psrp
+Trevor Sullivan 10:01 AM: 
+The documentation says there&apos;s a -KeyFilePath parameter on New-PSSession, but that doesn&apos;t exist on my Beta 1 system.
+Trevor Sullivan 10:01 AM: 
+Thanks @Ben
+Steve Lee (POWERSHELL) 10:02 AM: 
+@trevor, -keyfilepath is part of the ssh parameter set: new-pssession -hostname foo -keyfilepath
+Trevor Sullivan 10:02 AM: 
+NAME
+New-PSSession
+
+SYNOPSIS
+Creates a persistent connection to a local or remote computer.
+
+
+SYNTAX
+New-PSSession [[-ComputerName] <String[]>] [-ApplicationName <String>] [-Authentication {Default | Basic | Negotiate | NegotiateWithImplicitCredential | Credssp | Digest | Kerberos}] [-CertificateThumbprint <String>]
+[-ConfigurationName <String>] [-Credential <PSCredential>] [-EnableNetworkAccess] [-Name <String[]>] [-Port <Int32>] [-SessionOption <PSSessionOption>] [-ThrottleLimit <Int32>] [-UseSSL] [<CommonParameters>]
+
+New-PSSession [-ConnectionUri] <Uri[]> [-AllowRedirection] [-Authentication {Default | Basic | Negotiate | NegotiateWithImplicitCredential | Credssp | Digest | Kerberos}] [-CertificateThumbprint <String>] [-ConfigurationName
+<String>] [-Credential <PSCredential>] [-EnableNetworkAccess] [-Name <String[]>] [-SessionOption <PSSessionOption>] [-ThrottleLimit <Int32>] [<CommonParameters>]
+
+New-PSSession [[-Session] <PSSession[]>] [-EnableNetworkAccess] [-Name <String[]>] [-ThrottleLimit <Int32>] [<CommonParameters>]
+Trevor Sullivan 10:03 AM: 
+https://gist.github.com/pcgeek86/ba57cda85f90cb5414542e48d8da62b3 <-- there&apos;s no -KeyFilePath parameter
+Trevor Sullivan 10:03 AM: 
+I&apos;m running Beta 1
+Castillo, Joshua 10:04 AM: 
+How about a cmdlet that runs through the system and PascalCases all files and environmentvariables
+Castillo, Joshua 10:04 AM: 
+:)
+Darwin Sanoy (Infor) 10:04 AM: 
+https://cloudywindows.com/post/straight-and-narrow-code-for-safe-windows-path-updates/
+Staffan Gustafsson 10:04 AM: 
+Can we start pushing for using forward slashes on windows too?
+Trevor Sullivan 10:05 AM: 
+Thanks Joey ... I&apos;ll try Basic authentication for WS-Man.
+Trevor Sullivan 10:07 AM: 
+thx
+Darwin Sanoy (Infor) 10:07 AM: 
+What folder is the environmentvariable cmdlets RFC under?
+Nicholas M. Getchell 10:08 AM: 
+i've seen lots of people make the get-help syntax mistake. Any way to have the functionality of get-command -syntax in the Help?
+Trevor Sullivan 10:08 AM: 
+Just tried -Authentication Basic to WS-Man, and got "Authentication Failed" :( Any ideas @BenGelens?
+Castillo, Joshua 10:09 AM: 
+Its a joke :)
+Hemant Mahawar 10:09 AM: 
+Environmentvariable cmdlets RFC is in PowerShell-RFC repo, specifically https://github.com/PowerShell/PowerShell-RFC/pull/92
+Ben Gelens 10:09 AM: 
+I have a demo on using keyfile on my psconfeu session on youtube
+Joey Aiello 10:10 AM: 
+@Trevor: the server needs to be setup to accept Basic auth too... :\
+Castillo, Joshua 10:10 AM: 
+Ben, do you you have a link to the youtube video?
+Trevor Sullivan 10:10 AM: 
+Ah, good call. Can do that on my test server. Thanks! Didn&apos;t even think about that.
+Joey Aiello 10:11 AM: 
+https://www.youtube.com/watch?v=50xLm7J_dsM
+Ben Gelens 10:11 AM: 
+@Trevor, need to lower server side settings to allow unencrypt or add 5986 endpoint
+Steve Lee (POWERSHELL) 10:11 AM: 
+if you're using basic auth, please use https
+Ashley McGlone (GOATEEPFE) 10:11 AM: 
+Anyone having issues doing SSH remoting INTO a Mac?
+Trevor Sullivan 10:11 AM: 
+No wonder remoting worked locally, because I was using Kerberos. :) $PSSenderInfo rocks.
+Staffan Gustafsson 10:12 AM: 
+This works fine:
+
+[io.file]::ReadAllText(&apos;C:/Users/Staffan/.gitconfig&apos;)
+Staffan Gustafsson 10:12 AM: 
+ah, so it&apos;s win32?
+Staffan Gustafsson 10:12 AM: 
+I&apos;d like some comments on the developer environment. 
+I think we could do a lot to make it a lot easier to getting started contributing to PowerShell if there were working solutions/projects for VSCode/Visual Studio.
+Joey Aiello 10:13 AM: 
+https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=3&cad=rja&uact=8&ved=0ahUKEwi0yoOq-PnTAhVM0GMKHR4pCJ4QFggxMAI&url=https%3A%2F%2Fgithub.com%2Fdotnet%2Fstandard&usg=AFQjCNEtPeKo4Oqe9Cl5NTXAwlgIebkGUA&sig2=e2fmBFKjfZ_O85Ds-2FNzA
+Joey Aiello 10:13 AM: 
+https://github.com/dotnet/standard  
+ 
+Trevor Sullivan 10:13 AM: 
+Yay for .NET Standard 2.0! Looking forward to Active Directory support.
+Joey Aiello 10:13 AM: 
+https://blogs.msdn.microsoft.com/dotnet/2016/09/26/introducing-net-standard/  
+ 
+Eugene Bekker 10:14 AM: 
+Woohoo!
+Trevor Sullivan 10:15 AM: 
+Something I&apos;d be interested in hearing some feedback on ... will we see some increased focus on interop, to aid in building PowerShell modules targeting UNIX native libraries?
+Steve Lee (POWERSHELL) 10:16 AM: 
+Linux coverage is something we're targeting for 6.1.0, but for 6.0.0 we certainly need a better sdk to allow authoring cross platform (and cross ps versions) modules
+Trevor Sullivan 10:17 AM: 
+Thanks Steve, sounds good.
+Joey Aiello 10:17 AM: 
+https://github.com/PowerShell/PowerShell/issues/3135
+Darwin Sanoy (Infor) 10:17 AM: 
+@trevor - see the RFC I submitted a while back: https://github.com/PowerShell/PowerShell-RFC/blob/master/1-Draft/RFC0019-PowerShell-Core-Interop-Module.md
+Staffan Gustafsson 10:17 AM: 
+Platform native module load by some naming convention? Like nuget?
+Darwin Sanoy (Infor) 10:20 AM: 
+Also you can see my own interop code in these repos: https://github.com/DarwinJS/DebugDeepPSHExecution, https://github.com/DarwinJS/AWSSecurity
+Castillo, Joshua 10:22 AM: 
+Does working with Swager have a place on the wish list?
+Castillo, Joshua 10:22 AM: 
+Swagger
+Joey Aiello 10:24 AM: 
+https://github.com/PowerShell/PowerShell/issues/3091
+Staffan Gustafsson 10:25 AM: 
+"Versioning is not a problem" :)
+Castillo, Joshua 10:27 AM: 
+I keep seeing Joel's name on your pages, it might be time to higher him
+Joey Aiello 10:27 AM: 
+https://github.com/PowerShell/PowerShell/projects/11
+Eugene Bekker 10:27 AM: 
+For the RFCs - what does the "Experimental" stage mean?  Does that mean there is an version of the feature implemented somewhere to play with?
+Castillo, Joshua 10:28 AM: 
+yay
+Eugene Bekker 10:28 AM: 
+DSL
+Eugene Bekker 10:28 AM: 
+Yeah, that's the one I'm looking at
+Eugene Bekker 10:28 AM: 
+Got it, thanks
+Hemant Mahawar 10:28 AM: 
+https://github.com/PowerShell/powershell-rfc/blob/master/RFC0000-RFC-Process.md  describes the terms and workflow
+Joey Aiello 10:29 AM: 
+https://github.com/PowerShell/PowerShell/pull/3169
+Joey Aiello 10:29 AM: 
+https://github.com/PowerShell/PowerShell-RFC/blob/master/RFC0000-RFC-Process.md
+Joey Aiello 10:29 AM: 
+https://github.com/PowerShell/PowerShell-RFC/blob/master/RFC0000-RFC-Process.md#draft
+Castillo, Joshua 10:31 AM: 
+Can i bring my kids?
+Castillo, Joshua 10:31 AM: 
+ShadowBeard
+Joey Aiello 10:31 AM: 
+Thanks again everyone!
+Keith Hill 10:31 AM: 
+Thx!
+Darwin Sanoy (Infor) 10:31 AM: 
+Thanks guys for hosting these calls - very helpful
+Jeremiah Strong 10:32 AM: 
+Thanks!
+GLOCK 10:33 AM: 
+Thanks!
