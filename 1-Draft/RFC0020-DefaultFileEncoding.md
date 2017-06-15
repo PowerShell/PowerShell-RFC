@@ -40,11 +40,11 @@ If the BOM could be written when the platform expects it, interaction with nativ
 
 ## Specification
 
-A new global variable `$PSDefaultFileEncoding` shall be available which allows the user to define the encoding for their system.
-The allowed values for this variable shall be defined by the `Microsoft.PowerShell.Commands.FileSystemCmdletProviderEncoding` enum, with the following additions:
+A new global variable `$PSDefaultEncoding` shall be available which allows the user to define the encoding for their system.
+The allowed values for this variable shall be defined by the `Microsoft.PowerShell.Encoding` enum, with the following additions:
 
 * UTF8NoBOM
-* Legacy
+* WindowsLegacy
 
 The following is the complete list of `FileSystemCmdletProviderEncoding` members:
 * Ascii
@@ -62,9 +62,9 @@ The following is the complete list of `FileSystemCmdletProviderEncoding` members
 * UTF8
 * UTF8NoBOM
 
-When `$PSDefaultFileEncoding` is set to `UTF8NoBOM`, the file shall be created with UTF8 encoding and no BOM shall be written.
+When `$PSDefaultEncoding` is set to `UTF8NoBOM`, the file shall be created with UTF8 encoding and no BOM shall be written.
 
-When `$PSDefaultFileEncoding` is set to `Legacy`, the behavior shall be:
+When `$PSDefaultEncoding` is set to `Legacy`, the behavior shall be:
 
 ```
 CmdletName          Encoding
@@ -80,8 +80,8 @@ Redirection         UTF16
 ```
 This persists the irregular file encoding on non-Windows platforms, and allows Linux files to be used on Windows with the same encoding as exists in previous releases of PowerShell.
 
-The default on all platforms shall be `UTF8NOBOM` (including when `$PSDefaultFileEncoding` is not set).
-Naturally, specific use of the `-Encoding` parameter when invoking the cmdlet shall override `$PSDefaultFileEncoding`. 
+The default on all platforms shall be `UTF8NOBOM` (including when `$PSDefaultEncoding` is not set).
+Naturally, specific use of the `-Encoding` parameter when invoking the cmdlet shall override `$PSDefaultEncoding`. 
 
 ### Exclusions
 
@@ -91,7 +91,7 @@ Remoting protocol cmdlets shall also be unaffected with this change.
 
 ### Optional
 
-We should take this opportunity to rationalize our use of the `Encoding` parameter, and change the cmdlets which use Encoding as `string` or `System.Text.Encoding` type to use `Microsoft.PowerShell.Commands.FileSystemCmdletProviderEncoding`.
+We should take this opportunity to rationalize our use of the `Encoding` parameter, and change the cmdlets which use Encoding as `string` or `System.Text.Encoding` type to use `Microsoft.PowerShell.Encoding`.
 The following cmdlets use various types for the parameter `Encoding`
 
 ```PowerShell
@@ -170,7 +170,7 @@ PS> "ĝoo" |out-file -encoding UTF8NoBOM file.txt
 
 ### Commentary
 
-`UTF8NoBOM` and `Legacy` are, of course, not actual encodings but neither are a number of the other values for `FileSystemCmdletProviderEncoding`. 
+`UTF8NoBOM` and `WindowsLegacy` are, of course, not actual encodings but neither are a number of the other values for `Microsoft.PowerShell.Encoding`. 
 However, it is somewhat descriptive of our behavior. 
 
 ### Alternate Approaches
