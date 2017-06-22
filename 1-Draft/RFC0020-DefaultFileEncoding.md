@@ -51,12 +51,8 @@ The following is the complete list of `FileSystemCmdletProviderEncoding` members
 * BigEndianUnicode
 * BigEndianUTF32
 * Byte
-* Default
-* Legacy
-* Oem
 * String
 * Unicode
-* Unknown
 * UTF32
 * UTF7
 * UTF8
@@ -64,7 +60,7 @@ The following is the complete list of `FileSystemCmdletProviderEncoding` members
 
 When `$PSDefaultEncoding` is set to `UTF8NoBOM`, the file shall be created with UTF8 encoding and no BOM shall be written.
 
-When `$PSDefaultEncoding` is set to `Legacy`, the behavior shall be:
+When `$PSDefaultEncoding` is set to `WindowsLegacy`, the behavior shall be:
 
 ```
 CmdletName          Encoding
