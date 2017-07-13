@@ -172,3 +172,25 @@ However, it is somewhat descriptive of our behavior.
 ### Alternate Approaches
 The setting need not be a PowerShell variable, it could be an environment variable or part of the configuration proposed by [PowerShell-StartupConfig](https://github.com/PowerShell/PowerShell-RFC/blob/master/1-Draft/RFC0015-PowerShell-StartupConfig.md).
 However, this is the simplest approach and these alternatives can be done at later time.
+
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Absent 
+
+Joey Aiello: Accept
+
+Bruce Payette: Accept
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+### Majority Decision
+
+Commmittee agrees that this RFC satisfies the motivation for changes to default file encoding.
+
+### Minority Decision
+
+N/A
