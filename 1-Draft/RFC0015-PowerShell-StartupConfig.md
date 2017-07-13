@@ -157,3 +157,26 @@ I chose PowerShell Data format assuming that anyone that is configuring PowerShe
 Also, PSD1 files may conin comments, which may be very helpful in describing the settings.
 The config file location is somewhat forced due to PowerShell's side-by-side requirements, so a global location (.e.g., `/etc/`) would greatly complicate the configuration file to cover multiple versions.
 
+## PowerShell Committee Decision
+
+### Voting Results
+
+Jason Shirk: Absent 
+
+Joey Aiello: Reject
+
+Bruce Payette: Reject
+
+Steve Lee: Reject
+
+Hemant Mahawar: Reject
+
+### Majority Decision
+
+Committee decided to reuse an existing json file that is already parsed at startup and to move the telemetry configuration into that file.
+Although the current implementation does pull in the json parser, it doesn't appear to have a significant impact on startup as it's been in code since PSCore6 was public.
+
+### Minority Decision
+
+N/A
+
