@@ -1,0 +1,168 @@
+Sullivan, Trevor 9:30 AM: 
+You sound fine
+Kurt Roggen [BE] 9:31 AM: 
+:-)
+Glenn Sarti 9:31 AM: 
+Ya for swag!
+Sullivan, Trevor 9:33 AM: 
+#WhoNeedsBackups
+Simon Wåhlin 9:33 AM: 
+What backup? #ItAllinTheCloud :D
+Sullivan, Trevor 9:33 AM: 
+#LivingOnTheEdge 
+Joey Aiello 9:33 AM: 
+https://blogs.msdn.microsoft.com/powershell/2017/07/14/powershell-6-0-roadmap-coreclr-backwards-compatibility-and-more/ 
+Keith Hill 9:36 AM: 
+The blog post says you are using .NET Standard 2.0. Is that really true? I thought you were actually targeting NetCoreApp2.0 / net4xx?
+Sullivan, Trevor 9:37 AM: 
+I always install the latest beta as soon as it's available. :) Keeps getting better.
+Keith Hill 9:37 AM: 
+Are you sharing?
+Keith Hill 9:37 AM: 
+Are you sharing?
+Sullivan, Trevor 9:37 AM: 
+I don't see anything sharing.
+Kurt Roggen [BE] 9:39 AM: 
+Loading...
+Keith Hill 9:41 AM: 
+RE: solve dev story in beta5/6 - thank you!
+Kurt Roggen [BE] 9:43 AM: 
+compatibility assistant
+Sullivan, Trevor 9:44 AM: 
+Any news around dependency management going forward?
+Darwin Sanoy 9:46 AM: 
+Ok it's actually LuaBugLight by Aaron Margosis.  I don't mean that the tool code could be reused - but the concept: https://blogs.msdn.microsoft.com/aaron_margosis/2015/06/30/lua-buglight-2-3-with-support-for-windows-8-1-and-windows-10/ 
+Glenn Sarti 9:46 AM: 
+Not sure if this is RFC worthy....is there any way to a "registry" of installed PS versions on a host. Give we can install PS6 pretty much anywhere, how could we discover where PS is installed on the filesystem (and potentially version)
+Darwin Sanoy 9:48 AM: 
+Glenn: https://blogs.msdn.microsoft.com/aaron_margosis/2015/06/30/lua-buglight-2-3-with-support-for-windows-8-1-and-windows-10/ 
+Sullivan, Trevor 9:48 AM: 
+One thing I'd love some team / community help on ... writing native cmdlets for Mac OS X and Linux. Some examples of how to call native libraries would be awesome.
+Darwin Sanoy 9:49 AM: 
+Glenn: dir 'C:\Program Files\powershell\*\powershell.exe' | %{ get-command $_.fullname} 
+Glenn Sarti 9:49 AM: 
+reworded: Not sure if this is RFC worthy....is there any way to a "register" an installed PS versions on a host. Given we can install PS6 pretty much anywhere, how could we discover where PS is installed on the filesystem (and potentially version)
+Glenn Sarti 9:49 AM: 
+Does PS _have_ to be installed there is it just default?
+Devin 9:49 AM: 
+Seems like having env variable aware .net targetting and stuff might be best in an IDE
+Devin 9:50 AM: 
+but w/e
+Joel Bennett 9:50 AM: 
+Can we talk about the plan for ACTUALLY supporting .Net Standard 2 for nuget packages?
+Darwin Sanoy 9:51 AM: 
+I'd vote environment variable too because it would work multiplatform
+Keith Hill 9:55 AM: 
+Dumb question - can&apos;t PS just use nuget.exe to resolve nuget dependencies?
+Keith Hill 9:55 AM: 
+Hehe - that was me Joel. PSake required VSSetup on Windows but not needed on Linux/macOS.
+Devin 9:59 AM: 
+So would this be a requires that can target OS?
+Devin 9:59 AM: 
+and exclude OS
+Devin 9:59 AM: 
+?
+Joel Bennett 9:59 AM: 
+yes please ;-)
+Darwin Sanoy 10:00 AM: 
+This conversation is being had in the Chocolatey community as well.
+Simon Wåhlin 10:00 AM: 
+Sounds like something along the line of what Warren Frame is doing in PSDepend doesnt it?
+Jeff Dean 10:00 AM: 
+Not really related to dependencies, but does Core already support Desired State Configuration declarative 'function' types?
+Darwin Sanoy 10:00 AM: 
+Richer dependency and requirements declaration in .nuspec
+Keith Hill 10:02 AM: 
+@Trevor - isn&apos;t that a .NET Core platform invoke call to a native shared lib?
+Keith Hill 10:02 AM: 
+So sprinkle in some C# code with a pinvoke call.
+Sullivan, Trevor 10:02 AM: 
+@Keith: Possibly, yeah. I just am not familiar with native libraries on non-Windows platforms.
+Keith Hill 10:02 AM: 
+It&apos;s not that hard.
+Keith Hill 10:03 AM: 
+Example:
+[DllImport("libc")]
+static extern int read(int handle, byte[] buf, int n);
+Steve Lee (POWERSHELL) 10:04 AM: 
+https://github.com/PowerShell/PowerShell/tree/master/src/libpsl-native 
+Keith Hill 10:04 AM: 
+That&apos;s a C# sample but that could be Add-Type&apos;d
+Keith Hill 10:04 AM: 
++1
+Steve Lee (POWERSHELL) 10:04 AM: 
+https://github.com/PowerShell/PowerShell/blob/master/src/System.Management.Automation/CoreCLR/CorePsPlatform.cs 
+Sullivan, Trevor 10:04 AM: 
+@Keith: nice. I think the big things is needing docs for native libs.
+Keith Hill 10:05 AM: 
+Yup.
+Glenn Sarti 10:05 AM: 
+Joey: thanks for that. More thinking to do.
+Joel Bennett 10:06 AM: 
+It will depend how much you break
+Glenn Sarti 10:06 AM: 
+hahah...yeah right
+Joey Aiello 10:06 AM: 
+https://github.com/PowerShell/PowerShell-RFC/pull/97 
+10:07 AM This message wasn't sent to Kexy Biscuit.
+https://github.com/PowerShell/PowerShell-RFC/pull/97 
+Devin 10:08 AM: 
+Skip it :)
+Devin 10:08 AM: 
+Ty
+Bobby Cannon 10:12 AM: 
+I think that is the Core expectation? Correct?
+Keith Hill 10:12 AM: 
+--self-contained. :-)
+Sullivan, Trevor 10:12 AM: 
+Hopping off the call. Cheers for the help, guys!
+Darwin Sanoy 10:13 AM: 
+powershell-core is on chocolatey - but does not show up due to being marked beta
+Darwin Sanoy 10:14 AM: 
+If we can decide an environment variable pointer name for "current version of core" I can add it to the chocolatey package
+Darwin Sanoy 10:15 AM: 
+This variable would be helpful for making powershell core the default CLI for openssh
+Bobby Cannon 10:17 AM: 
+I haven&apos;t done any research on this but since you guys are talking about it. I create a custom application that is a PowerShell host / terminal. Would I want to host PowerShell 6 in process or find PowerShell in the environment and communicate with it via PowerShell Editor Services?
+Joel Bennett 10:18 AM: 
+What they just told me is that right now the only way is to host PS6 and ship all of it with your host app.
+Jeff Dean 10:18 AM: 
+correct
+Bobby Cannon 10:19 AM: 
+ok, sounds good. Core is new, can I host 6 in .NET 4.6.2?
+Bobby Cannon 10:19 AM: 
+new to me that is...
+Jeff Dean 10:19 AM: 
+that leads to the question... will the LCM eventually support PS core 6?
+Jeff Dean 10:21 AM: 
+ty
+Keith Hill 10:28 AM: 
+Looking through gh/ps/docs and not finding a doc on creating a cross-platform binary module? Anyone have a link to such a doc? Or is the host-powershell.md the doc?
+Keith Hill 10:29 AM: 
+k, just wondering when to start messing with this - after having been burned by net core 1.0 alphas :-)
+Keith Hill 10:29 AM: 
+Does seem to be firming up. New msbuild rocks.
+Keith Hill 10:30 AM: 
+Thanks!
+Nicholas M. Getchell 10:30 AM: 
+Thanks
+Thomas Rayner 10:30 AM: 
+Thanks guys!
+Glenn Sarti 10:30 AM: 
+thanks all
+Darwin Sanoy 10:30 AM: 
+Thanks for doing these calls!
+Jeremiah Strong 10:30 AM: 
+Always enjoy hearing the latest; thx for doing this
+Joel Bennett 10:30 AM: 
+Y’all rock :-)
+Simon Wåhlin 10:30 AM: 
+Thanks alot! 
+Joel Bennett 10:30 AM: 
+lol
+Devin 10:30 AM: 
+bai
+Darwin Sanoy 10:30 AM: 
+bye
+Jonathan Medd 10:30 AM: 
+Thanks
