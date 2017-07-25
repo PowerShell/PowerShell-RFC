@@ -1,0 +1,195 @@
+Joey Aiello 9:31 AM: 
+Hey everyone!
+Joey Aiello 9:31 AM: 
+Just getting set up, give us a second
+Sullivan, Trevor 9:31 AM: 
+Hello
+Joey Aiello 9:32 AM: 
+Hello!
+Sullivan, Trevor 9:32 AM: 
+Yes
+Glenn Sarti 9:32 AM: 
+yup
+Darwin Sanoy 9:32 AM: 
+yes
+Iain Brighton 9:32 AM: 
+Yep!
+Keith Hill 9:32 AM: 
+yes
+Constantin Hager 9:32 AM: 
+jes
+Thomas Rayner 9:32 AM: 
+affirmative
+Constantin Hager 9:32 AM: 
+yes
+Monty Evans 9:32 AM: 
+yep
+Hector, Michael 9:32 AM: 
+(y)
+Eugene Bekker 9:37 AM: 
+Does the Job run with the environment captured of the launching environment?
+Keith Hill 9:40 AM: 
+Crytographically strong randomness one might say. :-)
+Steve Lee (POWERSHELL) 9:41 AM: 
+lol
+Glenn Sarti 9:41 AM: 
++1 UTF8NOBOM
+Thomas Rayner 9:42 AM: 
+That's awesome
+Keith Hill 9:44 AM: 
++1 for uniform experience cross-plat.
+Darwin Sanoy 9:44 AM: 
+This just effects PowerShell Core?
+Keith Hill 9:45 AM: 
+Unicode in-mem and UTF8 on file just makes sense.
+Sullivan, Trevor 9:45 AM: 
+Oh, so *that's* why VSCode kept saying that my module manifests were binaries. Interesting.
+Keith Hill 9:45 AM: 
+Yup
+Jonathan Medd 9:45 AM: 
+Yay for fixing that problem with New-ModuleManifest and git. I wondered why that happened :-)
+Keith Hill 9:45 AM: 
+Which BTW is why Plaster generates a module manifest as UTF8NoBOM.
+Nicholas M. Getchell 9:45 AM: 
+Thanks Keith! 
+Keith Hill 9:47 AM: 
+Hate to admit this but I didn&apos;t even know powershell.exe took positional params. I always specify -Command or -File
+Sullivan, Trevor 9:47 AM: 
+I always specify parameter names for the powershell binary, too.
+Eugene Bekker 9:48 AM: 
+Is it time to consider a distinct name for the PS Core binary vs Windows PS?
+Eugene Bekker 9:48 AM: 
+For example, leave WInPS as powershell.exe and something else, like ps1.exe or posh.exe
+Sullivan, Trevor 9:48 AM: 
+PowerShell Desktop Edition vs. PowerShell Core Edition @Eugene
+Eugene Bekker 9:48 AM: 
+for PS6+
+Glenn Sarti 9:49 AM: 
+I assume it&apos;ll throw an appropriate error (file not found) to the console if you do pass in a command instead of a file... Nothing too obtuse
+Keith Hill 9:49 AM: 
+RE & operator - so the job is a traditional out-of-proc job instead on an in-process (separate runspace) job?
+Eugene Bekker 9:50 AM: 
+Thanks @Trevor
+Eugene Bekker 9:50 AM: 
+Two different names means we can have both live side-by-side on Windows with no conflicts or ambiguity
+Sullivan, Trevor 9:51 AM: 
+There are bigger fish to fry than changing the PowerShell binary name. Just leave it for now.
+Keith Hill 9:51 AM: 
+You could do that with a version parameter, no?
+Eugene Bekker 9:51 AM: 
+If PS6 is changing the CLI params (which is great!), but it will mean invoking PS.exe will require some magic by the caller
+Eugene Bekker 9:52 AM: 
+Also, maybe with PS Core have the ability to specify which "Engine Version" is loaded, much like dotnet CLI allows multiple SDKs living side by side
+Keith Hill 9:52 AM: 
+Heh maybe powershell needs a version manager. :-) psvm select 6.1
+Eugene Bekker 9:52 AM: 
+:-)
+Sullivan, Trevor 9:52 AM: 
++1 Keith
+Glenn Sarti 9:52 AM: 
+Thanks. Sometimes PS errors can be a bit verbose but that looks good.
+Bergmeister, Christoph (Reigate) 9:53 AM: 
++1 Keith because this would be great for testing
+Sullivan, Trevor 9:54 AM: 
+Are these discussions / feedback being discussed openly, or just internally to Microsoft? If you could point us to public discussions on pros/cons of issues like PS version manager and the binary renaming issue, that would be useful.
+Andrew Bradley 9:54 AM: 
+Will there be a simple, recommended way to invoke PSCore cross-platform? E.g. if a build script in an open-source project must have predictable UTF8 output on Linux and Windows
+Thomas Rayner 9:54 AM: 
+(N) changing the name of the binary name
+(Y) adding a minver/maxver/requirever param or launching
+Thomas Rayner 9:55 AM: 
+imo
+Eugene Bekker 9:55 AM: 
+But Desktop and Core are different enough that when I simply say "powershell.exe" I would like to have some predictability
+Keith Hill 9:55 AM: 
+Speaking of breaking changes, I&apos;d like to add the Unicode esc seq PR to the agenda (towards the end) if possible since it is a low risk breaking change. Would be nice to get into 6.0.
+Eugene Bekker 9:55 AM: 
+Especially if you're changing the CLI params
+Sullivan, Trevor 9:56 AM: 
+A *huge* issue to me is the lack of semantic versioning for dependencies in PowerShell module manifests. I'd love to see this breaking change in PS v6.0.
+Eugene Bekker 9:56 AM: 
+I agree -- it's not a "burning" issue
+Sullivan, Trevor 9:57 AM: 
+I hear you @Eugene. Nice to have, but pretty low in priority list.
+Thomas Rayner 9:59 AM: 
+Gotta run to another meeting. Thanks for the call and info!
+Joey Aiello 9:59 AM: 
+See ya! Thanks for joining! 
+Iain Brighton 10:01 AM: 
+Gotta shoot - thanks!
+Sullivan, Trevor 10:04 AM: 
+I had reported an issue with AssemblyLoadContext a couple calls ago ... does this fix that issue? I was getting a silent failure when loading a .NET Core assembly using the default load context.
+Sullivan, Trevor 10:05 AM: 
+I haven't tried on .NET Standard 2.0. Maybe I should give that a shot.
+Sullivan, Trevor 10:06 AM: 
+Wow, really? That is awesome. Single assembly for PS 3.0 Desktop *and* Core 6.0?
+Eugene Bekker 10:06 AM: 
+Awesome!Â  +1 PSStd
+David Jones 10:09 AM: 
+why not use install-package ?
+Sullivan, Trevor 10:09 AM: 
+Any news to share about including PowerShell Remoting "out of box" with the PowerShell Core install package? 
+Keith Hill 10:13 AM: 
+Here the two Unicode esc forms as implemented: fixed width "`u00A9Acme Inc" (ala C# and Bash) and variable width "`u{1f44d}" (ala JavaScript) that also supports Unicode surrogate pairs (emoji).
+Sullivan, Trevor 10:14 AM: 
+I already have an "Emojis" PowerShell module. :) 
+Sullivan, Trevor 10:14 AM: 
+It's on the PowerShell Gallery.
+Keith Hill 10:16 AM: 
+BTW big +1 to whoever fixed the PSReadline bug that was causing garbage characters to be displayed in the prompt on Linux.
+Bergmeister, Christoph (Reigate) 10:16 AM: 
+I find it great that you want to make PowerShell rather quality rather than date driven but can we have an update for each Beta version how many more Beta versions are roughly expected until RTM?
+Jonathan Medd 10:16 AM: 
+Can you join it now? I thought it was only recorded with the MS Azure guys?
+Sullivan, Trevor 10:16 AM: 
++1 Keith to PSReadline fix. Does that fix the issue with VSCode Integrated Terminal?
+Sullivan, Trevor 10:17 AM: 
+I used to get all sorts of weird characters printed in the Integrated Terminal, and it was rather unpredictable / hard to reproduce.
+Keith Hill 10:18 AM: 
+THere is a caveat to that fix. The last line which PSReadline modifies (changes color to indicate error) must not contain any vt term esc seqs.
+Nicholas M. Getchell 10:18 AM: 
+I saw that as well Trevor. I couldn't tell if it was PSReadline, vscode-powershell ext, integrated terminal, or my prompt. It was so random. 
+Sullivan, Trevor 10:18 AM: 
++1 for quality-driven release. Thanks for your efforts in this area. :)
+Sullivan, Trevor 10:19 AM: 
+@Nicholas yeah, I'm not sure where the source of the issue was. Figured Keith would know.
+Bergmeister, Christoph (Reigate) 10:19 AM: 
+Thanks for the info. :-)
+Sullivan, Trevor 10:19 AM: 
+I'm using VSCode on Mac.
+Sullivan, Trevor 10:20 AM: 
+It might have been PSReadLine related.
+Eugene Bekker 10:20 AM: 
+The link hasn't been posted yet
+Eugene Bekker 10:20 AM: 
+According to Roney's twitter
+Sullivan, Trevor 10:20 AM: 
+Have a great day folks, cheers!
+Bergmeister, Christoph (Reigate) 10:21 AM: 
+I found some minor remoting bugs for older pre-release version of PowerShell and OpenSSH. They are not blocking for me but are you still interest in getting to know about them?
+Keith Hill 10:21 AM: 
+@trevor - https://github.com/lzybkr/PSReadLine/issues/470
+Keith Hill 10:21 AM: 
+Chrome is slow!!
+Glenn Sarti 10:22 AM: 
+Thanks all!
+Darwin Sanoy 10:22 AM: 
+Memory hog cause it follows UAC process level best practice - like IE ;)
+Keith Hill 10:22 AM: 
+Thanks!
+Darwin Sanoy 10:22 AM: 
+THanks!
+Eugene Bekker 10:22 AM: 
+Thanks!
+Kenny, Richard 10:22 AM: 
+Thanks
+Hector, Michael 10:23 AM: 
+TY
+Jonathan Medd 10:23 AM: 
+Thanks
+Bergmeister, Christoph (Reigate) 10:23 AM: 
+Thanks
+Wiedmeyer, Martin - NTT 10:23 AM: 
+demke
+Joey Aiello 10:24 AM: 
+bitte
