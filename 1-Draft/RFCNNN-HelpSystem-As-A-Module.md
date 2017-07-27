@@ -39,6 +39,8 @@ This will be breaking change for code taking dependency of these public APIs.
 | UpdatableHelpCommandBase | Used by UpdateHelpCommand, breaking change impact is medium.
 | UpdateHelpCommand | Sealed class, breaking change impact is low.
 
+[CLR Type Forwarding](https://docs.microsoft.com/en-us/dotnet/framework/app-domains/type-forwarding-in-the-common-language-runtime) will be considered to lessen the impact of the breaking change.
+
 The interactive user experience would not change as command discovery will find the ```Get-Help```, ```Save-Help``` and ```Update-Help``` commands from the 'Microsoft.PowerShell.HelpSystem' module instead from 'Microsoft.PowerShell.Core' module (System.Management.Automation.dll).
 
 ## Alternate Proposals and Considerations
