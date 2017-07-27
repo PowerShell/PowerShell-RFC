@@ -29,7 +29,7 @@ This code will be moved to a separate assembly and be published as a module.
 All the public APIs from the help system will be moved to the new namespace 'Microsoft.PowerShell.HelpSystem'.
 This will be breaking change for code taking dependency of these public APIs.
 
-| Public API | Breaking change impact assessement
+| Public API | Breaking change impact assessment
 | ------------ | --------
 | HelpCategoryInvalidException | Exception class, breaking change impact is low.
 | GetHelpCommand | Sealed class, breaking change impact is low.
