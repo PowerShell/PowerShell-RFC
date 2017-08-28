@@ -34,7 +34,7 @@ However, as this is a very longstanding bug, there are workarounds for some case
 
 ### Quoting
 
-The decision if an argument needs to be quoted, will be simplified: Any Argument that contains `"`, `'` or a character that matches `char.IsWhiteSpace` will be quoted. To quote an argument (compatible to [MSVC rules](https://docs.microsoft.com/en-us/cpp/cpp/parsing-cpp-command-line-arguments) and `CommandLineToArgvW`):
+The decision if an argument needs to be quoted, will be simplified: Empty arguments and any argument that contains `"`, `'` or a character that matches `char.IsWhiteSpace` will be quoted. To quote an argument (compatible to [MSVC rules](https://docs.microsoft.com/en-us/cpp/cpp/parsing-cpp-command-line-arguments) and `CommandLineToArgvW`):
 - Every occurrence of N times `\` followed by `"` will be replaced by (2*N+1) times `\` followed by `"`. (N &#x2208; {0,1,2,...})
 - N times `\` at the end of the string is replaced by (2*N) times `\`. (N &#x2208; {0,1,2,...})
 - `"` is added to the beginning and to the end of the string
