@@ -1,0 +1,180 @@
+
+Keith Hill 9:30 AM:
+
+Yup
+michaeltlombardi 9:31 AM:
+
+\o
+Trevor Sullivan 9:31 AM:
+Send-SkypeMessage -Text 'Hello PowerShell Core community.'
+Mark Kraus 9:32 AM:
+
+hello everyone!
+Mark Kraus 9:33 AM:
+
+yup first one.. actually bailed out of a meeting to make this... :)
+michaeltlombardi 9:33 AM:
+
+\o/
+Trevor Sullivan 9:33 AM:
+Nope
+Trevor Sullivan 9:34 AM:
+All good now
+Keith Hill 9:36 AM:
+
+If only there was a language where you could automate many of these release activities. :-)
+Joey Aiello 9:38 AM:
+
+I'll add that to the agenda, Steve might have an update to share there
+Castillo, Joshua 9:39 AM:
+
+PSGradle?
+Castillo, Joshua 9:39 AM:
+
+:)
+Keith Hill 9:39 AM:
+
+On to 6.1..
+Trevor Sullivan 9:43 AM:
+Any plans to ramp up focus on VSCode PowerShell? It’s already great, just needs some more polishing.
+Joel Bennett 9:43 AM:
+
+Is there anything we can do to further the release of a 5.1 version of PowerShellStandard.Library?
+Keith Hill 9:43 AM:
+
+Yeah, +1 for Joel said.
+Trevor Sullivan 9:45 AM:
+I know David recently moved on, but curious if there are plans to fill the huge gap that his absence creates.
+Keith Hill 9:47 AM:
+
+Tyler Leonhardt is taking over for David - last I heard. He&apos;s working on pushing out a 1.5.1 patch release.
+Keith Hill 9:49 AM:
+
+Can we get enhanced module manifest support for cross-platform added to 6.1 list? Like how do I declare a command is exported only on Windows, or a module is required only Windows, etc.
+Trevor Sullivan 9:51 AM:
+No real feature requests for VSCode PowerShell. Some improved reliability would be really helpful though. It seems to hang a lot.
+Keith Hill 9:53 AM:
+
+@trevor - agreed. Attach to PSHost process is broken atm. Debugging on Linux/macOS also has issues.
+Trevor Sullivan 9:55 AM:
+It’s hard to reproduce hangs in VSCode PowerShell, but I’ll keep an eye on the existing issues if there’s something exceptionally serious. Thanks Steve!
+Mark Kraus 9:55 AM:
+
+is there some kind of initiative for pre-GA Documentation refresh?
+michaeltlombardi 9:55 AM:
+
+\o/
+Trevor Sullivan 9:55 AM:
+Perhaps Tyler, or whomever, could add some telemetry to help gather data around VSCode PowerShell hangs?
+michaeltlombardi 9:55 AM:
+
+(y) docs
+Sean Wheeler 9:56 AM:
+
+Not DSC - AzurePS
+Trevor Sullivan 10:00 AM:
+Telemetry would probably make it easier to debug the hangs and buggy behavior. Not sure how much of it is the fault of VSCode itself vs. the extension for PowerShell.
+Keith Hill 10:01 AM:
+
+VSCode is little more than an orchestrator for debugging so most (if not all) issues are in the extension.
+Bergmeister, Christoph (Reigate) 10:02 AM:
+
+there is a new issue for that: https://github.com/PowerShell/PowerShell/issues/5477
+Keith Hill 10:03 AM:
+
+FFO - isnt&apos; that the new buzzword? Fix forward only, right?
+Bergmeister, Christoph (Reigate) 10:08 AM:
+
+https://github.com/PowerShell/PowerShell-RFC/tree/master/CommunityCall
+Keith Hill 10:08 AM:
+
+FYI, we use something like this internally for signing binaries - https://github.com/onovotny/SignService
+Keith Hill 10:10 AM:
+
+Gotcha. 
+Eric Weilnau 10:10 AM:
+
+that&apos;s a good thing
+Trevor Sullivan 10:10 AM:
+Just use blockchain for everything, to establish trust. Everyone’s doing it!!!!!
+Ben Gelens 10:11 AM:
+Any news on dsc core?
+Trevor Sullivan 10:11 AM:
+I’d suggest avoiding DSC in Core, and focus on doing what PowerShell does well.
+Joel Bennett 10:12 AM:
+
+They suggested PowerShell + Python + C/native
+Trevor Sullivan 10:13 AM:
+DSC is a cool concept on Windows, but it feels distant from PowerShell, despite the syntactical similarities.
+Mark Kraus 10:15 AM:
+
+What kind of guidance can you provide on new features that are not fully cross-platform compatible? (i.e. CoreFX limitations on macOS) is there a minimal number of platforms a feature must work on to be accepted?
+Mark Kraus 10:22 AM:
+
+:)
+Keith Hill 10:22 AM:
+
+Thank you for IWR -Auth - already been using it!
+Mark Kraus 10:22 AM:
+
+me too... that's why I added it :)
+Joel Bennett 10:24 AM:
+
+LOL
+Jeremiah Strong 10:24 AM:
+
+I like skype :)
+Trevor Sullivan 10:24 AM:
+Skype is great, IMO. Works very well on Mac.
+Bobby Cannon 10:24 AM:
+
+Anything, just want to listen in
+Trevor Sullivan 10:24 AM:
+Please don’t use WebEx. Whatever you do, don’t use WebEx.
+Bergmeister, Christoph (Reigate) 10:24 AM:
+
+I don't mind which platform, but at least moving away from Skype for Business would be great because I only have 'normal' Skype at home and have to stay at work therefore
+Keith Hill 10:24 AM:
+
+For future conf calls, as Steve now owns some of this other PS tooling support, can we maybe add VSCode extension to the call? I mean we talked about it today but it would be good to have the devs here.
+Jeremiah Strong 10:24 AM:
+
+Skype Web App?
+Eric Weilnau 10:25 AM:
+
+yeah
+Joel Bennett 10:25 AM:
+
+I join in Skype4b
+Trevor Sullivan 10:25 AM:
+Skype for Business on Mac actually looks even better than the Windows version. Just grabbed it this morning.
+Keith Hill 10:25 AM:
+
++1
+Andrew Bradley 10:25 AM:
+Skype works fine because it doesn't force us to login or anything. Easy enough
+Eric Weilnau 10:25 AM:
+
+it does. I am on the web without an account
+Bergmeister, Christoph (Reigate) 10:25 AM:
+
+Thanks for the tip with the web app, I'll try it next time. :-)
+Keith Hill 10:26 AM:
+
+Thx!
+Nicholas M. Getchell 10:26 AM:
+
+Thanks PS team
+Darwin Sanoy 10:26 AM:
+
+Thanks much!
+Mark Kraus 10:26 AM:
+
+bye all!
+Jeremiah Strong 10:26 AM:
+
+Trouble Joining? Try Skype Web App
+
+<https://meet.lync.com/microsoft/jaiello/ZRC25BBR?sl=1>
+
+Join by phone
