@@ -12,3 +12,4 @@ Use [this ICS file](RecurringCommunityCall.ics) (right-click `Raw` and select `S
 * [May 18, 2017](./20170518_ChatTranscript.txt) ([YouTube recording](https://www.youtube.com/watch?v=f8WXuFrVSKM))
 * [June 15, 2017](./20170615_ChatTranscript.txt) ([YouTube recording](https://www.youtube.com/watch?v=Iu_Q_3cUxTQ))
 * [July 20, 2017](./20170720_Notes.md) ([YouTube recording](https://www.youtube.com/watch?v=DF2L5ezX7AE) and [transcript](./20170720_ChatTranscript.txt))
+* [November 16, 2017](./20171116_Notes.md) ([YouTube recording](https://youtu.be/EZ-UqdP_bxQ) and [transcript](./20171116_ChatTranscript.txt))
