@@ -10,9 +10,11 @@ Plan to Implement:
 ---
 
 # Implement Key and ExpandKey Parameters for the Select-Object Cmdlet
-I propose that the `Select-Object` Cmdlet be extended with two new parameters:
-`Key` and `ExpandKey`. These parameters would function similarly to the
-`Property` and `ExpandProperty` parameters which currently exist.
+This RFC proposes that the `Select-Object` Cmdlet be extended with two new
+parameters: `Key` and `ExpandKey`. These parameters would allow the
+Select-Object Cmdlet to index into Hashtables and would function similarly to
+the `Property` and `ExpandProperty` parameters which currently exist for other
+object types.  
 
 ## Motivation
 
