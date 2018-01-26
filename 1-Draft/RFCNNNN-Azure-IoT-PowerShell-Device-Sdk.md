@@ -105,6 +105,13 @@ Set-AzureIoTDeviceDirectMethod -Module (Resolve-Path ./ExampleDirectMethodModule
 Set-AzureIoTDeviceDirectMethod -Module ExampleDirectMethodModule
 ```
 
+#### Disclaimer
+
+This module will not be a complete implementation of the Azure IoT SDK. It will only be the device SDK and even within that, we are only looking to light up a few scenarios as a complete implementation would take a lot of time. The scenarios in scope are:
+
+* Sending a message from device to Azure
+* Setting a script block to be run when a Direct Method comes in
+
 ## Alternate Proposals and Considerations
 
 ### A module that already existed
