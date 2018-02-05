@@ -14,7 +14,7 @@ Plan to implement: Yes
 This RFC is about adding the Experimental Feature support in PowerShell through the PowerShell configuration.
 
 The Experimental Feature support in PowerShell is to provide a mechanism for experimental features to coexist
-with exsiting stable features in PowerShell or PowerShell modules.
+with existing stable features in PowerShell or PowerShell modules.
 An experimental feature would not be enabled
 unless a user opt in by properly configuring the `powershell.config.json` file.
 Experimental features should not affect any stable features
@@ -38,15 +38,15 @@ without worrying about regressions, issues, or side effects caused by the new fe
 For example, PowerShell team plans to rewrite the `FileSystemProvider` in future
 to reduce the code complexity and improve the performance.
 During the development,
-the `FileSystemProvider vnext` can coexist with the existing one
+the `FileSystemProviderV2` can coexist with the existing one
 and be exposed to the user as an experimental feature,
 so that PowerShell team can get early feedback and issue reports.
 At the same time, users can continue to use the existing `FileSystemProvider`
-without being affected by the known or unknown issues introduced by the `FileSystemProvider vnext`.
+without being affected by the known or unknown issues introduced by the `FileSystemProviderV2`.
 
 ## Specification
 
-### Experimental Feateure Names
+### Experimental Feature Names
 
 Experimental features for PowerShell components and built-in modules should be named as `PSXXX`,
 where `XXX` is the real feature name, which is a single word in camel case.
@@ -99,7 +99,7 @@ while the automatic variable makes it easy to query from PowerShell scripts.
 #### Code Path Divided
 
 The first implementation scenario of an experimental feature is to divide the code path based on whether a feature is enabled.
-This probably would be the most common pattern for implementing any experimental fatures.
+This probably would be the most common pattern for implementing any experimental features.
 PowerShell exposes the enabled experimental feature names through both an API and an automatic variable,
 so it could be very easy for both C# code and PowerShell script to access this information.
 
@@ -114,7 +114,7 @@ There are two cases in this scenario:
 
 - A new cmdlet is added by the experimental feature.
   The new cmdlet should be exposed when the experimental feature is enabled.
-- A new cmdlet is added by the experimental feature to overide an existing cmdlet with the same name.
+- A new cmdlet is added by the experimental feature to override an existing cmdlet with the same name.
   When the experimental feature is enabled,
   the existing cmdlet should be hidden and the new cmdlet should be exposed.
 
@@ -161,7 +161,7 @@ The following code snippets are examples of using this attribute for cmdlet/func
 ```c#
 [Experimental("PSWebCmdletV2", FeatureAction.Show)]
 [Cmdlet(Verbs.Invoke, "WebRequest")]
-public class InvokeWebRequsetCommandV2 : WebCmdletBaseV2 { ... }
+public class InvokeWebRequestCommandV2 : WebCmdletBaseV2 { ... }
 
 [Experimental("PSWebCmdletV2", FeatureAction.Hide)]
 [Cmdlet(Verbs.Invoke, "WebRequest")]
@@ -195,7 +195,7 @@ We want to expose this parameter only if the experimental feature is enabled.
 
 An example for the second case:
 > We want to remove a problematic parameter from `Add-Type`.
-In order to evaluate the impact of the breaking chagne,
+In order to evaluate the impact of the breaking change,
 we want to hide it only if the experimental feature is enabled.
 
 The same `[Experimental()]` attribute can also be used in this scenario.
@@ -245,7 +245,7 @@ There are two cases in this scenario:
 An example for the first case:
 > We want to support a new transport layer for `Invoke-Command`,
 which will introduce a new parameter set.
-Parameters `-ScirptBlock` and `-FilePath` need to be added to the new parameter set
+Parameters `-ScriptBlock` and `-FilePath` need to be added to the new parameter set
 when the experimental feature is enabled.
 
 An example for the second case:
@@ -339,6 +339,7 @@ internal enum EngineExperimentalFeatures
     PSFileSystemProviderV2
 }
 ```
+
 ```xml
 // EngineExperimentalFeature.resx
 <data name="PSFileSystemProviderV2-Description" xml:space="preserve">
