@@ -177,6 +177,9 @@ function Enable-SSHRemoting {
 }
 ```
 
+> Implementation Note: the attribute `[Experimental()]` could be applied to a script block directly.
+Execution of such a script block should error out when the associated experimental feature is not enabled.
+
 ##### Add New Parameters
 
 There are two cases in this scenario:
@@ -445,6 +448,13 @@ public class ExperimentalFeature
     public ExperimentalFeature[] Dependency { get; }
 }
 ```
+
+### Test Experimental Features
+
+How to test the combination of various experimental features would be a hard problem to solve,
+as well as a problem that we have to solve before using the experimental feature support.
+
+> Not sure how to handle it yet ...
 
 ## Alternate Proposals and Considerations
 
