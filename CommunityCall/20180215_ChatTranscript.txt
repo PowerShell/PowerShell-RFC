@@ -1,0 +1,350 @@
+Jonas Sommer Nielsen 9:34 AM: 
+have another participant do the recording
+Michael T Lombardi 9:34 AM: 
+;)
+Thomas Rayner 9:34 AM: 
+lol teams
+Mike O'Neill 9:35 AM: 
+teams doesn't for me
+Mike O'Neill 9:35 AM: 
+ever
+Sean Wheeler 9:35 AM: 
+loading
+Sean Wheeler 9:35 AM: 
+yep
+Jonas Sommer Nielsen 9:35 AM: 
+success in denmark :)
+German Islas 9:37 AM: 
+is Audio working for everyone else?
+Sean Wheeler 9:37 AM: 
+yes
+Mark Kraus 9:37 AM: 
+audio works for me
+Randal H 9:37 AM: 
+is there sound yet?
+Eugene Bekker 9:37 AM: 
+no
+Jeff Dean 9:37 AM: 
+yes
+Jonas Sommer Nielsen 9:37 AM: 
+(y)
+Keith Hill 9:37 AM: 
+yes
+Nicholas M. Getchell 9:37 AM: 
+We have audio
+Justino Garcia 9:37 AM: 
+no
+Michael T Lombardi 9:37 AM: 
+loud and reasonably clear
+Randal H 9:38 AM: 
+hmmm
+Randal H 9:38 AM: 
+nothing here
+Joey Aiello 9:38 AM: 
+you should probably quit and rejoin if you're having sound problems
+Joey Aiello 9:38 AM: 
+Sorry...
+Joey Aiello 9:38 AM: 
+Happens to me every 10th time
+Michael T Lombardi 9:38 AM: 
+If you’re like me, verify your volume is actually turned up. /sigh
+Thomas Rayner 9:38 AM: 
+Solid note
+Itadder 9:39 AM: 
+Solid it works
+Joel Bennett 9:39 AM: 
+woo
+Michael T Lombardi 9:39 AM: 
+\o/
+Michael T Lombardi 9:42 AM: 
+(docs improvements)++ 
+Mark Kraus 9:43 AM: 
+https://github.com/PowerShell/PowerShell/tree/master/docs/host-powershell 
+Joey Aiello 9:43 AM: 
+https://github.com/PowerShell/PowerShell/blob/master/docs/host-powershell/sample-dotnet2.0-powershell.beta.3/NuGet.config 
+Mark Kraus 9:45 AM: 
+it is le slow
+Thomas Rayner 9:46 AM: 
+Did I miss an announcement on new AST stuff?
+Joey Aiello 9:46 AM: 
+This is new AST stuff from back in PowerShell 5
+Thomas Rayner 9:47 AM: 
+oh oh thanks :)
+Mark Kraus 9:49 AM: 
+https://github.com/PowerShell/PowerShellStandard 
+Tyler Leonhardt (POWERSHELL) 9:49 AM: 
+👍
+Nicholas M. Getchell 9:49 AM: 
+That would be neat!
+Mark Kraus 9:50 AM: 
+https://blogs.msdn.microsoft.com/dotnet/2017/11/16/announcing-the-windows-compatibility-pack-for-net-core/ 
+Michael B. 9:50 AM: 
+SecureString!
+Michael T Lombardi 9:51 AM: 
+(Mark Kraus)++ for supporting resources
+Mark Kraus 9:51 AM: 
+its's there.. you just cannot serialze to xml
+Nicholas M. Getchell 9:51 AM: 
+So no serialization? 
+Joel Bennett 9:51 AM: 
+correct
+Mark Kraus 9:51 AM: 
+correct.. you cannot export-cllixml and such
+Nicholas M. Getchell 9:52 AM: 
+PSake
+Nicholas M. Getchell 9:52 AM: 
+Plaster
+Joel Bennett 9:53 AM: 
+I vot no.
+Michael T Lombardi 9:53 AM: 
+Split and rev as reasonable.
+Mark Kraus 9:54 AM: 
+...
+Mark Kraus 9:54 AM: 
+:)
+Joel Bennett 9:55 AM: 
+I'd rather not see specific _tools_ promoted into a dev pack -- any time Microsoft "picks a winner" or builds their own, the competition (and improvements) wither.
+Mark Kraus 9:56 AM: 
+Plans to bring on some more community maintainers with merge privs?
+Ryen Tang 9:56 AM: 
+Hmm... can't we have a cmdlet in PSCore.. say Get-PSUpdate?
+Itadder 9:57 AM: 
+what about powershell management tool for mac os with SCCM or intunes
+Itadder 9:57 AM: 
+Automate Macos Deployment via powershell
+Thomas Rayner 9:58 AM: 
+Off topic but just remembered: Any plans to change PSSA in such a way that script-based rules can be contributed to the core ruleset? David Wilson opened an issue for it on my behalf a while ago.
+Itadder 9:58 AM: 
+thanks
+Michael T Lombardi 10:00 AM: 
+++ keeping installer stuff out of the gallery
+DarwinJS 10:00 AM: 
+But you stood up Linux Repos? Isn&apos;t it time for an equivalent for Windows?
+Joel Bennett 10:01 AM: 
+Chocolatey :-P
+Michael T Lombardi 10:01 AM: 
+choco++
+DarwinJS 10:01 AM: 
+I love Choco - but need something more official like the Linux repos
+Keith Hill 10:01 AM: 
++1
+Itadder 10:02 AM: 
+yes
+Itadder 10:02 AM: 
+the equiilivenent
+Itadder 10:02 AM: 
+of the fleets
+Michael T Lombardi 10:02 AM: 
+@DarwinJS, you mean like an MS maintained feed?
+Itadder 10:02 AM: 
+or like get mac eventlogs
+DarwinJS 10:02 AM: 
+Hey - let&apos;s package windows stuff in RPMs!!!! :S
+Itadder 10:02 AM: 
+Got it thanks
+Michael B. 10:02 AM: 
+that has a snowball&apos;s chance
+Michael T Lombardi 10:03 AM: 
+ie, a nuget feed of chocolatey packages that are MS blessed for installing pwsh and similar?
+Michael B. 10:03 AM: 
+MDM/OMI
+DarwinJS 10:03 AM: 
+Windows Store is so NOT DevOps - can&apos;t you get the Windows Store to do a NuGet feed
+Ryen Tang 10:04 AM: 
+I'm thinking... the same.
+Keith Hill 10:04 AM: 
+Like NuGet used to do with install.ps1
+DarwinJS 10:05 AM: 
+It only does that inside VisualStudio right?
+Keith Hill 10:05 AM: 
+Good question. Honestly, I&apos;ve only used NuGet inside VS. :-)
+Joel Bennett 10:06 AM: 
+I believe they stopped doing that, because security
+Castillo, Joshua 10:06 AM: 
+Like dockerhub'ish
+Marcus Clayton 10:06 AM: 
+Yes!
+Keith Hill 10:06 AM: 
+Yeah, install.ps1 got dropped in what, v3?
+Michael T Lombardi 10:06 AM: 
+signed, blessed feeds is my personal preference and matches a bit better the Linux world / expectations
+Joel Bennett 10:07 AM: 
+Yes, and Darwin's right they never did that outside VS
+Jeff Dean 10:07 AM: 
+did sound die?
+Michael T Lombardi 10:08 AM: 
+@Jeff, not for me.
+Nichols, Colin 10:08 AM: 
+I lost audio
+Nicholas M. Getchell 10:08 AM: 
+Audio is fine here
+Jeremiah Strong 10:08 AM: 
+audio is still working for me
+Jeff Dean 10:08 AM: 
+I'm called in. Calling bakc in
+Jeff Dean 10:09 AM: 
+still no sound... :(
+Joey Aiello 10:09 AM: 
+Sorry you're not getting sound....you have to close the window if you exit and rejoin the call for it to actually restart your connection to the call
+Thomas Rayner 10:10 AM: 
+https://github.com/PowerShell/PSScriptAnalyzer/issues/743  - I don't have a more intelligent question than "can you please do this?" :D
+DarwinJS 10:10 AM: 
+No notes for the chocolatey conversion? Is it off the record :D
+Michael T Lombardi 10:11 AM: 
+;)
+Joey Aiello 10:12 AM: 
+@Darwin: Tyler is typing notes for me, I'm going to go and punch them up with my thoughts before I publish them ;-)
+DarwinJS 10:12 AM: 
+coo!
+Tyler Leonhardt (POWERSHELL) 10:12 AM: 
+Notes are hard
+DarwinJS 10:12 AM: 
+Agreed
+DarwinJS 10:13 AM: 
+Why isn&apos;t there a bot for that?
+Thomas Rayner 10:13 AM: 
+Any comments specifically on script-based rule support for the core ruleset?
+DarwinJS 10:13 AM: 
+How far back would PS compat analysis go?
+DarwinJS 10:14 AM: 
+Nice
+Jeff Dean 10:15 AM: 
+I guess I wasn't destined to hear the rest of the call. /shrug/ Don't ya'll have a great text to speech engine for closed captioning? (sorry, off topic)
+Keith Hill 10:15 AM: 
+IMO perf in PSSA is pretty important
+Thomas Rayner 10:16 AM: 
+https://github.com/PowerShell/PSScriptAnalyzer/issues/743 
+Michael B. 10:17 AM: 
+@keith ^
+Joey Aiello 10:17 AM: 
+Sorry, Jeff...there'll be a Youtube link at https://github.com/powershell/powershell-rfc/tree/master/CommunityCall when we finish
+Thomas Rayner 10:17 AM: 
+Thanks for the answer! Appreciate the transparency.
+Thomas Rayner 10:17 AM: 
+Issue about to have a birthday :)
+Jeff Dean 10:17 AM: 
+No worries. Appreciate ya'lls time for the calls. I'll catch up later.
+Tyler Leonhardt (POWERSHELL) 10:18 AM: 
+sort by 👍
+Marcus Clayton 10:20 AM: 
+No
+Mark Kraus 10:20 AM: 
+https://twitter.com/TylerLeonhardt/status/963520685388701696 
+Nichols, Colin 10:22 AM: 
+cool :)
+Marcus Clayton 10:22 AM: 
+(y) 
+Thomas Rayner 10:22 AM: 
+FInally started playing with Azure IoT Hub yesterday and some Raspberry Pi stuff and I'm hooked.
+Ryen Tang 10:22 AM: 
+Awesome. Reduce my learning curve to write something for IOT
+Michael T Lombardi 10:23 AM: 
+David Wilson ++
+Keith Hill 10:25 AM: 
+Soon is not soon enough. :-)
+Mark Kraus 10:26 AM: 
+good call everyone! I have to drop off early. Joey, keep hounding the OS and product teams for those modules. 
+Thomas Rayner 10:26 AM: 
+I think I reg'd for that session. Can't remember what it was up against.
+Thomas Rayner 10:26 AM: 
+Reminder: you can nominate David for MVP award May 1.
+Michael T Lombardi 10:26 AM: 
+\o/
+Michael T Lombardi 10:28 AM: 
+I do!
+DarwinJS 10:29 AM: 
+Nah, just use the SSH client in the windows git folder ;)
+Thomas Rayner 10:29 AM: 
+bash -c 'ssh ...'
+Nicholas M. Getchell 10:31 AM: 
+nice
+DarwinJS 10:32 AM: 
+What will having ssh in win32 mean for updatges via chocolatey?
+Michael B. 10:32 AM: 
+PSRP perf imp in ssh?
+Keith Hill 10:32 AM: 
+BTW is PSRL 2 still on track to make it into 6.1?
+Michael T Lombardi 10:32 AM: 
+choco calls
+Michael T Lombardi 10:32 AM: 
+++
+DarwinJS 10:32 AM: 
+If they are trustedinstaller protected it&apos;ll be a pain
+Michael T Lombardi 10:32 AM: 
+@DarwinJS++
+Michael T Lombardi 10:33 AM: 
+doc revs++++++
+DarwinJS 10:33 AM: 
+System32 placement is going to muck up all existing SSH clients that rely on the path right?
+Michael T Lombardi 10:34 AM: 
+concept docs++
+DarwinJS 10:34 AM: 
+Yep
+DarwinJS 10:35 AM: 
+Program Files/Microsoft
+DarwinJS 10:35 AM: 
+and then add to end of path
+DarwinJS 10:35 AM: 
+Git client ssh not on path
+DarwinJS 10:35 AM: 
+sure
+DarwinJS 10:36 AM: 
+Whew - hard to get that project to change their install alll - from experience
+Michael B. 10:36 AM: 
+but you have to know the one-liner...
+DarwinJS 10:37 AM: 
+Should be off on Desktop OS
+Campbell, Troy 10:39 AM: 
+I think it should be on by default, if it is a workable ssh client
+Campbell, Troy 10:39 AM: 
+there should be no reason for git ssh with this release
+Nicholas M. Getchell 10:39 AM: 
+We definitely want it preinstalled 
+Campbell, Troy 10:40 AM: 
+Windows Insiders just need to test those issues
+Michael T Lombardi 10:41 AM: 
+/me throws in an ask for the DSC core update at the last second
+Michael B. 10:42 AM: 
+if it&apos;s already there - don&apos;t install it again
+Michael B. 10:44 AM: 
+YES
+Nicholas M. Getchell 10:45 AM: 
+Is that why RSAT tools have to be reinstalled after every build install?
+Michael B. 10:47 AM: 
+do ship a where.exe :-)
+DarwinJS 10:47 AM: 
+get-command
+DarwinJS 10:47 AM: 
+No sorry
+DarwinJS 10:52 AM: 
+get-command should find arbitrary .exes - only on the path
+Keith Hill 10:52 AM: 
+So shooting for RS4?
+Keith Hill 10:53 AM: 
+Gotcha
+Sean Wheeler 10:54 AM: 
+where.exe ships in Windows already
+Michael B. 10:54 AM: 
+yes. since server 2003
+Michael B. 10:54 AM: 
+where.exe
+Nicholas M. Getchell 10:55 AM: 
+Thanks for your time guys
+Jeremiah Strong 10:55 AM: 
+(y)
+Marcus Clayton 10:55 AM: 
+Thanks!!
+Michael B. 10:55 AM: 
+thank you!
+Ryen Tang 10:55 AM: 
+Thanks
+DarwinJS 10:55 AM: 
+Thanks guys!
+Keith Hill 10:55 AM: 
+thanks!
+Nichols, Colin 10:55 AM: 
+(y)
+Tyler Leonhardt (POWERSHELL) 10:55 AM: 
+👋
+German Islas 10:55 AM: 
+Thank you
