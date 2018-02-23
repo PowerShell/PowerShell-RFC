@@ -362,6 +362,8 @@ public class ExperimentalFeature
     public string Description { get; }
     // Feature source (e.g. PSEngine, or module name)
     public string Source { get; }
+    // Feature is enabled or not
+    public bool IsEnabled { get; }
 }
 
 internal static readonly ReadOnlyCollection<ExperimentalFeature> EngineExperimentalFeatures;
@@ -402,6 +404,9 @@ For each of them, the `Name` and `Description` are from the metadata. The `Sourc
 Lastly, the cmdlet can go through not-yet-loaded modules that are in the module path,
 in a similar way as `Get-Command` does,
 with the help of the module analysis code.
+
+For the experimental features that are enabled,
+the property `IsEnabled` will be set to `true` accordingly.
 
 ### Experimental Feature Dependencies
 
@@ -467,6 +472,8 @@ public class ExperimentalFeature
     public string Description { get; }
     // Feature source (e.g. module name)
     public string Source { get; }
+    // Feature is enabled or not
+    public bool IsEnabled { get; }
     // Features it depends on
     public ExperimentalFeature[] Dependency { get; }
 }
@@ -593,7 +600,7 @@ There are two proposals here for solving this problem:
    The first pass is to convert the arguments into a more structured format,
    and process flags like `-settingsFile` at a very early stage.
    The second pass is the main parsing logic.
-1. Use an environment variable `PSSettingsFile` to point to the configuration file to use.
+2. Use an environment variable `PSSettingsFile` to point to the configuration file to use.
    By using the environment variable,
    overriding the instance configuration file can happen as early as the singleton instance of `PowerShellConfig` gets created,
    which would be the first time PowerShell attempts to read the configuration file.
