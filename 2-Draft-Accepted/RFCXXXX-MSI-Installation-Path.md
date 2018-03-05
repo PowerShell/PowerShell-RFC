@@ -37,11 +37,14 @@ We also provide the version of PowerShell in the FileVersion object associated w
     * Preview: an unsupported build that may contain incomplete new features and high-impact bugs,
       and should therefore not be used in production.
 * All stable MSIs of PowerShell Core 6.x shall be installed to `$env:ProgramFiles\PowerShell\6\`.
-* All preview MSIs of PowerShell Core 6.x shall be installed to `$env:ProgramFiles\PowerShell\6-preview`.
+* All preview MSIs of PowerShell Core 6.x shall be installed to `$env:ProgramFiles\PowerShell\6-Preview`.
 * When a stable MSI is run on a machine that already has a stable PowerShell Core 6.x installed,
   an in-place update of that stable build shall be performed.
 * When a preview MSI is run on a machine that already has a preview PowerShell Core 6.x installed,
-  an in-place update of that stable build shall be performed.
+  an in-place update of that preview build shall be performed.
+* No installation of a preview build shall interfere with a stable build, and vice versa
+    * This includes an implicit requirement that `Install-PowerShellRemoting.ps1` create a different endpoint name for the preview build.
+    * The preview binary of PowerShell Core 6.x shall be named `pwsh-preview` or `pwsh-preview.exe` (depending on the platform).
 
 ## Alternate Considerations and Proposals
 
