@@ -393,8 +393,19 @@ will be updated to incorporate this metadata to the resulted `PSModuleInfo` obje
 
 #### Get-ExperimentalFeature
 
-A new cmdlet `Get-ExperimentalFeature` will be added to return all available experimental features of a PowerShell session.
+A new cmdlet `Get-ExperimentalFeature` will be added to return all experimental features of a PowerShell session.
 The returned experimental features are represented by the type [`ExperimentalFeature`](#powerShell-engine-experimental-feature).
+The syntax signature of the cmdlet will look as follows:
+
+```powershell
+Get-ExperimentalFeature [-Enabled] [-Disabled] [<CommonParameters>]
+
+Get-ExperimentalFeature [-Name] <string[]> [<CommonParameters>]
+```
+
+When `-Enabled` is specified, only enabled experimental features will be returned.
+When `-Disabled` is specified, only disabled experimental features will be returned.
+When `-Name` is specified, only those specified experimental features will be returned.
 
 The cmdlet first goes through the items in `EngineExperimentalFeatures` to find all engine experimental features.
 
