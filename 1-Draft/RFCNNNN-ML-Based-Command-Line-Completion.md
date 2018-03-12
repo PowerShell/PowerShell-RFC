@@ -125,6 +125,44 @@ Enable-CommandLineSuggestions
 Disable-CommandLineSuggestions
 ```
 
+### Examples
+
+The following are the type of user experiences we would like to see enabled by machine learning. They are based on existing PowerShell command line completion but other experiences with better UI elements such as tables or popup windows would be even better.  In addition an interactive chatbot could be interesting and allow a machine learning model query the user to better provide suggestions.  
+
+```powershell
+# This pattern is often used on the local machine command line.
+# $sessionOption = New-PSSessionOption -NoMachineProfile -OutputBufferingMode Block -SkipCACheck -SkipCNCheck -SkipRevocationCheck -IdleTimeout 86400000
+# So tab complete would suggest:
+PS C:\> $sessionOption = <tab>
+
+$sessionOption = New-PSSessionOption -NoMachineProfile -OutputBufferingMode Block -SkipCACheck -SkipCNCheck -SkipRevocationCheck -IdleTimeout 86400000
+```
+
+```powershell
+# A fairly complex set of commands is run regularly from the command line to gather log information from remote machines. 
+# This example assumes that the existing PSReadline command, Ctrl+Space, is modified (or that there is a new similar command) and returns a machine learning suggestion that has high confidence.
+PS C:\> $computersForSummary = <Ctrl+Space>
+
+$computersForSummary = "manageC1","manageC2","manageC3",...
+$sessionOption = New-PSSessionOption -NoMachineProfile -SkipCACheck -SkipCNCheck -SkipRevocationCheck
+$summaryJobs = Invoke-Command -SessionOption $sessionOption -Cn $computersForSummary -ScriptBlock {
+    Import-Module -Name LoggingModule
+    $results = LoggingModule\GatherLogsSummary
+    Write-Output $results
+} -AsJob
+$summaryJobs | Wait-Job
+```
+
+```powershell
+# A user new to PowerShell is trying to perform a common task and invokes an AI chatbot to help.
+PS C:\> dir <Ctrl+?>
+** What do you want to do? **
+PS C:\>? I want to search all sub directories for all text files.
+
+Get-ChildItem -Path . -Include *.txt,*.text -Recurse
+```
+
+
 ### Open Issues
 
 #### General Data Protection Regulation (GDPR) Conformance
