@@ -39,7 +39,8 @@ Machine Learning is an inherently experimental process where different models an
 * Returns prediction from submitted command line fragment
 * Creates suggestion success statistics based on user choice
 
-#### General Data Protection Regulation (GDPR) support Module
+#### Telemetry Module
+This module is for accumulating data used to train the machine learning models. It conforms to the General Data Protection Regulation (GDPR) rules.
 These regulations apply to any personal data that is collected, and allows the user to:
 * View
 * Edit
@@ -90,8 +91,8 @@ Because of potential lag concerns (especially when the machine learning model is
         /// </summary>
         /// <param name="input">Command line fragment</param>
         /// <param name="cursorIndex">Cursor index</param>
-        /// <param name="OnPredictionCallback">Call back delegate to receive prediction results</param>
-        void PredictFromInput(string input, int cursorIndex, Action<Collection<CommandLinePredictionResult>> OnPredictionCallback);
+        /// <returns>Asynchronous task that returns predictions</returns>
+        Task<Collection<CommandLinePredictionResult>> GetPredictFromInput(string input, int cursorIndex);
 
         /// <summary>
         /// Submit command line text processed by PowerShell
