@@ -1,0 +1,276 @@
+Thomas Rayner 9:28 AM:
+(Y)
+
+Mike Lombardi 9:28 AM:
+
+Sho nuff
+Constantin Hager 9:29 AM:
+
+yes
+Mike Lombardi 9:31 AM:
+
+Blow it away and rebuild with DSC. ;)
+Justino Garcia 9:31 AM:
+Can we add --help support for pwsh
+
+Steve Lee (POWERSHELL) 9:31 AM:
+Please open an issue!
+Mike Lombardi 9:31 AM:
+
+I had a packer + vagrant box for my work machine at $LastJob, since I couldn’t get permissions to pave over my actual desktop workstation
+Justino Garcia 9:32 AM:
+mike that crazy
+
+Mark Kraus 9:32 AM:
+
+@Justino there is an open issue here https://github.com/PowerShell/PowerShell/issues/6397
+Mark Kraus 9:32 AM:
+
+got vote/comment
+Justino Garcia 9:32 AM:
+Thanks mark
+
+Mike Lombardi 9:32 AM:
+
+@MarkKraus++
+Mike Lombardi 9:33 AM:
+
+“You want to install _what_ on your workstation?"
+Steve Lee (POWERSHELL) 9:33 AM:
+#6397 is about cmdlets, I think the ask is for pwsh
+Thomas Rayner 9:33 AM:
+What's the usual turnaround on call end -> recording posted? I'm keen to hear about the Script Analyzer point, but I gotta run in about 20 min to another meeting.
+
+Joey Aiello 9:33 AM:
+I'll get it up this week for you, Thomas
+
+Thomas Rayner 9:33 AM:
+(L)
+
+Justino Garcia 9:36 AM:
+In linux, obviously --help (or -h) or -? as a way to get help
+
+Justino Garcia 9:37 AM:
+Okay I see np
+
+Tobias 9:38 AM:
+
+#requieres Would solve -- problem
+Mike Lombardi 9:38 AM:
+
+Just to clarify, we only see VSCode Joey, all your other screens when shown are blank boxes which is probably on purpose.
+Mike Lombardi 9:38 AM:
+
+(y)
+Tobias 9:38 AM:
+
+you can specify the powershell version by #reuires at the beginning of your script, so you could prevent breaking existing stuff.
+Mike Lombardi 9:39 AM:
+
+Well, but changing the pwsh switches can break people like puppet/chef/other things that are calling PowerShell
+Darwin Sanoy 9:39 AM:
+#requires is also opt-in by default - so hurts until you do that - or am I misunderstanding?
+
+Sean Wheeler 9:46 AM:
+@Joey - I want to talk about our release branch in Docs
+
+Joey Aiello 9:47 AM:
+Got it! (yes)
+
+Mike Lombardi 9:47 AM:
+
+Ping on PowerShellGet, NuGet versioning, and OneGet generally. Specifically, any plans to move towards NuGet 3+ support, and timeline for that work / priority?
+Thomas Rayner 9:47 AM:
+You could have used -NotReadyForPrimetime and people would have still got the message
+
+Bill 9:49 AM:
+
+Using a version scheme that the Version type doesn&apos;t understand would not be great. 
+Stankiewicz, Michael (EUT & BTO) 9:51 AM:
+https://semver.org/
+
+Travis Plunk 9:52 AM:
+$a=[System.Management.Automation.SemanticVersion]::new('6.1.1') 
+
+$b=[System.Management.Automation.SemanticVersion]::new('6.1.1-p') 
+
+> $a -lt $b 
+False
+
+$a -gt $b 
+True
+Mark Kraus 9:54 AM:
+
+IMO.. this should come from CoreFX (not pwsh) and there is an open issue to impliment semver types. https://github.com/dotnet/corefx/issues/13526
+Thomas Rayner 9:55 AM:
+Gotta run but looking forward to the recording. See you guys next time!
+
+Justino Garcia 9:55 AM:
+corefx
+
+Stankiewicz, Michael (EUT & BTO) 9:56 AM:
+https://semver.org/#spec-item-9
+
+Mark Kraus 10:01 AM:
+
+hrm.. can we require that "add in 6.4"?
+Joey Aiello 10:01 AM:
+We can, yeah
+
+Joey Aiello 10:01 AM:
+I think it would be useful
+
+Mark Kraus 10:01 AM:
+
+as in.. required in the doc commits
+Mark Kraus 10:02 AM:
+
+Yes.. there is interest
+Mike Lombardi 10:02 AM:
+
+Generally, transparency/availability is ++
+Darwin Sanoy 10:03 AM:
+I think you should have at least some meetings that are closed door for the reasons you mention
+
+Mike Lombardi 10:03 AM:
+
+Transcripts with redactions are probably a good intermediate step
+Mike Lombardi 10:04 AM:
+
+Then you can verify how much you actually need o redact
+Simon Wåhlin 10:04 AM:
+Agree! For a listenonly, a recording would be preferred to overcome timezone problem
+Darwin Sanoy 10:04 AM:
+redactions take time and isn't the team struggling with keeping up with project information outputs?
+
+Mike Lombardi 10:04 AM:
+
+Good point
+Justino Garcia 10:04 AM:
+hire a admin to work on this
+
+Darwin Sanoy 10:05 AM:
+how would an admin know what should be redacted?
+
+Justino Garcia 10:06 AM:
+good point
+
+Mike Lombardi 10:10 AM:
+
+(y)
+Tobias 10:17 AM:
+
+Because we&apos;re talking about msi&apos;s right now, can you pleas simplify creating msi and msp files?
+Joey Aiello 10:17 AM:
+For PowerShell Core specifically, or in general?
+
+Darwin Sanoy 10:17 AM:
+@tobias that is WIX
+
+Tobias 10:18 AM:
+
+in general
+Joey Aiello 10:18 AM:
+I think this is where they're going: https://github.com/Microsoft/msix-packaging
+
+Jeff Dean 10:19 AM:
+Thanks Joey! Thanks for that link. MSIs are the bane of my existence.
+
+Travis Plunk 10:20 AM:
+@Jeff Agreed
+Kexy Biscuit 10:21 AM:
+What about curl & curl.exe
+
+Darwin Sanoy 10:21 AM:
+Nice
+
+Nicholas M. Getchell 10:21 AM:
+Thanks for listening to the community on SSH Joey
+
+Mike Lombardi 10:26 AM:
+
+EditorServices ++
+Mike Lombardi 10:28 AM:
+
+Last minute, not important:
+
+
+
+https://github.com/PowerShell/PowerShell/issues/3020
+Mike Lombardi 10:28 AM:
+
+The code is SO. MUCH. PRETTIER.
+Bergmeister, Christoph (Reigate) 10:29 AM:
+Maybe talk about it offline but: https://github.com/PowerShell/PowerShell/pull/3169#issuecomment-372869168
+
+Mike Lombardi 10:29 AM:
+
+That already breaks with if/else
+Mike Lombardi 10:29 AM:
+
+/shrug
+Darwin Sanoy 10:29 AM:
+Can msix-packaging just go into nuget 4 ?
+
+Jim Truher 10:30 AM:
+Get-process |
+Bergmeister, Christoph (Reigate) 10:30 AM:
+The question is: What are the opinions about the parser going forward?
+
+Joey Aiello 10:30 AM:
+Do you know anyone on the Nuget or MSIX teams, Darwin?
+
+Joey Aiello 10:30 AM:
+@Christoph: that's a big one for me, I'm not caught up on that thread
+
+Jim Truher 10:30 AM:
+get-process |
+   Where WS -gt 500mb |
+   Format-Table
+Bergmeister, Christoph (Reigate) 10:30 AM:
+(y)
+
+Joey Aiello 10:30 AM:
+Let me talk to Rob and get back to you on the next call?
+
+Darwin Sanoy 10:30 AM:
+No I don't.  Seems like yet another standard and something that requires runtime installs?
+
+Darwin Sanoy 10:31 AM:
+...requires runtimes to process when I probably already have nuget?
+
+Joey Aiello 10:31 AM:
+I'm not up to date there, I just saw the announcement
+
+Joey Aiello 10:31 AM:
+I'll back channel and see if I can get you in touch with someone
+
+Mike Lombardi 10:32 AM:
+
+Like I said, not important. :)
+Mike Lombardi 10:32 AM:
+
+\o
+Francois-Xavier Cat 10:32 AM:
+Thank you
+
+Shane O'Neill 10:32 AM:
+
+Thanks!
+Ackerman, Sean 10:32 AM:
+Thanks!
+
+Kexy Biscuit 10:32 AM:
+thanks
+
+Mark Kraus 10:32 AM:
+
+thanks
+Tobias 10:33 AM:
+
+thanks
+Darwin Sanoy 10:33 AM:
+Thanks much!!
+
+Bergmeister, Christoph (Reigate) 10:33 AM:
+thanks
