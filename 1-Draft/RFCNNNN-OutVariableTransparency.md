@@ -24,13 +24,14 @@ This RFC floats the idea that OutVariable usage should be transparent to the use
 ## Specification
 
 This table summarises the changes proposed in this RFC:
-| Input | Non-OutVar Result Type | Old Result Type | New Result Type |
-| :-: | :-: | :-: | :-: |
-| `'Hello'` | System.String | System.Collections.ArrayList | System.String |
-| `@(1, 2)` | object[] | System.Collections.ArrayList | object[] |
-| `[System.Collections.ArrayList]::new(@(1,2))` | object[] | System.Collections.ArrayList | object[] |
+
+| Input                                            | Non-OutVar Result Type       | Old Result Type              | New Result Type              |
+| :----------------------------------------------: | :--------------------------: | :--------------------------: | :--------------------------: |
+| `'Hello'`                                        | System.String                | System.Collections.ArrayList | System.String                |
+| `@(1, 2)`                                        | object[]                     | System.Collections.ArrayList | object[]                     |
+| `[System.Collections.ArrayList]::new(@(1,2))`    | object[]                     | System.Collections.ArrayList | object[]                     |
 | `@(,[System.Collections.ArrayList]::new(@(1,2))` | System.Collections.ArrayList | System.Collections.ArrayList | System.Collections.ArrayList |
-| `$null` | ⊥ | System.Collections.ArrayList | ⊥ |
+| `$null`                                          | ⊥                            | System.Collections.ArrayList | ⊥                            |
 
 ## Alternate Proposals and Considerations
 
