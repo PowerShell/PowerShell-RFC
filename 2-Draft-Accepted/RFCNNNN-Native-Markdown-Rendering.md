@@ -68,7 +68,7 @@ enum MarkdownThemeType
 
 ```
 
-The properties can be individually to customized the rendering on console.
+The properties can individually customize the rendering on console.
 Dark will be the default theme.
 The individual colors for the dark theme are specified in the subsequent sections.
 
@@ -174,5 +174,4 @@ The limitations of this approach are:
 
 ## Open Questions
 
-- Investigate line wrapping behavior.
 - Investigate paging behavior.
