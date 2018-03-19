@@ -91,6 +91,7 @@ The block elements include paragraphs and line breaks, headers, block quotes, co
 #### Paragraphs and line breaks
 
 These will be rendered as plain text.
+Semantic line breaks will be rendered as paragraphs.
 
 #### Headers
 
