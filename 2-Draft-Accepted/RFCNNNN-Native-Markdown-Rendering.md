@@ -3,7 +3,7 @@ RFC:
 Author: Aditya Patwardhan
 Status: Draft
 SupercededBy: 
-Version: 0.2
+Version: 0.3
 Area: Formatting and Output
 Comments Due: 03/26/2018
 Plan to implement: Yes
@@ -11,7 +11,7 @@ Plan to implement: Yes
 
 # Native Markdown Rendering
 
-Render markdown content on console to improve readability. 
+Render markdown content on console to improve readability.
 
 ## Motivation
 
@@ -56,15 +56,11 @@ There will be support for changing the colors for various elements using the `Se
 
 ```PowerShell
 
-Set-MarkdownOption [-Header1Color <ConsoleColor>] [-Header2Color <ConsoleColor>] [-Header3Color <ConsoleColor>] [-Header4Color <ConsoleColor>] [-Header5Color <ConsoleColor>] [-Header6Color <ConsoleColor>] [-CodeBlockForegroundColor <ConsoleColor>] [-CodeBlockBackgroudColor <ConsoleColor>] [-ImageAltTextForegroundColor <ConsoleColor>] [-LinkForegroundColor <ConsoleColor>] [-ItalicsForegroundColor <ConsoleColor>] [<CommonParameters>]
+Set-MarkdownOption [-Header1Color <ConsoleColor>] [-Header2Color <ConsoleColor>] [-Header3Color <ConsoleColor>] [-Header4Color <ConsoleColor>] [-Header5Color <ConsoleColor>] [-Header6Color <ConsoleColor>] [-CodeBlockForegroundColor <ConsoleColor>] [-CodeBlockBackgroundColor <ConsoleColor>] [-ImageAltTextForegroundColor <ConsoleColor>] [-LinkForegroundColor <ConsoleColor>] [-ItalicsForegroundColor <ConsoleColor>] [<CommonParameters>]
 
-Set-MarkdownOption [-Theme <MarkdownThemeType>] [<CommonParameters>]
+Set-MarkdownOption -Theme <string> [<CommonParameters>]
 
-enum MarkdownThemeType
-{
-    Dark
-    Light
-}
+Set-MarkdownOption -InputObject <psobject> [<CommonParameters>]
 
 ```
 
@@ -79,6 +75,31 @@ The individual colors for the dark theme are specified in the subsequent section
 Get-MarkdownOption [<CommonParameters>]
 
 ```
+
+### Specification for `Export-MarkdownOption`
+
+```PowerShell
+
+Export-MarkdownOption -Path <string> [<CommonParameters>]
+
+Export-MarkdownOption -LiteralPath <string> [<CommonParameters>]
+
+```
+
+Export the current markdown settings to a file.
+
+### Specification for `Import-MarkdownOption`
+
+```PowerShell
+
+Import-MarkdownOption -Path <string> [<CommonParameters>]
+
+Import-MarkdownOption -LiteralPath <string> [<CommonParameters>]
+
+```
+
+Import the markdown settings from the specified file and returns a PSObject of the options.
+This can be used as an `InputObject` for `Set-MarkdownOption`.
 
 ## Supported Markdown Elements
 
