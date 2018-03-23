@@ -27,18 +27,19 @@ These features are documented in [about_Requires](https://docs.microsoft.com/en-
 
 Currently however, this is untrue, as `#requires`
 statements are allowed by the parser/tokenizer anywhere in
-a script and then effectively hoisted to the top of that 
-script, no matter where they are placed.
+a script and then effectively hoisted to the top of that
+script to be checked before any part of the script is
+executed, no matter where they are placed.
 
 This RFC proposes the following changes:
 
 * Only allow `#requires` at the top level of a script,
   before any lines that are not comments (i.e. with the
   intention that a hashbang can still work, just before
-  any executable PowerShell code). Placing `#requires`
-  anywhere will cause a parse-time error. This would be
-  a **breaking change**, albeit one that the documentation
-  already claims to be in force.
+  any executable PowerShell code). Placing `#requires` anywhere
+  after will cause a parse-time error. This would be a **breaking
+  change**, albeit one that the documentation already claims to be 
+  in force.
 * Using `#requires` in the interactive console will cause
   a parse-time error. This could be a **minor breaking
   change**, since currently PowerShell throws a [pipeline
@@ -88,7 +89,12 @@ This RFC proposes the following changes:
 1. `#requires` statements must appear in scripts
    above all executable PowerShell. Any `#requires`
    statement placed after any PowerShell code causes
-   an unrecoverable parse-time error.
+   an unrecoverable parse-time error. This new restriction
+   should not affect the usage of other comment-embedded
+   directives or pragmas, such as `#sig`, linter directives or
+   inline editor configurations. Specifically, the new `#requires`
+   placement restriction must not interfere with Unix-style
+   hashbangs (e.g. `#!/usr/bin/pwsh`).
 2. Any use of `#requires` in an interactive session causes
    a specific parse-time error to be thrown, informing the
    user that `#requires` may not be used in the interactive
@@ -139,3 +145,8 @@ PowerShell issue](https://github.com/PowerShell/PowerShell/issues/4549).
   machine with a given processor architecture.
   * `-Platform`, rather than trying to use combining
     logic with `-OS`.
+* Another requires parameter, `-PSEdition`, also seems to have
+  been added to the `#requires` functionality. However, it is
+  currently [undocumented](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_requires?view=powershell-6) and
+  there is an [open issue for it](https://github.com/PowerShell/PowerShell/issues/5908). It may
+  be worth discussing in this RFC.
