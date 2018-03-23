@@ -4,7 +4,7 @@ Author: Robert Holt
 Status: Draft
 SupercededBy:
 Version:
-Area: \#requires
+Area: Hash-requires
 Comments Due: 2018-05-15
 Plan to implement: Yes
 ---
@@ -26,8 +26,9 @@ These features are documented in [about_Requires](https://docs.microsoft.com/en-
 > cannot use them in functions, cmdlets, or snap-ins.
 
 Currently however, this is untrue, as `#requires`
-statements are effectively hoisted to the top of any
-script, no matter where they are placed in that script.
+statements are allowed by the parser/tokenizer anywhere in
+a script and then effectively hoisted to the top of that 
+script, no matter where they are placed.
 
 This RFC proposes the following changes:
 
