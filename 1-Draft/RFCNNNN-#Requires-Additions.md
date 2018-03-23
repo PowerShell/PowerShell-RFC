@@ -150,3 +150,6 @@ PowerShell issue](https://github.com/PowerShell/PowerShell/issues/4549).
   currently [undocumented](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_requires?view=powershell-6) and
   there is an [open issue for it](https://github.com/PowerShell/PowerShell/issues/5908). It may
   be worth discussing in this RFC.
+* Because of the pipeline-crash behavior of the interactive
+  usage of `#requires`, there is already a PR open to change
+  the behavior to what is described in this RFC.
