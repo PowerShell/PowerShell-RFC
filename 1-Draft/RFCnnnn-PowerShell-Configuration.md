@@ -128,7 +128,7 @@ Software\PowerShellCore | - | -
       }
     },
 
-    "PoliciesSettigs": {
+    "PoliciesSettings": {
       ...
     }
   },
