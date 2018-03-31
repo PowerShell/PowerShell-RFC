@@ -38,7 +38,7 @@ RFC documents shall follow the following template:
 RFC: RFC<four digit unique incrementing number assigned by Committee, this shall be left blank by the author>
 Author: <First Last>
 Status: <Draft | Experimental | Accepted | Rejected | Withdrawn | Final>
-SupercededBy: <link to another RFC>
+SupersededBy: <link to another RFC>
 Version: <Major>.<Minor>
 Area: <Area within the PowerShell language>
 Comments Due: <Date for submitting comments to current draft (minimum 1 month)>
@@ -51,9 +51,9 @@ Description and rationale.
 
 ## Motivation
 
-    As a <<user_profile>>,
-    I can <<functionality>>,
-    so that <<benefit>>.
+As a <<user_profile>>,
+I can <<functionality>>,
+so that <<benefit>>.
 
 ## Specification
 
@@ -69,11 +69,11 @@ RFCs may go through the following stages:
  
 This is the initial draft of an RFC posted for comments and considered a work-in-progress.
 
-* New proposed drafts should be submitted as a Pull Request from the Author's fork into the `Draft-Accepted` folder.
+* New proposed drafts shall be submitted as Pull Requests from the Author's fork into the `Draft-Accepted` folder.
 * The Author shall ensure that the `Allow edits from maintainers` box is checked so that a Committee Member can assign the next RFC number.
 * If the Pull Request has followed the correct template and process, a Committee Member will assign the label `Review - Open for comments` to the Pull Request to indicate that anyone can comment on the content of the submission.
 Typically, one or two months is allowed for comments, though this may be extended if a submission is particularly contentious or hasn't received enough feedback for the Committee to feel comfortable making a decision.
-* When the Committee closes the comment period, the Author should update the RFC and Pull Request with a new commit to address the comments.
+* When the Committee closes the comment period, the Author shall update the RFC and Pull Request with a new commit to address the comments.
 * The Committee shall vote to merge or reject the RFC.
 Note: the Comittee may be slower to respond to RFCs where the Author has indicated that they do not plan to implement the RFC.
 
@@ -93,11 +93,11 @@ RFCs in the `Experimental` stage have been accepted by the Committee, and code i
 
 Feedback from the experimental implementation and RFC have been reviewed.
 
-Because this working prototype already exists in preview builds available on GitHub, the community provide feedback on the implementation as issues in the [PowerShell/PowerShell repository](https://github.com/powershell/powershell) 
+Because this working prototype already exists in preview builds available on GitHub, the community shall provide feedback on the implementation as issues in the [PowerShell/PowerShell repository](https://github.com/powershell/powershell) 
 
-As the engineering team or code contributor works towards a final implementation, they should submit pull requests to PowerShell-RFC in order to keep the RFC in sync with the implementation.
+As the engineering team or code contributor works towards a final implementation, they shall submit pull requests to PowerShell-RFC in order to keep the RFC in sync with the implementation.
 These pull requests shall be reviewed and accepted by the Committee, but a formal vote is not necessary.
-The Committee should merely confirm that the changes in the RFC match the working implementation.
+The Committee shall merely confirm that the changes in the RFC match the working implementation.
 
 ### Rejected
 
@@ -110,8 +110,8 @@ RFCs in the `Withdrawn` state were rescinded by the RFC Author.
 ### Final
 
 RFCs in the `Final` state are considered fully complete and implemented in PowerShell.
-Any proposed changes should be made through a new RFC or via an Issue in the [PowerShell/PowerShell repository](https://github.com/powershell/powershell).
-New RFCs should reference old RFCs where applicable.
+Any proposed changes shall be made through a new RFC or via an Issue in the [PowerShell/PowerShell repository](https://github.com/powershell/powershell).
+New RFCs shall reference old RFCs where applicable.
 
 ## History
 v1.1 - 5-20-2016 - Updated to enable RFCs for design changes that don't require code changes.
