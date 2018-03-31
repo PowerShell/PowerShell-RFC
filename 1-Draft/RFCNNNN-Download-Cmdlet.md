@@ -11,7 +11,7 @@ Plan to implement: Yes
 
 # Download Cmdlet
 
-This RFC is to propose the design of a new cmdlet specialized for remote file downloads to compliment the existing Web Cmdlets.
+This RFC is to propose the design of a new cmdlet specialized for remote file downloads to complement the existing Web Cmdlets.
 
 ## Motivation
 
@@ -79,7 +79,7 @@ The cmdlet shall not share base code with the existing Web Cmdlets.
 The cmdlet shall have a subset of the Web Cmdlets features that are specific or essential to downloading files.
 For example, the cmdlet will not support body content nor HTTP methods other than GET.
 
-As the cmdlet is not centered HTTP and HTTPS,
+As the cmdlet is not centered around HTTP and HTTPS,
 the available features need to be generalized for multiple protocols.
 To this end, advanced authentication features in the Web Cmdlets will not exist in the download cmdlet.
 Most protocols expect a username and password.
@@ -196,7 +196,7 @@ The cmdlet shall support multiple protocols.
 The cmdlet shall be extensible to support additional protocols.
 The protocol handlers shall be extensible to handle additional features.
 
-The extensibility is accomplished by Interfaces.
+The extensibility is accomplished by interfaces.
 
 ```csharp
 internal interface IInvokeDownloadProtocol
@@ -246,7 +246,7 @@ public class InvokeDownloadCmdlet : PSCmdlet
 These APIs will begin as internal for several versions.
 Once they are mature, they will be made public.
 This will allow users to extend and replace protocols with their own handlers.
-A set of default handlers will be initialize.
+A set of default handlers will be initialized.
 The initial default protocols will be `HTTP`, `HTTPS`, `FTP`, and `FILE`.
 
 The protocol handler chosen will be based on the `Uri.Scheme`.
@@ -278,7 +278,7 @@ If the resume is already complete, no action will be taken.
 ## Alternate Proposals and Considerations
 
 Instead of being extensible, the cmdlet could be a closed system.
-There have been many lessons learned from the Web Cmdlets with regards to extensibility.
+There have been many lessons learned from the Web Cmdlets with regard to extensibility.
 Adding features is made difficult when all the code is too tightly coupled.
 
 Additional Features currently present in the Web Cmdlet might be considered.
