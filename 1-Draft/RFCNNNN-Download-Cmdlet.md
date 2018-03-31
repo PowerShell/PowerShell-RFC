@@ -210,8 +210,8 @@ internal interface IInvokeDownloadResumable
 {
     void SetResume(bool Resume);
     bool GetResume();
-    void SetResumeByte(long StartByte);
-    long getResumeByte();
+    bool IsResumeSuccessful();
+    bool IsResumeComplete();
 }
 
 internal interface IInvokeDownloadAuthenticator
@@ -260,6 +260,20 @@ The provided `Stream` will be read from and the results will be written to the f
 `IInvokeDownloadRedirectable` handlers indicate that the protocol supports redirection.
 They are responsible for following the redirection chain and returning the URIs in that chain.
 The cmdlet will use the final URI to perform the download and resolve the file name if required.
+
+### Resume Feature
+
+For protocols that support resuming failed or interrupted file transfer,
+the protocol handler can implement `IInvokeDownloadResumable`.
+
+The protocol handler will be responsible for its own resume implementation.
+The protocol handler will indicate if resume was successful.
+The protocol handler will indicate if the resume is already complete,
+i.e. the file is already completely downloaded and there is nothing to resume.
+
+If the resume was successful, the cmdlet will append to existing file.
+If resume was not successful, the cmdlet will attempt a full download load of the same file.
+If the resume is already complete, no action will be taken.
 
 ## Alternate Proposals and Considerations
 
