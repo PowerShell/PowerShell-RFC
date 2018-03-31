@@ -98,7 +98,7 @@ The filename will be chosen in this manner:
 1. The last segment of `Uri.Segments`
 1. In the case that the last segment is `/`, the file name `index.html` will be used
 1. Illegal file name characters will be replaced with their URL encoded equivalent.
-1. If a file with that name is present, the basename will be appended with a period followed by `DateTime.Now.ToString("yyyMMddhhmmssfff")`
+1. If a file with that name is present, the basename will be appended with a period followed by `DateTime.Now.ToString("yyyMMddHHmmssfff")`
 1. The above rule will repeat until it locates a name that does not exist or 100 attempts
 1. If in the unlikely event all the above fails, an error will be generated and the user will be suggested to supply a path or change directories.
 
