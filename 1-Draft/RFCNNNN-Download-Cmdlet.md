@@ -80,7 +80,7 @@ The cmdlet shall have a subset of the Web Cmdlets features that are specific or 
 For example, the cmdlet will not support body content nor HTTP methods other than GET.
 
 As the cmdlet is not centered HTTP and HTTPS,
-the available features need to be generalize for multiple protocols.
+the available features need to be generalized for multiple protocols.
 To this end, advanced authentication features in the Web Cmdlets will not exist in the download cmdlet.
 Most protocols expect a username and password.
 At minimum, a `PSCredential` will be accepted.
@@ -251,10 +251,11 @@ The initial default protocols will be `HTTP`, `HTTPS`, `FTP`, and `FILE`.
 
 The protocol handler chosen will be based on the `Uri.Scheme`.
 When a URI does not include a scheme, `HTTPS` will be assumed.
-In the event that supplied a scheme has not ben registered, an error will be thrown.
+In the event that the supplied scheme has not been registered, an error will be thrown.
 
 The protocol handlers are primarily responsible for returning a `Stream`.
-The `Stream` will be used by the cmdlet to read from and in order to write to the file.
+The `Stream` will be used by the cmdlet.
+The provided `Stream` will be read from and the results will be written to the file.
 
 `IInvokeDownloadRedirectable` handlers indicate that the protocol supports redirection.
 They are responsible for following the redirection chain and returning the URIs in that chain.
@@ -275,5 +276,5 @@ Also, the cmdlet should be considered as protocol agnostic as possible.
 but they will make no sense for `SSH`.
 
 Alternate automated file name resolution strategies could be considered.
-`wget` using `.1` at the end of a file when a file exists and increments until a file name does not exist.
+`wget` uses `.1` at the end of a file when a file exists and increments until if fined s file name that doesn't exist.
 `index.html` is also questionable as default when `/` is the only `Uri.Segment`.
