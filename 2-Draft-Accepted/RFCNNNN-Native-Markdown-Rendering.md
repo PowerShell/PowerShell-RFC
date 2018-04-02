@@ -17,6 +17,7 @@ Render markdown content on console to improve readability.
 
 Markdown is a common authoring format used by the community.
 There is no easy way in PowerShell to visualize a markdown document on console.
+Since the PowerShell help is authored in markdown, these components will be used for rendering help content.
 
 ## Specification
 
@@ -25,8 +26,9 @@ This RFC proposes to use `VT100` escape sequences to render markdown content.
 The `Tokens` property has the AST for the markdown document from `markdig`.
 The `Html` property has the markdown document converted to `HTML`.
 The `VT100EncodedString` property has the markdown documented with `VT100` escape sequences.
-By default, the `Tokens`and `Html` properties will be populated.
+By default, the `Html` property will be populated.
 The `VT100EncodedString` property will be populated only when `-AsVT100EncodedString` is specified.
+The `Tokens` property will be populated in all cases.
 
 For converting strings to VT100 coded strings, we will be writing an extension to [markdig](https://github.com/lunet-io/markdig).
 The extension will insert VT100 escape sequences as appropriate.
@@ -52,11 +54,15 @@ ConvertFrom-Markdown [-InputObject] <psobject> [-AsVT100EncodedString] [<CommonP
 
 There will be support for changing the colors for various elements using the `Set-MarkdownOption` cmdlet. To retrieve the current settings `Get-MarkdownOption` cmdlet can be used.
 
+#### Output Type
+
+The output type will be `MarkdownInfo` object with properties for `Html`, `VT100EncodedString` and `Tokens`.
+
 ### Specification for `Set-MarkdownOption`
 
 ```PowerShell
 
-Set-MarkdownOption [-Header1Color <ConsoleColor>] [-Header2Color <ConsoleColor>] [-Header3Color <ConsoleColor>] [-Header4Color <ConsoleColor>] [-Header5Color <ConsoleColor>] [-Header6Color <ConsoleColor>] [-CodeBlockForegroundColor <ConsoleColor>] [-CodeBlockBackgroundColor <ConsoleColor>] [-ImageAltTextForegroundColor <ConsoleColor>] [-LinkForegroundColor <ConsoleColor>] [-ItalicsForegroundColor <ConsoleColor>] [<CommonParameters>]
+Set-MarkdownOption [-Header1Color <string>] [-Header2Color <string>] [-Header3Color <string>] [-Header4Color <string>] [-Header5Color <string>] [-Header6Color <string>] [-CodeBlockForegroundColor <string>] [-CodeBlockBackgroundColor <string>] [-ImageAltTextForegroundColor <string>] [-LinkForegroundColor <string>] [-ItalicsForegroundColor <string>] [<CommonParameters>]
 
 Set-MarkdownOption -Theme <string> [<CommonParameters>]
 
@@ -65,6 +71,14 @@ Set-MarkdownOption -InputObject <psobject> [<CommonParameters>]
 ```
 
 The properties can individually customize the rendering on console.
+The properties for color must be expressed as a `VT100` escape sequence, like
+
+```PowerShell
+
+Set-MarkdownOption -Header1Color "$([char]0x1b)[7m"
+
+```
+
 Dark will be the default theme.
 The individual colors for the dark theme are specified in the subsequent sections.
 
@@ -86,7 +100,7 @@ Export-MarkdownOption -LiteralPath <string> [<CommonParameters>]
 
 ```
 
-Export the current markdown settings to a file.
+Export the current markdown settings to a JSON file.
 
 ### Specification for `Import-MarkdownOption`
 
@@ -100,6 +114,22 @@ Import-MarkdownOption -LiteralPath <string> [<CommonParameters>]
 
 Import the markdown settings from the specified file and returns a PSObject of the options.
 This can be used as an `InputObject` for `Set-MarkdownOption`.
+
+### Specification for `Show-Markdown`
+
+```Powershell
+
+Show-Markdown -InputObject <psobject[]> [<CommonParameters>]
+
+Show-Markdown -InputObject <psobject[]> -UseBrowser [<CommonParameters>]
+
+```
+
+Render the `VT100EncodedString` property of `MarkdownInfo` on console.
+If the `VT100EncodedString` property is null, then a non-terminating error will be thrown.
+
+If the switch `-UseBrowser` is specified, display the content of `Html` property in a web browser.
+If the `Html` property is null, then a non-terminating error will be thrown.
 
 ## Supported Markdown Elements
 
@@ -180,6 +210,16 @@ Escape code for images alt-text
 | Markdown | Rendered | Escape Sequences |
 |-------------|----------|----------|
 | ![](../assets/MarkdownRendering/Image-MD.png) | ![](../assets/MarkdownRendering/Image.png) | ESC[33m[alt-text]ESC[0m |
+
+### Rendered output
+
+#### Input Markdown
+
+![](../assets/MarkdownRendering/SampleMD.png)
+
+#### VT100 Rendered output
+
+![](../assets/MarkdownRendering/SampleVT100.png)
 
 ## Future Work
 
