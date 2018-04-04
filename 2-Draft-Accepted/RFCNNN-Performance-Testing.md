@@ -3,7 +3,7 @@ RFC:
 Author: Aditya Patwardhan
 Status: Draft
 SupercededBy:
-Version: 0.1
+Version: 0.2
 Area: Testing
 Comments Due: 10/15/2017
 Plan to implement: Yes
@@ -11,7 +11,8 @@ Plan to implement: Yes
 
 # Performance testing for PowerShell
 
-This RFC proposes the plan to add AppInsights instrumentation to collect performance telemetry from daily CI runs. This RFC specifies the additional telemetry that will be added.
+This RFC proposes the plan to add AppInsights instrumentation to collect performance telemetry from daily CI runs.
+This RFC specifies the additional telemetry that will be added.
 
 ## Motivation
 
@@ -25,6 +26,9 @@ These metrics will be collected only during daily CI runs in AppVeyor and Travis
 Typically, we would need large number of iterations to get stable numbers.
 A [metric aggregator](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-api-custom-events-metrics#trackmetric) will be used to compose the data from iterations and then upload the telemetry data points.
 This will avoid throttling and dropping of events.
+
+The metric collection code will be within a `#ifdef` and will only be compiled in when PowerShell is built with `Performance` configuration.
+There will be no performance metric collection code in official builds.
 
 ### Proposed performance test scenarios
 
