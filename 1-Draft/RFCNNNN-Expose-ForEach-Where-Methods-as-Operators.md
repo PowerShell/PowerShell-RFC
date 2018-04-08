@@ -54,12 +54,58 @@ $odds, $evens = (1, 2, 3, 4).Where({ $_ % 2 }, 'split')
 
 ## Specification
 
-* `.ForEach()` and `.Where()` will be exposed as * binary operators `-foreach` and `-where`, respectively.
+* `.ForEach()` and `.Where()` will be exposed as _binary operators_ `-foreach` and `-where`, respectively.
 
 * Unlike the methods (which return `[System.Collections.ObjectModel.Collection[psobject]]` instances), the operators will return `[object[]]` arrays for consistency with existing array-aware operators such as `-eq` and `-match`.
 
-* The _optional_ arguments supported by the `.ForEach()` and `.Where()` methods will be surfaced as optional RHS array elements, analogous to the `-split` operator's optional arguments, for instance.
+* The _optional_ arguments supported by the `.ForEach()` and `.Where()` methods will be surfaced as optional RHS array elements, analogous to the `-split` operator's optional arguments, for instance - see below.
 
+### Syntax forms (meta syntax borrowed from [`about_Split`](https://github.com/PowerShell/PowerShell-Docs/blob/staging/reference/6/Microsoft.PowerShell.Core/About/about_Split.md])):
+
+#### `-foreach`
+
+For script-block-based transformation, optionally with arguments passed to each script block invocation.
+
+```none
+<collection> -foreach <ScriptBlock>[, <Arguments[]>]
+```
+
+For type conversion.
+Note: 
+ * Arguably, this form is not needed, because a simple array-valued cast will do:  
+`[string[]] (1, 2, 3)` rather than `1, 2, 3 -foreach [string]`
+ * However, for symmetry with .ForEach() it should probably be implemented.
+
+```none
+<collection> -foreach <Type>
+```
+
+For property access / method calls:
+Note: 
+* For mere property extraction, there's a simpler alternative: member enumeration:  
+`((get-date), (get-date)).Ticks` vs.  `(get-date), (get-date) -foreach 'Ticks'`
+* However, there's actually a distinct advantage to using `-foreach`: bypassing the _ambiguity_ of member enumeration:  
+`('ab', 'cde') -foreach 'Length'` will unambigiously access the _elements'_. `.Length` property, 
+whereas `('ab', 'cde').Length` returns the _array's_ length (element count).
+
+```none
+<collection> -foreach "propertyName"[, <value>]
+<collection> -foreach "methodName"[, <Arguments[]>]
+```
+
+#### `-where`
+
+Filtering a collection based on the Boolean outcome of a script block, optionally in one of serveral modes and with a limit on how many objects to return:
+
+```none
+<collection> -where <ScriptBlock>[, <mode>[, <numberToReturn>]]
+```
+
+* `<mode>` is technically a [`[System.Management.AutomationWhereOperatorSelectionMode]`](https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.whereoperatorselectionmode?view=powershellsdk-1.1.0) enumeration value, but may be specified as a string (e.g., `'Split'`)
+* The semantics of `[int]` `<numberToReturn>` depend on `<mode>`; `0`, the default, requests that _all_ matching elements be returned.
+* As with `-split`, arguments are strictly positional; notably, specifying `<numberToReturn>` requires that `<mode>` value also be specified, even if as `'Default`.
+
+[@KirkMunro's blog post](http://www.powershellmagazine.com/2014/10/22/foreach-and-where-magic-methods/) contains the details.
 
 
 It's probably worth creating a new conceptual help topic titled `about_Collection_Operators` to describe these new operators.
