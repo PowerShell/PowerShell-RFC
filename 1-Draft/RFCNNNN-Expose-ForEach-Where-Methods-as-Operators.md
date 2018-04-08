@@ -22,11 +22,12 @@ As a regular PowerShell user
 I can use operators `-foreach` and `-where`  
 in order to transform/filter in-memory collections efficiently, using familiar operator syntax and `$_`-based script blocks, as conceptually clean complements to the `ForEach-Object` and `Where-Object` cmdlets.
 
+Examples:
+
 ```powershell
 $var = 1, 2, 3 -foreach { $_ + 1 }  # wishful thinking
 
 # vs.
-
 $var = foreach ($i in 1, 2, 3) { $i + 1 }
 # or (slower)
 $var = 1, 2, 3 | ForEach-Object { $_ + 1 }
@@ -41,7 +42,28 @@ $var = 1, 2, 3 | Where-Object { $_ -gt 1 }
 $var = foreach ($i in 1, 2, 3)  { if ($i -gt 1) { $i } }
 ```
 
+Advanced example (no `Where-Object` counterpart): split a collection in two:
+
+```powershell
+$odds, $evens = 1, 2, 3, 4 -where { $_ % 2 }, 'split'
+
+# equivalent to:
+$odds, $evens = (1, 2, 3, 4).Where({ $_ % 2 }, 'split')
+```
+
+
 ## Specification
+
+* `.ForEach()` and `.Where()` will be exposed as * binary operators `-foreach` and `-where`, respectively.
+
+* Unlike the methods (which return `[System.Collections.ObjectModel.Collection[psobject]]` instances), the operators will return `[object[]]` arrays for consistency with existing array-aware operators such as `-eq` and `-match`.
+
+* The _optional_ arguments supported by the `.ForEach()` and `.Where()` methods will be surfaced as optional RHS array elements, analogous to the `-split` operator's optional arguments, for instance.
+
+
+
+It's probably worth creating a new conceptual help topic titled `about_Collection_Operators` to describe these new operators.
+
 
 ## Alternate Proposals and Considerations
 
