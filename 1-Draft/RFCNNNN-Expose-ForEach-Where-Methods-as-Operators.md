@@ -103,6 +103,7 @@ Filtering a collection based on the Boolean outcome of a script block, optionall
 
 * `<mode>` is technically a [`[System.Management.AutomationWhereOperatorSelectionMode]`](https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.whereoperatorselectionmode?view=powershellsdk-1.1.0) enumeration value, but may be specified as a string (e.g., `'Split'`)
 * The semantics of `[int]` `<numberToReturn>` depend on `<mode>`; `0`, the default, requests that _all_ matching elements be returned.
+  * Given https://github.com/PowerShell/PowerShell/issues/4765, consider interpreting negative values - which currently generate an execption - as requests to return elements from the _end_ of the results collection - this should obviously apply both to the method and operator forms.
 * As with `-split`, arguments are strictly positional; notably, specifying `<numberToReturn>` requires that `<mode>` value also be specified, even if as `'Default`.
 
 [@KirkMunro's blog post](http://www.powershellmagazine.com/2014/10/22/foreach-and-where-magic-methods/) contains the details.
