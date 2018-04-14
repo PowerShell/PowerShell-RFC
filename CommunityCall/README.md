@@ -7,6 +7,7 @@ Use [this ICS file](RecurringCommunityCall.ics) (right-click `Raw` and select `S
 
 ## Notes
 
+* April 20, 2018 - Canceled due to conflicts with PSConf.EU
 * [Mar 15, 2018](./20180315_Notes.md) ([YouTube recording](https://youtu.be/PqH2qho-HDE) and [transcript](20180315_ChatTranscript.txt))
 * [Feb 15, 2018](./20180215_Notes.md) ([YouTube recording](https://youtu.be/fz8KxMoQDaM) and [transcript](20180215_ChatTranscript.txt))
 * Jan 18, 2018 ([YouTube recording](https://youtu.be/SFz-fFue0dg))
