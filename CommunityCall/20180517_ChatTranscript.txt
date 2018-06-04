@@ -1,0 +1,458 @@
+Sean Wheeler 9:29 AM: 
+hello
+Mark Kraus 9:29 AM: 
+yes
+Constantin Hager 9:29 AM: 
+yes
+Christoph Bergmeister 9:29 AM: 
+yes
+Pareek, Kamesh 9:29 AM: 
+Yes
+Constantin Hager 9:29 AM: 
+yes
+Ryan Nel 9:29 AM: 
+(y)
+Adil Zia 9:29 AM: 
+sight is overrated
+Maximo Trinidad 9:29 AM: 
+yes
+Maximo Trinidad 9:30 AM: 
+(y)(y)
+Darwin Sanoy 9:30 AM: 
+yeah
+Michael T Lombardi 9:30 AM: 
+\o/
+John Kavanagh 9:31 AM: 
+audio Lima Charlie
+Bill 9:31 AM: 
+(wave)
+Maximo Trinidad 9:32 AM: 
+Yeah!!
+Tyler Leonhardt (POWERSHELL) 9:32 AM: 
+👋
+Adil Zia 9:32 AM: 
+why does every room have to have special names
+Joel Bennett 9:32 AM: 
+oooohhh... lookit all the ... video!
+Joel Bennett 9:32 AM: 
+"Bravern-1/7056" shows in the video, yeah
+Maximo Trinidad 9:33 AM: 
+Yes
+David Coulter 9:33 AM: 
+(y)
+Constantin Hager 9:33 AM: 
+yes
+Ryan Nel 9:33 AM: 
+(y)
+Adil Zia 9:33 AM: 
+nyc is special then
+Maximo Trinidad 9:34 AM: 
+Demo ... Demo...
+Maximo Trinidad 9:35 AM: 
+Yes
+Maximo Trinidad 9:35 AM: 
+Sweet!
+Mark Kraus 9:35 AM: 
+lol
+Michael T Lombardi 9:35 AM: 
+(y)
+Tyler Leonhardt (POWERSHELL) 9:36 AM: 
+👏Mark
+Adam Murray 9:37 AM: 
+Will the AD module be available on the gallery?
+Darwin Sanoy 9:37 AM: 
+someon grab his password hash from that output!
+Michael T Lombardi 9:37 AM: 
+(AD Module on the Gallery)++
+Mark Kraus 9:37 AM: 
+any owrd on OSS-ing the AD module?
+Maximo Trinidad 9:38 AM: 
+What about providing the PScoreWindowsCompat with PSCore6? 
+Bill 9:38 AM: 
+AD Module on the gallery1!!!oneoneoneone1! !111
+Darwin Sanoy 9:39 AM: 
+Awesome!
+Michael T Lombardi 9:39 AM: 
+\o/
+Mark Kraus 9:39 AM: 
+PsCoreWindowsCompat will be rolled into the WinCompatibilityPack module
+Maximo Trinidad 9:40 AM: 
+(y) thx Mark
+Michael T Lombardi 9:40 AM: 
+Naming is hard
+Mark Kraus 9:40 AM: 
+hooray!
+Mark Kraus 9:40 AM: 
+like this one? https://github.com/PowerShell/WindowsPowerShellCompatibilityPack/pull/4 
+Maximo Trinidad 9:40 AM: 
+Mark is happy!!
+Mark Kraus 9:41 AM: 
+Yep, that's all it does.
+Michael T Lombardi 9:42 AM: 
+joey, fysa, you don&apos;t have to maintain eye contact with your webcam, we&apos;re seeing you from the end of the table. :)
+Adil Zia 9:42 AM: 
+really out of the way here .... what do you guys think of PScore use for ML and slightly more advanced analytics ... since Command line are quite useful for high effeciency parsing and stuff (rather use powershell as the command line element)... and .net core can and is utilized for ML and data analytics stuff anyway
+Maximo Trinidad 9:42 AM: 
+Yes! remoting!
+Maximo Trinidad 9:42 AM: 
+Nice
+Darwin Sanoy 9:43 AM: 
+can you guys zoom the conference cam?
+Adam Dzyacky 9:43 AM: 
++12 on remoting!
+Maximo Trinidad 9:43 AM: 
+I would love to work with the remoting one.
+Mark Kraus 9:43 AM: 
+where to get the module : https://github.com/PowerShell/WindowsPowerShellCompatibilityPack/tree/master/WinCompatibilityPack 
+Mark Kraus 9:45 AM: 
+one module to rule them all
+Maximo Trinidad 9:46 AM: 
+I'll call it Hybrid-Scripting! :P
+Maximo Trinidad 9:46 AM: 
+Sweet!
+Maximo Trinidad 9:48 AM: 
+Yes! Corporate Strategy... they are asking where/how PSCore will fit in their infrastructure. :)
+Adam Dzyacky 9:48 AM: 
+everyone move one chair to their left/right
+Bill 9:50 AM: 
+MY EARS!!! 
+kvprasoon 9:50 AM: 
+Can&apos;t we make PsCoreWindowsComp part of PSCore ? (For windows )
+Michael T Lombardi 9:50 AM: 
+lol
+Mark Kraus 9:50 AM: 
+that is an awesome sounds
+Bill 9:51 AM: 
+Need better documentation/WalkThroughs/Demo&apos;s for how to write binary modules. 
+Joel Bennett 9:51 AM: 
+So there's a Twitter MasterRace?
+Steve Lee (POWERSHELL) 9:51 AM: 
+@kvprasoon, in general I think we want more of the modules on PSGallery than part of the PSCore6 pkg, but something we've talked about is having a "thick" pscore6 pkg that has many common modules
+Joey Aiello 9:52 AM: 
+@Bill: DEFINITELY, unfortunately it's super painful right now, even if you DO know what you're doing. This will be a well-documented scenario as we finish it out
+Christoph Bergmeister 9:52 AM: 
+P.S. If you want to have tab completion for the dotnet cli, checkout posh-dotnet: https://github.com/bergmeister/posh-dotnet
+Joey Aiello 9:52 AM: 
+ooooh, I do want that, thanks
+Bill 9:52 AM: 
+Looking forward to it. I think it would be potentionally a lot of fun to write compiled modules. It&apos;s just really tough to figure out for a guy like me approaching from the scripting side as I am. 
+Michael T Lombardi 9:53 AM: 
+I want an excuse to try writing F# based powershell modules.
+Joel Bennett 9:53 AM: 
++1 for use of `dotnet new` ;-)
+Mark Kraus 9:53 AM: 
+I had been using this one https://github.com/markekraus/ps-core-module-template 
+Michael T Lombardi 9:54 AM: 
+@MarkKraus++
+Joey Aiello 9:54 AM: 
+@Bill: frankly, it's tough for me even with the whole team at fingertips to just get started. The scenario is just kinda tricky to get going right now, especially if you're trying to do cross-platform and cross-CLR "right" +1 @Mark, I gotta check that out.
+Maximo Trinidad 9:54 AM: 
+Can you do a PGI on this?
+Mark Kraus 9:55 AM: 
+need to change csproj to:
+<PackageReference Include="Microsoft.PowerShell.SDK" Version="6.0.0"><PrivateAssets>all</PrivateAssets></PackageReference> 
+Joel Bennett 9:55 AM: 
+Yeah, and my team (at work) has made one available on github for script modules too. I'll see about getting all these included in the "ModuleBuilder" docs that we've been working on Mark
+Mark Kraus 9:55 AM: 
+that way the ref lib isn't published
+Bill 9:55 AM: 
+@markKraus Starring that repo. THanks. 
+Michael T Lombardi 9:55 AM: 
+Joel, Mark, link to the modulebuilder stuff?
+Mark Kraus 9:55 AM: 
+https://github.com/PoshCode/ModuleBuilder 
+Joel Bennett 9:55 AM: 
+http://github.com/poshcode/modulebuilder 
+Michael T Lombardi 9:56 AM: 
+:D
+Michael T Lombardi 9:56 AM: 
+/me has opinions
+Maximo Trinidad 9:56 AM: 
+That is so Cool!  Please set a PGI on DotNeT building a PSCore Module!
+Joel Bennett 9:56 AM: 
+(y)
+Bill 9:57 AM: 
+(thumbsup)
+Tyler Leonhardt (POWERSHELL) 9:57 AM: 
+https://github.com/PowerShell/PowerShellStandard/tree/master/src/dotnetTemplate
+Adil Zia 9:58 AM: 
+yes
+Christoph Bergmeister 9:58 AM: 
+What about integrating those &apos;dotnet new&apos; templates into Plaster?
+Tyler Leonhardt (POWERSHELL) 9:59 AM: 
+@Christoph good idea - they should be added to Plaster
+Adil Zia 10:00 AM: 
+you guys working with vmware for powercli core?
+Tyler Leonhardt (POWERSHELL) 10:00 AM: 
+RE: Mark:
+need to change csproj to:
+<PackageReference Include="Microsoft.PowerShell.SDK" Version="6.0.0"><PrivateAssets>all</PrivateAssets></PackageReference>
+
+An added switch to the 6.0.0 SDK would be cool - this was really about PowerShell Standard initially
+Mark Kraus 10:01 AM: 
+well more avout the <PrivateAssets>all</PrivateAssets> 
+Tyler Leonhardt (POWERSHELL) 10:01 AM: 
+oh 👍
+Christoph Bergmeister 10:01 AM: 
+Any comments on the regressions in Windows 1803?
+Mark Kraus 10:01 AM: 
+that way the reference libraries don't get published with the module lib
+Maximo Trinidad 10:01 AM: 
+What about Windows fixes to be addresses in PowerShell Core?
+Adam Murray 10:01 AM: 
+getting PowerShellGet support for nuget v3 would be great - Then VSTS package management would be an awesome private gallery. At the moment it is a bit hacky
+Christoph Bergmeister 10:01 AM: 
+ok, thanks, just wondering why it could break if you don&apos;t change it any more.
+Christoph Bergmeister 10:02 AM: 
+sorry, I don&apos;t have a mic with me
+Christoph Bergmeister 10:03 AM: 
+Ok. Thanks, I was just wondering if there was still work on it. Thanks for answering that
+nick 10:03 AM: 
+#VSCode :)
+Tyler Leonhardt (POWERSHELL) 10:03 AM: 
+😎
+Joel Bennett 10:03 AM: 
+sound cut out?
+Bill 10:03 AM: 
+AUDIO? 
+nick 10:03 AM: 
+Lost audio
+Simon Wåhlin 10:04 AM: 
+Jea
+Adil Zia 10:04 AM: 
+it did
+Maximo Trinidad 10:04 AM: 
+Sorry Imeant about Windows PowerShell list of issue to be addresses in PowerShell Core? I saw Steve Lee issues on some items that may go to PSCore. :)
+Bill 10:04 AM: 
+lol 
+Jonas Sommer Nielsen 10:04 AM: 
+30 sec lost
+Jonas Sommer Nielsen 10:04 AM: 
+(y)
+Maximo Trinidad 10:04 AM: 
+Thx
+Christoph Bergmeister 10:06 AM: 
+Any conclusions/thoughts on the possible deprecation of v3/4 support for PSES?
+Adil Zia 10:07 AM: 
+I miss Out-gridview
+Christoph Bergmeister 10:07 AM: 
+Ok, thanks, that&apos;s actually a good idea :-)
+Joey Aiello 10:08 AM: 
+(yes)
+Mark Kraus 10:09 AM: 
+https://github.com/PowerShell/vscode-powershell/issues/1310 
+Maximo Trinidad 10:09 AM: 
+Any thoughts on keeping PSCore folder naming consistent cross-plat Linux/macOS: "../powershell/6-preview"?  This will help get rid of previous folders during PSCore updates. 
+Tyler Leonhardt (POWERSHELL) 10:09 AM: 
+https://github.com/PowerShell/vscode-powershell/issues/1310
+Tyler Leonhardt (POWERSHELL) 10:09 AM: 
+thanks Mark :)
+Mark Kraus 10:10 AM: 
+(rofl)
+Jonas Sommer Nielsen 10:10 AM: 
+\o/
+Jonas Sommer Nielsen 10:10 AM: 
+yeah its a great tool for that
+Adil Zia 10:10 AM: 
+oh ya
+Darwin Sanoy 10:11 AM: 
+absolutely - mid-pipeline
+Campbell, Troy 10:11 AM: 
+I use Out-Gridview that way as well
+Travis Plunk 10:11 AM: 
+same
+Jonas Sommer Nielsen 10:11 AM: 
+-passthrough or something
+Ben Wilkinson 10:11 AM: 
+-passthru
+Joel Bennett 10:11 AM: 
+can we ... https://github.com/migueldeicaza/gui.cs 
+Bill 10:11 AM: 
+Maybe that workflow should die in a fire anyway? 
+Joey Aiello 10:11 AM: 
+🤷‍♂️
+Joey Aiello 10:11 AM: 
+;)
+Darwin Sanoy 10:12 AM: 
+ that workflow is important when it's something that I don't do enough to automate that has to be done very carefully 
+Maximo Trinidad 10:12 AM: 
+About Out-GridView ... why not using text-based graph,  mssql-cli does a good job in simplified way. I'm not sure about pipeline selection. Just a thought!
+Jonas Sommer Nielsen 10:13 AM: 
+sometimes its neat to do stuff while working on the commandline 
+Tyler Leonhardt (POWERSHELL) 10:13 AM: 
+That looks cool @Joel
+Bill 10:13 AM: 
+Assign intermediate results to var and examine. 
+Joel Bennett 10:13 AM: 
+yeah, manual selection / filtering in a pipeline is just something you need to be able to do
+Joel Bennett 10:14 AM: 
+The fact that there are other (even MORE manual) ways to filter and then manually call the next command is kind of ... not the point. ;-)
+Joel Bennett 10:14 AM: 
+;-)
+Keith Hill 10:15 AM: 
+RE OpenSSH, did 1803 ship with 7.6.0.0 or 7.6.1.0? What is the servicing strategy for those who installed via the Windows Additional Features.
+nick 10:15 AM: 
+(clap)
+Keith Hill 10:15 AM: 
+Vs installing ZIP from the GH repo.
+Darwin Sanoy 10:16 AM: 
+I created code to clear the Old pwsh Paths - where should it be placed 
+Keith Hill 10:16 AM: 
+THanks
+Michael T Lombardi 10:17 AM: 
+Possibly wrong crowd to ask but where are we at with managing powershell over ssh via key pairs in a domain? Do we still have to shovel keys around to each machine, or are there plans to somehow make things work with a check to a DC?
+Keith Hill 10:18 AM: 
+Heh, same here "C:\WINDOWS\System32\OpenSSH\".
+Simon Wåhlin 10:18 AM: 
+@Michael like kerberos? :)
+Joey Aiello 10:18 AM: 
+@Keith: so does it work for you or no? 
+Jonas Sommer Nielsen 10:18 AM: 
+C:\WINDOWS\System32   doesn't sound like a healthy place
+Keith Hill 10:18 AM: 
+Well I mainly use the ZIP i installed from GH which resides here "C:\Program Files\OpenSSH-Win64"
+Michael T Lombardi 10:19 AM: 
+@Simon Well, yeah, kerberos is ++ but in mixed envs lots of folks have been using keypairs
+Michael T Lombardi 10:19 AM: 
+/me doesn&apos;t have an elegant solution either
+Keith Hill 10:19 AM: 
+BTW my main use is to avoid Git passphrase prompts. So I use the env var GIT_SSH_COMMAND = "C:\Program Files\OpenSSH-Win64\ssh.exe" -c aes128-cbc
+Michael T Lombardi 10:19 AM: 
+That would be the dopest
+Jonas Sommer Nielsen 10:19 AM: 
+put your key on psgallery and you can easily install them :P
+Simon Wåhlin 10:19 AM: 
+That would be great! Or Azure Key Vault
+Michael T Lombardi 10:19 AM: 
+Heavy ++
+Maximo Trinidad 10:19 AM: 
+I'm staying with installing OpenSSH from Chocolatey.  I wasn't able to make Windows 10 OpenSSh to work. :)
+Michael T Lombardi 10:20 AM: 
+SMB v1 shares with all authenticated users
+Michael T Lombardi 10:20 AM: 
+;)
+Bill 10:20 AM: 
+KDS Service could be coopted maybe? 
+Michael T Lombardi 10:20 AM: 
+Will file if it&apos;s not there
+Jonas Sommer Nielsen 10:20 AM: 
+so a dns text would actually work
+Keith Hill 10:20 AM: 
+@maximo Is that the DarwinJS maintained choco pkg?
+Maximo Trinidad 10:21 AM: 
+I Understand now.  Sounds Good!
+Darwin Sanoy 10:21 AM: 
+of course it works great ;)
+Maximo Trinidad 10:21 AM: 
+Any thoughts on keeping PSCore folder naming consistent cross-plat Linux/macOS: "../powershell/6-preview"?  This will help get rid of previous folders during PSCore updates.  
+Darwin Sanoy 10:21 AM: 
+https://blog.laslabs.com/2016/08/storing-ssh-keys-in-active-directory/ 
+Maximo Trinidad 10:21 AM: 
+OK
+Adil Zia 10:22 AM: 
+when will you destroy bash
+Keith Hill 10:22 AM: 
+Indeed Darwin - that&apos;s what I&apos;ve been using. :-)
+Maximo Trinidad 10:22 AM: 
+Sorry! :P
+Mark Kraus 10:22 AM: 
+I believe there are still missing APIs and types in the PowerShell API docs
+Darwin Sanoy 10:22 AM: 
+as extra attributes
+Eugene Bekker 10:22 AM: 
+sshd_config allows you to use script to pull public key
+Maximo Trinidad 10:22 AM: 
+So, Preview 3 will support Ubuntu 18.04 Bionic Beaver! :)
+Eugene Bekker 10:22 AM: 
+can be stored anywhere
+Jonas Sommer Nielsen 10:24 AM: 
+it would make sense to use extended attributes on the user object in AD for SSH keys ...imho
+Jonas Sommer Nielsen 10:24 AM: 
+something akin to how LAPS works
+Maximo Trinidad 10:24 AM: 
++1 @jonas
+Jonas Sommer Nielsen 10:24 AM: 
+then you have 1 place to update your keys if you want to do a refresh
+Jim Truher 10:25 AM: 
+lol
+Jonas Sommer Nielsen 10:26 AM: 
+somthing totally different
+https://developer.microsoft.com/en-us/graph/code-samples-and-sdks 
+
+Wheres my Powershell samples? :)
+Mark Kraus 10:27 AM: 
+I asked the Graph team that
+Adil Zia 10:27 AM: 
+lol
+Jonas Sommer Nielsen 10:27 AM: 
+:D
+Jonas Sommer Nielsen 10:27 AM: 
+yeah 
+Michael T Lombardi 10:27 AM: 
+https://github.com/PowerShell/Win32-OpenSSH/issues/1157
+Adam Murray 10:27 AM: 
+any update on psswagger?
+Joey Aiello 10:27 AM: 
+(yes) @ Michael
+Michael T Lombardi 10:28 AM: 
+psswagger++ color me interested on a less frictionful install/up-and-running process. 
+Jim Truher 10:28 AM: 
+this is also true for me and script analyzer
+Joey Aiello 10:28 AM: 
+@Adam: no update to share right now...not sure that we've got super active development there, but I can look into it and have something on the next call
+Michael T Lombardi 10:28 AM: 
+(modules with ~5 setup steps)--
+Bill 10:28 AM: 
+^^ That. 
+Steve Lee (POWERSHELL) 10:28 AM: 
+PSSwagger is being superceded by https://github.com/Azure/AutoRest 
+Adam Murray 10:29 AM: 
+@steve. Thanks. I'll check it out
+Jonas Sommer Nielsen 10:29 AM: 
+am i hearing notepad support comming up?
+Maximo Trinidad 10:29 AM: 
+That's Awesome!! Is VIM included.. seems hard to configure.
+Steve Lee (POWERSHELL) 10:29 AM: 
+@adam, not sure if the version they have there has the PS Swagger capability yet
+Adam Murray 10:29 AM: 
+ok
+Michael T Lombardi 10:29 AM: 
+#emacs
+Bill 10:30 AM: 
+Does that really belong in the Azure org? 
+Tyler Leonhardt (POWERSHELL) 10:30 AM: 
+notepad language server protocol support 🤔
+Maximo Trinidad 10:30 AM: 
+aaahhh!
+Keith Hill 10:30 AM: 
+Thx!
+Maximo Trinidad 10:30 AM: 
+Thanks Everyone!!
+Christoph Bergmeister 10:30 AM: 
+Thanks :-)
+Michael T Lombardi 10:30 AM: 
+\o
+Adam Murray 10:30 AM: 
+Thanks
+Mark Kraus 10:30 AM: 
+bye guys!
+kvprasoon 10:30 AM: 
+Thanks
+Adil Zia 10:30 AM: 
+bye
+Hannes Palmquist 10:30 AM: 
+Thanks, bye
+Jonas Sommer Nielsen 10:30 AM: 
+you too :) 
+Constantin Hager 10:30 AM: 
+bye
+John Kavanagh 10:30 AM: 
+Thank you
+Jonas Sommer Nielsen 10:30 AM: 
+have a great evening :)
+Tyler Leonhardt (POWERSHELL) 10:30 AM: 
+vim is the easiest one
+Darwin Sanoy 10:30 AM: 
+hey instead of notepad updating for linux EOL we should have edit back ;)
+Tyler Leonhardt (POWERSHELL) 10:31 AM: 
+lol
