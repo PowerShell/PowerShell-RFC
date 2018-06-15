@@ -18,9 +18,9 @@ This RFC addresses the experience for the user when using PowerShell Core 6.1 wi
 
 ## Motivation
 
-    As a ITPro,
-    I can use existing Windows PowerShell modules in PowerShell Core 6,
-    so that I can start deploying PowerShell Core 6 in my enterprise.
+As an ITPro,
+I can use existing Windows PowerShell modules in PowerShell Core 6,
+so that I can deploy PowerShell Core 6 in my enterprise.
 
 ## Specification
 
@@ -40,27 +40,29 @@ Windows PowerShell, by default, has module paths in:
 The proposed change is to add *only* the `System32` path to `PSModulePath` on PowerShell Core 6.
 
 Modules in the user profile should be re-installed under PowerShell Core 6.
-Duplicate modules is something that can be addressed in PowerShellGet and outside the scope of this RFC.
+Duplicate modules are something that can be addressed in PowerShellGet and outside the scope of this RFC.
 Modules in `Program Files` that may be compatible with PowerShell Core 6 is addressed below.
 
-Users who want to search the entirety of the Windows PowerShell PSModulePath should use `Add-WindowsPSModulePath` cmdlet
+Users who want to search the entirety of the Windows PowerShell `PSModulePath` should use `Add-WindowsPSModulePath` cmdlet
 from the `WindowsCompatibility` module.
 
 ### PowerShell Core PSModulePath
 
-Modules in the PowerShell Core PSModulePaths are implicitly deemed compatible even if the manifest does not
+Modules in the PowerShell Core `PSModulePath` are implicitly deemed compatible even if the manifest does not
 declare compatibility.
-A user would have explicitly used `Install-Module` within PowerShell Core 6 for those modules to be in the
-PowerShell Core 6 module path with expectation those modules are available.
+A user who explicitly uses `Install-Module` within PowerShell Core 6 for those modules expect them to be available to PowerShell Core 6.
 
-### CompatiblePSEditions
+### CompatiblePSEditions for system32
+
+When we add the `system32` path to PowerShell Core's `PSModulePath`,
+we will use additional logic to validate that the module is compatible with PowerShell Core.
 
 If the module manifest contains `CompatiblePSEditions` with value `Core`, then that module is treated as compatible.
 If the module manifest contains `CompatiblePSEditions` with only the value of `Desktop`, then that module is treated as incompatible.
 If the module manifest does not contain `CompatiblePSEditions`, then that module is treated the same as `Desktop` which is incompatible.
 
 By default, `Get-Module -ListAvailable` will only show modules found in `PSModulePath` that are declared as compatible.
-Similarly, module auto-discovery will only find modules that are declared as compatible.
+Similarly, module auto-discovery and auto-loading will only find modules that are declared as compatible.
 
 The `ModuleInfo` table format will add a column for `CompatiblePSEditions` (between `Name` and `ExportedCommands`).
 
