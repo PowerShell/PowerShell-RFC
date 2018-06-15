@@ -27,7 +27,7 @@ so that I can deploy PowerShell Core 6 in my enterprise.
 The module manifest (since Windows PowerShell 5) may contain a `CompatiblePSEditions` property to indicate if it is compatible with
 Windows PowerShell (value of `Desktop` even on Windows Server) or PowerShell Core (value of `Core`).
 Currently, this property is only documentation and not observed by PowerShell.
-The proposal is to modify PowerShell Core 6.1 to respect this property.
+The proposal is to modify PowerShell Core 6.1 to respect this property for in-box Windows PowerShell modules.
 
 ### Windows PSModulePath
 
@@ -50,11 +50,11 @@ from the `WindowsCompatibility` module.
 
 Modules in the PowerShell Core `PSModulePath` are implicitly deemed compatible even if the manifest does not
 declare compatibility.
-A user who explicitly uses `Install-Module` within PowerShell Core 6 for those modules expect them to be available to PowerShell Core 6.
+A user who explicitly uses `Install-Module` within PowerShell Core 6 expect those modules to be available to PowerShell Core 6.
 
-### CompatiblePSEditions for system32
+### CompatiblePSEditions for Windows System32
 
-When we add the `system32` path to PowerShell Core's `PSModulePath`,
+When we add the `System32` path to PowerShell Core's `PSModulePath`,
 we will use additional logic to validate that the module is compatible with PowerShell Core.
 
 If the module manifest contains `CompatiblePSEditions` with value `Core`, then that module is treated as compatible.
