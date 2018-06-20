@@ -56,8 +56,8 @@ Duplicate modules are something that can be addressed in PowerShellGet and outsi
 
 Modules in `Program Files` that may be compatible with PowerShell Core 6 is addressed below.
 
-Modules in the PowerShell Core `PSModulePath` are implicitly deemed compatible even if the manifest does not
-declare compatibility.
+Modules _not under_ Windows System32 path, for example in the PowerShell Core `PSModulePath`, are implicitly deemed compatible even
+if the manifest does not declare compatibility.
 A user who explicitly uses `Install-Module` within PowerShell Core 6 expect those modules to be available to PowerShell Core 6.
 
 ### CompatiblePSEditions for Windows System32
@@ -74,7 +74,7 @@ Similarly, module auto-discovery and auto-loading will only find modules that ar
 
 The `ModuleInfo` table format will add a column for `PSEditions` (shortened from `CompatiblePSEditions` between `Name` and `ExportedCommands`).
 
-### Using Modules not declared as Compatible
+### Using Modules from System32 not declared as Compatible
 
 `Get-Module -ListAvailable` will support `-SkipCompatibilityCheck` switch to list all modules in `PSModulePath`.
 
