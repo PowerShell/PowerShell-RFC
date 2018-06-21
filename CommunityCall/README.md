@@ -5,6 +5,33 @@ Topics include PowerShell Core, PSEditorServices/VSCode-PS, and PSScriptAnalyzer
 
 Use [this ICS file](RecurringCommunityCall.ics) (right-click `Raw` and select `Save Target/Link As` in order to download the file correctly) to put this recurring event on your calendar.
 
+# Call Details
+
+From: "Pacific Standard Time" : 0930
+To: "Pacific Standard Time" : 1030
+
+## Join Skype Meeting
+https://meet.lync.com/microsoft/jaiello/ZRC25BBR
+
+Trouble Joining? Try Skype Web App
+https://meet.lync.com/microsoft/jaiello/ZRC25BBR?sl=1
+
+### Join by phone
+ 
+Toll-free number: + 1 (866) 641-7188 (Dial-in Number) English (United States)  
+Toll number: +1 (213) 458-7614 (Dial-in Number) English (United States)  
+
+### Find a local number
+<https://dialin.lync.com/48b4c613-cc67-4825-8175-29628d9715e5?id=4334578>  
+
+Conference ID: 4334578
+Forgot your dial-in PIN?
+<https://dialin.lync.com/48b4c613-cc67-4825-8175-29628d9715e5>  |Help
+<http://go.microsoft.com/fwlink/?LinkId=389737>   
+
+Welcome to Skype for Business Online Meetings. All participants using
+the Join by Phone option must dial the full number for call access. 
+
 ## Notes
 
 * [May 17, 2018](./20180517_Notes.md) ([YouTube recording](https://youtu.be/2ZWBuyZvTTg) and [transcript](20180517_ChatTranscript.txt))
