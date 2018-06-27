@@ -76,18 +76,18 @@ The `ModuleInfo` table format will add a column for `PSEditions` (shortened from
 
 ### Using Modules from System32 not declared as Compatible
 
-`Get-Module -ListAvailable` will support `-SkipCompatibilityCheck` switch to list all modules in `PSModulePath`.
+`Get-Module -ListAvailable` will support `-SkipEditionCheck` switch to list all modules in `PSModulePath`.
 
 If `Import-Module` is used with a module that is not declared in the manifest as compatible, it will throw a terminating error:
 
-> The module '{0}' could not be imported as it is not declared as compatible.  Use `-SkipCompatibilityCheck` switch to override this check.
+> The module '{0}' could not be imported as it is not declared as compatible.  Use `-SkipEditionCheck` switch to override this check.
 
-`Import-Module` will support `-SkipCompatibilityCheck` switch to try and import the module regardless of `CompatiblePSEditions`.
+`Import-Module` will support `-SkipEditionCheck` switch to try and import the module regardless of `CompatiblePSEditions`.
 Since module auto-discovery does not expose cmdlets from modules not declared as compatible, explicit `Import-Module` with
-`-SkipCompatibilityCheck` is required to use potentially incompatible modules.
+`-SkipEditionCheck` is required to use potentially incompatible modules.
 
 ## Alternate Proposals and Considerations
 
-Open issue: Should `CompatiblePSEditions` column only be added in `ModuleInfo` table format if used with `-SkipCompatibilityCheck`?
+Open issue: Should `CompatiblePSEditions` column only be added in `ModuleInfo` table format if used with `-SkipEditionCheck`?
 Users who want to search the entirety of the Windows PowerShell `PSModulePath` should use `Add-WindowsPSModulePath` cmdlet
 from the `WindowsCompatibility` module.
