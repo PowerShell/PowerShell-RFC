@@ -20,7 +20,7 @@ In this RFC, we will explore the possibility of installing to different paths in
 
 Now that PowerShell Core 6.0 has GA'd, some users would like to run a preview version of PowerShell Core 6.1 side-by-side with PowerShell Core.
 Today, that's only possible if one version is installed via the MSI and another is installed via the "portable" ZIP package.
-Unfortunately, this makes the ZIP-installed copy of PowerShell difficult to install, and
+Unfortunately, this makes the ZIP-installed copy of PowerShell difficult to install.
 
 Also, in working to support Microsoft Update (MU) for servicing of PowerShell Core,
 we require that the path of all PowerShell Core binaries does not change between servicing.
@@ -47,7 +47,7 @@ We also provide the version of PowerShell in the FileVersion object associated w
     and `Enable-PSRemoting` create a different endpoint name for the preview build.
     * The preview of PowerShell Core 6.x shall not be placed on the `PATH`.
       Instead, we should create a subdirectory in `$PSHOME` called `bin`,
-      create a `.cmd` file that launches the preview `pwsh.exe`,
+      create a `pwsh-preview.cmd` file that launches the preview `pwsh.exe`,
       and add `$PSHOME\bin` to the `PATH`.
 
 ## Alternate Considerations and Proposals
