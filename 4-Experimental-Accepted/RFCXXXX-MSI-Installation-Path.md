@@ -44,7 +44,10 @@ We also provide the version of PowerShell in the FileVersion object associated w
   an in-place update of that preview build shall be performed.
 * No installation of a preview build shall interfere with a stable build, and vice versa
     * This includes an implicit requirement that `Install-PowerShellRemoting.ps1` create a different endpoint name for the preview build.
-    * The preview binary of PowerShell Core 6.x shall be named `pwsh-preview` or `pwsh-preview.exe` (depending on the platform).
+    * The preview of PowerShell Core 6.x shall not be placed on the `PATH`.
+      Instead, we should create a subdirectory in `$PSHOME` called `bin`,
+      create a `.cmd` file that launches the preview `pwsh.exe`,
+      and add `$PSHOME\bin` to the `PATH`.
 
 ## Alternate Considerations and Proposals
 
@@ -63,8 +66,6 @@ they should do a portable ZIP install.
 
 ## Open Questions
 
-* What happens if `...\6\pwsh.exe` and `...\6-preview\pwsh.exe` are both on the PATH?
-  Is it even desirable to put `...\6-preview\pwsh.exe` on the PATH?
 * Should an update install of stable PowerShell Core 6.0 to 6.1 also do a cleanup of any remaining preview 6.1 installs on the box?
     * I'd posit "no" because the stable vs. preview branches should be independent installations.
       E.g. I may want to immediately do an update of my preview 6.1 to 6.2,
