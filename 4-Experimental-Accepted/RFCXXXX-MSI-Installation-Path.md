@@ -1,8 +1,8 @@
 ---
 RFC: RFC
 Author: Joey Aiello
-Status: Draft
-Version: 0.1
+Status: Experimental-Accepted
+Version: 0.2
 Area: Installation
 Comments Due: March 27, 2018
 Plan to implement: Yes
