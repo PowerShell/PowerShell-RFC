@@ -43,7 +43,8 @@ We also provide the version of PowerShell in the FileVersion object associated w
 * When a preview MSI is run on a machine that already has a preview PowerShell Core 6.x installed,
   an in-place update of that preview build shall be performed.
 * No installation of a preview build shall interfere with a stable build, and vice versa
-    * This includes an implicit requirement that `Install-PowerShellRemoting.ps1` create a different endpoint name for the preview build.
+    * This includes an implicit requirement that `Install-PowerShellRemoting.ps1`
+    and `Enable-PSRemoting` create a different endpoint name for the preview build.
     * The preview of PowerShell Core 6.x shall not be placed on the `PATH`.
       Instead, we should create a subdirectory in `$PSHOME` called `bin`,
       create a `.cmd` file that launches the preview `pwsh.exe`,
