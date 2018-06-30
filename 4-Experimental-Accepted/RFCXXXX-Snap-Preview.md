@@ -17,7 +17,7 @@ I propose we have a separate package as it will allow side-by-side installation 
 ## Motivation
 
 Snaps are easy to use and having a Snap of the preview would allow people to adopt the preview across a wide variety of platforms.
-We want to design the preview Snap in a way that allows for the preview Snap to be installed easily without loosing access to the stable version of PowerShell.
+We want to design the preview Snap in a way that allows for the preview Snap to be installed easily without losing access to the stable version of PowerShell.
 
 ## Specification
 
