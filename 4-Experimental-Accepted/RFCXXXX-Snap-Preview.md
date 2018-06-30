@@ -24,7 +24,7 @@ We want to design the preview Snap in a way that allows for the preview Snap to 
 * There shall be two Snap packages available:
   * Stable: a production-ready, supported build, called `powershell`.
   * Preview: an unsupported build that may contain incomplete new features and high-impact bugs,
-    and should therefore not be used in production, called `powershell-preview`
+    and should therefore not be used in production, called `powershell-preview`.   Our hope is that the development process ensures that every build is stable and high quality.
 * Aliases
   * Stable package: `pwsh`
   * Preview package: `pwsh-preview`
