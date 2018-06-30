@@ -10,9 +10,9 @@ Plan to implement: Yes
 
 # Snaps of Preview builds
 
-We currently have not published any snap packages of a preview build.  There are some significant questions before we do.
+We currently have not published any [Snap packages](https://snapcraft.io) of a preview build.  There are some significant questions before we do.
 Primarily, do we follow Snap's model of channels or do we have a separate package called `powershell-preview`.
-I propose we have a separate package as it will allow side-by-side installation with the stable snap and will be consistent with our Linux package names.
+I propose we have a separate package as it will allow side-by-side installation with the stable Snap and will be consistent with our Linux package names.
 
 ## Motivation
 
@@ -21,7 +21,7 @@ We want to design the preview Snap in a way that allows for the preview Snap to 
 
 ## Specification
 
-* There shall be two snap packages available:
+* There shall be two Snap packages available:
   * Stable: a production-ready, supported build, called `powershell`.
   * Preview: an unsupported build that may contain incomplete new features and high-impact bugs,
     and should therefore not be used in production, called `powershell-preview`
@@ -40,7 +40,7 @@ We want to design the preview Snap in a way that allows for the preview Snap to 
 
 The main dis-advantage here is that preview builds cannot be install side-by-side with a stable build (at least with Snap alone).  Snap does allow you to switch between things you have downloaded fairly quickly so this is not fatal.
 
-* There shall be one snap package available:
+* There shall be one Snap package available:
   * Called `powershell`.
 * Alias
   * `pwsh`
