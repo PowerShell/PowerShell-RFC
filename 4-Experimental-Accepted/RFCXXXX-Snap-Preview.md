@@ -11,7 +11,7 @@ Plan to implement: Yes
 # Snaps of Preview builds
 
 We currently have not published any snap packages of a preview build.  There are some significant questions before we do.
-Primarily, do we follow Snap's model of channels or no we have a separate package called `powershell-preview`.
+Primarily, do we follow Snap's model of channels or do we have a separate package called `powershell-preview`.
 I propose we have a separate package as it will allow side-by-side installation with the stable snap and will be consistent with our Linux package names.
 
 ## Motivation
