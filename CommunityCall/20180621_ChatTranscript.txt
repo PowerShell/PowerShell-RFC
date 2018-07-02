@@ -1,0 +1,304 @@
+Michael T Lombardi 9:35 AM: 
+"Unfortunately"
+
+Smash cut to Joey drinking on a beach
+Hemant Mahawar 9:35 AM: 
+He needed a "much deserved" break ...
+Jeffrey Snover 9:36 AM: 
+(sun)(emo)
+Darwin Sanoy 9:36 AM: 
+Where-Is -Name Joey
+Jeffrey Snover 9:36 AM: 
+hi!
+Michael T Lombardi 9:36 AM: 
+\o
+Mark Kraus 9:39 AM: 
+haha... CSV -NoTypeInformation
+Mark Kraus 9:39 AM: 
+Tried...
+Maximo Trinidad 9:40 AM: 
+Any sound??
+Nick James 9:40 AM: 
+Can hear finer
+Nichols, Colin 9:40 AM: 
+sounds fine
+Nick James 9:40 AM: 
+fine*
+Constantin Hager 9:40 AM: 
+yes
+Robert Bodrick 9:40 AM: 
+yes
+Mark Farrugia 9:40 AM: 
+yep
+Stankiewicz, Michael (EUT & BTO) 9:40 AM: 
+I can hear
+Michael T Lombardi 9:40 AM: 
+Audio is good here
+Marcus Clayton 9:40 AM: 
+yeah, had to manually unmute my speaker too
+Michael T Lombardi 9:40 AM: 
+closed won't fix
+Nicholas M. Getchell 9:40 AM: 
+WHere can feedback go for the AD module?
+Jeffrey Snover 9:40 AM: 
+Restart-Skype
+Mark Kraus 9:40 AM: 
+https://github.com/PowerShell/PowerShellGet/issues/236 
+Jeffrey Snover 9:40 AM: 
+While ($true) {Restart-Skype}
+Jeffrey Snover 9:41 AM: 
+:-)
+Stankiewicz, Michael (EUT & BTO) 9:41 AM: 
+Fix-Headset
+Michael T Lombardi 9:41 AM: 
+powershell poker module ++
+Tyler Leonhardt (POWERSHELL) 9:41 AM: 
+He’ll still come back if he wins ;)
+Tyler Leonhardt (POWERSHELL) 9:42 AM: 
+don’t worry
+Tyler Leonhardt (POWERSHELL) 9:42 AM: 
+(I hope)
+Michael T Lombardi 9:42 AM: 
+:D
+Mark Kraus 9:43 AM: 
+https://github.com/PowerShell/PowerShell-RFC/pull/130 
+Darwin Sanoy 9:44 AM: 
+Shameless self-plug of a blog article posted today :$
+Darwin Sanoy 9:44 AM: 
+https://cloudywindows.io/post/winrm-for-provisioning---close-the-door-on-the-way-out-eh/ 
+Nicholas M. Getchell 9:45 AM: 
+Will the ported modules be open sourced? 
+Mark Kraus 9:46 AM: 
+WindowsCompatibility module: https://github.com/PowerShell/WindowsCompatibility 
+Jeffrey Snover 9:47 AM: 
+Context - MSFT code that use non-documented (PRIVATE) Windows APIs MUST ship in Windows.
+Michael B Smith 9:47 AM: 
+what is the level of API compatibility anticipated?
+Michael B Smith 9:48 AM: 
+(with the WCP)
+Tyler Leonhardt (POWERSHELL) 9:48 AM: 
+related issue in vscode-powershell:
+https://github.com/PowerShell/vscode-powershell/issues/1310
+Michael B Smith 9:48 AM: 
+Exchange :-)
+Michael B Smith 9:49 AM: 
+yes will PwoerShell Core ever be able to support Exchnage
+Jeffrey Snover 9:49 AM: 
+Implicit remoting is your friend.
+Jeffrey Snover 9:49 AM: 
+Exchange actually invented implicit remoting.
+maxtrinidad 9:50 AM: 
++1 @JSnover
+Michael B Smith 9:50 AM: 
+RIght, I'm aware of that. :-) I'm just interested in PS Core natively for Exchange :-)
+Jeffrey Snover 9:50 AM: 
+Try https://www.powershellgallery.com/packages/WindowsCompatibility/0.0.1  
+Jeffrey Snover 9:50 AM: 
+IT makes implicit remoting MUCH easier!
+Mark Kraus 9:51 AM: 
+New-Job -> New-ThreadJob and then everything else is just like what you are used to with Jobs
+Hemant Mahawar 9:52 AM: 
+(Y)
+Stankiewicz, Michael (EUT & BTO) 9:53 AM: 
+But there will be some loss of functionality via implicit remoting due to the objects being marshalled, no?
+Mark Kraus 9:53 AM: 
+https://github.com/PowerShell/PowerShell-Docs/tree/staging/contributing 
+Steve Lee (POWERSHELL) 9:53 AM: 
+Yes, they are not live objects
+Mark Kraus 9:53 AM: 
+Invoke-WinCommand { $Object.Method() }
+Keith Hill 9:54 AM: 
+Is there a fix in the works for the poor (non-indented) line wrapping for PS Core (in-box) help topics.
+Steve Lee (POWERSHELL) 9:54 AM: 
+@mark yes, that works!
+Kirk Munro 9:54 AM: 
+Steve, are you guys still exploring PowerShell in Azure Functions on the Azure Function v2 runtime? Any news in that area?
+Steve Lee (POWERSHELL) 9:54 AM: 
+@keith, is there an issue already?
+Keith Hill 9:54 AM: 
+Lemme check
+Steve Lee (POWERSHELL) 9:55 AM: 
+@kirk, yes, but nothing to announce and nothing in the immediate future
+Mark Kraus 9:57 AM: 
+https://docs.microsoft.com/en-us/powershell/developer/windows-powershell  
+Michael T Lombardi 9:57 AM: 
+\o/
+David Coulter 9:57 AM: 
+(wave)
+Michael T Lombardi 9:57 AM: 
+docs++++++++
+Bobby Reed 9:57 AM: 
+(rock)
+Mark Kraus 9:57 AM: 
+aka.ms/psapi for shortness
+Michael B Smith 9:58 AM: 
+1.17 rocks!
+maxtrinidad 10:01 AM: 
+Oops!!
+Jim Truher 10:02 AM: 
+Powershell standard 5 preview04 is now available. https://www.nuget.org/packages/PowerShellStandard.Library/5.1.0-preview-04
+Keith Hill 10:02 AM: 
+Tyler did you mention the better code folding support that Glenn has been working on?
+Tyler Leonhardt (POWERSHELL) 10:03 AM: 
+Ah! I didn’t
+Nick James 10:03 AM: 
+He's never mentioned highlighting either... :p jk lol
+Tyler Leonhardt (POWERSHELL) 10:03 AM: 
+ahhh
+Tyler Leonhardt (POWERSHELL) 10:04 AM: 
+so many exciting things :)
+Tyler Leonhardt (POWERSHELL) 10:04 AM: 
+I’ll bring it up. People need to know!
+Stankiewicz, Michael (EUT & BTO) 10:04 AM: 
+•         Per the last month notes:
+
+Rolling PSCoreWindowsCompat into WindowsPowerShellCompatibilityPack 
+Mark Kraus 10:05 AM: 
+https://github.com/PowerShell/WindowsCompatibility 
+
+https://blogs.msdn.microsoft.com/dotnet/2017/11/16/announcing-the-windows-compatibility-pack-for-net-core/ 
+
+https://github.com/markekraus/PSCoreWindowsCompat 
+Michael B Smith 10:05 AM: 
+is any of that xplat?
+Mark Kraus 10:06 AM: 
+the .NET WCP has _some_ x-plat support... but most APIs are windows only
+Michael B Smith 10:06 AM: 
+tnx
+Michael T Lombardi 10:06 AM: 
+WindowsPowerShellStandardShims
+WiPwshStdShims
+WPSShims
+
+"Whoops-shims"
+maxtrinidad 10:07 AM: 
+Confusion setting in! :)
+Mark Kraus 10:07 AM: 
+PSCoreWindowsCompat will no longer be needed with 6.1.0
+Darwin Sanoy 10:08 AM: 
+Does this mean separate packaging? "Note: In order to be able to deliver the PowerShell Core preview release and not deliver it to users expecting the stable release, we have renamed the preview package to powershell-preview and allowed it to be installed side by side with the stable package. "
+Steve Lee (POWERSHELL) 10:08 AM: 
+@mark correct
+Michael T Lombardi 10:09 AM: 
+Glenn Sarti ++
+Nick James 10:09 AM: 
+Will be submitting a batch of fixes/tweaks to VSCode as a PR tonight. Hopefully accepted and included in Insiders within a few days.
+Keith Hill 10:10 AM: 
+@stevelee - created an issue for the help formatting - https://github.com/PowerShell/PowerShell-Docs/issues/2606
+Steve Lee (POWERSHELL) 10:10 AM: 
+Thanks @keith
+Darwin Sanoy 10:10 AM: 
+Instead of a parallel package "powershell-preview" - can't you just not add it to the path / symlink?
+Nick James 10:10 AM: 
+It's also applied to powershell files when you view them on github.
+Tyler Leonhardt (POWERSHELL) 10:11 AM: 
+http://github.com/powershell/EditorSyntax
+Tyler Leonhardt (POWERSHELL) 10:11 AM: 
+Add this in the issue:
+```powershell
+# here’s the repro
+```
+Darwin Sanoy 10:12 AM: 
+OK - lotsa work on installers
+Keith Hill 10:12 AM: 
+one stable / one preview side-by-side ... sounds good to me.
+maxtrinidad 10:13 AM: 
+Can Cloud Shell have the same experience?
+maxtrinidad 10:13 AM: 
+Side-by-side on Cloud Shell
+Keith Hill 10:13 AM: 
+Heh, I just coded around that issue (only preview installed) for the VSCode extension.
+Michael T Lombardi 10:13 AM: 
+(symlinks on windows making my tests fail because I wasn't running as admin)--
+maxtrinidad 10:14 AM: 
+Cool! Thanks
+maxtrinidad 10:14 AM: 
+:)
+Keith Hill 10:14 AM: 
+Status of PowerShellGet - been running into a lot of issues as we get more folks using it/.
+Michael T Lombardi 10:14 AM: 
+Any more DSC news? ;)
+Michael B Smith 10:15 AM: 
+DSC!
+Keith Hill 10:15 AM: 
+Pkgs published without a cat sig by MS no less.
+Juraj Binka 10:15 AM: 
+dsc dsc
+Jeffrey Snover 10:15 AM: 
+ What flavor of PSGET issues?
+maxtrinidad 10:15 AM: 
+Office 365 / WinRM Linux And Mac
+Keith Hill 10:16 AM: 
+Cat sigs missing but PSGallery allows them to be published
+Jim Truher 10:16 AM: 
+which pkgs without cat sig?
+Keith Hill 10:16 AM: 
+Issues with upgrading release over prerelease.
+Jeffrey Snover 10:16 AM: 
+Thanks.
+Keith Hill 10:16 AM: 
+Have to uninstall prerelease
+Keith Hill 10:18 AM: 
+Hard to tell if a pkg is prelease - Get-Module doesnt show its prerelease. You have to do this: (gmo psreadline).privatedata
+Michael T Lombardi 10:18 AM: 
+"Naming is hard"
+Jeffrey Snover 10:18 AM: 
+@max - what was the error?
+Keith Hill 10:20 AM: 
+Go Hemant!
+maxtrinidad 10:21 AM: 
+@JeffreySnover - PS /home/maxt> install-package -Name Microsoft.SqlServer.SqlManagementObjects -MaximumVersion '140.17267.0-preview'
+
+The package(s) come(s) from a package source that is not marked as trusted. Are you sure you want to install software from 'Nuget'? [Y] Yes [A] Yes to All [N] No [L] No to All [S] Suspend [?] Help (default is "N"): A install-package : Unable to find dependent package(s) (System.Reflection.Emit.Lightweight) At line:1 char:1 + install-package -Name Microsoft.SqlServer.SqlManagementObjects -Maxim ... + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ + CategoryInfo : ObjectNotFound: (System.Reflection.Emit.Lightweight:String) [Install-Package], Exception + FullyQualifiedErrorId : UnableToFindDependencyPackage,Microsoft.PowerShell.PackageManagement.Cmdlets.InstallPackage
+
+"Unable to find dependent package(s) (System.Reflection.Emit.Lightweight)"
+Jeffrey Snover 10:21 AM: 
+Thanks Max!
+maxtrinidad 10:22 AM: 
+I for got to mentio that this use to work before on Linux and Mac
+Michael B Smith 10:22 AM: 
+DSC!
+Mark Kraus 10:22 AM: 
+I still think $PSVersionTable.PSVersion  should have stayed version and that a new semver property should have been added
+Michael T Lombardi 10:22 AM: 
+:D
+Keith Hill 10:22 AM: 
+Is there a story for authoring a module that has differing set of cmdlets for different platforms? How to express in the manifest?
+Keith Hill 10:26 AM: 
+Yeah, I include all and throw from commands that dont' work on the platform. But that seems less than idea.
+Keith Hill 10:26 AM: 
+er ideal
+Keith Hill 10:28 AM: 
+Good point - having PSGet carve up my module on install seems dangerous
+Hemant Mahawar 10:28 AM: 
+RootModule = if($PSEdition){<load the appropriate module/dll>} might mitigate a bit
+Jeffrey Snover 10:28 AM: 
+@max - I jjust sent you a Twitter DM.  Please read/respond.
+Keith Hill 10:28 AM: 
+In my case, I was referring to a pure script module
+Keith Hill 10:29 AM: 
+yeah what Tyler said
+Tyler Leonhardt (POWERSHELL) 10:29 AM: 
+:)
+Tyler Leonhardt (POWERSHELL) 10:29 AM: 
+ExportedFunctions = if($PSEdition){<load the appropriate module/dll>}
+Nicholas M. Getchell 10:29 AM: 
+Thanks for all the hard work!
+Tyler Leonhardt (POWERSHELL) 10:29 AM: 
+ExportedFunctions = if($PSEdition){return correct array of cmdlets}
+Keith Hill 10:29 AM: 
+Thanks
+Jim Truher 10:30 AM: 
+:)
+maxtrinidad 10:30 AM: 
+Awesome Guys!! :)
+Michael B Smith 10:30 AM: 
+thanks!
+Cat, Francois-Xavier (EUT & BTO) 10:30 AM: 
+thanks
+Michael T Lombardi 10:30 AM: 
+\o
+Ryen Tang 10:30 AM: 
+thanks
+Robert Bodrick 10:30 AM: 
+thank you
