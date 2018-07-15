@@ -69,7 +69,7 @@ RFCs may go through the following stages:
  
 This is the initial draft of an RFC posted for comments and considered a work-in-progress.
 
-* New proposed drafts should be submitted as a Pull Request from the Author's fork into the `Draft-Accepted` folder.
+* New proposed drafts should be submitted as a Pull Request from the Author's fork into the `Draft` folder.
 * The Author shall ensure that the `Allow edits from maintainers` box is checked so that a Committee Member can assign the next RFC number.
 * If the Pull Request has followed the correct template and process, a Committee Member will assign the label `Review - Open for comments` to the Pull Request to indicate that anyone can comment on the content of the submission.
 Typically, one or two months is allowed for comments, though this may be extended if a submission is particularly contentious or hasn't received enough feedback for the Committee to feel comfortable making a decision.
