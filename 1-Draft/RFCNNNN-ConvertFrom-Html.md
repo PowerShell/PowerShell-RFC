@@ -19,31 +19,7 @@ Windows PowerShell does contain the `HtmlWebResponseObject`, but PowerShell Core
 
 Additionally, Windows PowerShell Web CmdLets utilize Internet Explorer to parse HTML content. Since non-Windows systems do not have Internet Explorer, PowerShell Core utilizes the `BasicHtmlWebResponseObject` which does not contain this property.
 
-```text
-TypeName: Microsoft.PowerShell.Commands.BasicHtmlWebResponseObject
-
-Name              MemberType Definition
-----              ---------- ----------
-Equals            Method     bool Equals(System.Object obj)
-GetHashCode       Method     int GetHashCode()
-GetType           Method     type GetType()
-ToString          Method     string ToString()
-BaseResponse      Property   System.Net.Http.HttpResponseMessage BaseResponse {get;set;}
-Content           Property   string Content {get;}
-Encoding          Property   System.Text.Encoding Encoding {get;}
-Headers           Property   System.Collections.Generic.Dictionary[string,System.Collections.Generic.IEnumerable[stri...
-Images            Property   Microsoft.PowerShell.Commands.WebCmdletElementCollection Images {get;}
-InputFields       Property   Microsoft.PowerShell.Commands.WebCmdletElementCollection InputFields {get;}
-Links             Property   Microsoft.PowerShell.Commands.WebCmdletElementCollection Links {get;}
-RawContent        Property   string RawContent {get;set;}
-RawContentLength  Property   long RawContentLength {get;}
-RawContentStream  Property   System.IO.MemoryStream RawContentStream {get;}
-RelationLink      Property   System.Collections.Generic.Dictionary[string,string] RelationLink {get;}
-StatusCode        Property   int StatusCode {get;}
-StatusDescription Property   string StatusDescription {get;}
-```
-
-This RFC proposes that the creation of a new CmdLet named `ConvertFrom-Html`.  This CmdLet is to be implemented into PowerShell Core and should utilize the [AngelSharp](https://github.com/AngleSharp/AngleSharp) framework for converting strings into a PSCustomObject.
+This RFC proposes that the creation of a new CmdLet named `ConvertFrom-Html`.  This CmdLet is to be implemented into PowerShell Core and should utilize the [AngelSharp](https://github.com/AngleSharp/AngleSharp) framework for converting HTML strings into a PSCustomObject.
 
 ## Motivation
 
