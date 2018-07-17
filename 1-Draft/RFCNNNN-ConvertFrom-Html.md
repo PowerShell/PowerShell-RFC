@@ -153,5 +153,5 @@ $dnsDumpsterObject = Invoke-WebRequest @props | ConvertFrom-Html
 Some considerations to keep in mind:
 
 - Converted Html may be piped to any number of CmdLets.  For example, ConverTo-Json, ConverTo-Csv, ConvertTo-Xml, and ConvertTo-Html
-- Based on conversations in #3267 and #2867, this CmdLet should use AngleSharp to parse Html
+- Based on conversations in #3267 and #2867, this CmdLet should use AngleSharp to parse Html strings and output a PSCustomObject
 - We should support the same platforms that PowerShell is supported on: Win32, Ubuntu 14/16, CentOS7, MacOS10.
