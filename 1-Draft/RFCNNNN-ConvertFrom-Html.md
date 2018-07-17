@@ -11,6 +11,8 @@ Plan to implement:
 
 # ConvertFrom-Html
 
+The proposal is to create a new 'ConvertFrom-Html' cmdlet that will convert Html strings using PowerShell core.
+
 Currently the PowerShell Core Web CmdLets do not have access to the `HtmlWebResponseObject` and currently only contains the `BasicHtmlWebResponseObject` type.  Because of this, the capability to parse HTML using the `ParsedHtml` property of the `HtmlWebResponseObject` type does not exist within PowerShell Core.
 
 Windows PowerShell does contain the `HtmlWebResponseObject`, but PowerShell Core currently only contains the `BasicHtmlWebResponseObject` type.
