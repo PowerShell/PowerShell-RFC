@@ -33,10 +33,8 @@ As a IT Administrator, I can pipe a string into `ConvertFrom-Html` to convert it
 
 ## Specification
 
-The proposal is to create a new 'ConvertFrom-Html' cmdlet that will convert Html content using PowerShell core.
-
 - InputObject parameter
-  - Specifies the HTML strings to convert to Html objects. Enter a variable that contains the string, or type a command or expression that gets the string. You can also pipe a string to ConvertFrom-Html.
+  - Specifies the HTML strings to convert to PSCustomObject objects. Enter a variable that contains the string, or type a command or expression that gets the string. You can also pipe a string to ConvertFrom-Html.
   - The InputObject parameter is required, but its value can be an empty string. When the input object is an empty string, ConvertFrom-Html does not generate any output. The InputObject value cannot be $Null.
 
 ### Syntax
