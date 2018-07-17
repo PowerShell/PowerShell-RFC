@@ -145,7 +145,7 @@ $props = @{
     Method     = 'Post'
 }
 
-$dnsDumpsterObject = (Invoke-WebRequest @props).Content | ConvertFrom-Html
+$dnsDumpsterObject = Invoke-WebRequest @props | ConvertFrom-Html
 ```
 
 ## Alternate Proposals and Considerations
