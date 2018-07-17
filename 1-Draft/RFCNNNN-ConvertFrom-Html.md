@@ -25,9 +25,9 @@ This RFC proposes that the creation of a new CmdLet named `ConvertFrom-Html`.  T
 
 As a PowerShell Core user, I can convert HTML content to objects so that I can easily work with downloaded or local HTML content.
 
-As a IT Administrator, I can call `Invoke-WebRequest` and then use `ConvertFrom-Html` to convert the `RawContent` of my Web Request to an object so that I can easily work with HTML strings/content.
+As a IT Administrator, I can call `Invoke-WebRequest` and then use `ConvertFrom-Html` to convert the `Content` of my Web Request to a PSCustomObject so that I can easily work with HTML strings/content.
 
-As a IT Administrator, I can call `Invoke-WebRequest` and then use `ConvertFrom-Html` to convert the `Content` of my Web Request to an object so that I can easily convert it to another type (json, csv, xml, etc.).
+As a IT Administrator, I can call `Invoke-WebRequest` and then use `ConvertFrom-Html` to convert the `Content` of my Web Request to a PSCustomObject so that I can easily convert it to another type (json, csv, xml, etc.).
 
 As a IT Administrator, I can pipe a string into `ConvertFrom-Html` to convert it to a PSCustomObject so that I can easily convert it to another type, modify the object, and use the `ConvertTo-Html` CmdLet to convert it back to Html.
 
