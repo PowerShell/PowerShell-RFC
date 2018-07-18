@@ -1,7 +1,7 @@
 ---
 RFC: RFC
 Author: Travis Plunk (@TravisEz13)
-Status: Experimental-Accepted
+Status: Final
 Version: 0.1
 Area: Packaging
 Comments Due: July 15, 2018
