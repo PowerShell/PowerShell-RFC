@@ -53,3 +53,31 @@ The main dis-advantage here is that preview builds cannot be install side-by-sid
     `sudo snap install powershell --classic --edge`
 
 ## Open Questions
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Joey Aiello: Accept
+
+Bruce Payette: Accept
+
+Steve Lee: Absent
+
+Hemant Mahawar: Accept
+
+Jim Truher: Accept
+
+Dongbo Wang: Accept
+
+Kenneth Hansen: Absent
+
+### Majority Decision
+
+We support side-by-side and want to keep it that way, hence the distinct packages.
+The alias names also make sense given the pattern we set with the existing Linux packages.
+
+### Minority Decision
+
+N/A
