@@ -1,0 +1,170 @@
+Prasoon(kvprasoon) 9:31 AM: 
+[emoji]::print("thumbsup")
+DarwinJS 9:32 AM: 
+yep
+Constantin Hager 9:32 AM: 
+yes
+Edin Zbanic 9:32 AM: 
+Yes
+Evgeny 9:32 AM: 
+yup
+Tyler Leonhardt (POWERSHELL) 9:33 AM: 
+👋
+Michael T Lombardi 9:34 AM: 
+/me waves
+Maximo Trinidad 9:39 AM: 
+That's Awesome!
+Kirk Munro 9:39 AM: 
+(clap)
+Adam Murray 9:39 AM: 
+(y)
+DarwinJS 9:39 AM: 
+(y)
+Maximo Trinidad 9:41 AM: 
+Oh Man!!... just kitting!
+Aleksandar Nikolic 9:43 AM: 
+Cloud Shell will probably increase the usage
+Maximo Trinidad 9:43 AM: 
+Use IE!
+DarwinJS 9:46 AM: 
+Preview 2 was the last one to be an automatic upgrade in what is now the "stable" distribution right?
+Jeremy Murrah 9:46 AM: 
+apt list install from ubuntu gives version 6.1.0 preview 2
+DarwinJS 9:48 AM: 
+yep
+Maximo Trinidad 9:48 AM: 
+sneaky!!
+DarwinJS 9:48 AM: 
+Truth will be known on next prod GA
+Michael T Lombardi 9:49 AM: 
+sounds similar to a nixos package
+DarwinJS 9:49 AM: 
+That's not .MSIX ?
+Aleksandar Nikolic 9:50 AM: 
+Are there any plans to offer some Azure Linux VM images with preinstalled PS Core?
+DarwinJS 9:51 AM: 
+Amazon has that!
+DarwinJS 9:51 AM: 
+Amazon Linux 2 has an AMI with .NET Core and PowerShell
+DarwinJS 9:52 AM: 
+It isn't there default AMI - but my team will be talking to them this month and I want to push on that.
+DarwinJS 9:53 AM: 
+Seperate AMI yes
+DarwinJS 9:53 AM: 
+Ah ok
+DarwinJS 9:53 AM: 
+MSIX is technically linux too.
+Michael T Lombardi 9:53 AM: 
+Ping for later: Any further news on DSC Core?
+DarwinJS 9:54 AM: 
+.MSIX: https://blogs.msdn.microsoft.com/sgern
+Michael T Lombardi 9:56 AM: 
+Driscoll's relevance ++
+Nichols, Colin 9:56 AM: 
+general powershell update question (when you get a moment), is there any mechanism to check for new releases within pwsh (like update-help), maybe something like update-pwsh?
+Prasoon(kvprasoon) 9:58 AM: 
+(y) My vote for Update-Pwsh 
+Adam Dzyacky 9:59 AM: 
+i have a small ISE switching blocker, but it's not really a PowerShell team thing. The area is around the Azure Automation/SMA runbook management tool in ISE. What's the best way to interact with whatever team is responsible for that?
+Adam Dzyacky 9:59 AM: 
+otherwise, VS Code all the way. Great work!
+Travis Plunk 9:59 AM: 
+Snap package pages are at:
+https://snapcraft.io/powershell  and https://snapcraft.io/powershell-preview
+Tyler Leonhardt (POWERSHELL) 10:00 AM: 
+@Adam AFAIK, the Azure Automation extension for the ISE also can work in VSCode… let me see if I can find the link
+Aleksandar Nikolic 10:00 AM: 
+You need to build it by yourself
+Aleksandar Nikolic 10:01 AM: 
+It's easier to use it in ISE :(
+Tyler Leonhardt (POWERSHELL) 10:01 AM: 
+https://github.com/azureautomation/azure-automation-ise-addon#from-source
+
+Look for If you want to build the standalone AddOn for use with Visual Studio or VSCode
+Stankiewicz, Michael (EUT & BTO) 10:01 AM: 
+can you please send a link to the CVE representing the VSCode posh extension vulnerability?
+Aleksandar Nikolic 10:01 AM: 
+In Code it runs as a standalone add-on
+Tyler Leonhardt (POWERSHELL) 10:02 AM: 
+@michael:
+https://github.com/PowerShell/Announcements/issues/5
+Adam Dzyacky 10:02 AM: 
+that is interesting. wow, this is fantastic. most excellent @tyler thank you!
+Stankiewicz, Michael (EUT & BTO) 10:02 AM: 
+@Tyler Thanks!
+Nichols, Colin 10:02 AM: 
+Thanks for the comments.
+Tyler Leonhardt (POWERSHELL) 10:03 AM: 
+No problem @Adam! 
+
+@Aleksandar I’m not sure who’s responsible for that addon but I’ll try to find them to figure out how to properly release that so you don’t need to build from source
+Aleksandar Nikolic 10:04 AM: 
+Eamon O'Reilly
+Aleksandar Nikolic 10:04 AM: 
+Eamon owns it
+Adam Dzyacky 10:04 AM: 
+at least i know where it is, if i need to build or help push that forward i eagerly would
+Aleksandar Nikolic 10:05 AM: 
+Building it from a source is a blocker for the ITPros
+Tyler Leonhardt (POWERSHELL) 10:06 AM: 
+@Adam it doesn’t look like there isn’t an issue on github for a release that supports vscode… could you open one? That will help with that effort a lot
+Tyler Leonhardt (POWERSHELL) 10:08 AM: 
+it’s much better if a community member opens an issue
+Adam Dzyacky 10:08 AM: 
+sure thing
+Stankiewicz, Michael (EUT & BTO) 10:08 AM: 
+Have there been any updates to the documentation that Steve Lee was working on in regards to the PowerShell Core compatibility pack story?  This is a confusing topic and one that Steve was going to provide a formal doc on to demystify this for the masses.
+Tyler Leonhardt (POWERSHELL) 10:09 AM: 
+Thanks Adam!
+Michael T Lombardi 10:09 AM: 
+If you write plain text that changes the state of things in production, that's development. :)
+Adam Dzyacky 10:10 AM: 
+ https://github.com/azureautomation/azure-automation-ise-addon/issues/153 
+Joey Aiello 10:11 AM: 
+https://github.com/powershell/WindowsCompatibility
+Tyler Leonhardt (POWERSHELL) 10:12 AM: 
+Thanks Adam! Can everyone +1 that issue if you can/want :)
+Constantin Hager 10:13 AM: 
+have done It already
+Aleksandar Nikolic 10:13 AM: 
+Done.
+Joey Aiello 10:15 AM: 
+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-0875
+DarwinJS 10:17 AM: 
+Hey: https://github.com/DarwinJS/Undo-WinRMConfig
+Tyler Leonhardt (POWERSHELL) 10:19 AM: 
+added the link to the CVE to the announcement but here’s the direct link:
+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-8327
+Tyler Leonhardt (POWERSHELL) 10:28 AM: 
+I think I saw markdown support in the Gallery pages too :)
+Prasoon(kvprasoon) 10:32 AM: 
+Just Born.
+
+Update pwsh[Only for Windows] https://github.com/kvprasoon/PwshUtils/tree/master/Utilities
+Handles running pwsh(just worked for me !!!)
+Keith Hill 10:33 AM: 
+Awesome!
+Adam Dzyacky 10:33 AM: 
+nice!
+Keith Hill 10:34 AM: 
+Thanks!
+Adam Murray 10:34 AM: 
+Thanks
+Tyler Leonhardt (POWERSHELL) 10:34 AM: 
+Thanks everyone!
+Constantin Hager 10:34 AM: 
+bye. Thanks
+Joey Aiello 10:34 AM: 
+👋
+Tyler Leonhardt (POWERSHELL) 10:34 AM: 
+👋
+Prasoon(kvprasoon) 10:34 AM: 
+$Thanks
+Prasoon(kvprasoon) 10:34 AM: 
+[emoji]::print("wave")
+Jeremy Murrah 10:34 AM: 
+(beer) :30
+Tyler Leonhardt (POWERSHELL) 10:34 AM: 
+🍻
+Tyler Leonhardt (POWERSHELL) 10:35 AM: 
+☕
