@@ -91,3 +91,30 @@ Since module auto-discovery does not expose cmdlets from modules not declared as
 Open issue: Should `CompatiblePSEditions` column only be added in `ModuleInfo` table format if used with `-SkipEditionCheck`?
 Users who want to search the entirety of the Windows PowerShell `PSModulePath` should use `Add-WindowsPSModulePath` cmdlet
 from the `WindowsCompatibility` module.
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Joey Aiello: Accept
+
+Bruce Payette: Accept
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+Dongbo Wang: Accept
+
+Kenneth Hansen: Accept
+
+Jim Truher: Absent
+
+### Majority Decision
+
+Commmittee agrees to accept this RFC as written.
+
+### Minority Decision
+
+N/A
