@@ -1,9 +1,9 @@
 ---
-RFC: RFCNNNN
+RFC: RFC0025
 Author: Steve Lee
-Status: Draft
+Status: Draft-Accepted
 SupercededBy: n/a
-Version: 0.1
+Version: 1.0
 Area: Engine
 Comments Due: 6/30
 Plan to implement: Yes
