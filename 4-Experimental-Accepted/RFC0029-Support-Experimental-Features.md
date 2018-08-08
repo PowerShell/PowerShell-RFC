@@ -1,5 +1,5 @@
 ---
-RFC: RFC
+RFC: RFC0029
 Author: Dongbo Wang, Dan Travison
 Status: Draft
 SupercededBy: N/A
@@ -619,3 +619,28 @@ So for now, we don't have telemetry for experimental feature usage.
 ## Alternate Proposals and Considerations
 
 No alternate proposals.
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Joey Aiello: Accept
+
+Bruce Payette: Accept
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+Dongbo Wang: Accept
+
+Kenneth Hansen: Accept
+
+### Majority Decision
+
+Commmittee agrees that this RFC satisfies the experimental feature flag feature and recognizes that not all aspects of this RFC are currently implemented.
+
+### Minority Decision
+
+N/A
