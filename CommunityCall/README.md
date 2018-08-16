@@ -8,6 +8,7 @@ Or use this link if you already have Skype installed: https://meet.lync.com/micr
 
 ## Notes
 
+* [August 16, 2018](./20180816_Notes.md) ([YouTube recording](https://youtu.be/eNIbm4h2guE) and [transcript](20180816_ChatTranscript.txt))
 * [July 19, 2018](./20180719_Notes.md) ([YouTube recording](https://youtu.be/0eu--5muiLI) and [transcript](20180719_ChatTranscript.txt))
 * June 21, 2018 ([YouTube recording](https://youtu.be/Wj5kksgNTTs) and [transcript](20180621_ChatTranscript.txt))
 * [May 17, 2018](./20180517_Notes.md) ([YouTube recording](https://youtu.be/2ZWBuyZvTTg) and [transcript](20180517_ChatTranscript.txt))

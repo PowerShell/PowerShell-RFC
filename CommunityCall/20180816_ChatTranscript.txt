@@ -1,0 +1,374 @@
+Michael Lombardi 9:28 AM: 
+Also: Slack is down. :D
+Mark Kraus 9:28 AM: 
+If only we had some kind of Universal Time of some sort...
+Michael Lombardi 9:28 AM: 
+Got that discord link? ;)
+Michael Lombardi 9:28 AM: 
+@markkraus++
+Kexy Biscuit 9:29 AM: 
+PS > Get-TimeZone 
+Mark Kraus 9:29 AM: 
+https://bit.ly/psdiscord
+Pearon, Matthew 9:30 AM: 
+"The Issue"
+Pearon, Matthew 9:30 AM: 
+Sounds scary
+Michael Lombardi 9:30 AM: 
+@markkraus++
+Michael Lombardi 9:30 AM: 
+Definitely need a poshbot plugin for discord now...
+Joey Aiello 9:31 AM: 
+https://github.com/PowerShell/PowerShell/pull/7434 
+Nicholas M. Getchell 9:31 AM: 
+yes
+Nick 9:31 AM: 
+Yup
+Nicholas M. Getchell 9:31 AM: 
+it is horrific 
+Nicholas M. Getchell 9:32 AM: 
+better now!
+Keith Hill 9:32 AM: 
+It's good on my 4K monitor. :-)
+Darwin Sanoy 9:32 AM: 
+My eyes dont' scale up to 4K anymore
+Michael Lombardi 9:32 AM: 
+I usually swap from 4K to 1080 right before presentations
+Maximo Trinidad 9:32 AM: 
+What are the differences in the GA vs Preview4 Module CimCmdlets. I got an issue that I had to use 6.0.4 GA to install OpenSSH from Chocolatey.  Preview4 giving error: ERROR: The 'Get-CIMInstance' command was found in the module 'CimCmdlets', but the module could not be loaded. For more information, run 'Import-Module CimCmdlets'.
+The install of openssh was NOT successful. 
+Michael Lombardi 9:32 AM: 
+On the other hand, your 4k looks fine on mine. :D
+Darwin Sanoy 9:32 AM: 
+Same with 22 channel sound or whatever it's up to now
+Steve Lee (POWERSHELL) 9:32 AM: 
+@maximo, not aware of that issue. No explicit changes I’m aware of.
+Michael Lombardi 9:33 AM: 
+/me reading the thread, sees a lot of Joel, wonders if he's on the call
+Jonas Sommer Nielsen 9:34 AM: 
+should I be hearing any audio now?
+Michael Lombardi 9:34 AM: 
+Aside: I have to duck early for a meeting, but ping re DSC Core
+Joey Aiello 9:34 AM: 
+yes you should be
+Nicholas M. Getchell 9:34 AM: 
+screen is good
+Keith Hill 9:34 AM: 
+Yes
+Steve Lee (POWERSHELL) 9:34 AM: 
+@maximo, it doesn’t repro on my Windows box
+Maximo Trinidad 9:34 AM: 
+I got two Windows 10 insider build with the same issue.  I have try other Choco packages but weird I had to use Ga in order to install it.
+Constantin Hager 9:34 AM: 
+yes
+Mark Kraus 9:34 AM: 
+"works fine on my box" -Developer
+Keith Hill 9:34 AM: 
+yes
+Cat, Francois-Xavier (EUT & BTO) 9:34 AM: 
+yep
+Nick 9:34 AM: 
+yup
+Pearon, Matthew 9:34 AM: 
+Looks good here
+Steve Lee (POWERSHELL) 9:34 AM: 
+@mark, lol
+Maximo Trinidad 9:34 AM: 
+I meant I haven't try other Choco pkgs.
+Kexy Biscuit 9:35 AM: 
+Any sound?
+Mark Kraus 9:35 AM: 
+I can hear fine
+Cat, Francois-Xavier (EUT & BTO) 9:35 AM: 
+sound is ok
+Nick 9:35 AM: 
+Still sounds fine
+Andrew 9:35 AM: 
+Sounds good here
+Michael Lombardi 9:35 AM: 
+Sound and video is good.
+Nicholas M. Getchell 9:35 AM: 
+We can hear. 
+brendan foley 9:35 AM: 
+sound is good
+Maximo Trinidad 9:35 AM: 
+Let me re-login No sound
+David Coulter (Doc Guy) 9:35 AM: 
+Sounds good. Just reload Skype if you have no sound.
+Steve Lee (POWERSHELL) 9:37 AM: 
+Call out on chat if any acronyms don’t make sense to you
+Keith Hill 9:39 AM: 
+Nice!
+Nicholas M. Getchell 9:39 AM: 
+ActiveDirectory!
+Adam Murray 9:39 AM: 
+(y)
+Nicholas M. Getchell 9:39 AM: 
+This is awesome
+Ryen Tang 9:39 AM: 
+nice
+Kexy Biscuit 9:39 AM: 
+Productive for now.
+Michael Lombardi 9:39 AM: 
+\o/
+Michael B Smith 9:41 AM: 
+modules?
+Cat, Francois-Xavier (EUT & BTO) 9:41 AM: 
+commands
+Michael B Smith 9:41 AM: 
+hah
+Jeremy Murrah 9:41 AM: 
+what's the story around identifying modules that support core on linux and windows vs. just windows?
+Tim Curwick 9:43 AM: 
+How will the rest of the modules be rolled out to Win 10 and 2019? Monthly patches, semi annual, major update, other?
+Darwin Sanoy 9:43 AM: 
+Did yall see that PowerShell is in AWS Lambda now? https://docs.aws.amazon.com/powershell/latest/reference/items/AWS_Lambda_cmdlets.html 
+Darwin Sanoy 9:43 AM: 
+Why aren't implementations like Cron versus task scheduler hidden behind one CMDlet?
+Darwin Sanoy 9:43 AM: 
+Another set is Stop-Computer, Restart-Computer
+PowerCode 9:43 AM: 
+Do we need some way of specifying module compatiblity with os versions?
+Steve Lee (POWERSHELL) 9:44 AM: 
+For win10, if you’re in Insiders, you’ll get the latest with when the OS updates. All the changes we’ve made will show up in the final version of the next release of Win10. These changes don’t show up as part of monthly patches.
+PowerCode 9:45 AM: 
+Third party modules, that has dependencies on os specific modules
+Keith Bankston 9:45 AM: 
+FYI: Gallery doc listing recommended tags: https://docs.microsoft.com/en-us/powershell/gallery/concepts/item-manifest-affecting-ui 
+Keith Hill 9:45 AM: 
+Do you envision PowerShell Core ever shipping "built into" a future version of Windows? That's got both pros and cons. :-)
+Andrew 9:45 AM: 
+Any new details/timeframe around the cross-platform DSC agent?
+Michael Lombardi 9:45 AM: 
+DSC Core++
+Keith Bankston 9:45 AM: 
+FYI: Gallery doc listing recommended tags: https://docs.microsoft.com/en-us/powershell/gallery/concepts/item-manifest-affecting-ui  
+maxtrinidad 9:45 AM: 
+Sorry SteveL! I had to reconnect and I lost all the conversation thread... Maybe I need to reinstall Preview 4. and rty installing OpenSSH from Choco.
+Darwin Sanoy 9:48 AM: 
+Building PowerShell was hard - you guys are up to it :)
+Nicholas M. Getchell 9:49 AM: 
+I agree with Darwin on Scheduled Task
+Keith Hill 9:50 AM: 
+The Set-ACL cmdlet is like that IIRC. Still prefer icacls
+Trevor Sullivan 9:52 AM: 
+icacls always makes me think of some super villain cackling in an evil tone.
+Joey Aiello 9:53 AM: 
+https://github.com/PowerShell/PowerShell/tree/master/demos/crontab 
+Darwin Sanoy 9:53 AM: 
+nice
+Jeremy Murrah 9:53 AM: 
+I like the model of abstracting the OS-specific commands away in a configuration management resource/module. i.e. DSC resource for scheduling is a single thing, but it does different commands/OS things under the hood
+Mark Kraus 9:53 AM: 
+Make it plugable
+Mark Kraus 9:53 AM: 
+we can create distro/platform specific plugins
+Jeremy Murrah 9:53 AM: 
+that feels like a better/easier fit
+Jonas Sommer Nielsen 9:55 AM: 
+great idea
+Prasoon(kvprasoon) 9:55 AM: 
+Get-PendingReboot
+Steve Lee (POWERSHELL) 9:57 AM: 
+Created https://github.com/PowerShell/PowerShell/issues/7541 to discuss task scheduling cmdlets for cross-platform
+Trevor Sullivan 9:57 AM: 
+A plist reader/writer module would be nice
+Trevor Sullivan 9:57 AM: 
+Macs are fun with their special config files
+Darwin Sanoy 9:58 AM: 
+Thanks!
+PowerCode 9:58 AM: 
+Maybe a meta issue for what cmdlets should be considers "baseline"
+Kexy Biscuit 9:59 AM: 
+pwsh-sysadmin or something?
+Jonas Sommer Nielsen 9:59 AM: 
+Would it be possible for the Team to lay out the scafolding ... uhm like design "empty" commands that can be implemented on different platforms by the community
+Michael Lombardi 9:59 AM: 
+Since you opened the door, future work on classes in powershell? :D
+Darwin Sanoy 10:00 AM: 
+Maybe a "What should be bootstrap cmdlets" guiding principles / manifesto
+PowerCode 10:00 AM: 
+What he said!
+Jonas Sommer Nielsen 10:01 AM: 
+The important part for end "users" would be that the commands are the same across different os'es 
+Steve Lee (POWERSHELL) 10:05 AM: 
+I’ll create issue for the meta discussion on basic OS mgmt cmdlets
+PowerCode 10:05 AM: 
+I have actually created just that for DICE
+PowerCode 10:05 AM: 
+What Bruce talked about
+Joey Aiello 10:05 AM: 
+oooh, please share? :) 
+PowerCode 10:05 AM: 
+Not sure I can :(
+Doug Finke 10:07 AM: 
+I like the docker point
+Jeremy Murrah 10:09 AM: 
+trick with a minimal install is that alot of the gallery stuff has sort of implied dependencies on stuff they expect to be built-in
+PowerCode 10:09 AM: 
+What I did was nothing complex: Download pwsh from the web, a meta module with the modules I need, Save-Module on the meta module, and a click-once installer around the package. And PowerLine fonts of course :)
+Steve Lee (POWERSHELL) 10:09 AM: 
+https://github.com/PowerShell/PowerShell/issues/7542 created to discuss baseline cmdlets for managing cross platform
+Jeremy Murrah 10:09 AM: 
+so on that idea, any plans to have support for auto-installing dependent modules ala yum and pip?
+Trevor Sullivan 10:09 AM: 
+If anyone wants to contribute to an open source project, I launched an effort to provide Intellisense for AWS cloud resources. https://github.com/awslabs/aws-powershell-extensions
+Darwin Sanoy 10:12 AM: 
+will do
+Trevor Sullivan 10:12 AM: 
+It'd be awesome if we had a PowerShell module that would assist in deploying internally-facing / private NuGet feeds for PowerShell modules.
+Jonas Sommer Nielsen 10:12 AM: 
+It would still be nice to have a "trusted" repo for modules "rubberstamped" by the team or community
+Pearon, Matthew 10:13 AM: 
+Scary
+Nick 10:13 AM: 
+I'd be ok with that if it was confirm based
+PowerCode 10:13 AM: 
+Versioning needs to be expressed better
+maxtrinidad 10:13 AM: 
+SteveL/Darwin just an FYI... I'm able to install choco OpenSSH in Windows 5.1 but not PowerShell Core Preview4 (although works in GA). I can live with it! :)
+Keith Hill 10:13 AM: 
+We build modules published to a corp repo (Artifactory-based) if we depend on external modules in PSGallery - will that work?
+Pearon, Matthew 10:14 AM: 
+It just seems like a very quick way to break other stuff.
+Nick 10:14 AM: 
+ConfirmImpact = 'High'
+Nick 10:14 AM: 
+or 'SuperHigh'
+PowerCode 10:15 AM: 
+Have I missed something, or doesn't module version in requiredmodules just specify a lower bound? Should be semantic, shouldn't it?
+Nick 10:16 AM: 
+Trusted repo != trusted module necissarily. I may also not want a module for non-security reasons (cmdlet clobbering, etc.)
+Joey Aiello 10:16 AM: 
+@PowerCode: would nice to be semantic, but there's back compat problems that make it really complicated
+Joey Aiello 10:17 AM: 
+@Nick: in that case, high confirmation impact would be helpful I think
+Nick 10:17 AM: 
+Yup.
+PowerCode 10:17 AM: 
+Even if we add SemanticReqiredVersion
+Nick 10:17 AM: 
+Just wouldn't want it to happen without prompting
+Pearon, Matthew 10:17 AM: 
+Competing code between modules that were automatically downloaded/installed seems like a likely thing.
+maxtrinidad 10:17 AM: 
+Whar abotu using a SQLServe Linux server for DSC?
+Pearon, Matthew 10:18 AM: 
+The confirm would at least shift the mitigation step to the end user
+Trevor Sullivan 10:18 AM: 
+PowerShell Gallery is a bit overdue for a UI refresh.
+Keith Bankston 10:19 AM: 
+It's getting one
+Steve Lee (POWERSHELL) 10:19 AM: 
+@trevor https://www.preview.powershellgallery.com/
+Trevor Sullivan 10:19 AM: 
+"People who like this module also installed this module ..."
+PowerCode 10:20 AM: 
+What are the reqs for being trusted?
+Keith Bankston 10:21 AM: 
+@powercode: honestly still working on them. That's the reason we haven't made the feature public yet. 
+Darwin Sanoy 10:21 AM: 
+https://github.com/PowerShell/PowerShell/issues/7543 
+Prasoon(kvprasoon) 10:21 AM: 
+We had a PS Private gallery project , is it still alive, to have a provate repo for non public n/w facing environments ?
+Nick 10:21 AM: 
+I honestly don't care either way as long as it is consistent. It is currently not consistent. 
+Nicholas M. Getchell 10:21 AM: 
+What is the current functionality?
+Steve Lee (POWERSHELL) 10:22 AM: 
+currently it’s not consistent. making it consistent is a breaking change.
+Steve Lee (POWERSHELL) 10:22 AM: 
+“breaking change”
+Nick 10:22 AM: 
+"breaking"
+Keith Bankston 10:22 AM: 
+@prasoon(kvprasoon) that project was too difficult to maintain. We recommend folks deploy NuGet.
+Travis Plunk 10:22 AM: 
+@maxtrinidad we don’t have anyone from DSC on the call
+Prasoon(kvprasoon) 10:22 AM: 
+@keith - Thanks !
+maxtrinidad 10:24 AM: 
+Travis!! I'm just throwing it out there! :)
+Nick 10:24 AM: 
+The one anoying thing about the errors is if you're doing "if (!(Get-Whatever)) {}" you have to supress the error or someone running the script will see it.
+PowerCode 10:26 AM: 
++100
+Trevor Sullivan 10:26 AM: 
+PS /> Get-Clipboard
+To be honest, I prefer Bash to PowerS...
+
+"Oh crap ..."
+PowerCode 10:26 AM: 
+for Bruces Get-Command
+Pearon, Matthew 10:27 AM: 
+Someone kick Trevor form the meeting... :P
+Trevor Sullivan 10:27 AM: 
+Who's Trevor form?
+Nick 10:27 AM: 
+Or change PowerShell so that if a command is inside an if/elseif it automatically supresses. Error = $null default.
+PowerCode 10:27 AM: 
+A Test-Command?
+Pearon, Matthew 10:27 AM: 
+Hahaha...trying the standing desk thing.  Not going well. :)
+Jeremy Murrah 10:28 AM: 
+test-connection foo throws an error
+Jeremy Murrah 10:28 AM: 
+test-connection foo -quiet returns boolean
+Jeremy Murrah 10:29 AM: 
+should get-command have a -quiet? or should there be a test-command?
+PowerCode 10:29 AM: 
+Think about the .net TryGetValue. It is often useful to had a test and get
+Sean Wheeler 10:29 AM: 
++1 for test-command
+Nick 10:29 AM: 
+Is there an open issue on Github for this?
+Joey Aiello 10:31 AM: 
+I don't think so, the conversation was mostly happening in this (now-closed) PR: https://github.com/PowerShell/PowerShell/pull/7434 
+Nick 10:31 AM: 
+(y)
+Joey Aiello 10:31 AM: 
+It just ignited lots of discussion among us
+Keith Hill 10:31 AM: 
++1 for Test-Command.
+maxtrinidad 10:32 AM: 
++1 Test-Command
+Keith Hill 10:32 AM: 
+I expect get-* on a non-wildcard spec to fail if not found. But maybe that is just me.
+Keith Hill 10:33 AM: 
+@Joey - do you believe the new ConPTY support coming in conhost will make the interactive SSH experience with PS on the client and server side behave better. Right now, the the CLI experience isn't great with text randomly moving down several lines below where the prompt is.
+PowerCode 10:33 AM: 
+In many cases, I would actually like to have SDK classes exposed, matching the cmdlets on top. The both Get-Command and Test-Command could use the same SDK class, and I could use the class.TryGetValue when I needed it.
+Keith Hill 10:34 AM: 
+Great!
+Keith Hill 10:35 AM: 
+FYI https://blogs.msdn.microsoft.com/commandline/2018/08/02/windows-command-line-introducing-the-windows-pseudo-console-conpty/
+PowerCode 10:35 AM: 
+So, the cmdlets are just like the view/viewmodel layer
+Keith Hill 10:36 AM: 
+Nice!
+PowerCode 10:37 AM: 
+@Keith I don't. * for me means all matching. That may be none.
+Keith Hill 10:37 AM: 
+Ah, such a nice change from 8 years ago when we kept telling Jeffery that the consoel had to improve and he could only shrug. :-)
+Nick 10:37 AM: 
+@richturn_ms
+Keith Hill 10:37 AM: 
+Thanks!
+maxtrinidad 10:38 AM: 
+Awesome!! Thanks!!
+Darwin Sanoy 10:38 AM: 
+Thanks!
+Keith Hill 10:38 AM: 
+bye
+PowerCode 10:38 AM: 
+Thx for today!
+Doug Finke 10:38 AM: 
+thnks
+Ryen Tang 10:38 AM: 
+thanks
+Prasoon(kvprasoon) 10:38 AM: 
+$Thanks...
+Kexy Biscuit 10:38 AM: 
+Bye!
+Adam Murray 10:38 AM: 
+(y)
