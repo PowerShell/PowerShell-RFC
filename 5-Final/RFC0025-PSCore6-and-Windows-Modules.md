@@ -72,7 +72,7 @@ If the module manifest does not contain `CompatiblePSEditions`, then that module
 By default, `Get-Module -ListAvailable` will only show modules found in `PSModulePath` that are declared as compatible.
 Similarly, module auto-discovery and auto-loading will only find modules that are declared as compatible.
 
-The `ModuleInfo` table format will add a column for `PSEditions` (shortened from `CompatiblePSEditions` between `Name` and `ExportedCommands`).
+The `ModuleInfo` table format will add a column for `PSEdition` (shortened from `CompatiblePSEditions` between `Name` and `ExportedCommands`).
 
 ### Using Modules from System32 not declared as Compatible
 
