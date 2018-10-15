@@ -91,7 +91,7 @@ We should take this opportunity to rationalize our use of the `Encoding` paramet
 The following cmdlets use various types for the parameter `Encoding`
 
 ```PowerShell
-PS> Get-Command -type cmdlet | ?{$\_.parameters} |?{$\_.source -match "microsoft"}|ft name,{$\_.parameters['encoding'].ParameterType}
+PS> Get-Command -type cmdlet | ?{$_.parameters} |?{$_.source -match "microsoft"}|ft name,{$_.parameters['encoding'].ParameterType}
 
 Name             $_.parameters['encoding'].ParameterType
 ----             ---------------------------------------
