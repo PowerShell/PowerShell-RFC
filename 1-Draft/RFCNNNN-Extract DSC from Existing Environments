@@ -1,0 +1,28 @@
+--
+RFC: RFC00xx
+Author: Nik Charlebois
+---
+
+# Reverse Engineering Existing Environment into DSC
+
+Users have been complaining about the learning curve to get started with DSC and about the amount of work it takes for them to re-write their existing technology investment onto DSC for monitoring purposes. There have been various community projects to solve this issue by extracting DSC configurations out of existing environments, such as ReverseDSC, which had incredible success with clients wanting to adopt Configuration as Code practices within their organizations. 
+
+The purpose of this RFC is to propose that a fourth method that would retrieve all instances of a resource against an existing environment be included in DSC resources for them to be identified as HQRM.
+
+# Motivation
+
+* Reduce amount of work required to on-board existing environments onto DSC
+* Reduce learning curve to get started with DSC
+* Provide an automated path to migrate on-premises environments onto Azure
+* Allow users to easily document their environment’s configuration as code
+* Quickly compare configuration deltas between two environments
+
+# Specifications
+
+There are three components to the requested solution:
+* Component 1 needs to iterate through all instances of the current resource and provide the Get-TargetResource function the key parameters for it to be able to retrieve all other parameters associated with this resource instance.
+* Component 2 needs to retrieve the Hash tables received back from the Get-TargetResource and convert them into a DSC string. This is already automated and handled by the existing ReverseDSC Core module https://github.com/microsoft/reversedsc
+* Component 3 needs to orchestrate the calls to the resources’ Component 1 and 2 and collect the results into a resulting file, which will be a DSC script that can be used to replicate the environment.
+
+The vision is as follow:
+Component 1 and 2 would be combined into a new fourth function required by every HQRM, call it Export-TargetResource. Component 3 would be a global utility module, contained within the DSC module, which would orchestrate all the calls to the module’s Export-TargetResource methods (see SharePointDSC.Reverse at https://github.com/microsoft/sharepointdsc.reverse for a reference)
