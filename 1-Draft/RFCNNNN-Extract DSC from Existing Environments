@@ -1,6 +1,13 @@
---
+﻿--
 RFC: RFC00xx
 Author: Nik Charlebois
+Status: Draft
+SupercededBy: N/A
+Version: 0.0
+Area: DSC
+Comments Due: December 1st
+Plan to implement: Yes
+
 ---
 
 # Reverse Engineering Existing Environment into DSC
@@ -26,3 +33,7 @@ There are three components to the requested solution:
 
 The vision is as follow:
 Component 1 and 2 would be combined into a new fourth function required by every HQRM, call it Export-TargetResource. Component 3 would be a global utility module, contained within the DSC module, which would orchestrate all the calls to the module’s Export-TargetResource methods (see SharePointDSC.Reverse at https://github.com/microsoft/sharepointdsc.reverse for a reference)
+
+## Alternate Proposals and Considerations
+
+N/A
