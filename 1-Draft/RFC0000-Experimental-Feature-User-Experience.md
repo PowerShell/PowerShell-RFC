@@ -19,7 +19,7 @@ This RFC addresses the user experience.
 
     As a PowerShell user,
     I can discover and enable experimental features,
-    so that try new capabilities safely and provide feedback.
+    so that I can try new capabilities safely and provide feedback.
 
 ## Specification
 
