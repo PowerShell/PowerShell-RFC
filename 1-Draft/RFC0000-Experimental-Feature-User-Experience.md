@@ -52,9 +52,9 @@ The user can always prevent inheriting configuration from the system by explicit
 ### Enable and Disable cmdlets
 
 ```none
-Enable-ExperimentalFeature [[-Name] <string[]>] [-Scope <CurrentUser|System>] [<CommonParameters>]
+Enable-ExperimentalFeature [[-Name] <string[]>] [-Scope { CurrentUser | AllUsers }] [<CommonParameters>]
 
-Disable-ExperimentalFeature [[-Name] <string[]>] [-Scope <CurrentUser|System>] [<CommonParameters>]
+Disable-ExperimentalFeature [[-Name] <string[]>] [-Scope { CurrentUser | AllUsers }] [<CommonParameters>]
 ```
 
 These cmdlets allow users to selectively enable and disable experimental features.
@@ -64,7 +64,7 @@ The `-Name` parameter shall accept `ValueFromPipelineByPropertyName` and is the 
 The `-Scope` parameter is optional and defaults to `CurrentUser` and will create or update the
 `powershell.config.json` in `$HOME\Documents\PowerShell\powershell.config.json` on Windows
 and from `$HOME/.config/powershell/powershell.config.json` on Linux and macOS.
-If `-Scope` is `System`, it will create or update `$PSHOME\powershell.config.json`.
+If `-Scope` is `AllUsers`, it will create or update `$PSHOME\powershell.config.json`.
 
 Experimental features are read and enabled at PowerShell startup, so a warning message will be provided informing the user:
 > Experimental feature changes will only be applied after restarting PowerShell.
