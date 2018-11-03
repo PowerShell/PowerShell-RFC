@@ -11,7 +11,8 @@ Plan to implement: Yes
 
 # Experimental Feature User Experience
 
-[Experimental Feature Flags](https://github.com/PowerShell/PowerShell-RFC/blob/master/5-Final/RFC0029-Support-Experimental-Features.md) enable developers to expose experimental features to users to gather feedback before finalizing design.
+[Experimental Feature Flags](https://github.com/PowerShell/PowerShell-RFC/blob/master/5-Final/RFC0029-Support-Experimental-Features.md)
+enable developers to expose experimental features to users to gather feedback before finalizing design.
 That feature was focused on the developer and did not make it easy for users to discover and enable experimental features.
 This RFC addresses the user experience.
 
@@ -34,20 +35,13 @@ Since there are likely not many experimental features available at any point in 
 it would make sense to remove the `-ListAvailable` switch and simply display all experimental features.
 The current output already has a column indicating if the experimental feature is enabled allowing for easy filtering.
 
-### User scope powershell.config.json
+### System and User scope powershell.config.json
 
-Enabling experimental features require creating or updating a `powershell.config.json` file in `$PSHOME` which is read at startup.
-In general, we should allow use of PowerShell Core without the need to be root or elevated.
+Enabling experimental features automatically requires creating or updating a `powershell.config.json` file in `$PSHOME`
+which is read at startup which affects all users or from `$HOME\Documents\PowerShell\powershell.config.json` on Windows
+and from `$HOME/.config/powershell/powershell.config.json` on Linux and macOS per user.
 
-The change proposed is to support automatic loading of `powershell.config.json` from `$HOME\Documents\PowerShell\powershell.config.json` on Windows
-and from `$HOME/.config/powershell/powershell.config.json` on Linux and macOS.
-
-If an admin has provided a `powershell.config.json` file in `$PSHOME` and the user has one in their scope,
-then on `pwsh` startup, it will read the one in `$PSHOME` and clobber the properties that exist from the user configuration.
-
-Since this is configuration and not policy, the user configuration overrides the system configuration default settings.
-The user can always prevent inheriting configuration from the system by explicitly starting `pwsh` with the
-`-SettingsFile` parameter which will only read configuration from that specified file.
+This is existing behavior and will not be changed as part of this RFC.
 
 ### Enable and Disable cmdlets
 
@@ -70,13 +64,6 @@ Experimental features are read and enabled at PowerShell startup, so a warning m
 > Experimental feature changes will only be applied after restarting PowerShell.
 
 ## Alternate Proposals and Considerations
-
-### Configuration file
-
-In the case where there is both a system and current user configuration,
-an alternate proposal is to not read the system configuration if the user configuration exists.
-However, in the future, there may be useful configuration settings that make sense to have
-as default values for a specific environment.
 
 ### Enabled property
 
