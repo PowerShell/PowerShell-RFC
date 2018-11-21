@@ -54,6 +54,30 @@ interface IMyExtendedInterfaceWithMembers {
 
 ### Semantics
 
+The examples above would create new interface types exactly as if one had defined those using C#
+
+The following piece of code in PowerShell:
+
+```powershell
+interface IMyInterface {
+    [int]$MyProperty
+    [void]MyMethod([string]$StringParam)
+}
+```
+
+would produce IL completely identical to what the C# compiler would produce for the equivalent:
+
+```csharp
+public interface IMyInterface {
+    int MyProperty { get; set; }
+    void MyMethod(string StringParam);
+}
+```
+
+*Note: [C# 8 is slated to support default implementations](https://blogs.msdn.microsoft.com/dotnet/2018/11/12/building-c-8-0/) for interface methods, something we might want to consider as well*
+
+### Notes on potential changes to the AST surface
+
 Currently, when the parser recognizes a `class` or `enum` declaration, it produces a `TypeDefinitionAst` made up of `PropertyMemberAst` and `FunctionMemberAst` children. The type definition AST is then dispatched to either TypeDefiner.DefineTypeHelper or TypeDefiner.DefineEnumHelper for creating and emitting the corresponding runtime type.
 
 We can either add new `AbstractMemberAst` types specifically for the purpose of abstract type definitions, or modify the existing `MemberAst` types to account for abstract member constraints.
@@ -75,3 +99,4 @@ There are a couple of open questions around the design and implementation of int
  - Should we allow control over getter/setter declarations?
    - If so, should we replicate the syntax from C#?
  - Existing class definitions need to [mark interface member implementations virtual](https://github.com/PowerShell/PowerShell/issues/8302)
+ - Depending on community feedback and envisioned use cases, are interfaces sufficient or might we consider `abstract` classes as well? 
