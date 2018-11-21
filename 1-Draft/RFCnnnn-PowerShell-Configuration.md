@@ -12,9 +12,9 @@ Comments Due: 2/25/2018
 
 ## Motivation
 
-Consumers, developers, and enterpsise system administrators should be able to flexibly and conveniently configure PowerShell Core and applications based on it.
+Consumers, developers, and enterprise system administrators should be able to flexibly and conveniently configure PowerShell Core and applications based on it.
 
-The public PowerShell Core configuration API allows to use unified configuration means and to manage PowerShell-based applications in a consistent manner.
+A public PowerShell Core configuration API would allow a unified way to manage PowerShell-based applications in a consistent manner.
 
 ## Specification
 
@@ -23,9 +23,9 @@ The public PowerShell Core configuration API allows to use unified configuration
 - On Windows - Group Policy Objects (GPO), Group Policy Preferences (GPP) and settings files.
 - On Unix - settings files.
 
-The settings files have `Json` format.
+The settings files have `JSON` format.
 
-**Caution!** The settings files differ from `PowerShell Core` _profile_ files that are PowerShell scripts.
+**Warning** The settings files differ from `PowerShell Core` _profile_ files, which are PowerShell scripts run at startup.
 
 Configuration schemes allow to customize `PowerShell Core` in the most flexible way:
 
@@ -54,9 +54,19 @@ Scheme | Windows | Unix
 GPO -> Computer Policy | HKLM\Software\Policies\PowerShellCore | /etc/powershell.config.json
 GPO -> User Policy | HKCU\Software\Policies\PowerShellCore | See `Comment A` below
 File -> Computer-Wide | %ProgramFiles%/PowerShell/powershell.config.json | /opt/Microsoft/powershell/powershell.config.json
-File -> User-Wide | %APPDATA%/powershell.config.json | ~/powershell.config.json
-File -> Application-Wide | $apphome/powershell.config.json | $apphome/powershell.config.json
 File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json`
+File -> User-Wide | %APPDATA%/powershell.config.json | %XDG_CONFIG_HOME%/powershell.config.json
+File -> Application-Wide | $apphome/powershell.config.json | $apphome/powershell.config.json
+
+Defaults:
+
+`%APPDATA%` - `C:\Users\useraccount\AppData\Roaming`
+
+`%XDG_CONFIG_HOME%` - `HOME/.config`
+
+#### Parameter `-settingsfile`
+
+With `-settingsfile` parameter users can assign custom settings from the config file and overwrite user-wide and application-wide settings. Only users with elevated rights can overwrite computer-wide and user policy settings.
 
 #### Priorities for Regular settings in descending order
 
@@ -94,7 +104,7 @@ Software\PowerShellCore | - | -
 | | UpdatableHelp | DefaultSourcePath | String
 |Software\Policies\Microsoft\Windows\EventLog | ProtectedEventLogging | EnableProtectedEventLogging | DWORD
 
-#### Json file settings format
+#### JSON file settings format
 
 ```json
 {
@@ -149,7 +159,7 @@ We could redesign `-settingsfile` startup parameter. If we'd support configurati
 
 ### Comment A
 
-Mainly for Unix we'd add `Users` section to computer wide Json file (`/etc/powershell.config.json`) to allow administrators set policies and regular settings on user level base
+Mainly for Unix we'd add `Users` section to computer wide JSON file (`/etc/powershell.config.json`) to allow administrators set policies and regular settings on user level base
 
 ```json
 {
