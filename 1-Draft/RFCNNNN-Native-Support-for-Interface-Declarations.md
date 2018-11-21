@@ -9,7 +9,7 @@ Comments Due: 2019-01-04
 Plan to implement: Yes
 ---
 
-# Native Support for Interface Declarations
+# Native Support for .NET Interface Declarations
 
 The PowerShell Classes feature introduced in PowerShell 5.0 allows for type definitions at runtime. Since open sourcing PowerShell Core, one of the most oft-repeated feature request I've heard from community members is the ability to also declare and define interfaces at runtime, usually for ease of implementing common software design pattern such as the Builder pattern.
 
