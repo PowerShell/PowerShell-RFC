@@ -12,7 +12,7 @@ Plan to implement: Yes
 # New default rules in the VSCode Extension and a new "Aggressive Analysis mode" rules
 
 ## Context
-The VSCode extension provides an integration with PSScriptAnalyzer (referred to as PSSA going forward) to expose rule violations in a friendly way.
+The VSCode extension provides integration with PSScriptAnalyzer (referred to as PSSA going forward) to expose rule violations in a friendly way.
 These rule violations show up as green or red squiggles under the associated code that violates the rules.
 Here's an example:
 
