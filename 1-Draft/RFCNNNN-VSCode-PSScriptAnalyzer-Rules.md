@@ -20,7 +20,7 @@ Here's an example:
 
 Today,
 the VSCode extension only enables a subset of the default PSSA rules.
-This was done because some of the PSSA default rules can be opinionated and we don't want to intrude on user's that don't want too much chatter.
+This was done because some of the PSSA default rules can be opinionated and we don't want to intrude on users that don't want too many false negatives they don't agree with.
 If a user wanted to opt-in for more rules,
 they have a few options:
 
