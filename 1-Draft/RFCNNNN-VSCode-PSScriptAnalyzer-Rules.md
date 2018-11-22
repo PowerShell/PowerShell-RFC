@@ -31,7 +31,7 @@ command pallet action
 `PSScriptAnalyzerSettings.psd1`
 file with the rules you want and update your
 `powershell.scriptAnalysis.settingsPath`
-VSCode setting to point to that
+VSCode setting to point to that settings file.
 
 ## Problem
 
