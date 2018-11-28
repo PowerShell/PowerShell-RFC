@@ -41,7 +41,11 @@ Enabling experimental features automatically requires creating or updating a `po
 which is read at startup which affects all users or from `$HOME\Documents\PowerShell\powershell.config.json` on Windows
 and from `$HOME/.config/powershell/powershell.config.json` on Linux and macOS per user.
 
-This is existing behavior and will not be changed as part of this RFC.
+Experimental features are currently not being read from the user config and this RFC will enable reading
+of the user config in addition to the system config.
+In the case where the user config exists, it will take precedence over the system config for experimental features
+in that the system config is not read for experimental features.
+System config is not policy so this should be acceptable and expected.
 
 ### Enable and Disable cmdlets
 
@@ -72,3 +76,25 @@ In addition to the warning message that a restart is required after changing exp
 the `Enabled` property could be changed to an enum instead of a boolean: True, False, Pending.
 However, since experimental features is expected to be used by more advanced users,
 this seems unnecessary.
+
+Alternatively, we can add a `RestartRequired` property to indicate an enabled feature is pending.
+
+### Features that were previously Experimental
+
+In the case where an Experimental Feature no longer experimental (whether accepted or rejected),
+the config file may still have that feature listed.
+We can add a `State` property that has enum values: Available, NotAvailable.
+This `State` can also convey the `RestartRequired` state.
+If this becomes a problem in the future, we can have cmdlets to help clean-up non-valid settings in the
+configuration (which will be more than just experimental features).
+Since this is additive, this is currently outside the scope of this RFC.
+
+### PowerShell instance specific configuration
+
+The system (AllUsers) configuration is in `$PSHOME` and specific to that instance of PowerShell.
+The user config is global to all instances of PowerShell which can create problems.
+For experimental features, this is not a big issue as experimental features listed to
+be enabled in the config file that don't exist are silently ignored.
+However, other configuration that one may want to apply to a preview release and not a
+stable release cannot be applied except for AllUsers currently.
+This should be addressed in a separate configuration RFC.
