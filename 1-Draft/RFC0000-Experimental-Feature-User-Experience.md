@@ -67,6 +67,8 @@ If `-Scope` is `AllUsers`, it will create or update `$PSHOME\powershell.config.j
 Experimental features are read and enabled at PowerShell startup, so a warning message will be provided informing the user:
 > Experimental feature changes will only be applied after restarting PowerShell.
 
+Upon success, there is no output other than the warning message.
+
 ## Alternate Proposals and Considerations
 
 ### Enabled property
