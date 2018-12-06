@@ -5,7 +5,7 @@ Status: Draft
 SupercededBy: 
 Version: 6.?
 Area: Hosting
-Comments Due: 31/08/2018
+Comments Due: 01/03/2019
 Plan to implement: Yes
 ---
 
