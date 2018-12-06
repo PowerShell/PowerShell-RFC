@@ -1,0 +1,267 @@
+Trevor Sullivan 9:31 AM: 
+What happened to the attendee list in Skype for Business?
+Trevor Sullivan 9:32 AM: 
+Oh there's a different tab now.
+Prasoon(kvprasoon) 9:32 AM: 
+@Trevor ?
+Edwin Young 9:32 AM: 
+all looks ok here
+Trevor Sullivan 9:32 AM: 
+Mac version of S4B changed
+Trevor Sullivan 9:33 AM: 
+AWS Lambda supports PowerShell Core now :)
+Friedrich Weinmann 9:33 AM: 
+The string cmdlet RFC
+Joel Bennett 9:34 AM: 
+working for me
+Edin Zbanic 9:34 AM: 
+Yes
+Trevor Sullivan 9:34 AM: 
+https://aws.amazon.com/blogs/developer/announcing-lambda-support-for-powershell-core/
+Keith Hill 9:34 AM: 
+yes
+Ackerman, Sean 9:34 AM: 
+yes
+Friedrich Weinmann 9:34 AM: 
+see just fine :)
+Friedrich Weinmann 9:35 AM: 
+yes
+Staffan (PowerCode) 9:35 AM: 
+The RFC is bigger in scope than Join-String
+Trevor Sullivan 9:35 AM: 
+I know there's been some asks about PowerShell Core on Amazon Linux ... is there still a blocker on that?
+Ackerman, Sean 9:36 AM: 
+yes
+Anderson, Drew 9:36 AM: 
+yes
+Keith Hill 9:37 AM: 
+no
+Tyler Leonhardt (POWERSHELL) 9:38 AM: 
+👋
+Ackerman, Sean 9:38 AM: 
+yep
+Darwin Sanoy 9:39 AM: 
+install-powershell.sh should be able to install on Amazon Linux
+Trevor Sullivan 9:39 AM: 
+Upgrade to 6.1 went smoothly. Also updated the Homebrew for Mac package.
+Keith Hill 9:39 AM: 
+Which list is smaller? Modules that work w/6.1 or those that don't?
+Trevor Sullivan 9:39 AM: 
+Cool, thanks Darwin.
+Trevor Sullivan 9:40 AM: 
+I'm unfortunately not tied in with regular development of PowerShell Core ... do we have any unit tests around chunked HTTP responses? I know this is rather nuanced, but ran into it last night. https://github.com/PowerShell/PowerShell/issues/7824
+Ryan Yates 9:45 AM: 
+docathons for hacktoberfest???
+Steve Lee (POWERSHELL) 9:45 AM: 
+(y)
+Tyler Leonhardt (POWERSHELL) 9:46 AM: 
+yesss
+Trevor Sullivan 9:46 AM: 
+Good job, Mark!
+Staffan (PowerCode) 9:46 AM: 
+What! That's silly1
+Tyler Leonhardt (POWERSHELL) 9:46 AM: 
+Mark is the true PowerShell Standard ;)
+Staffan (PowerCode) 9:48 AM: 
+Can we add some templates for help? Or does it already exist?
+Staffan (PowerCode) 9:48 AM: 
+Sure, but I was asked to write the docs for join-string...
+Staffan (PowerCode) 9:49 AM: 
+:D
+MaxTrinidad(PSMVP) 9:50 AM: 
+Out-Gridview alternatives!! :)
+Friedrich Weinmann 9:51 AM: 
+Enumerations?
+MaxTrinidad(PSMVP) 9:51 AM: 
+Updated SDK!!
+Staffan (PowerCode) 9:52 AM: 
+Even more promising is looking at derived PSObjects.
+Edwin Young 9:54 AM: 
+If you're going to Ignite 2018 this is a handy primer on the powershell content. https://cda.ms/FR 
+Michael Lombardi 9:54 AM: 
+\o/
+Staffan (PowerCode) 9:55 AM: 
+Can you gauge the quality of all these in some way? Are they tested?
+MaxTrinidad(PSMVP) 9:56 AM: 
+Cool!!
+Prasoon(kvprasoon) 9:58 AM: 
+S 2019 with DSC v1.0, ??, isn't it the same as LCM version ?
+if so t should be 2.0
+MaxTrinidad(PSMVP) 10:00 AM: 
+Can it support SQL Server backend on Linux? :P
+Joel Bennett 10:00 AM: 
+publishing
+Edwin Young 10:01 AM: 
+you need 1.6.7+ to publish to new gallery 
+Friedrich Weinmann 10:01 AM: 
+not really for me
+Edwin Young 10:01 AM: 
+not 2.0.0
+Keith Hill 10:02 AM: 
+Yes, very highly desired feature!
+Friedrich Weinmann 10:02 AM: 
+Been fixing that for years with:
+$PSDefaultParameterValue
+Will not have any impact whatsoever for me :)
+Joel Bennett 10:02 AM: 
+The major feature in 2.0 is that it falls back to user scope installs automatically when run not-elevated
+Joel Bennett 10:03 AM: 
+It's not a HUGE breaking change
+Joel Bennett 10:03 AM: 
+But it's a change.
+Joel Bennett 10:03 AM: 
+In fact, maybe it's not a "breaking" change?
+Keith Hill 10:03 AM: 
+Yeah, the pkgmgnt/psget update process is a bit of a pain.
+Brandon Lundt 10:03 AM: 
+Whatever it would break would be worth it to me.
+Prasoon(kvprasoon) 10:04 AM: 
+Agree with @joel, its not hug, but adds lots of benfit
+Joel Bennett 10:04 AM: 
+The only way it affects CI is if someone is *testing* the fact that it fails?
+Ryan Yates 10:04 AM: 
+Personally I would like to see it in there in a servicing release as ideally I would have liked to see it in the 6.1 release
+Darwin Sanoy 10:04 AM: 
+Any status on an official MS Chocolatey feed?
+Keith Hill 10:04 AM: 
+If admin I thought it used global scope?
+Keith Hill 10:05 AM: 
+Ah, perhaps that was on Windows PS.
+Joel Bennett 10:06 AM: 
+Yeah, Keith, that's what I thought ;-)
+Staffan (PowerCode) 10:06 AM: 
+Related: will Install-Module be fixed? So that -Force will work without the -SkipPublisher -AllowClobber -AcceptLicense -AllowPrerelease madness?
+Ryan Yates 10:06 AM: 
+but it needs to be in an Admin shell no
+Joey Aiello 10:07 AM: 
+@Ryan: yes
+Joel Bennett 10:07 AM: 
+@Staffan: not really
+Darwin Sanoy 10:07 AM: 
+How about a new switch "-JustDoItDammit"
+Ryan Yates 10:07 AM: 
+No more switches like ^^
+Brandon Lundt 10:07 AM: 
+-SrslyYesPlease ?
+Keith Hill 10:08 AM: 
+How about a "-DoItDamnIt" param?
+Ryan Yates 10:08 AM: 
+No more switches like ^^ please
+Staffan (PowerCode) 10:08 AM: 
+-Force should, according do JS, mean 'Just F*$#ing do it'
+Joel Bennett 10:09 AM: 
+To note taker, correction: "in PS Core it defaults to `CurrentUser` irrespective of whether you're ELEVATED"
+Keith Hill 10:09 AM: 
+At the very least, it should exclude the clobber warnings on installing/updating the built-in pckgmngt/psget modules.
+Joey Aiello 10:09 AM: 
+@Keith: THAT we can fix. we need to ship hardcoded PSGet manifests in the "inbox" modules for PS Core
+Keith Hill 10:10 AM: 
++1
+MaxTrinidad(PSMVP) 10:10 AM: 
++1
+Friedrich Weinmann 10:10 AM: 
+I use -Force -SkipPublisherCheck on each dependency install on Azure DevOps. Always.
+Keith Hill 10:11 AM: 
+You want it to behave more like npm install?
+MaxTrinidad(PSMVP) 10:11 AM: 
+It creates dups modules. Update doesn't work.
+Ryan Yates 10:11 AM: 
+it *SHOULD* if the dependency chain is correctly understood in the module manifest
+Ryan Yates 10:12 AM: 
+but in PSGet its isnt
+Keith Hill 10:12 AM: 
+Oh but without the constant (npm) pkg cache corruption issues :-)
+Friedrich Weinmann 10:12 AM: 
+'-Ensure'? I want 'Ensure' as approved Verb ;)
+Felix Becker 10:12 AM: 
+Question: Does PowerShellGet support dependencies? I.e. can I declare dependencies on other modules in a module manifest, and have powershellget install them all?
+Ryan Yates 10:12 AM: 
+@felix look at AzureRM module
+Edwin Young 10:12 AM: 
+@felix, yes\
+Ryan Yates 10:12 AM: 
+that shows dependancies
+Ryan Yates 10:13 AM: 
+but one problem is downloading AzureRM.Profile for each dependant module in the chain of AzureRM module
+Ryan Yates 10:14 AM: 
+or did when I looked into this ages ago
+Staffan (PowerCode) 10:14 AM: 
+I use that a lot, but it breaks down if different module need different versions of a dependent module.
+Friedrich Weinmann 10:14 AM: 
+RequiredVersion is a pest
+Edwin Young 10:14 AM: 
+@ryan, we should only download a dependency once
+Joey Aiello 10:14 AM: 
+@Staffan: ^ that's what I was trying to say, just can't articulate the specifics
+Felix Becker 10:16 AM: 
+I’m spoiled by node/npm
+Ryan Yates 10:16 AM: 
+Why a new repo?
+Tyler Leonhardt (POWERSHELL) 10:16 AM: 
+node/npm has a nice hybrid model of local & global dependencies/modules/utilities
+Ryan Yates 10:17 AM: 
+Is this for the choco package of pscore on the community feed? or wider that just PSCore
+Joel Bennett 10:17 AM: 
+@Staffan: yeah, so Install-Module fail in that instance, but Import-Module might not (if it's not a binary module)? Guess that dependencies need to be handled with -Force 😣
+Darwin Sanoy 10:18 AM: 
+Will source install binaries always be embedded in Microsoft Chocolatey packages?
+Darwin Sanoy 10:18 AM: 
+That would rock for curation.
+Ryan Yates 10:18 AM: 
+That makes more sense. I think that was what I was missing elsewhere
+Darwin Sanoy 10:18 AM: 
+I've chocolatey packages SQL server - so size isn't a challenge.
+Staffan (PowerCode) 10:20 AM: 
+For the Join-String cmdlet, I think the only outstanding issue is whether it should support wildcards on properties to join.
+I.E. 
+get-childitem | Join-String *Time*
+
+I haven't implemented it yet, as I’m not convinced of the usefulness of it. It adds complexity and I’m not convinced it is worth it.
+
+Is it valuable? If so when? 
+Seems like it would need a different delimiter between properties (as opposed to between records)
+Ryan Yates 10:20 AM: 
+That makes more sense. I think that was what I was missing elsewhere and would do you think it likely would include things like VSCode VSEnterprise installers etc?
+Joey Aiello 10:21 AM: 
+@Ryan: that's the idea, yes, but it's unclear as to whether it's feasible yet
+Friedrich Weinmann 10:23 AM: 
+a pleasure
+Staffan (PowerCode) 10:24 AM: 
+I was thinking conceptual complexity more than implementation
+Darwin Sanoy 10:24 AM: 
+FYI - unless it has been fixed, chocolatey packages that wrap .MSU's can't run over remoting.  FYI - .NET runtime EXE installers do this.
+Darwin Sanoy 10:24 AM: 
+It is an .MSU over remoting problem - not chocolatey
+Felix Becker 10:26 AM: 
+If I have a question, can I just take over audio?
+Joey Aiello 10:27 AM: 
+stevel-msft and travisez123
+Prasoon(kvprasoon) 10:29 AM: 
+There are a bunch of Resolution-Duplicate issues to be closed.
+Prasoon(kvprasoon) 10:30 AM: 
+basically Resolution-* issues
+Ryan Yates 10:31 AM: 
+RE stalebot
+Tyler Leonhardt (POWERSHELL) 10:31 AM: 
++1 :)
+Ackerman, Sean 10:31 AM: 
+yeah have a whole team going
+Friedrich Weinmann 10:31 AM: 
+:'(
+Joey Aiello 10:31 AM: 
+https://aka.ms/PowerShellAtIgnite
+Prasoon(kvprasoon) 10:32 AM: 
+not f0r ignite,
+any for psconf.asia ?
+Ryan Yates 10:32 AM: 
+I'm not really a fan on it as it can hide long running issues like 1979
+Friedrich Weinmann 10:32 AM: 
+Will be at PSConfAsia
+Ryan Yates 10:32 AM: 
+Issue 1979 that is
+MaxTrinidad(PSMVP) 10:32 AM: 
+Woohoo! Me
+Prasoon(kvprasoon) 10:33 AM: 
+$Thankyou all !!!!
+MaxTrinidad(PSMVP) 10:33 AM: 
+Thanks Everyone!! Bye!!
