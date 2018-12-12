@@ -4,6 +4,7 @@ Author: Jason Shirk
 Status: Draft
 Area: Splatting
 Comments Due: 3/31/2016
+Edits: Joey Aiello
 ---
 
 # Generalized Splatting
@@ -47,7 +48,7 @@ $addTypeParams = @{
     MemberType = 'NoteProperty'
     Value = 42
 }
-Update-TypeData @addTypeParams 
+Update-TypeData @addTypeParams
 ```
 
 This works, but feels a bit messy because of the need for a variable,
@@ -60,7 +61,7 @@ $PSBoundParameters.Remove('SomeExtraParam')
 Command @PSBoundParameters
 ```  
 
-This proposal suggesst a syntax that improves this scenario as well.
+This proposal suggests a syntax that improves this scenario as well.
 
 ## Specification
 
@@ -118,7 +119,7 @@ Get-ChildItem @$myArgs
 ```
 
 The above example would fail with a "parameter not found" because of the 'ExtraStuff' key.
-Here is a possible syntax to allow the above without resulting in an error: 
+Here is a possible syntax to allow the above without resulting in an error:
 
 ```PowerShell
 $myArgs = @{ Path = $pwd; ExtraStuff = 1234 }
@@ -129,6 +130,15 @@ We can think of '@?' as the 'relaxed splatting' operator.
 If '@' is the splatting operator,
 adding the '?' is suggestive of being more permissive,
 much like the C# '?.' member access operator.
+
+If parameter values are passed explicitly in addition to the relaxed splatting operator,
+those values would take precedence over anything in the splatted hashtable:
+
+```PowerShell
+$myArgs = @{ Path = C:\foo; ExtraStuff = 1234 }
+Get-ChildItem @?$myArgs -Path C:\bar
+# Lists the children of C:\bar
+```
 
 ### Splatting in method invocations
 
@@ -160,7 +170,16 @@ and via splatting in the same invocation:
 # Must be an error, parse time or runtime, because startIndex
 # is specified positionally and via splatting.
 $subStringArgs = @{startIndex = 2}
-$str.SubString(2, @$subStringArgs)
+$str.SubString(3, @$subStringArgs)
+```
+
+Using the relaxed splatting operator, the `3` value will override the value in `$subStringArgs`:
+
+```PowerShell
+# This will not result in an error,
+# and the substring will be of length 3.
+$subStringArgs = @{startIndex = 2}
+$str.SubString(3, @?$subStringArgs)
 ```
 
 Multiple splatted arguments are not allowed:
@@ -177,55 +196,6 @@ The splatted argument must be last.
 $str.SubString(@@{length=2}, 2)
 ```
 
-### Splatting in switch cases
-
-It can be awkward to match multiple conditions with a single switch statement.
-For example:
-
-```PowerShell
-switch ($color) {
-  { $_ -eq 'Red' -or $_ -eq 'Blue' -or $_ -eq 'Green' } { $true }
-  default { $false }
-}
-```
-
-With splatting, this can be simplified:
-
-```PowerShell
-switch ($color) {
-  @@('Red','Blue','Green') { $true }
-  default { $false }
-}
-```
-
-### Modifying hashtables for splatting
-
-Sometimes it is useful to provide a 'slice' of a hashtable,
-e.g. you want to remove or include specific keys.
-The Add/Remove methods on a hashtable work, but can be verbose.
-This proposal suggests overloading the '+' and '-' operators to provide a hashtable 'slice':
-
-```PowerShell
-Get-ChildItem @$($PSBoundParameters - 'Force') # Splat all parameters but 'Force'
-Get-ChildItem @$($PSBoundParameters - 'Force','WhatIf') # Splat all parameters but 'Force' and 'WhatIf'
-Get-ChildItem @$($PSBOundParameters + 'LiteralPath','Path') # Only splat 'LiteralPath' and 'Path'
-```
-
-Today, PowerShell supports "adding" two hashtables with the '+' operator,
-the result is a new hashtable with all of the key value pairs from both hashtables.
-It is an error for a key to be specified in both operands.
-
-This proposal adds semantics for adding and subtracting other values.
-If the value is enumerable, the effect is to treat each value in the collection as a key,
-otherwise the value is treated as a single key.
-The result is always a new hashtable,
-the left hashtable operand is unmodified.
-
-When using '+', the result will only include keys found in the right hand side.
-When using '-', the result will exclude all keys from the right hand side.
-
-In either case,
-it is not an error to specify a key in the right hand side operand that is not present in the left hand side.  
 
 ## Alternate Proposals and Considerations
 
@@ -249,3 +219,35 @@ it's important to understand how a hash literal is to be used.
 The sigil makes it clear a hash literal is really specifying command arguments.
 Furthermore, the sigil simplifies the analysis required for good parameter completion,
 and does not require a complete expression to begin providing parameter name completion.
+
+### Modifying hashtables for splatting
+
+> The following features could be useful in the scenarios described above,
+> but they should be written about in more detail in another RFC.
+
+Sometimes it is useful to provide a 'slice' of a hashtable,
+e.g. you want to remove or include specific keys.
+The Add/Remove methods on a hashtable work, but can be verbose.
+This proposal suggests overloading the '+' and '-' operators to provide a hashtable 'slice':
+
+```PowerShell
+Get-ChildItem @$($PSBoundParameters - 'Force') # Splat all parameters but 'Force'
+Get-ChildItem @$($PSBoundParameters - 'Force','WhatIf') # Splat all parameters but 'Force' and 'WhatIf'
+Get-ChildItem @$($PSBoundParameters + 'LiteralPath','Path') # Only splat 'LiteralPath' and 'Path'
+```
+
+Today, PowerShell supports "adding" two hashtables with the '+' operator,
+the result is a new hashtable with all of the key value pairs from both hashtables.
+It is an error for a key to be specified in both operands.
+
+This proposal adds semantics for adding and subtracting other values.
+If the value is enumerable, the effect is to treat each value in the collection as a key,
+otherwise the value is treated as a single key.
+The result is always a new hashtable,
+the left hashtable operand is unmodified.
+
+When using '+', the result will only include keys found in the right hand side.
+When using '-', the result will exclude all keys from the right hand side.
+
+In either case,
+it is not an error to specify a key in the right hand side operand that is not present in the left hand side.  
