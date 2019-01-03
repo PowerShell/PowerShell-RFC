@@ -1,0 +1,262 @@
+Joel Francis 9:32 AM: 
+Hi PS folks!!
+Adam Murray 9:32 AM: 
+Yep
+Nichols, Colin 9:32 AM: 
+yep
+Joel Francis 9:32 AM: 
+We hear yo
+Mike O'Neill 9:32 AM: 
+y
+Kohls, Daniel 9:32 AM: 
+Yes
+Kohls, Daniel 9:32 AM: 
+Sounds good
+Joel Francis 9:32 AM: 
+It sounds pretty good
+Roberth Strand 9:32 AM: 
+Sounds like persons talking
+Mike O'Neill 9:32 AM: 
+a little off
+Adil Zia 9:32 AM: 
+Terminators
+Mike O'Neill 9:32 AM: 
+but ok
+Thomas Rayner 9:33 AM: 
+Off to a great start :D
+Steve Lee (POWERSHELL) 9:33 AM: 
+almost ready
+Mike O'Neill 9:34 AM: 
+PowerShell can fix it!
+Francois-Xavier Cat 9:34 AM: 
+Hi
+Mike O'Neill 9:34 AM: 
+that's better
+Hager Constantin 9:34 AM: 
+yes
+Joel Francis 9:34 AM: 
+Yup!
+Mike O'Neill 9:35 AM: 
+and a screen
+Hager Constantin 9:35 AM: 
+no screen
+Mike O'Neill 9:35 AM: 
+now no screen
+Joel Francis 9:35 AM: 
+So full there's no room for the camera
+Joel Francis 9:35 AM: 
+Also screen is still black if it's not supposed to be
+Joel Francis 9:36 AM: 
+Good!
+Kirk Munro 9:42 AM: 
+Any comments on when the PowerShell Module folder location will be moved out of OneDrive?
+Mike O'Neill 9:43 AM: 
+Look at what's happening in our cadence of OS and app releases...they are slowing them down
+Christoph Bergmeister 9:43 AM: 
+having an equivalen of a version with LTS support would be great
+Thomas Rayner 9:43 AM: 
+gotta go to scrum, see you all in 15 min :P
+Mike O'Neill 9:44 AM: 
+Windows
+Mike O'Neill 9:44 AM: 
+Office on premises
+Joel Francis 9:44 AM: 
+Nooo Tom come baack
+Joel Francis 9:44 AM: 
+:P
+Christoph Bergmeister 9:44 AM: 
+it takes a while to develop, test and ship, 6 months is not 'enterprise friendly'
+Mike O'Neill 9:44 AM: 
+think of customers with 100K plus seats
+Mike O'Neill 9:44 AM: 
+they are moving slower
+Mike O'Neill 9:45 AM: 
+yes...many of the 'smaller' customers can keep up
+Mullick, Ayan 9:45 AM: 
+Will the PowerShell core version updates be included in Windows Updates?
+Mullick, Ayan 9:48 AM: 
+ok. Great. Thanks
+Mullick, Ayan 9:49 AM: 
+Hemant mentioned on one of the Ignite sessions that VSC would eventually replace PS ISE. Is there anywhere on GitHub where one could point out the ISE features one misses in VSC?
+Adil Zia 9:49 AM: 
+I like powershell updating automatically via some mechanism
+Michael B Smith 9:49 AM: 
+requires 1809 or above, doesn't it?
+Darwin Sanoy 9:49 AM: 
+Yet another packager command line to figure out :(
+Adil Zia 9:49 AM: 
+if that happens
+Michael B Smith 9:49 AM: 
+MSIX that is
+Joey Aiello 9:49 AM: 
+https://github.com/powershell/vscode-powershell/issues?q=is%3Aopen+is%3Aissue+label%3AISE-Compatibility
+Adil Zia 9:50 AM: 
+AM I GETTING BACK MY OUT_GRIDVBIEW IN VSCODE!!?
+Steve Lee (POWERSHELL) 9:50 AM: 
+@michael, I haven’t looked closely at MSIX myself yet. Travis on my team is the expert but he’s on vacation right now. If that is true, we’ll have to figure out a story for older Windows
+Mullick, Ayan 9:51 AM: 
+ok. Thanks (y)
+Joey Aiello 9:51 AM: 
+https://github.com/PowerShell/vscode-powershell/blob/master/docs/ise_compatibility.md
+Keith Hill 9:51 AM: 
+If you're using PS 5.x in the PSIC then Out-GridView still works. 
+Michael B Smith 9:52 AM: 
+yes, v1809 https://www.microsoft.com/en-us/p/msix-packaging-tool/9n5lw3jbcxkf?activetab=pivot:overviewtab
+Joel Francis 9:55 AM: 
+Someone in the PS Slack has a semi-working OSX ogv
+Joel Francis 9:55 AM: 
+It looks fun
+Adam Murray 9:55 AM: 
+Joel posted this for out-gridview - https://t.co/dlhBkKfP1N 
+Joel Francis 9:56 AM: 
+Ah I remember that
+Joel Francis 9:56 AM: 
+Think it was @sifb or someone else who got a GUI version of it in osx as well 
+Joel Francis 9:56 AM: 
+Yeah that's the other Joel :P
+Michael B Smith 9:59 AM: 
+what did you do about $returns
+Michael B Smith 10:00 AM: 
+<raise hand>
+Joel Francis 10:04 AM: 
+Consistency with PowerShell behaviour should be considered imo
+Michael B Smith 10:04 AM: 
+there is an RFC on it :-)
+Michael B Smith 10:05 AM: 
+i thought there was
+Michael B Smith 10:05 AM: 
+ok, sorry.
+Joey Aiello 10:05 AM: 
+https://github.com/Azure/azure-functions-powershell-worker/issues/82
+Michael B Smith 10:08 AM: 
+i want to complain about COM objects. but that's not PS core. :-)
+Thomas Rayner 10:08 AM: 
+I think I missed the announcement if there was one. Who owns PSGallery stuff now?
+Thomas Rayner 10:08 AM: 
+And does that person own the powershellget module?
+Keith Hill 10:08 AM: 
+Add this to your profile: Set-Alias nano 'C:\Program Files\Git\usr\bin\nano.exe'
+Set-Alias vim 'C:\Program Files\Git\usr\bin\vim.exe'
+Sydney Smith 10:09 AM: 
+I own both PSGallery and the PSget module now
+Thomas Rayner 10:09 AM: 
+Good to know. Thanks, Sydney :)
+Joel Francis 10:09 AM: 
+Let's just make another client editor lol
+Keith Hill 10:09 AM: 
+I'd prefer VIM over Emacs. :-)
+Joel Francis 10:09 AM: 
+Thatll go well
+Adil Zia 10:09 AM: 
+So maybe cuz i havent done it in core... but how would you like ..manage and edit office files...like say excel....in core... cuz in 5x it was com...and that..was and is horrendous
+Joel Francis 10:09 AM: 
+*cli
+Thomas Rayner 10:10 AM: 
+Collect telemetry on noobs trying to exit vim and use it for a random string generator
+Joel Francis 10:10 AM: 
+Hahaha
+Keith Hill 10:10 AM: 
+Nano and VIM comes with Git
+Joel Francis 10:11 AM: 
+No they come with
+Keith Hill 10:11 AM: 
+Yes it always come with it
+Joel Francis 10:11 AM: 
+You have a toggleable setting
+Keith Hill 10:11 AM: 
+So you use an alias
+Keith Hill 10:12 AM: 
+usr/bin
+Joel Francis 10:12 AM: 
+And you can choose to have it added to the path on install
+Joel Francis 10:12 AM: 
+There is a nano
+Keith Hill 10:12 AM: 
+Set-Alias vim 'C:\Program Files\Git\usr\bin\vim.exe'
+Michael B Smith 10:12 AM: 
+and if you have VIM you have EX :-)
+Joel Francis 10:13 AM: 
+Is it too late in the year to ask after lengthy PRs and should I wait till next year? :D
+Andrew Bradley 10:13 AM: 
+In bash, `set -e` is common to auto-fail every time an external process returns a non-zero exit code. Is there a way to implement something similar in PS? Like hooking into process invocation? I've tried using $ExecutionContext.InvokeCommand.(post-command-resolution event) but this isn't scoped to my modules so it's leaky
+
+Broadly speaking, unix interop still feels inconvenient because of quirks like this, would be awesome if we could implement better fixes as modules
+Joel Francis 10:13 AM: 
+Yeah, no I figured haha. You guys should be tidying up by now haha
+Joel Francis 10:13 AM: 
+Cheers
+Darwin Sanoy 10:16 AM: 
+Trap statement
+Joey Aiello 10:16 AM: 
+https://github.com/PowerShell/PowerShell-RFC/pull/88
+Keith Hill 10:16 AM: 
+Any chance the PS build.psm1 function Start-NativeExecution could be made a built-in function?
+Darwin Sanoy 10:17 AM: 
+This Windows Tar is not packaged anywhere?
+Darwin Sanoy 10:17 AM: 
+CIS CAT PRO portable only ships as .tar.gz for windows
+Michael B Smith 10:17 AM: 
+robocopy and psexec were discussed i hope?
+Michael B Smith 10:17 AM: 
+i haven't read that RFC yet
+Keith Hill 10:17 AM: 
+We have copied it and use it all the time in build/test scripts.
+Keith Hill 10:18 AM: 
+Got a few funny looks when our builds were passing but we had obvious native exe failures in our build log.
+Andrew Bradley 10:21 AM: 
+Just as an aside, no need to discuss further:
+To enforce exit code checking globally, I've done $ExecutionContext.InvokeCommand.PostCommandLookupAction = {<# script block that replaces all native commands with script blocks that check $LASTEXITCODE #> but it's a total hack
+Darwin Sanoy 10:21 AM: 
+http://libarchive.org/downloads/
+Adil Zia 10:21 AM: 
+what replaced the functionality of COM in core... as horrible as it was.... I dont know what replaced the functionality of say...excel automation and report generation or editing.... just curious..I apologize for my ignorance...
+Keith Hill 10:22 AM: 
+Yup, our version of Start-NativeExecution allows you to pass in an array of success codes.
+Adil Zia 10:23 AM: 
+thanks
+Darwin Sanoy 10:24 AM: 
+So this tar tool ships in Windows, is it considered the Official version then?
+Darwin Sanoy 10:24 AM: 
+I see lotsa other nasty ways of getting tar on windows
+Christoph Bergmeister 10:25 AM: 
+one note about COM in PSCore: WPS uses MTA but PSCore uses STA
+Steve Lee (POWERSHELL) 10:25 AM: 
+Keith, maybe you could pkg that as a module on psgallery :)
+Michael B Smith 10:25 AM: 
+where.exe works in Windows since Server 2003
+Keith Hill 10:25 AM: 
++1
+Christoph Bergmeister 10:26 AM: 
+sorry, the other way around
+Joel Francis 10:26 AM: 
+What that means should be documented somewhere haha
+Joel Francis 10:26 AM: 
+Like on the page where you list the parameter options for powershell
+Joel Francis 10:27 AM: 
+Hahahahaha
+Christoph Bergmeister 10:27 AM: 
+we had a perf impact on WPS because [Management.Automation.PowerShell]::Create() was using MTA by default and not STA as one would expect
+Joel Francis 10:27 AM: 
+Can of worms lol
+Christoph Bergmeister 10:28 AM: 
+more details are documented/discussed here: https://github.com/PowerShell/PowerShell/issues/6908
+Hager Constantin 10:28 AM: 
+anything new on intellicode support for PowerShell?
+Michael B Smith 10:30 AM: 
+thanks for the call!
+Joel Francis 10:30 AM: 
+Have a good and safe Xmas y'all
+Adam Murray 10:30 AM: 
+Cya
+Keith Hill 10:30 AM: 
+Thanks!
+Adil Zia 10:30 AM: 
+goo holidays
+Hager Constantin 10:30 AM: 
+bye
+Keith Hill 10:30 AM: 
+Have a good one!
+Kirk Munro 10:30 AM: 
+Merry Christmas everyone.
+Christoph Bergmeister 10:30 AM: 
+bye, happy xmas
