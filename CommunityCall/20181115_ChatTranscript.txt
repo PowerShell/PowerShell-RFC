@@ -1,0 +1,180 @@
+Kirk Munro 9:39 AM: 
+Muted Joey = Sad Joey
+Joel Francis 9:40 AM: 
+Not this meme again! :D 
+Romero126 9:42 AM: 
+Good Morning!
+Joel Francis 9:42 AM: 
+Hiya rom!
+Paul DiMaggio 9:45 AM: 
+WOOO
+Joel Francis 9:49 AM: 
+Fyi fellas, looks like the dial-in conference ID has changed / expired / something. Fellow on the #powershell IRC isn't able to get in from the UK dial in number with the currently published ID: 4334578
+Mark Kraus 9:51 AM: 
+progress!
+Keith Hill 9:51 AM: 
+Is there a Set-ExperimentalFeature or do you have to munge a config json file?
+Kirk Munro 9:51 AM: 
+Glad to hear that RFCs are no longer a place where ideas go to die.
+Steve Lee (POWERSHELL) 9:52 AM: 
+@keith, currently you have to hand craft the config json file. I’m hoping cmdets show up in preview3 to make this easy
+Keith Hill 9:53 AM: 
+Guess Enable-ExperimentalFeature would be a better name.
+Joel Francis 9:53 AM: 
+Just use discord lol
+Domansky, Mark 9:53 AM: 
+Move to Teams: +1, works for my Office Hours weekly call.
+Steve Lee (POWERSHELL) 9:53 AM: 
+@keith, look at my RFC https://github.com/PowerShell/PowerShell-RFC/pull/148/files
+Joel Francis 9:53 AM: 
+;)
+Keith Hill 9:54 AM: 
+(y)
+Joel Francis 9:54 AM: 
+My wife says hi btw (heart) 
+Kirk Munro 9:54 AM: 
+General feedback: the RFC process feels slow (not just because it's been low priority...the process itself seems designed to be quite slow).
+Ryan Yates 9:55 AM: 
+Can you show more of the notes as I joined a little late
+Joel Francis 9:55 AM: 
+Indeed. Should I be looking to write an RFC for proposed behaviours for pr#7993?
+Keith Hill 9:56 AM: 
+Some changes should be a bit slow particularly to avoid breaking changes. Yeah, what Joey is saying now ...
+Mark Kraus 9:56 AM: 
+joey/steve: I added https://aka.ms/PSCommunityCall and set you 2 as owners
+Steve Lee (POWERSHELL) 9:57 AM: 
+Thanks @mark!
+Joel Francis 10:01 AM: 
+(y) sounds good
+Ryan Yates 10:01 AM: 
+Yup
+PowerCode 10:01 AM: 
+I wonder abit about your 
+poshizzle 10:01 AM: 
+(y)
+Ryan Yates 10:02 AM: 
+some debt??? Just some.......:O
+PowerCode 10:02 AM: 
+I'd like to hear your views on major breaking changes. It that an option, if it would enable substantial performance improvements? 
+Ryan Yates 10:08 AM: 
+Thanks @Steve :-)
+Paul DiMaggio 10:09 AM: 
+really like that
+Ryan Yates 10:10 AM: 
+So Tab Completion based on the Capitilsation in the Function/cmdlet names
+Mark Kraus 10:10 AM: 
+Now it is time to start chosing cmdlet names based on fun abbreviations...
+Romero126 10:10 AM: 
+I hear Daxxion is working on a security module. is there any public details on that?
+Bergmeister, Christoph (Reigate) 10:10 AM: 
+:)
+Ryan Yates 10:11 AM: 
+Hey Sidney 
+Ryan Yates 10:11 AM: 
+(wave)(wave)(wave)
+Ryan Yates 10:12 AM: 
+GH Projects using GH Labels will work well
+Keith Hill 10:13 AM: 
+seeminglyscience
+Bergmeister, Christoph (Reigate) 10:13 AM: 
+no, @seeminglyscience
+Aleksandar 10:13 AM: 
+any plans for bringing back Out-GridView and some other GUI-related commands?
+Kirk Munro 10:13 AM: 
+Sidney, are you working towards making PowerShellGet much easier to use (remove the annoying errors, fix the update all scenario, fix the performance, etc.). Also, FxCop-like support for binary modules, and PSModuleAnalyzer.
+Kirk Munro 10:14 AM: 
+(y)
+Edwin Young 10:15 AM: 
+I have wondered about binary modules too. Do we see those as in scope for PSSA? The whole thing is focused around powershell AST today...
+Steve Lee (POWERSHELL) 10:15 AM: 
+@edwin, I think it’s a different tool
+Ryan Yates 10:16 AM: 
+Sounds good to me :-)
+Edwin Young 10:16 AM: 
+i'm used to it
+Aleksandar 10:17 AM: 
+PowerShell Core support in Azure Automation service?
+Keith Hill 10:17 AM: 
+Seems like you'd need a Rosyln-based code analyzer for binary module development. Does the team have such a beast for internal use?
+Joey Aiello 10:17 AM: 
+Aiello
+Joey Aiello 10:17 AM: 
+Joey
+Ryan Yates 10:19 AM: 
+the runtime in functions will be v6 yes?
+Steve Lee (POWERSHELL) 10:19 AM: 
+yes
+Aleksandar 10:19 AM: 
+Has anyone tried to deploy Az to Azure Automation?
+Steve Lee (POWERSHELL) 10:19 AM: 
+there’s work by AzAuto team to support that…
+Aleksandar 10:20 AM: 
+I think "Deploy to Azure Automation" option should be removed from PSGallery
+Aleksandar 10:20 AM: 
+for Az modules
+PowerCode 10:21 AM: 
+I'm thinking on the level of rewriting PSOBject
+Steve Lee (POWERSHELL) 10:22 AM: 
+I’m intrigued
+Kirk Munro 10:26 AM: 
+Not related to what Joey is currently saying: I'd love to get some attention on issues #7703 (designing modules for multi-runspace/multi-threaded use) and #8192 (module guidance on how to properly handle credential caching). Docs are definitely needed, plus possibly some features/functionality in PS itself.
+Sean Wheeler 10:26 AM: 
++1 for fsprovider v2
+PowerCode 10:27 AM: 
+@Steve That is when when we pick it up when we're not bogged down by work :)
+Steve Lee (POWERSHELL) 10:28 AM: 
+(y)
+Joel Francis 10:28 AM: 
+Heh, good point
+PowerCode 10:28 AM: 
+Will there be a pwsh 7.0
+Joey Aiello 10:28 AM: 
+:) unclear
+Joey Aiello 10:29 AM: 
+We need to work out branch strategy once .NET Core 3.0 come into play
+Joel Francis 10:29 AM: 
+Let's just skip to 10.0
+Joel Francis 10:29 AM: 
+Like Windows :P
+PowerCode 10:29 AM: 
+Because that would be a nice window ;)
+Aleksandar 10:29 AM: 
+JEA in remoting over SSH?
+Steve Lee (POWERSHELL) 10:29 AM: 
+PowerShell X
+Steve Lee (POWERSHELL) 10:29 AM: 
+JEA over SSH is in the backlog, not in 6.2
+Romero126 10:29 AM: 
+Is there a plan to grab more granular control over security locking down cmdlets / or unlocking specific types? Kind of like an ACL for a firewall?
+Steve Lee (POWERSHELL) 10:30 AM: 
+Please open an issue on what you need in terms of granularity
+Edwin Young 10:30 AM: 
+https://docs.microsoft.com/en-us/powershell/jea/overview  ?
+Romero126 10:30 AM: 
+Will do XD Thanks Steve. 
+Steve Lee (POWERSHELL) 10:30 AM: 
+https://aka.ms/jeadocs
+Sean Wheeler 10:31 AM: 
+Also, I forgot to mention the new feedback feature in the Docs
+Joel Francis 10:31 AM: 
+Thanks guys!
+Joel Francis 10:31 AM: 
+Have a good day everyone (heart) 
+Ryan Yates 10:32 AM: 
+That sounds like a really useful change Joey
+corey webster 10:33 AM: 
+Thanks. Excellent Info. 
+Keith Hill 10:33 AM: 
+Thanks!
+Cat, Francois-Xavier (EUT & BTO) 10:33 AM: 
+Thanks
+Joel Francis 10:33 AM: 
+Cheers
+Romero126 10:33 AM: 
+Thanks Joey!
+Prasoon(kvprasoon) 10:33 AM: 
+Thanks !
+Ryen Tang 10:33 AM: 
+thanks
+Darwin Sanoy 10:33 AM: 
+Thanks!
