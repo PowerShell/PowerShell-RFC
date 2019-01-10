@@ -173,15 +173,6 @@ $subStringArgs = @{startIndex = 2}
 $str.SubString(3, @$subStringArgs)
 ```
 
-Using the relaxed splatting operator, the `3` value will override the value in `$subStringArgs`:
-
-```PowerShell
-# This will not result in an error,
-# and the substring will be of length 3.
-$subStringArgs = @{startIndex = 2}
-$str.SubString(3, @?$subStringArgs)
-```
-
 Multiple splatted arguments are not allowed:
 
 ```PowerShell
@@ -196,8 +187,39 @@ The splatted argument must be last.
 $str.SubString(@@{length=2}, 2)
 ```
 
-
 ## Alternate Proposals and Considerations
+
+### Relaxed splatting in method invocations
+
+Initially, we wanted to support relaxed splatting for invocation of .NET methods.
+In this case, the `3` value would override the value in `$subStringArgs`:
+
+```PowerShell
+# This will not result in an error,
+# and the substring will be of length 3.
+$subStringArgs = @{startIndex = 2}
+$str.SubString(3, @?$subStringArgs)
+```
+
+However, some situations may make it ambiguous or unclear as to which overload you're invoking.
+
+While not a good practice for API design, if the third overload below is added at a later date,
+the meaning of the PowerShell will change when using relaxed splatting.
+
+```csharp
+class foo {
+    void static bar(int a, string b);
+    void static bar(int a, string b, int c);
+    // this third overload may be added at a later date
+    void static bar(int d, int a, string b, int c);
+}
+```
+
+```PowerShell
+$params = @{a = 1; b = '2'; c = 3}
+
+[foo]::bar(0, @?$params)
+```
 
 ### Slicing operators
 
