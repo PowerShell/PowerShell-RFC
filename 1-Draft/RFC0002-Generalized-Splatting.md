@@ -221,14 +221,6 @@ $params = @{a = 1; b = '2'; c = 3}
 [foo]::bar(0, @?$params)
 ```
 
-### Slicing operators
-
-The suggested use of '+' and '-' is perhaps surprising
-even though they correspond to Add and Remove, respectively.
-The actual operation is also similar to a union or intersection,
-so other operators should be considered, perhaps bitwise operators
-like '-bnot' and '-bor', or maybe new general purpose set operators. 
-
 ### Postfix operator
 
 The use of a sigil is not always well received.
@@ -273,3 +265,9 @@ When using '-', the result will exclude all keys from the right hand side.
 
 In either case,
 it is not an error to specify a key in the right hand side operand that is not present in the left hand side.  
+
+The suggested use of '+' and '-' is perhaps surprising
+even though they correspond to Add and Remove, respectively.
+The actual operation is also similar to a union or intersection,
+so other operators should be considered, perhaps bitwise operators
+like '-bnot' and '-bor', or maybe new general purpose set operators.
