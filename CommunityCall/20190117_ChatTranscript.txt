@@ -1,0 +1,316 @@
+Maximo Trinidad 9:33 AM: 
+Let me get out 
+Kirk Munro 9:35 AM: 
+(y)
+JimTru 9:35 AM: 
+We can see it
+Joel Francis 9:35 AM: 
+We see you joey
+Roberth Strand 9:36 AM: 
+We can see :)
+MaxTrinidad 9:37 AM: 
+Any reason why I can't install PowerShell SDK 6.1.2 from Nuget. :)
+Knox, Cory 9:38 AM: 
+MaxTrinidad: probably not updated on nuget yet
+MaxTrinidad 9:38 AM: 
+But it's showing on that page. :(
+Keith Hill 9:39 AM: 
+RE PSGET - did the "PkgMgmnt / PSGet failed to update because of files in use" bug get fixed?
+Steve Lee (POWERSHELL) 9:39 AM: 
+https://www.nuget.org/packages/Microsoft.PowerShell.SDK/6.1.2  should be there, let me try
+MaxTrinidad 9:39 AM: 
+And, the find-package cmdlet finds it.
+MaxTrinidad 9:40 AM: 
+I posted the issue and SteveLee knows it. (y)
+IISResetMe (Mathias) 9:40 AM: 
+https://github.com/PowerShell/PowerShell/blob/master/CHANGELOG.md <-- no entry for 6.1.2 yet :) 
+Staffan (PowerCode) 9:40 AM: 
+It there time for perf fixes for 6.2?
+Thomas Rayner 9:40 AM: 
+Fuzzy matching is so cool
+MaxTrinidad 9:40 AM: 
+Yiu guys ROCK!! :)
+Darwin Sanoy 9:41 AM: 
+Chocolatey package was pushed the next day
+Steve Lee (POWERSHELL) 9:41 AM: 
+@staffan, depends on risk/reward
+Steve Lee (POWERSHELL) 9:41 AM: 
+submit them anyways :)
+Staffan (PowerCode) 9:42 AM: 
+What could possibly go wrong?
+IISResetMe (Mathias) 9:42 AM: 
+Ahh, yeah, the sorting tricked me
+Edwin Young 9:42 AM: 
+@Keith Hill, no change there. Because .NET holds open assembly files and we can't unload them in the same process, there is no straightforward way to do this (that we have thought of so far, anyway)
+Keith Hill 9:43 AM: 
+Thx for the update
+Steve Lee (POWERSHELL) 9:43 AM: 
+@edwin, you can’t replace/remove files in use, but you can rename
+Steve Lee (POWERSHELL) 9:43 AM: 
+the install-powershell.ps1 script in PSCore repo uses this trick to update “in place"
+Adil Zia 9:44 AM: 
+if we want to start contributing...and say we are beginners... where do we start..and then aim for to continue doing so
+MaxTrinidad 9:44 AM: 
+Hey guys! Is there a possibility to push update thru Windows Update. Maybe part of the roadmap!
+Joey Aiello 9:44 AM: 
+https://github.com/PowerShell/PowerShell/blob/master/.github/CONTRIBUTING.md 
+Thomas 9:44 AM: 
+To increase the adoption of updatable help, has anyone put some thought into allowing PowerShell Gallery to host help files (.xml and .cab)?
+Joel Francis 9:44 AM: 
+Also just ask in the PS slack there are usually contributors around to help you get started
+Prasoon(kvprasoon) 9:45 AM: 
+@Adil - you just start it, community will help. that's my experience
+Adil Zia 9:45 AM: 
+Thank you
+MaxTrinidad 9:45 AM: 
+I like the changes to submitting issues!
+Darwin Sanoy 9:46 AM: 
+gasp!  an untaken pending reboot on Joey's machine :o
+MaxTrinidad 9:46 AM: 
+(y)
+Edwin Young 9:46 AM: 
+'up-for-grabs' and 'good first issue' also apply to the PowerShellGet repo fyi
+Prasoon(kvprasoon) 9:48 AM: 
+'up-for-grabs' is available in PowerShell repo and is a great way to start.
+IISResetMe (Mathias) 9:48 AM: 
+PowerShell-RFC maintenance seems a bit stale the last 6-7 months, care to clarify expectations? 
+MaxTrinidad 9:48 AM: 
+Are we expectign to see the .NET Core 3.0 for the summit?
+Staffan (PowerCode) 9:48 AM: 
+What is the ship date target for 3.0?
+Mullick, Ayan 9:49 AM: 
+They haven't yet put the SQLServer PowerShell module on GitHub. They have had it on their to-do for months. How can one get an update.
+__https://trello.com/c/4zkQ9ffs/115-open-source-and-put-on-github-powershell-gallery 
+Staffan (PowerCode) 9:49 AM: 
+RFC's feels like a black hole. Where typed text goes to die...
+MaxTrinidad 9:50 AM: 
+SQLServer is owned by MIcrosoft SQL Server Team. It would be hard for them to let go! haha :)
+Shawn Melton (@wsmelton) 9:52 AM: 
+Another large list of community folks streaming are built on this repo https://github.com/bnb/awesome-developer-streams
+Darwin Sanoy 9:52 AM: 
+Is Joey's keyboard on fire yet?
+Darwin Sanoy 9:53 AM: 
+He's faster than voice recognition
+IISResetMe (Mathias) 9:53 AM: 
+I've already implemented it :P
+Mike O'Neill 9:54 AM: 
+because it's VSCode!
+Mike O'Neill 9:54 AM: 
+happens to me often
+Keith Hill 9:54 AM: 
+Check AMSI CPU usage. :-)
+Staffan (PowerCode) 9:54 AM: 
+@Joey JavaScript?
+MaxTrinidad 9:54 AM: 
+Add memory! LOL
+Darwin Sanoy 9:54 AM: 
+Might be Markdown plug-ins
+Mike O'Neill 9:54 AM: 
+seems like a memory issue leak somewhere
+Mike O'Neill 9:55 AM: 
+reboot 3 times and fixes the issue
+Mike O'Neill 9:55 AM: 
+:-o
+MaxTrinidad 9:55 AM: 
+Ah! Defrag your disk!
+Darwin Sanoy 9:55 AM: 
+I've had it forget what the "Return" key is supposed to do because of markdown plugins
+IISResetMe (Mathias) 9:55 AM: 
+For context: I'm mostly interested in getting the ball rolling to get formal feedback on features/behavior - which I believe would be easier if the RFC draft was accepted + ID assigned in at least a draft state :) 
+Mullick, Ayan 9:56 AM: 
+(y) Could you share his email?
+Shawn Melton (@wsmelton) 9:57 AM: 
+Typing lag in VS Code...could be this one: https://github.com/Microsoft/vscode/issues/27378
+Shawn Melton (@wsmelton) 9:57 AM: 
+Disable VS Code from using GPU can also help perf of it (don't know if it will directly for typing)
+MaxTrinidad 9:58 AM: 
+LOL L)
+MaxTrinidad 9:58 AM: 
+:)
+Knox, Cory 9:59 AM: 
+Doesn't he have a waiting reboot? That's probably the performance issue :D
+IISResetMe (Mathias) 9:59 AM: 
+Cool, thanks Joey!
+Shawn Melton (@wsmelton) 10:01 AM: 
+Maynot be the call to ask this but saw Tyler mention on Twitter about getting PS Core support in Azure Functions. Is there any word or update on that, or an issue we can follow?
+Keith Hill 10:01 AM: 
+BTW Bergmeister has done some nice work in VSCode PS extension to support file menu items for Run Pesters Tests and Debug Pester Tests.
+Adil Zia 10:02 AM: 
+better tab autocomplete in VS with PS extension? Hope...
+MaxTrinidad 10:02 AM: 
+Save the doc Joey!
+Joey Aiello 10:03 AM: 
+Max wins
+MaxTrinidad 10:03 AM: 
+:)
+Adil Zia 10:03 AM: 
+in the editor as well
+Steve Lee (POWERSHELL) 10:03 AM: 
+vscode autosaves periodically :)
+Joey Aiello 10:04 AM: 
+Yeah ,but it fixed the perf problem
+MaxTrinidad 10:04 AM: 
+Any changes to Cloud Shell?
+Jonas Sommer Nielsen 10:04 AM: 
+Sorry, Just changed from my phone to pc. What was the link to the Powershell Live site again? (listing people live sharing their codeing)
+Joey Aiello 10:04 AM: 
+twitch.tv/PowerShellLive 
+Keith Hill 10:04 AM: 
+Yup, both Run/Debug are in the menu.
+Shawn Melton (@wsmelton) 10:04 AM: 
+twitch.tv\powershelllive
+Jonas Sommer Nielsen 10:04 AM: 
+thanks :)
+MaxTrinidad 10:05 AM: 
+I'm looking for the upload to a diffrente location
+Edwin Young 10:07 AM: 
+https://feedback.azure.com/forums/598699-azure-cloud-shell  is the best option to request/update improvements there
+MaxTrinidad 10:07 AM: 
+I think I aded that feedbakc sometime ago.
+Roberth Strand 10:07 AM: 
+Would be awesome to check out
+Jonas Sommer Nielsen 10:08 AM: 
+the azure functions sounds awsome :) 
+Jonas Sommer Nielsen 10:08 AM: 
+dont think so
+Roberth Strand 10:08 AM: 
+I would like to be on the list ;)
+Jonas Sommer Nielsen 10:08 AM: 
+would be great :) 
+MaxTrinidad 10:08 AM: 
+Any progress on the Textbased datagrid view. :)
+Darwin Sanoy 10:09 AM: 
+Progress on text editor ? :D
+Mullick, Ayan 10:09 AM: 
+How can I contact Mateo about the SQLserver module?
+Thomas 10:09 AM: 
+Any updates on help system leveraging markdown?
+Joey Aiello 10:09 AM: 
+richturn_ms
+Darwin Sanoy 10:09 AM: 
+And tar for windows packaging?
+Edwin Young 10:09 AM: 
+Could Try @matteo_taveggia on twitter also
+MaxTrinidad 10:10 AM: 
+I got Mateo email. I've been in contact with him about SMO crossplat.
+Jonas Sommer Nielsen 10:10 AM: 
+are you talking about reinventing vi in powershell?
+Darwin Sanoy 10:10 AM: 
+Did you find the internal Microsoft person for tar?
+MaxTrinidad 10:10 AM: 
+matteot@microsoft.com
+Keith Hill 10:10 AM: 
+It's in 1809
+Mullick, Ayan 10:11 AM: 
+Thanks Max
+MaxTrinidad 10:11 AM: 
+(y)
+Adil Zia 10:11 AM: 
+is there a method that reads and or modifies excel and other office files without COM?
+
+especially with the problem of it having to open Excel or the relevant program..and being slow
+Adil Zia 10:12 AM: 
+theres also the issue to make reports on side vm servers without having to install office .... especially if you want to automate it
+Adil Zia 10:12 AM: 
+com makes tht dificult
+Jonas Sommer Nielsen 10:13 AM: 
+aah 
+IISResetMe (Mathias) 10:13 AM: 
+Does .NET Core have any primitives for creating tar-balls? GZip is already available, so might make sense to augment Compress/Expand-Archive for tar.gz?
+Jonas Sommer Nielsen 10:13 AM: 
+(y)
+Staffan (PowerCode) 10:13 AM: 
+@Adil Check out the Import-Excel module
+Keith Hill 10:14 AM: 
+So Joey, did you create a vim alias to Git for Windows vim in your profile? :-) Handy, yeah?
+Staffan (PowerCode) 10:14 AM: 
+Doug Finke wrote it
+Knox, Cory 10:14 AM: 
+ImportExcel FTW
+MaxTrinidad 10:14 AM: 
+On Excel.. Still the .Net component is a wrapper to the com object.
+Aleksandar 10:14 AM: 
+https://www.powershellgallery.com/packages/PSWriteExcel/0.0.15
+Adil Zia 10:14 AM: 
+i thought importexcel uses com
+Aleksandar 10:14 AM: 
+https://www.powershellgallery.com/packages/PSWriteWord/0.5.16
+Knox, Cory 10:15 AM: 
+importexcel doesn't use COM unless you're converting xls to xlsx
+Staffan (PowerCode) 10:15 AM: 
+I think ImportExcel uses a .net library that understands the office file formats
+Darwin Sanoy 10:15 AM: 
+Use the tar code ;)
+Adil Zia 10:15 AM: 
+Ah i see
+Joel Francis 10:15 AM: 
+Probability of being able to get binary parsing support approved for 6.2 GA? ;) 
+IISResetMe (Mathias) 10:15 AM: 
+OpenXML SDK library also supports authoring Office documents (including excel) without any COM service interaction :) 
+Joel Francis 10:16 AM: 
+Hahaha
+Joel Francis 10:16 AM: 
+Mostly Ilya's fantastic comments tbh
+Joel Francis 10:16 AM: 
+Cheers! ️
+MaxTrinidad 10:16 AM: 
+I'm Old School!! LOL :) OPenXML Rules!
+Prasoon(kvprasoon) 10:17 AM: 
+there are a bunch of Resolution-External/Answered issues to be closed, few are a year old
+Joel Francis 10:17 AM: 
+ Thanks! Love you guys!
+Adil Zia 10:17 AM: 
+can you give the link for the list of modules?
+Joey Aiello 10:18 AM: 
+https://evotec.xyz/sixteen-powershell-modules-that-ive-worked-on-in-2018/ 
+Adil Zia 10:18 AM: 
+THank you very much
+Aleksandar 10:18 AM: 
+He will be speaking at PSConfEU
+Jonas Sommer Nielsen 10:19 AM: 
+reminds me i have to get my tickets 
+IISResetMe (Mathias) 10:19 AM: 
+PSConfEU = June
+Staffan (PowerCode) 10:20 AM: 
+4-7th I think
+Jonas Sommer Nielsen 10:20 AM: 
+Hoppy or Sad Joey?
+Jonas Sommer Nielsen 10:20 AM: 
+Happy even 
+Jonas Sommer Nielsen 10:20 AM: 
+:D
+IISResetMe (Mathias) 10:20 AM: 
+PowerShell Summit = April 30 - May 3
+PSConfEU = June 4 - June 7
+Nicholas M. Getchell 10:21 AM: 
+Thanks PS Team
+MaxTrinidad 10:21 AM: 
+Awesome! Good Job!! :)
+Mike O'Neill 10:21 AM: 
+thank you!
+Mike O'Neill 10:21 AM: 
+great stuff
+IISResetMe (Mathias) 10:21 AM: 
+#FrozenJoey merchandise in the works
+Joel Francis 10:21 AM: 
+Saved by twitch lol
+Thomas Rayner 10:21 AM: 
+TWITCH VOD TO THE RESCUE
+Prasoon(kvprasoon) 10:21 AM: 
+Woooow. #Twitch
+Knox, Cory 10:21 AM: 
+Tyler FTW!
+Joel Francis 10:21 AM: 
+I'll send you guys a word cloud of the notes to celebrate :P
+Mullick, Ayan 10:21 AM: 
+Thank you
+Prasoon(kvprasoon) 10:22 AM: 
+Thank you all
+Jonas Sommer Nielsen 10:22 AM: 
+Have a nice day :)
+IISResetMe (Mathias) 10:22 AM: 
+Thanks guys!
+Darwin Sanoy 10:22 AM: 
+Thanks!
+Keith Hill 10:22 AM: 
+thx
