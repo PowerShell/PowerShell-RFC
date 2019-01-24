@@ -75,3 +75,13 @@ The abbreviated form is `s-avm`, not `s-av` which might be expected.
 
 This feature is not dynamic aliases as readability of scripts would be significantly
 impacted if `n-assdrc` was allowed in scripts.
+
+Partial support where just verb or noun is abbreviated is not supported.
+This could be added in the future based on customer feedback.
+
+Fuzzy matching is not in scope of this RFC.
+Fuzzy matching for [suggestions on CommandNotFoundException](https://github.com/PowerShell/PowerShell/pull/8458)
+was implemented and could be used as a base for supporting tab completion.
+
+If more variants/algorithms are supported, we may need a way to allow the user
+to pick which ones they want to use.
