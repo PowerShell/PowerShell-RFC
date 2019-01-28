@@ -1,9 +1,10 @@
 ---
 RFC: 0002
 Author: Jason Shirk
-Status: Draft
+Status: Draft-Accepted
 Area: Splatting
 Comments Due: 3/31/2016
+Edits: Joey Aiello
 ---
 
 # Generalized Splatting
@@ -47,7 +48,7 @@ $addTypeParams = @{
     MemberType = 'NoteProperty'
     Value = 42
 }
-Update-TypeData @addTypeParams 
+Update-TypeData @addTypeParams
 ```
 
 This works, but feels a bit messy because of the need for a variable,
@@ -60,7 +61,7 @@ $PSBoundParameters.Remove('SomeExtraParam')
 Command @PSBoundParameters
 ```  
 
-This proposal suggesst a syntax that improves this scenario as well.
+This proposal suggests a syntax that improves this scenario as well.
 
 ## Specification
 
@@ -118,7 +119,7 @@ Get-ChildItem @$myArgs
 ```
 
 The above example would fail with a "parameter not found" because of the 'ExtraStuff' key.
-Here is a possible syntax to allow the above without resulting in an error: 
+Here is a possible syntax to allow the above without resulting in an error:
 
 ```PowerShell
 $myArgs = @{ Path = $pwd; ExtraStuff = 1234 }
@@ -129,6 +130,15 @@ We can think of '@?' as the 'relaxed splatting' operator.
 If '@' is the splatting operator,
 adding the '?' is suggestive of being more permissive,
 much like the C# '?.' member access operator.
+
+If parameter values are passed explicitly in addition to the relaxed splatting operator,
+those values would take precedence over anything in the splatted hashtable:
+
+```PowerShell
+$myArgs = @{ Path = C:\foo; ExtraStuff = 1234 }
+Get-ChildItem @?$myArgs -Path C:\bar
+# Lists the children of C:\bar
+```
 
 ### Splatting in method invocations
 
@@ -160,7 +170,7 @@ and via splatting in the same invocation:
 # Must be an error, parse time or runtime, because startIndex
 # is specified positionally and via splatting.
 $subStringArgs = @{startIndex = 2}
-$str.SubString(2, @$subStringArgs)
+$str.SubString(3, @$subStringArgs)
 ```
 
 Multiple splatted arguments are not allowed:
@@ -177,28 +187,57 @@ The splatted argument must be last.
 $str.SubString(@@{length=2}, 2)
 ```
 
-### Splatting in switch cases
+## Alternate Proposals and Considerations
 
-It can be awkward to match multiple conditions with a single switch statement.
-For example:
+### Relaxed splatting in method invocations
+
+Initially, we wanted to support relaxed splatting for invocation of .NET methods.
+In this case, the `3` value would override the value in `$subStringArgs`:
 
 ```PowerShell
-switch ($color) {
-  { $_ -eq 'Red' -or $_ -eq 'Blue' -or $_ -eq 'Green' } { $true }
-  default { $false }
+# This will not result in an error,
+# and the substring will be of length 3.
+$subStringArgs = @{startIndex = 2}
+$str.SubString(3, @?$subStringArgs)
+```
+
+However, some situations may make it ambiguous or unclear as to which overload you're invoking.
+
+While not a good practice for API design, if the third overload below is added at a later date,
+the meaning of the PowerShell will change when using relaxed splatting.
+
+```csharp
+class foo {
+    void static bar(int a, string b);
+    void static bar(int a, string b, int c);
+    // this third overload may be added at a later date
+    void static bar(int d, int a, string b, int c);
 }
 ```
 
-With splatting, this can be simplified:
-
 ```PowerShell
-switch ($color) {
-  @@('Red','Blue','Green') { $true }
-  default { $false }
-}
+$params = @{a = 1; b = '2'; c = 3}
+
+[foo]::bar(0, @?$params)
 ```
+
+### Postfix operator
+
+The use of a sigil is not always well received.
+This proposal nearly considers '@' a prefix unary operator,
+but it doesn't quite specify it as such.
+
+A postfix operator is another possiblity and would look less like a sigil.
+This idea was rejected because, when reading a command invocation from left to right,
+it's important to understand how a hash literal is to be used.
+The sigil makes it clear a hash literal is really specifying command arguments.
+Furthermore, the sigil simplifies the analysis required for good parameter completion,
+and does not require a complete expression to begin providing parameter name completion.
 
 ### Modifying hashtables for splatting
+
+> The following features could be useful in the scenarios described above,
+> but they should be written about in more detail in another RFC.
 
 Sometimes it is useful to provide a 'slice' of a hashtable,
 e.g. you want to remove or include specific keys.
@@ -208,7 +247,7 @@ This proposal suggests overloading the '+' and '-' operators to provide a hashta
 ```PowerShell
 Get-ChildItem @$($PSBoundParameters - 'Force') # Splat all parameters but 'Force'
 Get-ChildItem @$($PSBoundParameters - 'Force','WhatIf') # Splat all parameters but 'Force' and 'WhatIf'
-Get-ChildItem @$($PSBOundParameters + 'LiteralPath','Path') # Only splat 'LiteralPath' and 'Path'
+Get-ChildItem @$($PSBoundParameters + 'LiteralPath','Path') # Only splat 'LiteralPath' and 'Path'
 ```
 
 Today, PowerShell supports "adding" two hashtables with the '+' operator,
@@ -227,25 +266,38 @@ When using '-', the result will exclude all keys from the right hand side.
 In either case,
 it is not an error to specify a key in the right hand side operand that is not present in the left hand side.  
 
-## Alternate Proposals and Considerations
-
-### Slicing operators
-
 The suggested use of '+' and '-' is perhaps surprising
 even though they correspond to Add and Remove, respectively.
 The actual operation is also similar to a union or intersection,
 so other operators should be considered, perhaps bitwise operators
-like '-bnot' and '-bor', or maybe new general purpose set operators. 
+like '-bnot' and '-bor', or maybe new general purpose set operators.
 
-### Postfix operator
+---------------
 
-The use of a sigil is not always well received.
-This proposal nearly considers '@' a prefix unary operator,
-but it doesn't quite specify it as such.
+## PowerShell Committee Decision
 
-A postfix operator is another possiblity and would look less like a sigil.
-This idea was rejected because, when reading a command invocation from left to right,
-it's important to understand how a hash literal is to be used.
-The sigil makes it clear a hash literal is really specifying command arguments.
-Furthermore, the sigil simplifies the analysis required for good parameter completion,
-and does not require a complete expression to begin providing parameter name completion.
+### Voting Results
+
+Joey Aiello: Accept
+
+Bruce Payette: Accept
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+Dongbo Wang: Accept
+
+Kenneth Hansen: Accept
+
+### Majority Decision
+
+Committee agrees that this is the above features would be useful to have in splatting.
+However, we do not currently have a plan to implement any of this,
+so it can be picked up by a member of the community.
+
+Also, it would be useful to build a new RFC for hashtable manipulation per the alternate considerations.
+
+### Minority Decision
+
+N/A
