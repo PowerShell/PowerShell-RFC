@@ -1,7 +1,7 @@
 ---
 RFC: 0002
 Author: Jason Shirk
-Status: Draft
+Status: Draft-Accepted
 Area: Splatting
 Comments Due: 3/31/2016
 Edits: Joey Aiello
@@ -271,3 +271,33 @@ even though they correspond to Add and Remove, respectively.
 The actual operation is also similar to a union or intersection,
 so other operators should be considered, perhaps bitwise operators
 like '-bnot' and '-bor', or maybe new general purpose set operators.
+
+---------------
+
+## PowerShell Committee Decision
+
+### Voting Results
+
+Joey Aiello: Accept
+
+Bruce Payette: Accept
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+Dongbo Wang: Accept
+
+Kenneth Hansen: Accept
+
+### Majority Decision
+
+Committee agrees that this is the above features would be useful to have in splatting.
+However, we do not currently have a plan to implement any of this,
+so it can be picked up by a member of the community.
+
+Also, it would be useful to build a new RFC for hashtable manipulation per the alternate considerations.
+
+### Minority Decision
+
+N/A
