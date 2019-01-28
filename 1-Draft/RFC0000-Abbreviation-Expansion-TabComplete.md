@@ -1,7 +1,7 @@
 ---
-RFC: RFC0000
+RFC: RFC0030
 Author: Steve Lee
-Status: Draft
+Status: Experimental-Accepted
 SupercededBy: N/A
 Version: 1.0
 Area: Engine-CommandCompleter
@@ -85,3 +85,26 @@ was implemented and could be used as a base for supporting tab completion.
 
 If more variants/algorithms are supported, we may need a way to allow the user
 to pick which ones they want to use.
+
+---------------
+## PowerShell Committee Decision
+
+### Voting Results
+
+Joey Aiello: Accept
+
+Bruce Payette: Accept
+
+Steve Lee: Accept
+
+Hemant Mahawar: Accept
+
+Jim Truher: Accept
+
+### Majority Decision
+
+Committee agrees that the RFC is complete for the targeted scenario and additional enhancement requires are out of scope and should be separate RFCs.
+
+### Minority Decision
+
+N/A
