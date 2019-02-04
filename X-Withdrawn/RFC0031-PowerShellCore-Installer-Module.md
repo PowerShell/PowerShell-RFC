@@ -1,7 +1,7 @@
 ---
-RFC: RFC00NN
+RFC: RFC0031
 Author: Joey Aiello
-Status: Draft-Accepted
+Status: Withdrawn
 SupercededBy: N/A
 Version: 0.1
 Area: External Module
