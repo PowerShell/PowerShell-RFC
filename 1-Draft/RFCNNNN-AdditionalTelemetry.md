@@ -156,7 +156,12 @@ to collect/send the following information:
   - The platform being used: macOS 10.3
 
 ## Mock PowerBi Report
-![PowerBi]('\Fake PowerBi.pdf')
+
+![PowerBi1](https://github.com/SydneyhSmith/Internal-PowerShellTeam-Docs/blob/master/Telemetry/Powerbi1.PNG)
+![PowerBi2](https://github.com/SydneyhSmith/Internal-PowerShellTeam-Docs/blob/master/Telemetry/Powerbi2.PNG)
+![PowerBi3](https://github.com/SydneyhSmith/Internal-PowerShellTeam-Docs/blob/master/Telemetry/Powerbi3.PNG)
+![PowerBi4](https://github.com/SydneyhSmith/Internal-PowerShellTeam-Docs/blob/master/Telemetry/Powerbi4.PNG)
+![PowerBi5](https://github.com/SydneyhSmith/Internal-PowerShellTeam-Docs/blob/master/Telemetry/Powerbi5.PNG)
 
 ## Alternate Proposals and Considerations
 
