@@ -33,33 +33,40 @@ executed, no matter where they are placed.
 
 This RFC proposes the following changes:
 
-* Only allow `#requires` at the top level of a script,
-  before any lines that are not comments (i.e. with the
-  intention that a hashbang can still work, just before
-  any executable PowerShell code). Placing `#requires` anywhere
-  after will cause a parse-time error. This would be a **breaking
-  change**, albeit one that the documentation already claims to be 
-  in force.
-* Using `#requires` in the interactive console will cause
-  a parse-time error. This could be a **minor breaking
-  change**, since currently PowerShell throws a [pipeline
-  creation error](https://github.com/PowerShell/PowerShell/issues/3803).
+* Emit a warning when parsing scripts where the `#requires`
+  is not at the top, because of the hoisting behavior.
 * Add support for the following new parameters (each
   independently up for discussion):
   * `-OS {Windows | Linux | MacOS}`, where an
     operating system (or possibly combination of them) can
     be specified as required. See [this PowerShell issue](https://github.com/PowerShell/PowerShell/issues/3751).
-  * `-Assembly <Assembly-name>`, where a .NET assembly can
-    be specified as required. See [this PowerShell issue](https://github.com/PowerShell/PowerShell/issues/5022).
-  * `-MaxVersion <V>[.<v>]`, where a maximum PowerShell
+  * `-MaximumPSVersion <V>[.<v>]`, where a maximum PowerShell
      version can be specified as required. See [this PowerShell issue](https://github.com/PowerShell/PowerShell/issues/2846).
+  * `-MinimumPSVersion` as an alias of `-MinimumVersion`.
+
+* **Withdrawn**, in favor of `using` statements.
+  ~~`-Assembly <Assembly-name>`, where a .NET assembly can
+  be specified as required. See [this PowerShell issue](https://github.com/PowerShell/PowerShell/issues/5022).~~
+* **Withdrawn** on the basis that this could break many existing scripts.
+  ~~Only allow `#requires` at the top level of a script,
+  before any lines that are not comments (i.e. with the
+  intention that a hashbang can still work, just before
+  any executable PowerShell code). Placing `#requires` anywhere
+  after will cause a parse-time error. This would be a **breaking
+  change**, albeit one that the documentation already claims to be 
+  in force.~~
+* **Withdrawn** since this is difficult to implement with little gain
+  and it breaks the layering of the parser.
+  ~~Using `#requires` in the interactive console will cause
+  a parse-time error. This could be a **minor breaking
+  change**, since currently PowerShell throws a [pipeline
+  creation error](https://github.com/PowerShell/PowerShell/issues/3803).~~
 
 ## Motivation
 
-> As a PowerShell user, I can be sure that all the
-> `#requires` statements in a script come before any
-> PowerShell code, so that it's clear they always
-> execute first, and so they can all be found easily.
+> As a PowerShell user, I will be warned about
+> `#requires` statements that won't behave the
+> way I might expect based on position.
 
 > As a PowerShell user, I get feedback that `#requires`
 > statements cannot be used in the interactive console,
@@ -73,12 +80,6 @@ This RFC proposes the following changes:
 > for.
 
 > As a PowerShell user, I can specify that my script
-> `#requires` a given .NET Assembly to run in an
-> efficient and declarative way, so that I don't have
-> to do complex runtime logic to determine my script
-> cannot run.
-
-> As a PowerShell user, I can specify that my script
 > `#requires` to be run in a version of PowerShell
 > lower than a given version, so that I can declaratively
 > prevent it from being run in an environment where
@@ -86,43 +87,31 @@ This RFC proposes the following changes:
 
 ## Specification
 
-1. `#requires` statements must appear in scripts
-   above all executable PowerShell. Any `#requires`
-   statement placed after any PowerShell code causes
-   an unrecoverable parse-time error. This new restriction
-   should not affect the usage of other comment-embedded
-   directives or pragmas, such as `#sig`, linter directives or
-   inline editor configurations. Specifically, the new `#requires`
-   placement restriction must not interfere with Unix-style
-   hashbangs (e.g. `#!/usr/bin/pwsh`).
-2. Any use of `#requires` in an interactive session causes
-   a specific parse-time error to be thrown, informing the
-   user that `#requires` may not be used in the interactive
-   console.
-3. `#requires` can take an `-OS` parameter, with possible
-   arguments being `Windows`, `Linux` and `MacOS` (and
-   possibly some syntax for `or`-ing them). This check
-   succeeds if-and-only-if the correspoding runtime
-   PowerShell variable (`$IsWindows`, `$IsLinux` and
-   `$IsMacOS` is true). Requiring a given OS when the
-   corresponding runtime variable is false results in
+1. `#requires` statements appearing before any
+   line that is not blank or a comment (i.e. any semantic statement)
+   will generate a warning at parse-time about being hoisted to the top of the script.
+   Other comments, such as hashbangs, and blank lines
+   preceing a `#requires` will not generate this warning.
+2. `#requires` can take an `-OS` parameter, 
+   with possible arguments being `Windows`, `Linux` and `MacOS`.
+   Multiple operating systems can be specified by providing arguments
+   in an array syntax, such as `#requires -OS 'Linux','MacOS'`,
+   with the meaning of **any** of the required operating systems.
+   The check for a given operating system succeeds
+   if-and-only-if the correspoding runtime PowerShell variable
+   (`$IsWindows`, `$IsLinux` and `$IsMacOS`)
+   executed on that system would be true.
+   Requiring a given OS when the corresponding runtime variable is false results in
    a pre-execution error with a specific error message
    stating that the script is required to be run on a
    different operating system.
-4. `#requires` can take an `-Assembly` parameter, with
-   possible arguments being exactly what a `using assembly`
-   statement will accept. If a required assembly is not
-   present on the executing system, a pre-execution error
-   is raised.
-5. `#requires` can take a `-MaxVersion` parameter, with
-   a major version and optional minor version, to define
-   the maximum (inclusive) version of PowerShell it should
-   run on. The version given does not need to correspond to
-   any version of PowerShell, but will just be compared in
-   standard lexicographic tuple order. Executing a script
-   required to be on a version of PowerShell strictly lower
-   than the executing version results in a pre-execution
-   error.
+3. `#requires` can take a `-MaximumPSVersion` parameter,
+   with a major version and optional minor version,
+   to define the maximum (inclusive) version of PowerShell it should run on.
+   The version given does not need to correspond to any existing version of PowerShell,
+   but will be compared in standard PowerShell version comparison logic.
+   Executing a script required to be on a version of PowerShell strictly lower
+   than the executing version results in a pre-execution error.
 
 Finally, scripts with `#requires` in them should still
 be editable in contexts that do not satisfy their 
@@ -133,8 +122,8 @@ PowerShell issue](https://github.com/PowerShell/PowerShell/issues/4549).
 
 ## Alternate Proposals and Considerations
 
-* An `-Assembly` parameter may be unneccessary, given the
-  possibility of using `using assembly <Assembly-name>`.
+* **Withdrawn**. ~~An `-Assembly` parameter may be unneccessary, given the
+  possibility of using `using assembly <Assembly-name>`.~~
 * Given the suite of proposed changes to `#requires`, any
   other proposed parameters for `#requires` are worth
   including and discussing in this RFC. Possible
@@ -150,6 +139,3 @@ PowerShell issue](https://github.com/PowerShell/PowerShell/issues/4549).
   currently [undocumented](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_requires?view=powershell-6) and
   there is an [open issue for it](https://github.com/PowerShell/PowerShell/issues/5908). It may
   be worth discussing in this RFC.
-* Because of the pipeline-crash behavior of the interactive
-  usage of `#requires`, there is already a PR open to change
-  the behavior to what is described in this RFC.
