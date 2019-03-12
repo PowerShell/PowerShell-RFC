@@ -19,7 +19,7 @@ re-implement as a separate module.
 
 ## Motivation
 
-    Most major mail platforms now have REST methods to send mail allowing existing cmdlets to allow sending mail.
+    Most major mail platforms now have REST methods to send mail, which allows `Invoke-RestMethod' to allow sending mail messages.
 
     * gmail
       * https://developers.google.com/gmail/api/v1/reference/users/messages/send
