@@ -31,7 +31,7 @@ re-implement as a separate module.
 
 ### Add a warning to 6.2 after the release of 6.2
 
-During the 6.3 development time, we will add a warning to `Send-MailMessage` that an alternative should be found.
+In a 6.2 servicing release, we will add a warning to `Send-MailMessage` that an alternative method should be found.
 
 ### Remove the cmdlet in 6.3
 
