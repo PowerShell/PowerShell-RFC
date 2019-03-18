@@ -1,0 +1,241 @@
+Pearon, Matthew 9:32 AM: 
+Hearing you load and clear
+Ryan Yates 9:32 AM: 
+Yes we can Joey :-)
+Jonas Sommer Nielsen 9:32 AM: 
+(y)
+Pearon, Matthew 9:32 AM: 
+load = loud
+Adam Murray 9:32 AM: 
+(y)
+Joel Bennett 9:32 AM: 
+Describing skype audio call works
+  [+] speakers are audible to audience 36ms 
+Jonas Sommer Nielsen 9:32 AM: 
+Is this skype still the "official" channel?
+Maximo Trinidad 9:33 AM: 
+Our MVP CPM lead are using Teams!
+Maximo Trinidad 9:33 AM: 
+I can see you all!! Hi there!
+Knox, Cory 9:33 AM: 
+don't forget to record....
+Ryan Yates 9:34 AM: 
+Yeah we can see the screen :-)
+Jonas Sommer Nielsen 9:34 AM: 
+looks good
+Knox, Cory 9:34 AM: 
+(Y)
+Jonas Sommer Nielsen 9:35 AM: 
+a policy thing?
+Mike O'Neill 9:35 AM: 
+teams only
+kvprasoon 9:35 AM: 
+policy!
+Jonas Sommer Nielsen 9:35 AM: 
+nope
+Mike O'Neill 9:35 AM: 
+live the dream
+Maximo Trinidad 9:35 AM: 
+NO
+Corey Webster 9:35 AM: 
+Time to move to a teams meeting!
+Maximo Trinidad 9:35 AM: 
+It did it!
+Maximo Trinidad 9:35 AM: 
+He have control!!
+Dean McKenzie 9:35 AM: 
+I'm still having issues dialing in
+Adil Zia 9:36 AM: 
+no more twitch?
+Ryan Yates 9:36 AM: 
+I was gonna say did you want me to record via OBS if needed and Stream to Twtich
+Adil Zia 9:39 AM: 
+What will be different in .netcore 3 for posh?
+Christoph Bergmeister 9:40 AM: 
+wpf/winform support
+Pearon, Matthew 9:40 AM: 
+Lost the presentation
+Maximo Trinidad 9:40 AM: 
+Gone!!
+Knox, Cory 9:40 AM: 
+would that mean that AzureAD/MSOL might work?
+Maximo Trinidad 9:41 AM: 
+Cool!!
+Maximo Trinidad 9:42 AM: 
+:P
+Jonas Sommer Nielsen 9:42 AM: 
+Could you elaborate on Adil Zia  question? 
+What does .net core 3 mean for powershell? 
+Joel Francis 9:42 AM: 
+Lol
+Christoph Bergmeister 9:42 AM: 
+the first preview of 3.0 was actually better than the 2nd...
+Joel Bennett 9:42 AM: 
+I would vote for major version bump with .NET Core 3 (for sxs reasons), given (as you say) you're not following semver anyway.
+Christoph Bergmeister 9:42 AM: 
+that is just the nature of previews....
+Jonas Sommer Nielsen 9:43 AM: 
+(y)
+Jonas Sommer Nielsen 9:44 AM: 
+so existing PS 6 scripts should still work on .net core 3
+Joel Francis 9:44 AM: 
+Relying on magic means many broken things ;) should be fun!
+Joel Bennett 9:44 AM: 
+@Jonas: yes (that IS an explicit goal/requirement)
+Maximo Trinidad 9:46 AM: 
+Cool! That's needed. :)
+Pearon, Matthew 9:46 AM: 
+That is an awesome idea
+Christoph Bergmeister 9:46 AM: 
+This is the PR on those new rules: https://github.com/PowerShell/PSScriptAnalyzer/pull/1133
+kvprasoon 9:46 AM: 
+@Joey, save the notes !
+Maximo Trinidad 9:47 AM: 
+Yeah Save notes
+Maximo Trinidad 9:48 AM: 
+@Joey 
+kvprasoon 9:48 AM: 
+Meeting notes in Teams is awesome
+Maximo Trinidad 9:48 AM: 
+How about PSRemoting? Any changes or enhancements?
+ 
+I recent install and configure Linux Kerberos to connect PSRemote to a Windows AD domain computer. But, it will default to open Windows PowerShell. It there's a way to force to open PowerShell Core.
+ 
+I open a feedback: PowerShell Core should be supported in WinRm from Linux systems #8942
+https://github.com/PowerShell/PowerShell/issues/8942 
+Pearon, Matthew 9:48 AM: 
+Need to use vsLiveShare to share out the meeting notes. :)
+Maximo Trinidad 9:48 AM: 
+Cool!
+Ryan Yates 9:48 AM: 
+Should I record via OBS from here on in as well?
+Joey Aiello 9:48 AM: 
+That'd be awesome, Ryan! Thanks!
+Ryan Yates 9:49 AM: 
+:thumbs:
+Maximo Trinidad 9:49 AM: 
+I will look for the response.
+Maximo Trinidad 9:49 AM: 
+Thanks
+Joel Bennett 9:49 AM: 
+@Max you should drop by Discord and ask about that -- I'm pretty sure you're just using the wrong config name when connecting ;-)
+9:49 AM This message wasn't sent to Mike O'Neill. 
+That'd be awesome, Ryan! Thanks!
+Maximo Trinidad 9:50 AM: 
+:P
+Maximo Trinidad 9:50 AM: 
+Thanks
+Roberth Strand 9:51 AM: 
+If 7 supports 6 scripts.. 
+Ryan Yates 9:51 AM: 
+Please no
+Ryan Yates 9:51 AM: 
+We don't really need another PSModulePath
+Jonas Sommer Nielsen 9:52 AM: 
+as long as you don't break an existing ps6 deployment when you install 7 side by side
+Jonas Sommer Nielsen 9:52 AM: 
+(y)
+Jonas Sommer Nielsen 9:52 AM: 
+just to calm down operations guys 
+Jonas Sommer Nielsen 9:53 AM: 
+fair
+Joel Bennett 9:53 AM: 
+So if .NET Core 3 isn't LTS, neither PS 6 nor PS 7 will be LTS?
+Jonas Sommer Nielsen 9:54 AM: 
+following .NET Core makes sense to more people ... or is easy to explain at least
+Jonas Sommer Nielsen 9:54 AM: 
+screen is here
+Maximo Trinidad 9:54 AM: 
+Save file!
+Joey Aiello 9:56 AM: 
+PS 7.0 would not be LTS, but some PS 7.x would be LTS when .NET Core 3.x releases an LTS branch
+Joey Aiello 9:56 AM: 
+But PS 6 would never get an LTS
+Jonas Sommer Nielsen 9:56 AM: 
+Oh that is a new thing ... so there will actually be a upgrade of 5.1? 
+Maximo Trinidad 9:56 AM: 
+lol
+Michael Smith (c) 9:57 AM: 
+5.1 until you convert exchange :-)
+Jonas Sommer Nielsen 9:57 AM: 
+*argh* guests ..... 
+
+Have a nice day/evening :) 
+Jonas Sommer Nielsen 9:57 AM: 
+ps. Keep up the good work :D
+Jonas Sommer Nielsen 9:59 AM: 
+sounds good 
+Adil Zia 9:59 AM: 
+Will we be able to update to 7 and or later by just running a single command.... like we can for update modules
+Maximo Trinidad 9:59 AM: 
+(y)(y)
+Ryan Yates 9:59 AM: 
+Experimental Features in 6.2.0-preview4??
+Joey Aiello 10:00 AM: 
+On non-Windows, of course! :) Just use your package manager
+Steve Lee (POWERSHELL) 10:00 AM: 
+@ryan, what about that exactly?
+Joey Aiello 10:00 AM: 
+On Windows, it's a hard problem to do right unfortunately....
+Adil Zia 10:00 AM: 
+:'(
+Joel Bennett 10:00 AM: 
+just write your own provider for PackageManagement
+Steve Lee (POWERSHELL) 10:01 AM: 
+@joel, we’ve had discussions about that several times in the past, never really got anywhere with that for various reasons
+Joey Aiello 10:01 AM: 
+Not supported, but this does mostly do what you want: https://github.com/PowerShell/PowerShell/blob/master/tools/install-powershell.ps1 
+Adil Zia 10:01 AM: 
+yay
+Ryan Yates 10:02 AM: 
+specifically the inclusion of this https://github.com/PowerShell/PowerShell/pull/8109 and future experimental feature plans
+Christoph Bergmeister 10:02 AM: 
+I don't mind about telemetry, people that don't like it can turn it off anyway
+Keith Hill 10:03 AM: 
+Telemetry on loaded extensions would be handy for extension authors.
+kvprasoon 10:05 AM: 
+Experimental features are a kind of preview within preview release 
+Christoph Bergmeister 10:07 AM: 
+Rss is still fine but I got a couple of new unreads
+Aleksandar 10:08 AM: 
+comments won't be migrated?
+Ryan Yates 10:09 AM: 
+it seemed to auto pull into the PowerShell Slack
+Ryan Yates 10:09 AM: 
+the new Blog URL that is
+JB Lewis 10:10 AM: 
+Going back to July, there are no comments
+Corey Webster 10:10 AM: 
+Thanks for doing a awesome job!
+Keith Hill 10:10 AM: 
+What are the plans for PS sessions at the MVP Summit?
+Ryan Yates 10:11 AM: 
+NDA still Keith
+Keith Hill 10:11 AM: 
+:-)
+kvprasoon 10:11 AM: 
+Hope the team will be available @PSConfAsia 2019
+kvprasoon 10:12 AM: 
+sure (y)
+Ryan Yates 10:12 AM: 
+PSDayUK Call for Speakers is open too - https://sessionize.com/psdayuk-2019
+Maximo Trinidad 10:13 AM: 
+I love the suggestion feature from the Experimental Features.
+Maximo Trinidad 10:15 AM: 
+:)
+Corey Webster 10:15 AM: 
+(flex)
+Adam Murray 10:15 AM: 
+Just tested that experimental feature too. Great
+Keith Hill 10:15 AM: 
+Thx
+JB Lewis 10:15 AM: 
+Thanks!
+Maximo Trinidad 10:15 AM: 
+:)
+Maximo Trinidad 10:15 AM: 
+Bye!!
+kvprasoon 10:16 AM: 
+bye and thanks everyone 
+Adam Murray 10:16 AM: 
+bye
