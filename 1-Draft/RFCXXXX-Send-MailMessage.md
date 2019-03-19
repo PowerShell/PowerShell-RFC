@@ -19,6 +19,14 @@ re-implement as a separate module.
 
 ## Motivation
 
+### Primary
+
+The underlying API, [`SmtpClient`](https://docs.microsoft.com/dotnet/api/system.net.mail.smtpclient), doesn't support many modern protocols.
+It is compat-only.
+It's great for one off emails from tools, but doesn't scale to modern requirements of the protocol.
+
+### Secondary
+
     Most major mail platforms now have REST methods to send mail, which allows `Invoke-RestMethod' to allow sending mail messages.
 
     * gmail
@@ -29,9 +37,9 @@ re-implement as a separate module.
 
 ## Removal Plan
 
-### Add a warning to 6.2 after the release of 6.2
+### Add a warning to 6.2
 
-In a 6.2 servicing release, we will add a warning to `Send-MailMessage` that an alternative method should be found.
+In a 6.2, we will add an obsolete warning to `Send-MailMessage` that an alternative method should be found.
 
 ### Remove the cmdlet in 6.3
 
@@ -43,19 +51,29 @@ If needed, develop a new cmdlet based on the DotNet recommended solution of [Mai
 
 ## Alternate Proposals and Considerations
 
+### Alternative to removal
+
+Instead of removing the cmdlet,
+a switch could be added requiring the user to accept the risk of using older less secure implementations.
+This switch would be called `-AllowInsecure` and would be mandatory.
+
+### Community replacement
+
 The community could develop a replacement that can could be incorporated back into PowerShell Core.
 This has the disadvantage of increasing the size of PowerShell Core and delaying the solution.
 
-### GMail REST API
+### Additional considerations
+
+#### GMail REST API
 
 To use the GMail REST API the following additional items are needed
 
-### WebSafeBase64
+#### WebSafeBase64
 
 For GMail, a MIME message is required to be encoded in this format.
 https://code.google.com/p/stringencoders/wiki/WebSafeBase64
 
-### Something to compose the MIME message
+#### Something to compose the MIME message
 
 For GMail, you have to pass the MIME message.
 
