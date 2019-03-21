@@ -32,6 +32,18 @@ Configuration schemes allow to customize `PowerShell Core` in the most flexible 
 - Enterprise system administrators can use GPO, GPP and computer-wide settings files to apply approved configuration settings and mandatory security settings in a centralized manner. The same settings can be applied at user, application or startup levels.
 - Developers and consumers can use user, application and startup level settings files.
 
+### Configuration defaults
+
+PowerShell Core has hardcoded defaults for all configuration options.
+
+The default values must be `secure-by-default`.
+
+For release versions hardcoded defaults must be the same as ones in re-installed configuration files. For preview versions they may vary (ex., enable experimental features and so on).
+
+If during startup PowerShell Core cannot read configuration files it uses _hardcoded_ defaults.
+
+If during operation PowerShell Core cannot read configuration files it continue to use _current_ (runtime) configuration values.
+
 ### Settings locations
 
 `PowerShell Core` settings are grouped into `Policy settings` and `Regular settings`. Regular settings are normal configuration settings. Regular settings can be treated as default values. Policy settings is high priority and overlap regular settings. Policy settings are used by administrators to centrally manage applications.
