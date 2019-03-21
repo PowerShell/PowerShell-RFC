@@ -37,7 +37,7 @@ Configuration schemes allow to customize `PowerShell Core` in the most flexible 
 `PowerShell Core` settings are grouped into `Policy settings` and `Regular settings`. Regular settings are normal configuration settings. Regular settings can be treated as default values. Policy settings is high priority and overlap regular settings. Policy settings are used by administrators to centrally manage applications.
 
 Location | Policy settings | Regular settings
-- | - | -
+-| - | -
 File section | "PowerShell": { "PolicySettings": {...} } | "PowerShell": { "RegularSettings": {...} }
 File section | "OtherPowerShellApplication": { "PolicySettings": {...} } | "OtherPowerShellApplication": { "RegularSettings": {...} }
 Registry key | Software\Policies\PowerShellCore | Software\PowerShellCore
