@@ -1,0 +1,244 @@
+---
+RFC: RFCXXXX
+Author: Dongbo Wang
+Status: Draft
+SupercededBy: N/A
+Version: 1.0
+Area: Console
+Comments Due: 4/30/2019
+Plan to implement: Yes
+---
+
+# Notification on PowerShell version updates
+
+Today, to find out whether a new version of PowerShell is available,
+one has to check the release page of the `PowerShell\PowerShell` repository,
+or depend on communication channels like `twitter` or `GitHub Notifications`.
+It would be convenient if `pwsh` itself can notify the user of a new update on startup.
+
+## Motivation
+
+    As a PowerShell user, I get notified when a new version of `pwsh` becomes available.
+
+## Specification
+
+### Target Goals
+
+1. No notification or update check when the running `pwsh` is a self-built version.
+No notification or update check for non-interactive sessions.
+Also, no notification when the PowerShell banner message is suppressed.
+
+2. When there is a new update, assuming you use `pwsh` every day
+and at least one interactive `pwsh` session lasts long enough for the update check,
+then you should be able to see an update notification during the `pwsh` startup on the same day of a release or the next day at the latest.
+
+3. This feature must have very minimal impact on the startup time of `pwsh`.
+This means the check for update must not happen during `pwsh` startup.
+The only acceptable extra overhead to the `pwsh` startup should just be the work related to printing the notification.
+
+4. Check for updates should not blindly run for every interactive `pwsh` session.
+For a particular version of `pwsh`, only one check at most can run to complete per a day
+no matter how many interactive session of the `pwsh` are started/opened in that day.
+
+5. After a new update is detected during a successful check,
+all subsequent interactive sessions of that version of `pwsh` should show the notification at startup time.
+And subsequent checks can be avoided for a reasonable period of time, such as a week.
+
+6. `pwsh` of preview versions should check for the new preview version as well as the new GA version.
+`pwsh` of GA versions should check for the new GA version only.
+
+7. The notification and update check are not needed in some scenarios,
+such as when `pwsh` is in a container image.
+Hence, you should be able to suppress them altogether by setting an environment variable.
+
+### No Goals
+
+1. Notification shows up right after a new version of `pwsh` is released.
+
+   _This is not a goal._
+   Assuming you use `pwsh` interactively every day,
+   then a notification about the new release may show up on the same day,
+   but is guaranteed no later than the next day.
+
+2. If an update check detects a new release, the notification should show up in the same session.
+
+   _This is not a goal._
+   An update check should happen way after the startup of an interactive session,
+   and thus it has no impact on whether or not a notification will be shown at the startup of that session.
+   If new release is detected,
+   the subsequent interactive sessions will show a notification about that new release.
+
+### Implementation
+
+This section talks about
+
+- when to do the update check
+- how to persist the detected new release for subsequent `pwsh` sessions to use
+- how to synchronize update checks from different processes of the same version `pwsh` so that at most only one can run to complete during a day
+- how to do the update check
+- how to display the notification
+
+#### When to do the update check
+
+During the startup, `pwsh` creates a `Task` of the update check work,
+but delays the task run for 3 seconds by using `Task.Delay(3000)`.
+The typical startup time for `pwsh` with a moderate size profile should be less than 1 second.
+Given that, I guess it's reasonable to delay the update check work for 3 seconds,
+so that it has close-to-zero impact on the startup performance.
+
+#### How to persist information about a new version
+
+The version of new release is persisted using a file,
+not as the file content, but instead baked in the file name in the following template,
+so that we can avoid extra file loading at the startup.
+
+```none
+_update_<new-version>
+```
+
+The file should be in a folder that is unique to the specific version of `pwsh`.
+For example, for the `v6.2.0 pwsh`, the folder `6.2.0` will be created in the `pwsh` cache folder (shown below),
+and the update check related files for that version of `pwsh` are put there exclusively.
+In this way, the update information for different versions of `pwsh` doesn't interfere with each other.
+
+- Windows: `$env:LOCALAPPDATA\Microsoft\PowerShell\6.2.0`
+- Unix: `$env:HOME/.cache/powershell/6.2.0`
+
+#### How to synchronize update checks
+
+The most challenging part is to properly synchronize the update checks started from different `pwsh` processes,
+so that for a specific version of `pwsh`, only one update check task, at most, will run to complete per a day.
+Other tasks should be able to detect "a check is in progress" or "the check has been done for today" and bail out early,
+to avoid any unnecessary network IO or CPU cycles.
+
+We need two more files to achieve the synchronization,
+`sentinel-{year}-{month}-{day}` and `sentinel-{year}-{month}-{day}.done`.
+The `{year}-{month}-{day}` part will be filled with the date of current day when the update check task starts to run,
+and they will be in the version folder too.
+
+The file `sentinel-{year}-{month}-{day}` serves as a file lock among `pwsh` processes.
+The file `sentinel-{year}-{month}-{day}.done` serves as a flag that indicates a successful update check as been done for the day.
+Here are the sample code for doing this synchronization:
+
+```c#
+const string TestDir = @"C:\arena\tmp\updatetest";
+const string FileNameTemplate = "sentinel-{0}-{1}-{2}";
+
+static void CheckForUpdate()
+{
+    // Some pre-validation needs to happen to see if we need to do anything at all.
+    // - If the current running `pwsh` is a self-built version, let's bail out early.
+    // - Check if a file like `_update_<version>` already exists.
+    //   If so, check the `LastWriteTime` to see if it's still relatively new, say within a week.
+    //   If so, let's bail out early.
+
+    DateTime today = DateTime.UtcNow;
+    string todayFileName = string.Format(
+        CultureInfo.InvariantCulture,
+        FileNameTemplate,
+        today.Year.ToString(),
+        today.Month.ToString(),
+        today.Day.ToString());
+
+    string todayFilePath = Path.Combine(TestDir, todayFileName);
+    string todayDoneFilePath = string.Concat(todayFilePath, ".done");
+
+    if (File.Exists(todayDoneFilePath))
+    {
+        // A successful update check has been done today,
+        // so we can bail out early.
+        return;
+    }
+
+    try
+    {
+        // Use 'todayFilePath' as the file lock -- the update check run from each process will compete on
+        // creating and holding on the same file.
+        //  - 'FileMode.CreateNew' means only one process can create/hold the file.
+        //  - 'FileOptions.DeleteOnClose' means the file is cleaned up once it's closed.
+        //     - Note that the file will be deleted even if the `pwsh` process terminates before the FileStream is disposed.
+        using (FileStream s = new FileStream(
+                todayFilePath,
+                FileMode.CreateNew,
+                FileAccess.Write,
+                FileShare.None,
+                bufferSize: 1024,
+                FileOptions.DeleteOnClose))
+        {
+            if (File.Exists(todayDoneFilePath))
+            {
+                // After grab the file lock, it turns out a successful check has finished.
+                // Then let's bail out early.
+                return;
+            }
+
+            // Now it's guaranteed that I'm the only process that reaches here.
+            foreach (string oldFile in Directory.EnumerateFiles(TestDir, "sentinel-*-*-*.done"))
+            {
+                // Clean up the old '.done' file, there should be only one.
+                File.Delete(oldFile);
+            }
+
+            // Do the real update check
+            //  - Send HTTP request to query for the new release/pre-release;
+            //  - If there is a valid new release that should be reported to the user, create the file `_update_<new-version>`,
+            //    or rename the existing `_update_<old-version>` to `_update_<new-version>`.
+            // ... more ...
+
+            // Finally, create the `todayDoneFilePath` file as an indicator that a successful update check has finished today.
+            new FileStream(
+                todayDoneFilePath,
+                FileMode.CreateNew,
+                FileAccess.Write,
+                FileShare.None,
+                bufferSize: 1024,
+                FileOptions.None).Close();
+        }
+    }
+    catch (Exception e)
+    {
+        // An update check is in progress from another `pwsh` process. So it's OK to just return.
+    }
+}
+```
+
+With the file lock, only one process can get in the guarded `using` block at a given time.
+So only one process will be creating the file `_update_<version>`, or renaming an old such file to reflect the new version.
+Yes, other processes could be looking at the old file name (when a `pwsh` session tries to print a notification),
+or working with an outdated `FileInfo` object (another update check tries to do a pre-validation).
+But it's fine for that to happen:
+
+- In the former case, that particular `pwsh` session will show a notification about an outdated version,
+  but the next `pwsh` session will show the right notification.
+- In the latter case, the other update check will continue and find the `.done` file already exists for today.
+
+It's possible that a `pwsh` session terminates while the update check task is still running,
+in the middle of the `using` block for example.
+Creating the `.done` file is the very last step in the `using` block.
+So if the session ends before the `.done` file is created,
+another update check will happen when the next `pwsh` session starts and finish the work.
+
+#### How to do the update check
+
+This is the easy part.
+
+- Determine if we need to check pre-releases.
+- Send HTTP query request.
+- If there is a new update, create the file `_update_<version>` if one doesn't exists yet;
+  or rename the existing file with the new version.
+
+#### How to display the notification
+
+`pwsh` checks to see if notification should be printed only if it's allowed to print the banner message.
+
+- Run `Directory.EnumerateFiles` with the the version directory and the pattern `_update_v*.*.*` to find such a file.
+- If a file path is returned, then get the version information from the file name.
+- Use that version to construct the notification message, including the URL to that GitHub release page.
+
+## Alternate Proposals and Considerations
+
+When thinking about how to reduce unnecessary update checks,
+the first design I had was to depend on the `Day` of the month.
+So for instance, we can check for updates every 3 days by checking `DateTime.UtcNow.Day % 3 == 0`.
+But that means in the worst case, a user won't be notified of a new release until 3 days after the release.
+That makes this feature somewhat broken from the UX perspective.
