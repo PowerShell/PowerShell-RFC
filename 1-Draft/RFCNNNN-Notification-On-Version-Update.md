@@ -51,7 +51,7 @@ And subsequent checks can be avoided for a reasonable period of time, such as a 
 such as when `pwsh` is in a container image.
 Hence, you should be able to suppress them altogether by setting an environment variable.
 
-### No Goals
+### Non-Goals
 
 1. Notification shows up right after a new version of `pwsh` is released.
 
