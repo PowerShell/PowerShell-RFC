@@ -37,7 +37,7 @@ This means the check for update must not happen during `pwsh` startup.
 The only acceptable extra overhead to the `pwsh` startup should just be the work related to printing the notification.
 
 4. Check for updates should not blindly run for every interactive `pwsh` session.
-For a particular version of `pwsh`, only one check at most can run to complete per a day
+For a particular version of `pwsh`, only one check at most can run to complete per day
 no matter how many interactive session of the `pwsh` are started/opened in that day.
 
 5. After a new update is detected during a successful check,
