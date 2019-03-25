@@ -1,7 +1,7 @@
 ---
 RFC:  RFC0023
 Author:  Bruce Payette
-Status:  Draft
+Status:  Rejected
 SupercededBy:  N/A
 Version: 0.1
 Area: CMDLETS
