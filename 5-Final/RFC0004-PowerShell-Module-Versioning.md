@@ -32,13 +32,20 @@ This RFC proposes the following guideline for the naming and versioning of modul
 
 * Modules, scripts, commands, and DSC resources should be named as they are expected to be used, regardless of the state (experimental, preview, production, etc.)
 * Modules, scripts, commands, and DSC resources should be versioned in a way that aligns with Semantic Versioning, meaning:
-  * Versions contain at least 3 segments separated by periods: Major.Minor.Patch
-  * Major version number changes if changes are made that are incompatible with the previous version
-  * Minor version number changes if functionality is added in a backwards-compatible manner
-  * Patch version number changes when there is an update that is backwards-compatible and does not add new features
-  * If a 4th segment is used, it indicates a build number only, with no changes in the component. *Note that this is an open issue*
-* Major version 0 (0.x.y) indicates code that is experimental. Version 1.0.0 is expected to be a production-ready version of the code.
-* Preview versions of major updates released after the module reaches production-ready state: If the developer desires to publish a preview or experimental copy of a major update, they should do so via a project development site such as GitHub. *Note that this is an open issue.*
+  * The version should be structured as 3 numeric blocks separated by periods, as in 0.1.1 or 4.11.192
+  Versions starting with "0" indicate that the package is not yet production ready, and the first number should only begin
+  with "0" if that is the only number used
+  * Changes in the first number (1.9.9999 to 2.0.0) indicate major and breaking changes between the versions
+  * Changes to the second number (1.1 to 1.2) indicate feature-level changes, such as adding new cmdlets to a module
+  * Changes to the third number indicate non-breaking changes, such as new parameters, updated samples, or new tests
+  * When listing versions, PowerShell will sort the versions as strings, so 1.01.0 will be treated as greater than 1.001.0
+* PowerShell was created before SemVer was published, so it provides support for most but not all elements of SemVer, specifically:
+  * It does not support prerelease strings in version numbers. This is useful when a publisher wishes to deliver a preview
+    release of a new major version after providing a version 1.0.0. This will be supported in a future release of the PowerShell Gallery
+    and PowerShellGet cmdlets.
+* PowerShell and the PowerShell Gallery allow version strings with 1, 2, and 4 segments. Many early modules did not follow the
+  guidelines, and product releases from Microsoft include build information as a 4th block of numbers (for example 5.1.14393.1066). From
+  a versioning standpoint, these differences are ignored.
 * This guideline affects publishing PowerShell modules, commands, scripts, and DSC resources via the [PowerShell Gallery](https://powershellgallery.com), and should not be implied as having broader applicability. 
 
 ### Alternate Proposals and Considerations
