@@ -166,14 +166,14 @@ The Runspace-level isolation seems to be more promising.
 However, the Runspace-level isolation doesn't help the motivation called out above,
 because it's still not possible to load same assemblies with different versions in the same Runspace load context.
 
-There is probably an easier way to address that scenario -- register a handler to `AssemblyLoadContext.Default.Resolving` event.
+There is probably an easier way to address that scenario -- register a handler to `AssemblyLoadContext.AssemblyResolve` event.
 The resolving process is as follows:
 
-- When `Assembly.Load` fails, the `Resolving` event will be triggered.
-  - Then we can check whether an assembly with the same name is already loaded,
-    - If yes, we check to see if the requested assembly has a higher version,
-      - If yes, we use the location of the requesting assembly to search for the requested assembly
-        - If found, we load it into a separate custom `AssemblyLoadContext`, and return the assembly.
+- When `Assembly.Load` fails, the `AssemblyResolve` event will be triggered.
+  - The event arg passed in contains the requesting assembly,
+    so we can get the directory where the requesting assembly locates.
+    - Search in that particular directory to find the exact match of the requested assembly.
+      - if found, load it into the load context of the requesting assembly.
 
 Yes, this can also cause interoperability issues,
 but the chance that a user is affected by it should be low compared to supporting `Import-Module -Isolated`,
