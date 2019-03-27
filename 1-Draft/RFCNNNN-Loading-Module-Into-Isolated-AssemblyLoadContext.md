@@ -154,17 +154,17 @@ The Runspace-level isolation seems to be more promising.
   then search in the default load context.
 - Runspace load context can be reclaimed after the Runspace is closed,
   because the Runspace is not held on by anything other than the user code.
-- It fit in the server-application model better.
+- It fits in the server-application model better.
   Imagine we want to make a server process for PowerShell,
-  and any host can connect to the server and request for a new session.
-  It would be a requirement that an isolated session is created for each host so they are not interference between the hosts.
+  and any hosts can connect to the server and request for a new session.
+  It would be a requirement that an isolated session is created for each host so they are not interfered with each other.
   The Runspace-level isolation would be perfect in this scenario,
-  since a server process is able to create multiple sessions in-proc to satisfy requests.
+  since one server process would be able to satisfy multiple hosts by creating isolated sessions for them.
 
 ### About the scenario called out in Motivation
 
 However, the Runspace-level isolation doesn't help the motivation called out above,
-because it's still not possible to load same assemblies with different versions in the Runspace load context.
+because it's still not possible to load same assemblies with different versions in the same Runspace load context.
 
 There is probably an easier way to address that scenario -- register a handler to `AssemblyLoadContext.Default.Resolving` event.
 The resolving process is as follows:
