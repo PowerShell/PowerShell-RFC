@@ -93,7 +93,7 @@ not as the file content, but instead baked in the file name in the following tem
 so that we can avoid extra file loading at the startup.
 
 ```none
-_update_<new-version>
+_update_<version>_<publish-date>
 ```
 
 The file should be in a folder that is unique to the specific version of `pwsh`.
@@ -112,36 +112,37 @@ Other tasks should be able to detect "a check is in progress" or "the check has 
 to avoid any unnecessary network IO or CPU cycles.
 
 We need two more files to achieve the synchronization,
-`sentinel-{year}-{month}-{day}` and `sentinel-{year}-{month}-{day}.done`.
+`"sentinel"` and `"sentinel-{year}-{month}-{day}.done"`.
 The `{year}-{month}-{day}` part will be filled with the date of current day when the update check task starts to run,
 and they will be in the version folder too.
 
-The file `sentinel-{year}-{month}-{day}` serves as a file lock among `pwsh` processes.
-The file `sentinel-{year}-{month}-{day}.done` serves as a flag that indicates a successful update check as been done for the day.
+The file `"sentinel"` serves as a file lock among `pwsh` processes.
+The file `"sentinel-{year}-{month}-{day}.done"` serves as a flag that indicates a successful update check as been done for the day.
 Here are the sample code for doing this synchronization:
 
 ```c#
 const string TestDir = @"C:\arena\tmp\updatetest";
-const string FileNameTemplate = "sentinel-{0}-{1}-{2}";
+const string SentinelFileName = "sentinel";
+const string DoneFileNameTemplate = "sentinel-{0}-{1}-{2}.done";
 
 static void CheckForUpdate()
 {
     // Some pre-validation needs to happen to see if we need to do anything at all.
     // - If the current running `pwsh` is a self-built version, let's bail out early.
-    // - Check if a file like `_update_<version>` already exists.
+    // - Check if a file like `_update_<version>_<publish-date>` already exists.
     //   If so, check the `LastWriteTime` to see if it's still relatively new, say within a week.
     //   If so, let's bail out early.
 
     DateTime today = DateTime.UtcNow;
-    string todayFileName = string.Format(
+    string todayDoneFileName = string.Format(
         CultureInfo.InvariantCulture,
-        FileNameTemplate,
+        DoneFileNameTemplate,
         today.Year.ToString(),
         today.Month.ToString(),
         today.Day.ToString());
 
-    string todayFilePath = Path.Combine(TestDir, todayFileName);
-    string todayDoneFilePath = string.Concat(todayFilePath, ".done");
+    string sentinelFilePath = Path.Combine(TestDir, SentinelFileName);
+    string todayDoneFilePath = Path.Combine(TestDir, todayDoneFileName);
 
     if (File.Exists(todayDoneFilePath))
     {
@@ -152,18 +153,9 @@ static void CheckForUpdate()
 
     try
     {
-        // Use 'todayFilePath' as the file lock -- the update check run from each process will compete on
-        // creating and holding on the same file.
-        //  - 'FileMode.CreateNew' means only one process can create/hold the file.
-        //  - 'FileOptions.DeleteOnClose' means the file is cleaned up once it's closed.
-        //     - Note that the file will be deleted even if the `pwsh` process terminates before the FileStream is disposed.
-        using (FileStream s = new FileStream(
-                todayFilePath,
-                FileMode.CreateNew,
-                FileAccess.Write,
-                FileShare.None,
-                bufferSize: 1024,
-                FileOptions.DeleteOnClose))
+        // Use 'sentinelFilePath' as the file lock.
+        // The update check tasks started by every 'pwsh' process will compete on holding this file.
+        using (FileStream s = new FileStream(sentinelFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
         {
             if (File.Exists(todayDoneFilePath))
             {
@@ -186,13 +178,7 @@ static void CheckForUpdate()
             // ... more ...
 
             // Finally, create the `todayDoneFilePath` file as an indicator that a successful update check has finished today.
-            new FileStream(
-                todayDoneFilePath,
-                FileMode.CreateNew,
-                FileAccess.Write,
-                FileShare.None,
-                bufferSize: 1024,
-                FileOptions.None).Close();
+            new FileStream(todayDoneFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None).Close();
         }
     }
     catch (Exception e)
@@ -203,7 +189,7 @@ static void CheckForUpdate()
 ```
 
 With the file lock, only one process can get in the guarded `using` block at a given time.
-So only one process will be creating the file `_update_<version>`, or renaming an old such file to reflect the new version.
+So only one process will be creating the file `_update_<version>_<publish-date>`, or renaming an old such file to reflect the new version.
 Yes, other processes could be looking at the old file name (when a `pwsh` session tries to print a notification),
 or working with an outdated `FileInfo` object (another update check tries to do a pre-validation).
 But it's fine for that to happen:
@@ -220,18 +206,30 @@ another update check will happen when the next `pwsh` session starts and finish 
 
 #### How to do the update check
 
-This is the easy part.
+This is comparatively the easy part.
 
 - Determine if we need to check pre-releases.
-- Send HTTP query request.
-- If there is a new update, create the file `_update_<version>` if one doesn't exists yet;
+- Send HTTP query request and parse the response.
+  Some optimization work is needed in this step (see below).
+  It would be much better if we can have the latest release/pre-release information stored in a well-known URL,
+  to make the query easier and take less time.
+  - GitHub API doesn't support querying for the latest pre-release,
+    so we need to hit the 'get-all-releases' API `https://api.github.com/repos/PowerShell/PowerShell/releases`.
+    By default that will return 30 records per page and result in very expensive payload.
+    As an optimization, we should add `?per_page=4` to make it only return the most recent 4 records.
+    Most likely, they will include the latest release or pre-release.
+  - The JSON payload for 4 release records is still a lot,
+    and thus the deserialization is expensive, taking about 650 ms on my dev machine.
+    We only care about the `tag_name` and `published_at` attributes,
+    so it would be desirable to optimize the deserialization to skip the unneeded.
+- If there is a new update, create the file `_update_<version>_<publish-date>` if one doesn't exists yet;
   or rename the existing file with the new version.
 
 #### How to display the notification
 
 `pwsh` checks to see if notification should be printed only if it's allowed to print the banner message.
 
-- Run `Directory.EnumerateFiles` with the the version directory and the pattern `_update_v*.*.*` to find such a file.
+- Run `Directory.EnumerateFiles` with the the version directory and the pattern `_update_v*.*.*_????-??-??` to find such a file.
 - If a file path is returned, then get the version information from the file name.
 - Use that version to construct the notification message, including the URL to that GitHub release page.
 
