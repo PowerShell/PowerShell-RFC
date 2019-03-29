@@ -39,7 +39,7 @@ It's great for one off emails from tools, but doesn't scale to modern requiremen
 
 ### Add a warning to 6.2
 
-In a 6.2, we will add an obsolete warning to `Send-MailMessage` that an alternative method should be found.
+In a 6.2, we have added an obsolete warning to `Send-MailMessage` that an alternative method should be found.
 
 ### Remove the cmdlet in 6.3
 
