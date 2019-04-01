@@ -1,7 +1,7 @@
 ---
-RFC: RFC
+RFC: RFC0034
 Author: Michael Klement
-Status: Draft
+Status: Rejected
 Version: 0.1
 Area: Operators
 Comments Due: 7/8/2018
