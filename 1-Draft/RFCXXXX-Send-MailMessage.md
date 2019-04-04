@@ -35,15 +35,20 @@ It's great for one off emails from tools, but doesn't scale to modern requiremen
     * Office365
       * https://docs.microsoft.com/en-us/previous-versions/office/office-365-api/api/version-2.0/mail-rest-operations#SendMessages
 
-## Removal Plan
+## Deprecation Plan
 
 ### Add a warning to 6.2
 
 In a 6.2, we have added an obsolete warning to `Send-MailMessage` that an alternative method should be found.
 
-### Remove the cmdlet in 6.3
+**Note:** Adding an obsolete warning should not break compatibility in any way.
 
-During the development of 6.3, remove the `Send-MailMessage` cmdlet.
+### Positive confirmation of issue in 6.3
+
+We will add a switch requiring the user to accept the risk of using older **possibly** less secure implementations.
+This switch would be called `-AllowUnsecureConnection` and would be mandatory
+
+**Note:** The switch name is based on the [DSC Property](https://docs.microsoft.com/en-us/powershell/dsc/managing-nodes/metaconfig#configuration-server-blocks)
 
 ### If needed, develop an alternative
 
@@ -51,11 +56,11 @@ If needed, develop a new cmdlet based on the DotNet recommended solution of [Mai
 
 ## Alternate Proposals and Considerations
 
-### Alternative to removal
+### Remove the cmdlet during 6.3
 
-Instead of removing the cmdlet,
-a switch could be added requiring the user to accept the risk of using older less secure implementations.
-This switch would be called `-AllowInsecure` and would be mandatory.
+During the development of 6.3, remove the `Send-MailMessage` cmdlet.
+
+Feedback on this option was negative and the RFC has been updated with then next most reasonable option.
 
 ### Community replacement
 
