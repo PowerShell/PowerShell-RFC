@@ -1,10 +1,14 @@
 # PowerShell Core Community Call
 
-The PowerShell Core Community Call is held on the 3rd Thursday of every month.
-Topics include PowerShell Core, PSEditorServices/VSCode-PS, and PSScriptAnalyzer.
+The PowerShell Community Call is held on the 3rd Thursday of every month.
+Topics include PowerShell Core, PSEditorServices/VSCode-PowerShell, PSScriptAnalyzer,
+PowerShell Gallery, and any other projects owned by the PowerShell Team.
 
-Use [this ICS file](RecurringCommunityCall.ics) (right-click `Raw` and select `Save Target/Link As` in order to download the file correctly) to put this recurring event on your calendar.
-Or use this link if you already have Skype installed: https://meet.lync.com/microsoft/jaiello/ZRC25BBR
+You can join our Teams live event at https://aka.ms/JoinPSCall
+
+Use [this ICS file](PSTeamsCall.ics) (right-click `Raw` and select
+`Save Target/Link As` in order to download the file correctly) to put a
+recurring event on your calendar.
 
 ## Notes
 
