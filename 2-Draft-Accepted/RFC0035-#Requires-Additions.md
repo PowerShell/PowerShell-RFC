@@ -1,9 +1,9 @@
 ---
 RFC: RFC
 Author: Robert Holt
-Status: Draft
+Status: Draft-Accepted
 SupercededBy:
-Version:
+Version: 0.2
 Area: Hash-requires
 Comments Due: 2018-05-15
 Plan to implement: Yes
