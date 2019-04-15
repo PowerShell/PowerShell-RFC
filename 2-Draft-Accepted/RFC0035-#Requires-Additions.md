@@ -63,11 +63,11 @@ This RFC proposes the following changes:
 
 ## Specification
 
-1. `#requires` statements appearing before any
+1. `#requires` statements appearing after any
    line that is not blank or a comment (i.e. any semantic statement)
    will generate a warning at parse-time about being hoisted to the top of the script.
    Other comments, such as hashbangs, and blank lines
-   preceing a `#requires` will not generate this warning.
+   preceding a `#requires` will not generate this warning.
 2. `#requires` can take an `-OS` parameter, 
    with possible arguments being `Windows`, `Linux` and `MacOS`.
    Multiple operating systems can be specified by providing arguments
