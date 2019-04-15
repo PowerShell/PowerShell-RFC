@@ -11,8 +11,7 @@ Plan to implement: Yes
 
 # \#Requires Additions
 
-Currently, PowerShell's `#requires` statement (or perhaps
-pragma?) supports the following parameters:
+Currently, PowerShell's `#requires` statement (or pragma) supports the following parameters:
 
 * `-Version <N>[.<n>]`, where a minimum PowerShell version can be specified
 * `-PSSnapin <PSSnapin-Name> [-Version <N><n>]`, where a required PowerShell Snapin can be specified
@@ -44,34 +43,11 @@ This RFC proposes the following changes:
      version can be specified as required. See [this PowerShell issue](https://github.com/PowerShell/PowerShell/issues/2846).
   * `-MinimumPSVersion` as an alias of `-MinimumVersion`.
 
-* **Withdrawn**, in favor of `using` statements.
-  ~~`-Assembly <Assembly-name>`, where a .NET assembly can
-  be specified as required. See [this PowerShell issue](https://github.com/PowerShell/PowerShell/issues/5022).~~
-* **Withdrawn** on the basis that this could break many existing scripts.
-  ~~Only allow `#requires` at the top level of a script,
-  before any lines that are not comments (i.e. with the
-  intention that a hashbang can still work, just before
-  any executable PowerShell code). Placing `#requires` anywhere
-  after will cause a parse-time error. This would be a **breaking
-  change**, albeit one that the documentation already claims to be 
-  in force.~~
-* **Withdrawn** since this is difficult to implement with little gain
-  and it breaks the layering of the parser.
-  ~~Using `#requires` in the interactive console will cause
-  a parse-time error. This could be a **minor breaking
-  change**, since currently PowerShell throws a [pipeline
-  creation error](https://github.com/PowerShell/PowerShell/issues/3803).~~
-
 ## Motivation
 
 > As a PowerShell user, I will be warned about
 > `#requires` statements that won't behave the
 > way I might expect based on position.
-
-> As a PowerShell user, I get feedback that `#requires`
-> statements cannot be used in the interactive console,
-> so that it's clear that they have no effect on an
-> interactive session.
 
 > As a PowerShell user, I can specify that my script
 > `#requires` being run on a specific operating system,
@@ -122,8 +98,6 @@ PowerShell issue](https://github.com/PowerShell/PowerShell/issues/4549).
 
 ## Alternate Proposals and Considerations
 
-* **Withdrawn**. ~~An `-Assembly` parameter may be unneccessary, given the
-  possibility of using `using assembly <Assembly-name>`.~~
 * Given the suite of proposed changes to `#requires`, any
   other proposed parameters for `#requires` are worth
   including and discussing in this RFC. Possible
@@ -139,3 +113,23 @@ PowerShell issue](https://github.com/PowerShell/PowerShell/issues/4549).
   currently [undocumented](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_requires?view=powershell-6) and
   there is an [open issue for it](https://github.com/PowerShell/PowerShell/issues/5908). It may
   be worth discussing in this RFC.
+
+### Withdrawn proposals
+
+* `-Assembly <Assembly-name>`, where a .NET assembly can
+  be specified as required. See [this PowerShell #5022](https://github.com/PowerShell/PowerShell/issues/5022).
+  **Withdrawn in favor of `using` statements.**
+* Only allow `#requires` at the top level of a script,
+  before any lines that are not comments (i.e. with the
+  intention that a hashbang can still work, just before
+  any executable PowerShell code). Placing `#requires` anywhere
+  after will cause a parse-time error. This would be a **breaking
+  change**, albeit one that the documentation already claims to be
+  in force.
+  **Withdrawn on the basis that this could break many existing scripts.**
+  Instead, a warning is proposed.
+* Using `#requires` in the interactive console will cause
+  a parse-time error. This could be a **minor breaking
+  change**, since currently PowerShell throws a [pipeline
+  creation error](https://github.com/PowerShell/PowerShell/issues/3803).
+  **Withdrawn since this is difficult to implement with little gain and breaks the layering of the parser.**
