@@ -20,13 +20,14 @@ statistics.
 To make the best possible investments in PowerShell we need answers backed by data to the following questions:
 
 - Is PowerShell Core usage growing (in terms of number of starts)?
-- Is the PowerShell Core user-base growing (both in terms of number of users and devices)?
+- Is the PowerShell Core user-base growing?
 - How is PowerShell being used? What is the usage distribution across command types and session type?
 - What are impediments to PowerShell Core usage growth?
 - What are issues that customers are hitting in PowerShell Core?
 - What versions of PowerShell tools and services should Microsoft continue to support?
 - What PowerShell integration scenarios are people using? How many people are using PowerShell
-  Editor services
+  Editor services?
+- Which experimental features are being used and tested? Which experimental features should we invest in?
 - How can we optimize the engine size and efficiency of PowerShell for cloud scenarios?
 
 To ensure we are getting an accurate picture of how everyone uses PowerShell, not just those most
@@ -54,6 +55,7 @@ Add telemetry to track the following metrics:
 - Count of unique devices (PowerShell)
 - Count of unique users (PowerShell)
 - Count of execution types (ex. cmdlets, native binaries/applications) (PowerShell)
+- Count of enabled PSEngine experimental features (only those created by the PowerShell Team) (PowerShell)
 - Count of session types (ex. hosted vs not hosted sessions) (PowerShell)
 - Hosting application of the of the PowerShell session (ex. VSCode, ISE, AZDevOps) (PowerShell)
 - Version of PowerShell, PowerShellGet, PackageManagement, Nuget and platform
@@ -65,16 +67,15 @@ Add telemetry to track the following metrics:
   Find a mocked-up PowerBi DashBoard with randomly generated data at the end of the document.
   It includes the following reports:
   - Unique user trends
-  - Unique devices trends
   - Types of user &mdash;based on types of executions taking place
   - VSCode usage trends
   - Application trends
   - Hosted Scenario Trends
   - PowerShellGet installation trends
 - A cmdlet for providing feedback (Send-PSFeedback):
-  - This cmdlet would take in a string and send it back to the PowerShell team
+  - This cmdlet would take in a string array and send it back to the PowerShell team
   - The cmdlet will also send Platform data (OS/version) and Shell data ($PSVersionTable)
-  - The cmdlet will have an -OpenGitHubIssue switch that will allow the user to open a GitHubIssue
+  - The cmdlet will have an -OpenGitHubIssue switch that will open a browser to a new issue template
     in the PowerShell/PowerShell repository
   - The user will have the option to include the the last error using an -IncludeError switch
   - If the command is not successful (ex. there is no Web Connection) the cmdlet will return a
@@ -86,19 +87,18 @@ Add telemetry to track the following metrics:
   - The cmdlet will stop all collection of telemetry for the remainder of that session and stop
     telemetry from being collected on subsequent starts
   - The user can request their telemetry is deleted by using a Remove-PSTelemetry cmdlet
-  - In order to have their telemetry deleted the user will be required to provide their System GUID
-    and User GUID
+  - In order to have their telemetry deleted the user will be required to provide their User GUID
   - If the cmdlet is unable to send the information the cmdlet will return a warning and alternative
     instructions for support through GitHub. It will be specified that GUIDs are unique identifiers
     and should not be shared publicly on GitHub.
-- There will be three options for the telemetry environment variable which can all be set manually
+- There will be two options for the telemetry environment variable which can be set manually
   or using the Set-PSTelemetry cmdlet
   - $True indicates all telemetry will be collected
   - $False indicates no telemetry will be collected
-  - $NonIdentifying indicates that only non-identifying telemetry will be collected i.e. no GUIDs
-    will be collected
 - The existing disabling mechanisms for PowerShell telemetry will remain including the ability to
-  set the telemetry environment variable before the first start of PowerShell
+  set the telemetry environment variable before ever needing to launch PowerShell.
+  Setting the telemetry environment variable to $False will block telemetry from being sent on 
+  every session launch.
 
 ### Future work
 
@@ -106,30 +106,33 @@ A public API for module authors and PowerShell hosted application owners to use 
 infrastructure to collect telemetry for their module or application.
 Making the API public is a phase two goal of this project.
 We will make the telemetry publicly available once it is internally validated.
-Microsoft will not collect, store, or manage any data externally gathered through this API.
+The intent of this API is to provide a simple consistent way for PowerShell authors to collect their own telemetry.
+If external PowerShell authors want to use the API they will need to provide their own storage for the data.
+Validating compliance/privacy will be up to the user of the API and not something PowerShell team/Microsoft will cover.
 
 ## Design
 
 ### PowerShell Changes
 
-- Count of unique devices will be based on a System GUID generated on the first start-up
 - Count of unique users will be based on a User GUID generated at PowerShell start time and stored
   in the user's configuration directory
-- The combination of the User GUID and System GUID will be used to determine counts of unique
-  users and unique devices
+- On first start up notification that telemetry is enabled will display in the console header
 - The Application ID will be used to disambiguate PowerShell Hosted applications. It will be a
   standardized method for applications to identify themselves in our telemetry. It will be up to
   Application owners to tag their usage for inclusion in our counts.
 - The count execution type will be collected throughout the PowerShell session
 - The type of PowerShell session (hosted vs non-hosted) will be collected at PowerShell
   engine start time
+- The count of enabled PSEngine experiemental features will be collected at PowerShell
+  engine start time. The count will be based on the experimental feature list in the 
+  powershell.config.json file under $PSHOME, and will only count features created by the PowerShell Team
 - An example of what would be collected on PowerShell Start up:
-  - System GUID: b45d67e8-8c51-4ea3-a170-0a3cedb697ed
   - User GUID: c58030d3-1a91-4086-9cb1-5bddd342056d
   - The ApplicationID: VSCode
   - The Platform being used: Windows 10 Pro
   - The Version of PowerShell: 6.2.0-preview.4
   - The type of PS session: Hosted
+  - Experimental Features enabled: "A-Experimental-Feature-name", "Another-Experimental-Feature-Name"
 - An example of what might be collected during a PowerShell Session:
   - Count of cmdlets and functions: 10
   - Count of native binaries/applications: 5
@@ -167,9 +170,16 @@ to collect/send the following information:
 
 Privacy concerns including GDPR regulations are a major consideration of this RFC.
 We underwent a privacy review before drafting this RFC to ensure that we are respecting
-the privacy of all users. The System GUID will be stored in $PSHome so that the user
+the privacy of all users. The User GUID will be stored in $PSHome so that the user
 can provide it and have their data deleted at anytime.
 Performance impact is also a major consideration of these changes, and the metrics chosen are
 designed to have as nominal an impact on end user experience as possible.
+
+We considered collecting the module/function/cmdlet usage from only modules that are downloaded by the PowerShell Gallery.
+The reason we did not chose to propose this is because of the large cost (in terms of performance, data collection, and data management) 
+compared with the relatively smaller benefit of actionable questions we could answer with the information. 
+
+We also considered automatically collecting a count of fully qualified error ids. The reason we decided against this was because 
+of the potential performance impact and high cost. 
 
 [Microsoft Privacy Policy](https://privacy.microsoft.com/en-US/privacystatement)
