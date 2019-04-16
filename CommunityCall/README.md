@@ -6,7 +6,7 @@ PowerShell Gallery, and any other projects owned by the PowerShell Team.
 
 You can join our Teams live event at https://aka.ms/JoinPSCall
 
-Use [this ICS file](PSTeamsCall.ics) (right-click `Raw` and select
+Use [this ICS file](https://raw.githubusercontent.com/PowerShell/PowerShell-RFC/master/CommunityCall/PSTeamsCall.ics) (right-click and select
 `Save Target/Link As` in order to download the file correctly) to put a
 recurring event on your calendar.
 
