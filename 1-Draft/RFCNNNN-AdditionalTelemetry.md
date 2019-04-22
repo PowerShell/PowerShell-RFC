@@ -95,7 +95,7 @@ Add telemetry to track the following metrics:
   or using the Set-PSTelemetry cmdlet
   - $True indicates all telemetry will be collected
   - $False indicates no telemetry will be collected
-- The existing disabling mechanisms for PowerShell telemetry will remain including the ability to
+- The existing disabling [mechanisms for PowerShell telemetry](https://docs.microsoft.com/en-us/powershell/scripting/whats-new/what-s-new-in-powershell-core-61?view=powershell-6#telemetry-can-only-be-disabled-with-an-environment-variable) will remain including the ability to
   set the telemetry environment variable before ever needing to launch PowerShell.
   Setting the telemetry environment variable to $False will block telemetry from being sent on 
   every session launch.
