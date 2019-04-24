@@ -6,7 +6,7 @@ Area: Commands
 Comments Due: 05/30/2019
 ---
 
-# `CurrenCulture` and comparisons
+# `CurrentCulture` and comparisons
 
 Historically, PowerShell has used `CurrenCulture` and case-insensetive in many places to make string comparisons.
 
