@@ -52,7 +52,6 @@ The goal of this is not to collect patterns of individual users but to look at a
 
 Add telemetry to track the following metrics:
 
-- Count of unique devices (PowerShell)
 - Count of unique users (PowerShell)
 - Count of execution types (ex. cmdlets, native binaries/applications) (PowerShell)
 - Count of enabled PSEngine experimental features (only those created by the PowerShell Team) (PowerShell)
