@@ -8,7 +8,7 @@ Comments Due: 05/30/2019
 
 # `CurrentCulture` and comparisons
 
-Historically, PowerShell has used `CurrenCulture` and case-insensetive in many places to make string comparisons.
+Historically, PowerShell has used `CurrentCulture` and case-insensitive in many places to make string comparisons.
 
 ## Motivation
 
