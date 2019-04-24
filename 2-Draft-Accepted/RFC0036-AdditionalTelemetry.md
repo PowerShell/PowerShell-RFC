@@ -1,7 +1,7 @@
 ---
 RFC: RFC0036
 Author: Sydney Smith
-Status: Draft
+Status: Draft-Accepted
 SupercededBy: N/A
 Version: 1.0
 Area: Telemetry
