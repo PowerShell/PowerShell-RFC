@@ -157,14 +157,6 @@ to collect/send the following information:
   - The version of PowerShell: Core 6.2
   - The platform being used: macOS 10.3
 
-## Mock PowerBi Report
-
-![PowerBi1](https://github.com/SydneyhSmith/Internal-PowerShellTeam-Docs/blob/master/Telemetry/Powerbi1.PNG)
-![PowerBi2](https://github.com/SydneyhSmith/Internal-PowerShellTeam-Docs/blob/master/Telemetry/Powerbi2.PNG)
-![PowerBi3](https://github.com/SydneyhSmith/Internal-PowerShellTeam-Docs/blob/master/Telemetry/Powerbi3.PNG)
-![PowerBi4](https://github.com/SydneyhSmith/Internal-PowerShellTeam-Docs/blob/master/Telemetry/Powerbi4.PNG)
-![PowerBi5](https://github.com/SydneyhSmith/Internal-PowerShellTeam-Docs/blob/master/Telemetry/Powerbi5.PNG)
-
 ## Alternate Proposals and Considerations
 
 Privacy concerns including GDPR regulations are a major consideration of this RFC.
