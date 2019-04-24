@@ -1,12 +1,12 @@
 ---
-RFC: RFC
+RFC: RFC0036
 Author: Sydney Smith
 Status: Draft
 SupercededBy: N/A
 Version: 1.0
 Area: Telemetry
 Comments Due: 3/29/19
-Plan to implement: <Yes | No>
+Plan to implement: Yes
 ---
 
 # Additional Telemetry in PowerShell
@@ -174,3 +174,23 @@ We also considered automatically collecting a count of fully qualified error ids
 of the potential performance impact and high cost. 
 
 [Microsoft Privacy Policy](https://privacy.microsoft.com/en-US/privacystatement)
+
+## PowerShell Committee Decision
+
+### Voting Results
+
+Joey Aiello: Accept
+
+Steve Lee: Accept
+
+Dongbo Wang: Accept
+
+Jim Truher: Accept
+
+### Majority Decision
+
+Committee agrees that this RFC addresses the need for additional telemetry to help guide future decisions.
+
+### Minority Decision
+
+N/A
