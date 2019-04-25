@@ -1,0 +1,31 @@
+<Types>
+<Type>
+  <Name>GitPullRequest</Name>
+  <Members>
+    <ScriptProperty>
+      <Name>Number</Name>
+      <GetScriptBlock>
+        [int]($this.url.split("/")[-1])
+      </GetScriptBlock>
+    </ScriptProperty>
+    <ScriptProperty>
+      <Name>Author</Name>
+      <GetScriptBlock>
+        $this.user.login
+      </GetScriptBlock>
+    </ScriptProperty>
+    <AliasProperty>
+      <Name>Created</Name>
+      <ReferencedMemberName>
+        created_at
+      </ReferencedMemberName>
+    </AliasProperty>
+    <AliasProperty>
+      <Name>Updated</Name>
+      <ReferencedMemberName>
+        updated_at
+      </ReferencedMemberName>
+    </AliasProperty>
+  </Members>
+</Type>
+</Types>
