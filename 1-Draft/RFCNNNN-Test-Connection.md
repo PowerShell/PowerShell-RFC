@@ -34,9 +34,9 @@ Test-Connection [-TargetName] <string[]> -TCPPort <int> [-Source <string>]
 
 ## Changes
 
-1. All current host/information output is relegated to the `-Verbose` stream. Currently that isn't used _at all_, and this is a perfect use case for it.
+1. All current host/information output is relegated to the `-Verbose` stream.
 2. No progress bar per committee decision in [PowerShell#6768](https://github.com/PowerShell/PowerShell/issues/6768).
-3. All output occurs as soon as data is available, individual records per PingReply / trace hop.
+3. All output occurs as soon as data is available, individual records per ping reply / trace hop.
 4. All presented data should be readily available as properties to the user.
 
 ## Output Type Proposed Members
