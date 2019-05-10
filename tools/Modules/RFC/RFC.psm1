@@ -1,4 +1,27 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
 $script:repoBase = "https://api.github.com/repos"
+$script:repositoryOwner = "PowerShell"
+$script:repositoryName  = "PowerShell"
+$script:Headers = @{ }
+
+$PSDefaultParameterValues['Invoke-RestMethod:Headers'] = $script:Headers
+
+function Set-Header {
+    param ( $token )
+    $script:Headers = @{ Authorization = "Bearer $token" }
+    $PSDefaultParameterValues['Invoke-RestMethod:Headers'] = $script:Headers
+}
+
+function Remove-Header {
+    if ( $PSDefaultParameterValues['Invoke-RestMethod:Headers'] ) {
+         $PSDefaultParameterValues.Remove("Invoke-RestMethod:Headers")
+    }
+}
+
+function Get-Header {
+    $PSDefaultParameterValues['Invoke-RestMethod:Headers']
+}
 
 <#
 .SYNOPSIS
@@ -16,9 +39,9 @@ PS> get-maxrfcnumber
 #>
 
 function Get-MaxRFCNumber {
-    $repoOwner = "PowerShell"
+    # specify a new repoName, since it's specific to RFCs
     $repoName = "PowerShell-RFC"
-    $repoFiles = Get-RepoFileList -repoOwner $repoOwner -repoName $repoName
+    $repoFiles = Get-RepoFileList -repoOwner $script:repositoryOwner -repoName $repoName
     $pattern = "RFC(?<number>\d\d\d\d)-"
     $numbers = $repoFiles.Where({$_.path -cmatch $pattern}).Foreach({if ( $_ -match $pattern ) { [int]($matches.number)}}) | Sort-Object
     $numbers[-1]
@@ -44,8 +67,8 @@ General notes
 function Get-MaxRFC {
     $maxNumber = Get-MaxRFCNumber
     $rfcPattern = "RFC{0:0000}" -f $maxNumber
-    $RFC = (Get-RepoFileList -repoOwner PowerShell -repoName PowerShell-RFC).Where({$_.path -cmatch $rfcPattern})
-    $RFC | Add-Member -TypeName RepoFile -PassThru -MemberType NoteProperty -Name file_url -Value ("https://github.com/PowerShell/PowerShell-RFC/blob/master/" + $RFC.path)
+    $RFC = (Get-RepoFileList -repoOwner $script:repositoryOwner -repoName PowerShell-RFC).Where({$_.path -cmatch $rfcPattern})
+    $RFC | Add-Member -TypeName RepoFile -PassThru -MemberType NoteProperty -Name file_url -Value ("https://github.com/${script:repositoryOwner}/PowerShell-RFC/blob/master/" + $RFC.path)
 }
 
 # get the RFCs referenced in PRs
@@ -73,12 +96,9 @@ function Get-PullRFCNumber {
     )
 
     $rfcs = [System.Collections.ArrayList]::new()
-    $page = 1
-    do {
-        $st = Invoke-RestMethod "${repoBase}/PowerShell/PowerShell-RFC/pulls?state=${State}&per_page=100&page=${page}"
-        $st.Foreach({ if ( $_.Title -match "RFC(?<num>\d\d\d\d)" ) { $null = $rfcs.Add([int]$matches.num) } })
-        $page++
-    } while ( $st.Count -gt 1 )
+    $url = "${repoBase}/${script:repositoryOwner}/PowerShell-RFC/pulls?state=${State}"
+    $st = Invoke-RestMethod -FollowRelLink $url | Foreach-Object { $_ }
+    $st.Foreach({ if ( $_.Title -match "RFC(?<num>\d\d\d\d)" ) { $null = $rfcs.Add([int]$matches.num) } })
     $rfcs.Sort()
     return $rfcs
 }
@@ -118,20 +138,17 @@ General notes
 
 function Get-PR {
     param (
-        [Parameter()]$repoOwner = "PowerShell",
-        [Parameter()]$repoName = "PowerShell",
+        [Parameter()]$repoOwner = $script:repositoryOwner,
+        [Parameter()]$repoName = $script:repositoryName,
         [ValidateSet("open","closed","all")]
         [Parameter()]$State = "all",
         [Parameter()]$PageCount = [int]::maxvalue
     )
 
-    $page = 1
-    do {
-        $url = "${repoBase}/${repoOwner}/${repoName}/pulls?state=${State}&per_page=100&page=${page}"
-        $st = Invoke-RestMethod $url
-        $st.Foreach({$_.PSObject.TypeNames.Insert(0,"GitPullRequest");$_})
-        $page++
-    } while ( $st.Count -gt 1 -and $page -lt $PageCount + 1)
+    $url = "${repoBase}/${repoOwner}/${repoName}/pulls?state=${State}"
+    # get the data, and unspool the collections returned as a result of -FollowRelLink
+    $st = Invoke-RestMethod -FollowRelLink $url | Foreach-Object { $_ }
+    $st.Foreach({$_.PSObject.TypeNames.Insert(0,"GitPullRequest");$_})
 
 }
 
@@ -165,6 +182,7 @@ function Get-RFCPullRequest {
         [Parameter()]$State = "open"
     )
 
+    # specific to RFC repo
     Get-PR -repoName "PowerShell-RFC" -State $State
 }
 
@@ -234,7 +252,8 @@ pushed_at           html_url
 function Get-GitFork {
     [CmdletBinding(DefaultParameterSetName="owner")]
     param (
-        [Parameter(ParameterSetName="owner")]$repoOwner = "PowerShell", $repoName = "PowerShell" ,
+        [Parameter(ParameterSetName="owner")]$repoOwner = $script:repositoryOwner,
+        [Parameter(ParameterSetName="owner")]$repoName = $script:repositoryName,
         [Parameter(ParameterSetName="fork")]$forkUrl
         )
     if ( ! $forkUrl ) {
@@ -242,14 +261,13 @@ function Get-GitFork {
     }
     try {
         # if we have a problem bail
-        $result = Invoke-WebRequest "${forkUrl}?per_page=100"
+        $result = Invoke-RestMethod -FollowRelLink "${forkUrl}" | Foreach-Object { $_ }
     }
     catch {
-        Write-Warning "Could not get data from $forkUrl"
+        Write-Warning "Could not get data from $forkUrl ($_)"
         return
     }
-    $forks = $result.Content | ConvertFrom-Json
-    foreach ( $fork in $forks ) {
+    foreach ( $fork in $result ) {
         if ( $fork.forks -ne 0 ) {
             Get-GitFork -forkUrl $fork.forks_url
         }
@@ -280,7 +298,7 @@ General notes
 function Get-GitBranchesFromFork {
     param ( $Fork )
     $branchurl = $Fork.branches_url -replace "{/branch}$"
-    $branchInfo = (Invoke-WebRequest $branchurl).Content | ConvertFrom-Json
+    $branchInfo = Invoke-RestMethod $branchurl
     $branchInfo.Foreach({$_.psobject.typenames.insert(0,"GitBranchInfo");$_})
 }
 
@@ -307,12 +325,11 @@ General notes
 
 function Get-LastCommit
 {
-    param ( $repoOwner = "PowerShell", $repoName = "PowerShell" )
-    #$d = "{0:YYYY}-{0:MM}-{0:DD}T{0:HH}:{0:mm}:{0:ss}Z" -f [datetime]::now()
+    param ( $repoOwner = $script:repositoryOwner, $repoName = $script:repositoryName )
+
     $repo ="${repoBase}/${repoOwner}/${repoName}/commits"
-    $r = invoke-webrequest $repo
-    $rContent = $r.content | ConvertFrom-Json
-    $lastCommit = $rContent | Sort-Object {$_.commit.committer.date}|Select-Object -Last 1
+    $result = Invoke-RestMethod $repo
+    $lastCommit = $result | Sort-Object {$_.commit.committer.date}|Select-Object -Last 1
     return $lastCommit.sha
 }
 
@@ -347,13 +364,12 @@ General notes
 
 function Get-RepoFileList
 {
-    param ( $commit, $repoOwner = "PowerShell", $repoName = "PowerShell" )
+    param ( $commit, $repoOwner = $script:repositoryOwner, $repoName = $script:repositoryName )
     if ( ! $commit ) {
         $commit = Get-LastCommit -repoOwner $repoOwner -repoName $repoName
     }
     $repo = "${repoBase}/${repoOwner}/${repoName}/git/trees/${commit}?recursive=1"
-    $r = invoke-webrequest $repo
-    $rContent = $r.content | ConvertFrom-Json
+    $rContent = Invoke-RestMethod $repo
     if ( $rContent.truncated ) {
         #Get-RepoFileListFromTree $commit
     }
