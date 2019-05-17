@@ -9,7 +9,7 @@ Comments Due: 4/30/2019
 Plan to implement: No
 ---
 
-# Deprecating `Send-MailMessage`
+# Obsoleting `Send-MailMessage`
 
 `Send-MailMessage` does not support many modern protocols leading to the inability to use this with modern secure mail services.
 See [DotNet DE0005](https://github.com/dotnet/platform-compat/blob/master/docs/DE0005.md).
@@ -35,7 +35,7 @@ It's great for one off emails from tools, but doesn't scale to modern requiremen
     * Office365
       * https://docs.microsoft.com/en-us/previous-versions/office/office-365-api/api/version-2.0/mail-rest-operations#SendMessages
 
-## Deprecation Plan
+## Obsoletion  Plan
 
 ### Add a warning to 6.2
 
