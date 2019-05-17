@@ -86,7 +86,7 @@ For the implementation, this RFC builds on the work done in [PR #8938](https://g
 
 ## Alternate Proposals and Considerations
 
-While implicit line continuance for splatted collections is not a breaking change (PowerShell syntax does not support `@variableName` at the start of a command), implicit line continuance for named parameters is a breaking change, because PowerShell syntax currently supports commands that start with dash.
+While implicit line continuance for splatted collections is not a breaking change (PowerShell syntax does not support `@variableName` at the start of a command), implicit line continuance for named parameters is a breaking change in some scenarios, because PowerShell syntax currently supports commands that start with dash, and PowerShell supports unary operators whose name starts with a single dash.
 
 For example, consider this script:
 
@@ -95,11 +95,54 @@ function -dash {
     'run'
 }
 
+Get-Process -Id $PID
 -dash
 ```
 
-In practice, I believe this to be a very low risk breaking change, because it is unlikely that (m)any users have defined functions or aliases that start with a dash, and in researching commands on Windows and Linux I was not able to find any commands with names that start with dash. However, in the event that someone is using such a command, they can still invoke it even if this breaking change is applied, by using the call operator as follows:
+In PowerShell 6.x and earlier, two commands will be executed: `Get-Process`, and `-dash`. With this PR in place and the experimental feature enabled, only one command would be executed: `Get-Process`. The reason is that the parser would identify `-dash` as being intended as a parameter on the command on the previous line. That's how the parser needs to work to make this implicit line continuance functional.
+
+Similarly, consider this script:
 
 ```PowerShell
-& -dash
+Get-Process -Id $PID
+-split 'a b c d'
 ```
+
+Similar to the previous example, in PowerShell 6.x and earlier, one command and one statement will be executed: `Get-Process`, and the unary `-split` statement. With this PR in place and the experimental feature enabled, only one command would be executed: `Get-Process`, because again, the parser would identify `-split` as being intended as a parameter on the command on the previous line. The same applies to the `-join` unary operator as well. It does not apply to the `--` prefix arithmetic operator because the parser knows parameter names cannot start with a dash.
+
+To fix this, users can do one of the following:
+
+1. For either example, insert a blank line between `Get-Process` and the next command that starts with dash, as shown here:
+
+    ```PowerShell
+    function -dash {
+        'run'
+    }
+
+    Get-Process -Id $PID
+
+    -dash # Runs the -dash command because implicit line continuance stops looking when it encounters a blank line
+
+    Get-Process -Id $PID
+
+    -split 'a b c d' # splits the string 'a b c d' into an array with four items
+    ```
+
+1. In the example with a command that starts with a dash, invoke the command using the call operator, as shown here:
+
+    ```PowerShell
+    function -dash {
+        'run'
+    }
+
+    Get-Process -Id $PID
+    & -dash # Runs the `-dash` command because implicit line continuance sees the call operator and recognizes that the line does not continue further
+    ```
+
+    Unfortunately this workaround does not work for the -split or -join unary operators, because you cannot invoke statement that starts with a unary operator with the call operator (the call operator is only for invoking commands).
+
+In practice, I believe that there are not many commands out there that start with a dash. While researching this, I couldn't find a single command on Windows or Linux that starts with a dash, so that's not a very risky scenario. However, since the `-split` and `-join` unary operators exist in PowerShell, there is a good likelihood that those may be used on a line following a command, and that is where this breaking change would have the most potential impact. While I don't feel that risk is enough to reject this proposal entirely, because it adds significant value to script authors, it is worth considering what the best approach would be.
+
+Special casing the named unary operators could work (among the thousands of commands on my system, none of them have split or join parameters, but some may exist somewhere), but that would mean future unary operators be special cased as well, so that approach isn't desirable because it risks future breaking changes.
+
+If the risk is deemed to be too high because of the risk with named unary operators, at a bare minimum I feel this feature offers enough significant value to the community that it should not be rejected, but instead offered as an optional feature so that users wanting the benefit can opt-into the functionality, and mark it as enabled for their scripts/modules. I also suspect the majority of scripters would want it turned on and would then simply write their scripts accordingly. It's really too bad though that unary operators with string names use the same single first character as parameter names because they get in the way here. In hindsight, named operators should probably have been prefixed with something other than a single dash to differentiate them from named parameters (something to consider if PowerShell ever comes out with a version with significant breaking changes plus conversion scripts).
