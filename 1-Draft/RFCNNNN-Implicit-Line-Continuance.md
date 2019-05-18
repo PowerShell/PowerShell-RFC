@@ -37,7 +37,7 @@ For example, consider this example of a New-ADUser command invocation:
 New-ADUser -Name 'Jack Robinson' -GivenName 'Jack' -Surname 'Robinson' -SamAccountName 'J.Robinson' -UserPrincipalName 'J.Robinson@enterprise.com' -Path 'OU=Users,DC=enterprise,DC=com' -AccountPassword (Read-Host -AsSecureString 'Input Password') -Enabled $true
 ```
 
-By itself it's not too much to handle, but in a script commands with many parameters like this can be difficult to manage it in a script. To wrap this command across multiple lines, users can either use backticks, or they can use splatting. The former is a nuisance which should really only be used in situations when PowerShell cannot implicitly intuit how lines are wrapped. The latter is helpful, but users lose the benefits of tab completion and Intellisense for parameters when they use splatting. As a workaround, they can work out the parameters they want to use for the command first, and then convert it into a splatted command, but that's generally onerous. Even though Visual Studio Code has an extension that makes splatting easier, as can be seen [here](https://sqldbawithabeard.com/2018/03/11/easily-splatting-powershell-with-vs-code/), once you've converted to splatting you still lose Intellisense for future updates unless you work from the command first and then add to your splatted collection, and that's just in Visual Studio Code. Other editors may or may not support that functionality, and users working in a standalone terminal won't have that available to them either.
+By itself it's not too much to handle, but in a script commands with many parameters like this can be difficult to manage. To wrap this command across multiple lines, users can either use backticks, or they can use splatting. The former is a nuisance which should really only be used in situations when PowerShell cannot implicitly intuit how lines are wrapped. The latter is helpful, but users lose the benefits of tab completion and Intellisense for parameters when they use splatting. As a workaround, they can work out the parameters they want to use for the command first, and then convert it into a splatted command, but that's generally onerous. Even though Visual Studio Code has an extension that makes splatting easier, as can be seen [here](https://sqldbawithabeard.com/2018/03/11/easily-splatting-powershell-with-vs-code/), once you've converted to splatting you still lose Intellisense for future updates unless you work from the command first and then add to your splatted collection, and that's just in Visual Studio Code. Other editors may or may not support that functionality, and users working in a standalone terminal won't have that available to them either.
 
 Instead, why not allow users to do this by supporting implicit line continuance when using named parameters:
 
@@ -69,6 +69,15 @@ New-ADUser
     -AccountPassword (Read-Host -AsSecureString 'Input Password')
     @commonParams
 ```
+
+And lastly, if users have a bunch of arguments they want to pass after the stop parsing sigil (`--%`), let them do this also (thanks @Jaykul for the suggestion):
+
+```PowerShell
+&"./plink.exe"
+    --% $Hostname -l $Username -pw $Password $Command
+```
+
+For the last one, `--%` stops the parsing of that command, so no further implicit line continuance may be used because that would require the parser which the scripter opted out of using for that command.
 
 ## Motivation
 
@@ -146,3 +155,31 @@ In practice, I believe that there are not many commands out there that start wit
 Special casing the named unary operators could work (among the thousands of commands on my system, none of them have split or join parameters, but some may exist somewhere), but that would mean future unary operators be special cased as well, so that approach isn't desirable because it risks future breaking changes.
 
 If the risk is deemed to be too high because of the risk with named unary operators, at a bare minimum I feel this feature offers enough significant value to the community that it should not be rejected, but instead offered as an optional feature so that users wanting the benefit can opt-into the functionality, and mark it as enabled for their scripts/modules. I also suspect the majority of scripters would want it turned on and would then simply write their scripts accordingly. It's really too bad though that unary operators with string names use the same single first character as parameter names because they get in the way here. In hindsight, named operators should probably have been prefixed with something other than a single dash to differentiate them from named parameters (something to consider if PowerShell ever comes out with a version with significant breaking changes plus conversion scripts).
+
+### Some Non-Breaking Alternatives
+
+1. Require users to opt-in on any command where they want this wrapping by ending the first line (and only the first line) with a sigil.
+
+    This suggestion was proposed by @jaykul. We could add a token at the end of a command and from that point on, treat subsequent lines as part of the same command if they begin with named parameters, splatted collections, or the stop-parsing sigil (`--%`). For example, this could be a multi-line command that follows these rules:
+
+    ```PowerShell
+    New-ADUser @
+        -Name 'Jack Robinson'
+        -GivenName 'Jack'
+        -Surname 'Robinson'
+        -SamAccountName 'J.Robinson'
+        -UserPrincipalName 'J.Robinson@enterprise.com'
+        -Path 'OU=Users,DC=enterprise,DC=com'
+        -AccountPassword (Read-Host -AsSecureString 'Input Password')
+        -Enabled $true
+    ```
+
+    Pros: The @ symbol is familiar since it is used for splatting.
+    Cons: Users lose the benefit of not having to use any characters for line continuance.
+
+1. Add support for optional features to PowerShell, and make this feature optional, rather than experimental.
+
+    The experimental feature is designed to be a temporary holding place until features are fully developed. There are advantages to having optional features as well, which users can opt into if they want the benefit. Ideally such functionality would have support for enabling optional features in both scripts and modules, so that the features could be used by script/module authors without impacting the experience of individual consumers of those scripts/modules. This alone (support for optional features) warrants another RFC, but assuming it is there and assuming such features can be turned on for scripts (via `#requires`?) and/or modules (via the manifest), scripters who want this capability could have it automatically turned on for new scripts/modules without risk to existing scripts/modules because they wouldn't have that feature enabled, thus preventing a breaking change. Anyone who wants this for existing scripts/modules could manually enable it and take on the responsibility of making their code work appropriately.
+
+    Pros: Allows the feature to be used without any breaking changes, and without extra continuance characters.
+    Cons: Requires optional feature work in PowerShell (an RFC that I'd be happy to write).
