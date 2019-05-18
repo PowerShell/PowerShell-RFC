@@ -174,7 +174,7 @@ If the risk is deemed to be too high because of the risk with named unary operat
         -Enabled $true
     ```
 
-    Pros: The @ symbol is familiar since it is used for splatting.
+    Pros: The @ symbol is familiar since it is used for splatting. Also, PSReadline could recognize when you're opting in to use this at the command prompt, only running the command if you hit enter twice (although this wouldn't be used nearly as often at the prompt -- it's really for scripts).
     Cons: Users lose the benefit of not having to use any characters for line continuance.
 
 1. Add support for optional features to PowerShell, and make this feature optional, rather than experimental.
