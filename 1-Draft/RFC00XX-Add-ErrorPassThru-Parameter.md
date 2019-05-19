@@ -130,7 +130,7 @@ The motivation of this RFC comes from the issue [PowerShell#6010](https://github
 
 The proposal there was a parameter that you pass a ScriptBlock to:
 
-```
+```pwsh
 Stop-Process foo* -OnError {
      Write-Host "Had an error."
 }
