@@ -1,5 +1,5 @@
 ---
-RFC: 0037
+RFC: 00XX
 Author: Tyler Leonhardt
 Status: Draft
 Area: Cmdlet-ErrorPassThru
