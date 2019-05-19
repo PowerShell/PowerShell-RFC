@@ -8,7 +8,7 @@ Comments Due: 6/18/2019
 
 # New ErrorPassThru parameter for Cmdlets and advanced functions
 
-This RPC proposes the addition of ad
+This RFC proposes the addition of an
 `-ErrorPassThru`
 parameter to help better catch and handle terminating and non-terminating errors.
 
