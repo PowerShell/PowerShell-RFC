@@ -126,7 +126,7 @@ just as you would with anything else
 
 ### Alternate Proposals and Considerations
 
-The motivation of this RFC comes from the issue https://github.com/PowerShell/PowerShell/issues/6010.
+The motivation of this RFC comes from the issue [PowerShell#6010](https://github.com/PowerShell/PowerShell/issues/6010).
 
 The proposal there was a parameter that you pass a ScriptBlock to:
 
