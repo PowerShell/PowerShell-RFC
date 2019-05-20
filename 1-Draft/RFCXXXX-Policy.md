@@ -104,7 +104,10 @@ With `-settingsfile` parameter users can assign custom settings from the config 
 
 ##### Computer-wide and user policy settings
 
-**No** user can overwrite computer-wide and user policy settings using `-settingsfile`
+Admin/root users can overwrite computer-wide and user policy settings using `-settingsfile`,
+only when not in System Lock-down mode.
+
+This will have performance impact on startup, but only when `-settingsfile` is specified.
 
 #### Priorities for Regular settings in descending order
 
@@ -139,6 +142,8 @@ A set of configuration settings in GPO scheme and file scheme for policy setting
 |                                  | Transcription               | EnableInvocationHeader             | DWORD  | Computer, Then User |
 |                                  | Transcription               | OutputDirectory                    | String | Computer, Then User |
 |                                  | UpdatableHelp               | DefaultSourcePath                  | String | Computer Wide       |
+
+I filed [#9632](https://github.com/PowerShell/PowerShell/issues/9632) on UpdatableHelp-DefaultSourcePath to make it allow User settings.
 
 #### JSON file settings format
 
@@ -196,17 +201,10 @@ A set of configuration settings in GPO scheme and file scheme for policy setting
 We could attempt to resolve policy conflicts between PowerShell 7 policy and Windows PowerShell policy.
 This would make the `Precedence for Policy settings` not just a simple list but a complex set of rules that would not be easily understood.  See [this conversation](https://github.com/PowerShell/PowerShell/issues/9309?#issuecomment-480643922).
 
-### Allow admins to overwrite computer-wide settings
+### Allowing environment variable in the JSON
 
-In System Lock-down mode, we attempt to protect from the admin,
-so allowing computer-wide or policy setting to be overwritten at the command-line is dangerous.
-
-We could try to check for System Lock-down mode and
-admin user and allow `-settingsfile` to overwrite computer-wide settings.
-
-But, performing the system lock-down check this early would hurt startup performance.
-
-I don't recommend this approach.
+A new RFC should be drafted about how to allow environment variables in the JSON.
+This would allow consistent files across platforms.
 
 ### Comment A
 
