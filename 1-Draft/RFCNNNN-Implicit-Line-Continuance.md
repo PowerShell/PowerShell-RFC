@@ -177,9 +177,49 @@ If the risk is deemed to be too high because of the risk with named unary operat
     Pros: The @ symbol is familiar since it is used for splatting. Also, PSReadline could recognize when you're opting in to use this at the command prompt, only running the command if you hit enter twice (although this wouldn't be used nearly as often at the prompt -- it's really for scripts).
     Cons: Users lose the benefit of not having to use any characters for line continuance.
 
+    Here's another alternative sigil to do the same thing that is a bit more literal:
+
+    ```PowerShell
+    New-ADUser ...
+        -Name 'Jack Robinson'
+        -GivenName 'Jack'
+        -Surname 'Robinson'
+        -SamAccountName 'J.Robinson'
+        -UserPrincipalName 'J.Robinson@enterprise.com'
+        -Path 'OU=Users,DC=enterprise,DC=com'
+        -AccountPassword (Read-Host -AsSecureString 'Input Password')
+        -Enabled $true
+    ```
+
+    Pros: ... is literal and familiar. The same PSReadline benefits listed for the previous example apply.
+    Cons: The same cons listed in the previous example apply.
+
 1. Add support for optional features to PowerShell, and make this feature optional, rather than experimental.
 
     The experimental feature is designed to be a temporary holding place until features are fully developed. There are advantages to having optional features as well, which users can opt into if they want the benefit. Ideally such functionality would have support for enabling optional features in both scripts and modules, so that the features could be used by script/module authors without impacting the experience of individual consumers of those scripts/modules. This alone (support for optional features) warrants another RFC, but assuming it is there and assuming such features can be turned on for scripts (via `#requires`?) and/or modules (via the manifest), scripters who want this capability could have it automatically turned on for new scripts/modules without risk to existing scripts/modules because they wouldn't have that feature enabled, thus preventing a breaking change. Anyone who wants this for existing scripts/modules could manually enable it and take on the responsibility of making their code work appropriately.
 
     Pros: Allows the feature to be used without any breaking changes, and without extra continuance characters.
     Cons: Requires optional feature work in PowerShell (an RFC that I'd be happy to write).
+
+1. Add argument enclosure support to PowerShell.
+
+    One reader of this RFC who expressed their dislike for this functionality was pointing out that they don't like the fact that there is no terminator to the wrapped command parameters, so PowerShell needs to determine when the command ends based on lookahead. If preferable, new syntax could be added to allow for argument enclosures so that there is a defined terminator. For example, consider this syntax:
+
+    ```PowerShell
+    New-ADUser -{
+        -Name 'Jack Robinson'
+        -GivenName 'Jack'
+        -Surname 'Robinson'
+        -SamAccountName 'J.Robinson'
+        -UserPrincipalName 'J.Robinson@enterprise.com'
+        -Path 'OU=Users,DC=enterprise,DC=com'
+        -AccountPassword (Read-Host -AsSecureString 'Input Password')
+        -Enabled $true
+    }
+    ```
+
+    What's interesting about this syntax is that these don't need to be just (named) parameter enclosures. They can be defined as argument enclosures, allowing scripters to put whatever they want on whichever lines they want, wrapping where it makes sense for them to do so, while using named parameters, positional parameters, or arguments (for external commands that don't have parameters).
+
+    Pros: Allows the feature to be used without any breaking changes (script blocks do not support negate or subtraction operators, so this new enclosure could be added without risk). Allows the scripter to wrap how they see fit, while still getting Intellisense and tab completion. Parameters and arguments are entered the same way they would be if they were all placed on one line (e.g. unlike splatting, parameter names are entered with dashes, no equals signs are required, etc.).
+    Cons: Requires a little extra syntax to make it work properly.
+
