@@ -9,35 +9,15 @@ Comments Due: June 16, 2019
 Plan to implement: Yes
 ---
 
-# Support implicit line continuance when using named parameters or splatting in commands
+# Support implicit line continuance when using named parameters, splatting, or the stop parsing sigil in commands
 
-Nobody likes having to use the backtick to wrap commands in PowerShell, yet many users still use it to get the style they prefer in their scripts.
-
-For example, PowerShell has long supported explicit line continuance when you end a pipelined command line with a pipe symbol, like this:
-
-```PowerShell
-Get-Process -Id $PID |
-    Stop-Process
-```
-
-Even though that is available, when you have a pipeline with many stages (commands) in it, the style is not as desirable as it could be if you could place the pipeline on the beginning of the line instead, like this:
-
-```PowerShell
-Get-Process -Id $PID
-    | Stop-Process
-```
-
-Historically that syntax would not be possible unless you ended each line before the last line in the pipeline with a backtick. That shouldn't be necessary though, and PowerShell should be smart enough to recognize implicit line continuance when pipelines are placed at the beginning of the line. This was discussed in detail in [Issue #3020](https://github.com/PowerShell/PowerShell/issues/3020), and [PR #8938](https://github.com/PowerShell/PowerShell/pull/8938) that was recently merged added this support to PowerShell for version 7.
-
-While that is helpful, there is another potential improvement where PowerShell could support implicit line continuance: when using named parameters or splatting in commands, and that's what this RFC is about.
-
-For example, consider this example of a New-ADUser command invocation:
+Consider this example of a New-ADUser command invocation:
 
 ```PowerShell
 New-ADUser -Name 'Jack Robinson' -GivenName 'Jack' -Surname 'Robinson' -SamAccountName 'J.Robinson' -UserPrincipalName 'J.Robinson@enterprise.com' -Path 'OU=Users,DC=enterprise,DC=com' -AccountPassword (Read-Host -AsSecureString 'Input Password') -Enabled $true
 ```
 
-By itself it's not too much to handle, but in a script commands with many parameters like this can be difficult to manage. To wrap this command across multiple lines, users can either use backticks, or they can use splatting. The former is a nuisance which should really only be used in situations when PowerShell cannot implicitly intuit how lines are wrapped. The latter is helpful, but users lose the benefits of tab completion and Intellisense for parameters when they use splatting. As a workaround, they can work out the parameters they want to use for the command first, and then convert it into a splatted command, but that's generally onerous. Even though Visual Studio Code has an extension that makes splatting easier, as can be seen [here](https://sqldbawithabeard.com/2018/03/11/easily-splatting-powershell-with-vs-code/), once you've converted to splatting you still lose Intellisense for future updates unless you work from the command first and then add to your splatted collection, and that's just in Visual Studio Code. Other editors may or may not support that functionality, and users working in a standalone terminal won't have that available to them either.
+By itself it's not too much to handle, but in a script commands with many parameters like this can be difficult to manage. To wrap this command across multiple lines, users can either use backticks, or they can use splatting. The former is a syntactical nuisance which should really only be used in situations when PowerShell cannot implicitly intuit how lines are wrapped. The latter is helpful, but users lose the benefits of tab completion and Intellisense for parameters when they use splatting. As a workaround, they can work out the parameters they want to use for the command first, and then convert it into a splatted command, but that's onerous. Even though Visual Studio Code has an extension that makes splatting easier, as can be seen [here](https://sqldbawithabeard.com/2018/03/11/easily-splatting-powershell-with-vs-code/), once you've converted to splatting you still lose Intellisense for future updates unless you work from the command first and then add to your splatted collection, and that's just in Visual Studio Code. Other editors may or may not support that functionality, and users working in a standalone terminal won't have that available to them either.
 
 Instead, why not allow users to do this by supporting implicit line continuance when using named parameters:
 
@@ -82,12 +62,12 @@ For the last one, `--%` stops the parsing of that command, so no further implici
 ## Motivation
 
     As a script/module author,
-    I can wrap long commands across multiple lines at any named parameter or splatted collection,
-    so that my scripts are easier to maintain while I still get the benefits of Intellisense and tab completion.
+    I can wrap long commands across multiple lines at any named parameter, splatted collection, or the stop-parsing sigil
+    so that my scripts are easier to write and maintain while I still get the benefits of Intellisense and tab completion.
 
 ## Specification
 
-Note: This RFC is already implemented and submitted as [PR #9614](https://github.com/PowerShell/PowerShell/pull/9614).
+Note: This RFC is already implemented and submitted as [PR #9614](https://github.com/PowerShell/PowerShell/pull/9614) in case you want to try it out early and see what it's like.
 
 Since this RFC includes some breaking changes (see below), it will be initially implemented with the `PSImplicitLineContinuanceForNamedParameters` experimental feature flag. If the PowerShell Team and the community agree that the risk of this breaking change is low enough, and the workaround is sufficient for those low frequency use cases where it does become an issue, I would much prefer not using an experimental feature flag at all.
 
@@ -137,7 +117,7 @@ To fix this, users can do one of the following:
     -split 'a b c d' # splits the string 'a b c d' into an array with four items
     ```
 
-1. In the example with a command that starts with a dash, invoke the command using the call operator, as shown here:
+2. In the example with a command that starts with a dash, invoke the command using the call operator, as shown here:
 
     ```PowerShell
     function -dash {
