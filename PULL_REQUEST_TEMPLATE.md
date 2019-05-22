@@ -2,7 +2,7 @@
 
 All new RFCs must:
 
-* have examples of the proposed behavior, preferably in the form of a script (or scripts) which shows the proposed behavior.
+* have examples of the proposed behavior, preferably in the form of a script (or scripts) which shows the proposed behavior with comments and annotations
 
 All new RFCs should:
 
