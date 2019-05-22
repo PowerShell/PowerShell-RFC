@@ -57,7 +57,7 @@ And lastly, if users have a bunch of arguments they want to pass after the stop 
     --% $Hostname -l $Username -pw $Password $Command
 ```
 
-For the last one, `--%` stops the parsing of that command, so no further implicit line continuance may be used because that would require the parser which the scripter opted out of using for that command.
+For the last one, `--%` stops the parsing of that command until a newline or a pipe is encountered, so no further parameter line continuance could be used because that would require the parser which the scripter opted out of using for that command.
 
 ## Motivation
 
