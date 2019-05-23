@@ -52,7 +52,7 @@ cacls @
 
 ```
 
-In each of these examples, the command parsing stops when one of the following is found:
+In each of these examples, the parser starts parsing the command as a multi-line command when it encounters the `@` token at the end of the line, and in this mode command parsing stops once one of the following is found:
 
 * end of file
 * blank line
@@ -80,7 +80,7 @@ The pros/cons to this new syntax are as follows:
 ## Specification
 
 * expand the command parser to accept multi-line command parameters/arguments after an at symbol (`@`) is encountered at the end of a line
-* terminate multi-line commands when the parser encounters either a blank line or a command-terminating token (pipe symbol, redirection operator, closing enclosure, or semi-colon when not used after a stop-parsing sigil, or simply pipe symbol or redirection operator when used after a stop-parsing sigil)
+* terminate multi-line commands when the parser encounters either a blank line or a command-terminating token (a command-terminating token will be a pipe symbol, redirection operator, closing enclosure, or semi-colon when the command does not have the stop-parsing sigil in its arguments, or simply pipe symbol or redirection operator the command does have the stop-parsing sigil in its arguments)
 
 ## Alternate Proposals and Considerations
 
@@ -102,13 +102,23 @@ That command will not parse because there is no closing brace for the script blo
 
 ### Inline splatting
 
-There has also been some discussion about the idea of inline splatting, using a format like `-@{...}` or `-@(...)`. Inline splatting has also been discussed separately on [RFC0002: Generalized Splatting](https://github.com/PowerShell/PowerShell-RFC/blob/master/2-Draft-Accepted/RFC0002-Generalized-Splatting.md), but using the syntax `@@{...}` or `@@(...)`. Using splatting to be able to span a single command across multiple lines has several limitations, including:
+There has also been some discussion about the idea of inline splatting, using a format like `-@{...}` or `-@(...)`. Inline splatting has also been discussed separately on [RFC0002: Generalized Splatting](https://github.com/PowerShell/PowerShell-RFC/blob/master/2-Draft-Accepted/RFC0002-Generalized-Splatting.md), but using the syntax `@@{...}` or `@@(...)`. Here is an example showing what that might look like:
+
+```PowerShell
+Get-ChildItem -@{
+    LiteralPath = $rootFolder
+    File = $true
+    Filter = '*.ps*1'
+}
+```
+
+Using inline splatting to be able to span a single command across multiple lines like this has several limitations, including:
 
 1. You cannot transition to/from the inline splatted syntax without a bunch of manual tweaks to the command (either converting parameter syntax into hashtable or array syntax or vice versa).
-1. You're forced to choose between named parameters or positional parameters/arguments. i.e. You can splat in a hashtable of named parameter/value pairs or an array of positional values, but you can't mix the two.
+1. You're forced to choose between named parameters or positional parameters/arguments. i.e. You can splat in a hashtable of named parameter/value pairs or an array of positional values, but you can't mix the two (the example shown just above is also used earlier in this RFC with positional parameters and switch parameters used without values, matching the way it is often used as a single-line command).
 1. There's no way to include unparsed arguments after the stop-parsing sigil in splatting.
 1. Splatting requires a different syntax than typical parameter/argument input, which is more to learn. In contrast, the proposal above only requires learning about the `@` sigil (borrowed from splatting, but without specifying hashtables or arrays -- just allow all content until a newline), reducing the learning curve and allowing users to use parameters the same way in either case.
 
 ### Breaking changes
 
-All previous options that would have introduced breaking changes have been removed in favor of a syntax that just works to the specification without any breaking changes, regardless of how you use it.
+All previous options from the original RFC and the discussion about it that would have introduced breaking changes have been removed in favor of a syntax that just works to the specification without any breaking changes, regardless of how you use it.
