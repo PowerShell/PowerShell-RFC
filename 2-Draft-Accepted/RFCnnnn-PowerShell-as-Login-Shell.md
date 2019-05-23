@@ -24,33 +24,48 @@ environment changes.
 
 ## Specification
 
-`/etc/profile` is a Bourne shell (sh) script that is executed to configure the
-environment and used with login shells.
-On Linux systems, this script will typically call out to other scripts (`rc` files)
-to perform their own configuration.
-On macOS, this script executes `path_helper` which sets up the `$env:PATH`
-environment variable and then if the shell is `bash` executes `bashrc`.
-
 Many existing tools expect `-l` to be accepted by a shell and to act as a login
 shell.
-Without supporting `/etc/profile`, some environment variables will be missing
-in PowerShell rendering it limited as a login or default shell.
 
-If `-l` (or `-LoadProfile`) is specified, PowerShell will execute `/etc/profile`
-using `sh` in a new process and dump out the resulting environment variables.
-It will then set those variables in the current PowerShell process.
+`-l` (expanded form is `-LoadProfile`) will explicitly have pwsh load the PowerShell
+profile.
+This is effectively a no-op as if this switch is not specified, pwsh will load
+the PowerShell profile and only doesn't load it if `-noprofile` is specified.
 
-On Windows, this switch will only explicitly load the PowerShell profiles.
+This will allow tools that expect `-l` to be accepted to work.
+There is no additional work to process `/etc/profile` when `-l` is used.
 
-Since PowerShell is starting a new process to process `/etc/profile` which itself
-may start child processes like `path_helper`, there should not be more than 100ms
-impact when `-l` is specified.
+For cases where you do need `/etc/profile` to be processed,
+such as using pwsh as your default shell,
+the proposal is to include a Bourne shell script that can be specified as the
+shell:
+
+```sh
+#!/bin/sh -l
+exec /usr/local/bin/pwsh "$@"
+```
+
+This script will be called `pwsh-login` and should be used whenever you require
+a specific login shell.
 
 ## Alternate Proposals and Considerations
 
-This RFC is not intended to address the default behavior of PowerShell to load
-the PowerShell profile.
-`-NoProfile` is still required to have PowerShell not execute PowerShell profiles.
+### Process /etc/profile using sh and copy the env vars
 
-The implementation is intended to be limited to just environment variables.
-`umask` settings, for example, will not be inherited to PowerShell.
+This proposal would be that if `-l` is specified, pwsh would run `/bin/sh -l -c export`
+which would create a new shell process that does all the processing needed for
+a login shell and export the environment variables that would be exported.
+Additional code is needed to take those environment variables and copy them to
+the parent pwsh process.
+
+The downsides to this approach is additional code to maintain,
+but more importantly not getting a complete login shell environment as things
+like ulimit and umask would not be inherited into pwsh.
+
+### pwsh to start `/bin/sh -l -c "exec pwsh"`
+
+This proposal would have pwsh when given the `-l` switch to start Bourne shell
+as a login shell and start pwsh within that process.
+
+This would result in a complete login shell environment, however, would
+incur the performance penalty of starting pwsh twice.
