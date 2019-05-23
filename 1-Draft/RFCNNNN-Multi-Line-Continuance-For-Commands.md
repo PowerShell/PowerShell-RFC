@@ -81,7 +81,11 @@ The pros/cons to this new syntax are as follows:
 ## Specification
 
 * expand the command parser to accept multi-line command parameters/arguments after an at symbol (`@`) is encountered at the end of a line
-* terminate multi-line commands when the parser encounters either a blank line or a command-terminating token (a command-terminating token will be a pipe symbol, redirection operator, closing enclosure, or semi-colon when the command does not have the stop-parsing sigil in its arguments, or simply pipe symbol or redirection operator the command does have the stop-parsing sigil in its arguments)
+* terminate multi-line commands when the parser encounters two newlines (rather than one), or when the parser encounters any other normal command-terminating token
+
+Note:
+* for commands that do not use the stop-parsing sigil in their arguments, command-terminating tokens include a pipe symbol, a redirection operator, a closing enclosure, or a semi-colon.
+* for commands that do use the stop-parsing sigil in their arguments, command-terminating tokens include a pipe symbol or a redirection operator.
 
 ## Alternate Proposals and Considerations
 
@@ -121,9 +125,9 @@ Get-ChildItem -@{
 Using inline splatting to be able to span a single command across multiple lines like this has several limitations, including:
 
 1. You cannot transition to/from the inline splatted syntax without a bunch of manual tweaks to the command (either converting parameter syntax into hashtable or array syntax or vice versa).
-1. You're forced to choose between named parameters or positional parameters/arguments for each splatted collection. i.e. You can splat in a hashtable of named parameter/value pairs or an array of positional values, but you can't mix the two (the example shown just above is also used earlier in this RFC with positional parameters and switch parameters used without values, matching the way it is often used as a single-line command).
-1. There's no way to include unparsed arguments after the stop-parsing sigil in splatting. You can add it afterwards, but not include it within.
-1. Splatting requires a different syntax than typical parameter/argument input, which is more to learn. In contrast, the proposal above only requires learning about the `@` sigil (borrowed from splatting, but without specifying hashtables or arrays -- just allow all content until a newline), reducing the learning curve and allowing users to use parameters the same way in either case.
+2. You're forced to choose between named parameters or positional parameters/arguments for each splatted collection. i.e. You can splat in a hashtable of named parameter/value pairs or an array of positional values, but you can't mix the two (the example shown just above is also used earlier in this RFC with positional parameters and switch parameters used without values, matching the way it is often used as a single-line command).
+3. There's no way to include unparsed arguments after the stop-parsing sigil in splatting. You can add it afterwards, but not include it within.
+4. Splatting requires a different syntax than typical parameter/argument input, which is more to learn. In contrast, the proposal above only requires learning about the `@` sigil (borrowed from splatting, but without specifying hashtables or arrays -- just allow all content until a newline), reducing the learning curve and allowing users to use parameters the same way in either case.
 
 Further, unlike using a leading sigil such as `@`, which would work with Intellisense and tab expansion as they are coded now, inline splatting would require special work to make Intellisense and tab expansion work with it. That's not a reason not to do it, but it is more code to write/maintain.
 
