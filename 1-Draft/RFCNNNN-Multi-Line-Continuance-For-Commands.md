@@ -52,11 +52,11 @@ cacls @
 
 ```
 
-In each of these examples, the parser starts parsing the command as a multi-line command when it encounters the `@` token at the end of the line, and in this mode command parsing stops once one of the following is found:
+In each of these examples, the parser starts parsing the command as a multi-line command when it encounters the `@` token as the last token on the line, and in this mode command parsing stops once one of the following is found:
 
 * end of file
-* blank line
-* command-terminating token
+* two newlines (as opposed to the normal one)
+* command-terminating token (i.e. all other ways of ending commands work the same as usual, and this does not affect other elements of the PowerShell syntax)
 
 The pros/cons to this new syntax are as follows:
 
@@ -66,10 +66,11 @@ The pros/cons to this new syntax are as follows:
 * parameters and arguments are entered the exact same way they would be if they were all placed on one line.
 * ad hoc could support this syntax as well (PSReadline could wait for a double-enter when in multi-line command parsing mode)
 * no breaking changes (a standalone @ is currently an unrecognized token in PowerShell no matter where it is used).
+* users can use a blank line to terminate the command, or they can opt to use a semi-colon or some other valid command-terminating token instead.
 
 **Cons:**
 
-* if no command-terminating token is used to terminate the command, a blank line is required after the command as terminator (but, users can opt to use a semi-colon or some other command-terminating token if they don't want the blank line)
+* no known cons at this time
 
 ## Motivation
 
@@ -86,7 +87,7 @@ The pros/cons to this new syntax are as follows:
 
 ### A different sigil
 
-The original draft of this RFC included different options for the sigil that could be used to enter multi-line parameter/argument parsing mode, and others were presented in the discussion however none of the other sigils that were presented could be used without breaking changes. When considering an alternate sigil, it must be something that can be identified as a unique token without breaking commands such as Write-Host (which can write many sigils to the console) or commands external to PowerShell.
+The original draft of this RFC included different options for the sigil that could be used to enter multi-line parameter/argument parsing mode, and others were presented in the discussion however none of the other sigils that were presented could be used without breaking changes. When considering an alternate sigil, it must be something that can be identified as a unique token without breaking commands that accept multiple strings as positional parameters, such as Write-Host (which can write many sigils to the console) or commands external to PowerShell.
 
 ### Enclosures instead of a sigil
 
@@ -95,10 +96,15 @@ The original draft also included some proposals for enclosures instead of a lead
 For example, consider this syntax:
 
 ```PowerShell
-. {cmd --% dir}
+. {"./plink.exe" @
+    --% 
+    $Hostname
+    -l $Username
+    -pw $Password
+    $Command}
 ```
 
-That command will not parse because there is no closing brace for the script block because what appears to be a closing brace is placed after the stop-parsing sigil. To correct this, the closing brace must be placed on a separate line, but in a multi-line command you cannot do that (because the command is multi-line, so where would the parser terminate after a stop-parsing sigil) and therefore, unless the sigil used to identify the end of the multi-line parameter/arguments was one that could be respected by the stop-parsing sigil, and safely be introduced without risk to breaking changes, enclosures simply cannot be used.
+That command will not parse because there is no closing brace for the script block. What appears to be a closing brace is placed after the stop-parsing sigil, and therefore treated as an argument to the plink command. To correct this, the closing brace must be placed on a separate line, but in a multi-line command you cannot do that (because the command is multi-line, so where would the parser terminate after a stop-parsing sigil) and therefore, unless the sigil used to identify the end of the multi-line parameter/arguments was one that could be respected by the stop-parsing sigil, and safely be introduced without risk to breaking changes, enclosures simply cannot be used.
 
 ### Inline splatting
 
@@ -118,6 +124,8 @@ Using inline splatting to be able to span a single command across multiple lines
 1. You're forced to choose between named parameters or positional parameters/arguments for each splatted collection. i.e. You can splat in a hashtable of named parameter/value pairs or an array of positional values, but you can't mix the two (the example shown just above is also used earlier in this RFC with positional parameters and switch parameters used without values, matching the way it is often used as a single-line command).
 1. There's no way to include unparsed arguments after the stop-parsing sigil in splatting. You can add it afterwards, but not include it within.
 1. Splatting requires a different syntax than typical parameter/argument input, which is more to learn. In contrast, the proposal above only requires learning about the `@` sigil (borrowed from splatting, but without specifying hashtables or arrays -- just allow all content until a newline), reducing the learning curve and allowing users to use parameters the same way in either case.
+
+Further, unlike using a leading sigil such as `@`, which would work with Intellisense and tab expansion as they are coded now, inline splatting would require special work to make Intellisense and tab expansion work with it. That's not a reason not to do it, but it is more code to write/maintain.
 
 ### Breaking changes
 
