@@ -115,8 +115,8 @@ Get-ChildItem -@{
 Using inline splatting to be able to span a single command across multiple lines like this has several limitations, including:
 
 1. You cannot transition to/from the inline splatted syntax without a bunch of manual tweaks to the command (either converting parameter syntax into hashtable or array syntax or vice versa).
-1. You're forced to choose between named parameters or positional parameters/arguments. i.e. You can splat in a hashtable of named parameter/value pairs or an array of positional values, but you can't mix the two (the example shown just above is also used earlier in this RFC with positional parameters and switch parameters used without values, matching the way it is often used as a single-line command).
-1. There's no way to include unparsed arguments after the stop-parsing sigil in splatting.
+1. You're forced to choose between named parameters or positional parameters/arguments for each splatted collection. i.e. You can splat in a hashtable of named parameter/value pairs or an array of positional values, but you can't mix the two (the example shown just above is also used earlier in this RFC with positional parameters and switch parameters used without values, matching the way it is often used as a single-line command).
+1. There's no way to include unparsed arguments after the stop-parsing sigil in splatting. You can add it afterwards, but not include it within.
 1. Splatting requires a different syntax than typical parameter/argument input, which is more to learn. In contrast, the proposal above only requires learning about the `@` sigil (borrowed from splatting, but without specifying hashtables or arrays -- just allow all content until a newline), reducing the learning curve and allowing users to use parameters the same way in either case.
 
 ### Breaking changes
