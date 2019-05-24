@@ -53,7 +53,7 @@ class PingStatus
     int BufferSize { get; }
     PingOptions Options { get; }
     // Hidden in the formatter when not set; only populated & shown when using the -MtuSizeDetect switch
-    int? MtuSize { get; }
+    int MtuSize { get; } = -1
 }
 ```
 
