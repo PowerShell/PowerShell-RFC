@@ -10,7 +10,7 @@ Feedback: https://github.com/PowerShell/PowerShell-Language-RFC/issues/5
 # PowerShell RFC Process and Guidelines
 
 A PowerShell RFC (Request for Comments) is a publication to propose design changes and improvements to PowerShell.
-This provides the community an opportunity to provide feedback before code is written where it becomes harder to change at the risk of 
+This provides the community an opportunity to provide feedback before code is written where it becomes harder to change at the risk of
 compatibility.
 The complete list of RFCs are available at https://github.com/powershell/powershell-rfc
 
@@ -33,7 +33,7 @@ This process was adapted from the Chef RFC process as well as from the DMTF.org 
 
 RFC documents shall follow the following template:
 
-```markdown
+````markdown
 ---
 RFC: RFC<four digit unique incrementing number assigned by Committee, this shall be left blank by the author>
 Author: <First Last>
@@ -55,18 +55,31 @@ Description and rationale.
     I can <<functionality>>,
     so that <<benefit>>.
 
+## User Experience
+
+Example of user experience with example code/script.
+Include example of input and output.
+
+```powershell
+Get-Example
+```
+
+```output
+Hello World
+```
+
 ## Specification
 
 ## Alternate Proposals and Considerations
 
-```
+````
 
 ## RFC Workflow
 
 RFCs may go through the following stages:
 
 ### Draft
- 
+
 This is the initial draft of an RFC posted for comments and considered a work-in-progress.
 
 * New proposed drafts should be submitted as a Pull Request from the Author's fork into the `Draft-Accepted` folder.
@@ -75,7 +88,7 @@ This is the initial draft of an RFC posted for comments and considered a work-in
 Typically, one or two months is allowed for comments, though this may be extended if a submission is particularly contentious or hasn't received enough feedback for the Committee to feel comfortable making a decision.
 * When the Committee closes the comment period, the Author should update the RFC and Pull Request with a new commit to address the comments.
 * The Committee shall vote to merge or reject the RFC.
-Note: the Comittee may be slower to respond to RFCs where the Author has indicated that they do not plan to implement the RFC.
+Note: the Committee may be slower to respond to RFCs where the Author has indicated that they do not plan to implement the RFC.
 
 ### Draft-Accepted
 
@@ -83,7 +96,7 @@ The PowerShell Committee has reviewed the RFC and comments, and has voted to acc
 
 * New comments are not being sought.
 * No one has begun implementing the RFC, and there are no current plans to implement the RFC.
-In this case, the Comittee will create `up-for-grabs` Issues in the [PowerShell](https://github.com/PowerShell/PowerShell) repository.
+In this case, the Committee will create `up-for-grabs` Issues in the [PowerShell](https://github.com/PowerShell/PowerShell) repository.
 
 ### Experimental
 
@@ -93,7 +106,7 @@ RFCs in the `Experimental` stage have been accepted by the Committee, and code i
 
 Feedback from the experimental implementation and RFC have been reviewed.
 
-Because this working prototype already exists in preview builds available on GitHub, the community provide feedback on the implementation as issues in the [PowerShell/PowerShell repository](https://github.com/powershell/powershell) 
+Because this working prototype already exists in preview builds available on GitHub, the community provide feedback on the implementation as issues in the [PowerShell/PowerShell repository](https://github.com/powershell/powershell)
 
 As the engineering team or code contributor works towards a final implementation, they should submit pull requests to PowerShell-RFC in order to keep the RFC in sync with the implementation.
 These pull requests shall be reviewed and accepted by the Committee, but a formal vote is not necessary.
@@ -114,6 +127,7 @@ Any proposed changes should be made through a new RFC or via an Issue in the [Po
 New RFCs should reference old RFCs where applicable.
 
 ## History
+
 v1.1 - 5-20-2016 - Updated to enable RFCs for design changes that don't require code changes.
 Added Draft-Accepted state and Version header property.
 
