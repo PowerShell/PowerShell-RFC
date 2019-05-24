@@ -33,7 +33,11 @@ trap {
 Get-Process IDontExist -ErrorAction Stop
 ```
 
-If you wanted to handle both terminating and non-terminating errors in your `trap` you can use the `ErrorType` property:
+If you wanted to handle both terminating and non-terminating errors in your
+`trap`
+you can use the
+`ErrorType`
+property:
 
 ```pwsh
 trap {
