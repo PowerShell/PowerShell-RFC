@@ -12,6 +12,7 @@ recurring event on your calendar.
 
 ## Notes
 
+* [May 16, 2019](./20190516_Notes.md) ([YouTube recording](https://youtu.be/Qmu8J6m9HNI) and [transcript](20190516_ChatTranscript.txt))
 * [April 18, 2019](./20190418_Notes.md) ([YouTube recording](https://youtu.be/d5f5BAOMie8) and [transcript](20190418_ChatTranscript.txt))
 * March 21, 2019 (Cancelled)
 * [February 21, 2019](./20190221_Notes.md)] ([transcript](20190221_ChatTranscript.txt), missing YouTube recording 😞)
