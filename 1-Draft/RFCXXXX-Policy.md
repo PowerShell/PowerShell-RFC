@@ -82,7 +82,7 @@ Policy settings are used by administrators to centrally manage PowerShell.
 | Location     | Policy settings                                           | Regular settings                                           |
 |--------------|-----------------------------------------------------------|------------------------------------------------------------|
 | File section | "PowerShell": { "PolicySettings": {...} }                 | "PowerShell": { "RegularSettings": {...} }                 |
-| Registry key | Software\Policies\PowerShellCore                          | Software\PowerShellCore                                    |
+| Registry key | Software\Policies\PowerShellCore                          | Not Applicable                                             |
 
 ### Policy settings Setting Fall-Back
 
@@ -101,14 +101,16 @@ The default in Group Policy is to have no policy, so it would not fall back to W
 
 Because a configuration setting can be in several schemes, the setting wins according to the priority of its scheme.
 
-#### Precedence for Policy settings in descending order
+#### Precedence for Computer-Wide settings in descending order
+
+Note, this is listed as `Computer, Then User` in [Registry keys and settings](#registry-keys-and-settings).
 
 | Scheme                      | Windows                                              | Unix                                                 |
 |-----------------------------|------------------------------------------------------|------------------------------------------------------|
 | GPO -> Computer Policy      | HKLM\Software\Policies\PowerShellCore                | See [Moving configuration out of PSHome][moving]     |
 | GPO -> User Policy          | HKCU\Software\Policies\PowerShellCore                | %XDG_CONFIG_HOME%/powershell.config.json             |
-| File -> Computer-Wide       | See [Moving configuration out of PSHome][moving]     | [Moving configuration out of PSHome][moving]         |
 | File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
+| File -> Computer-Wide       | See [Moving configuration out of PSHome][moving]     | [Moving configuration out of PSHome][moving]         |
 | File -> User-Wide           | %APPDATA%/powershell.config.json                     | %XDG_CONFIG_HOME%/powershell.config.json             |
 
 Defaults:
@@ -135,15 +137,27 @@ only when not in System Lock-down mode.
 
 This will have performance impact on startup, but only when `-settingsfile` is specified.
 
-#### Precedence for Regular settings in descending order
+#### Precedence for User settings in descending order
+
+Note, this is listed as `User, then Computer` in [Registry keys and settings](#registry-keys-and-settings).
 
 | Scheme                      | Windows                                              | Unix                                                 |
 |-----------------------------|------------------------------------------------------|------------------------------------------------------|
+| GPO -> User Config          | HKCU\Software\PowerShellCore                         | %XDG_CONFIG_HOME%/powershell.config.json             |
+| GPO -> Computer Config      | HKLM\Software\PowerShellCore                         | /etc/powershell.config.json                          |
 | File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
 | File -> User-Wide           | %APPDATA%\powershell.config.json                     | %XDG_CONFIG_HOME%/powershell.config.json             |
 | File -> Computer-Wide       | See [Moving configuration out of PSHome][moving]     | /opt/Microsoft/powershell/powershell.config.json     |
-| GPO -> User Config          | HKCU\Software\PowerShellCore                         | %XDG_CONFIG_HOME%/powershell.config.json             |
+
+#### Precedence for UpdatableHelp in descending order
+
+Note, this is listed as `Computer` in [Registry keys and settings](#registry-keys-and-settings).
+
+| Scheme                      | Windows                                              | Unix                                                 |
+|-----------------------------|------------------------------------------------------|------------------------------------------------------|
 | GPO -> Computer Config      | HKLM\Software\PowerShellCore                         | /etc/powershell.config.json                          |
+| File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
+| File -> Computer-Wide       | See [Moving configuration out of PSHome][moving]     | /opt/Microsoft/powershell/powershell.config.json     |
 
 ### Configuration settings
 
@@ -151,22 +165,27 @@ A set of configuration settings in GPO scheme and file scheme for policy setting
 
 #### Registry keys and settings
 
-| Key                              | SubKey                      | Option                             | Type   | Precedence          |
-|----------------------------------|-----------------------------|------------------------------------|--------|---------------------|
-| Software\Policies\PowerShellCore | -                           | -                                  |        |                     |
-| Software\PowerShellCore          | -                           | -                                  |        |                     |
-|                                  |                             | ExecutionPolicy                    | String | Computer, Then User |
-|                                  | ConsoleSessionConfiguration | EnableConsoleSessionConfiguration  | DWORD  | User, then Computer |
-|                                  | ConsoleSessionConfiguration | ConsoleSessionConfigurationName    | String | User, then Computer |
-|                                  | ModuleLogging               | EnableModuleLogging                | DWORD  | Computer, Then User |
-|                                  | ModuleLogging               | ModuleNames                        | String | Computer, Then User |
-|                                  | ProtectedEventLogging       | EncryptionCertificate              | DWORD  | Computer Wide       |
-|                                  | ScriptBlockLogging          | EnableScriptBlockInvocationLogging | DWORD  | Computer, Then User |
-|                                  | ScriptBlockLogging          | EnableScriptBlockLogging           | DWORD  | Computer, Then User |
-|                                  | Transcription               | EnableTranscripting                | DWORD  | Computer, Then User |
-|                                  | Transcription               | EnableInvocationHeader             | DWORD  | Computer, Then User |
-|                                  | Transcription               | OutputDirectory                    | String | Computer, Then User |
-|                                  | UpdatableHelp               | DefaultSourcePath                  | String | Computer Wide       |
+Notes:
+
+- All policies are in `Software\Policies\PowerShellCore`.
+- `ExecutionPolicy` is not in any SubKey.
+
+| SubKey                      | Option                             | Type   | Precedence          |
+|-----------------------------|------------------------------------|--------|---------------------|
+| -                           | -                                  |        |                     |
+| -                           | -                                  |        |                     |
+|                             | ExecutionPolicy                    | String | Computer, Then User |
+| ConsoleSessionConfiguration | EnableConsoleSessionConfiguration  | DWORD  | User, then Computer |
+| ConsoleSessionConfiguration | ConsoleSessionConfigurationName    | String | User, then Computer |
+| ModuleLogging               | EnableModuleLogging                | DWORD  | Computer, Then User |
+| ModuleLogging               | ModuleNames                        | String | Computer, Then User |
+| ProtectedEventLogging       | EncryptionCertificate              | DWORD  | Computer Wide       |
+| ScriptBlockLogging          | EnableScriptBlockInvocationLogging | DWORD  | Computer, Then User |
+| ScriptBlockLogging          | EnableScriptBlockLogging           | DWORD  | Computer, Then User |
+| Transcription               | EnableTranscripting                | DWORD  | Computer, Then User |
+| Transcription               | EnableInvocationHeader             | DWORD  | Computer, Then User |
+| Transcription               | OutputDirectory                    | String | Computer, Then User |
+| UpdatableHelp               | DefaultSourcePath                  | String | Computer Wide       |
 
 I filed [#9632](https://github.com/PowerShell/PowerShell/issues/9632) on UpdatableHelp-DefaultSourcePath to make it allow User settings.
 
@@ -236,3 +255,7 @@ Per issues [9278](https://github.com/PowerShell/PowerShell/issues/9278) we need 
 follow that issue for issues related to new locations of files.
 
 [moving]:#moving-configuration-out-of-pshome
+
+### Allowing Regular settings from the registry in Windows
+
+This is out of scope of this RFCs
