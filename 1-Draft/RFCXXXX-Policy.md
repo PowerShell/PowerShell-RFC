@@ -12,7 +12,7 @@ Comments Due: 6/30/2019
 
 ## Motivation
 
-Consumers, developers, and enterprise system administrators should be able to flexibly and reliable way to configure PowerShell 7.
+Consumers, developers, and enterprise system administrators should be able to flexibly and reliable configure PowerShell 7.
 
 ## Acknowledgement
 
@@ -43,9 +43,12 @@ PowerShell 7 has hard-coded defaults for all configuration options.
 
 The default values must be `secure-by-default`.
 
-For release versions hard-coded defaults must be the same as ones in re-installed configuration files. For preview versions they may vary (ex., enable experimental features and so on).
+For release versions hard-coded defaults must be the same as ones in pre-installed configuration files. For preview versions they may vary (ex., enable experimental features and so on).
 
-If during startup PowerShell 7 cannot read system configuration files it fails to startup.
+System configuration includes security sensitive setting,
+and failing to read those setting could result in an insecure system.
+So, if during startup, PowerShell 7 cannot read files read from the Computer-Wide scope,
+it fails to startup.
 
 If during startup PowerShell 7 cannot read user configuration files it uses _hardcoded_ defaults.
 
@@ -55,27 +58,28 @@ If during operation PowerShell 7 cannot read configuration files it continue to 
 
 `PowerShell 7` settings are grouped into `Policy settings` and `Regular settings`.
 Regular settings are normal configuration settings.
-Regular settings can be treated as default values.
-Policy settings is high priority and overlap regular settings.
-Policy settings are used by administrators to centrally manage applications.
+Regular settings can be treated as default and recommended values.
+Policy settings is higher precedence.
+See [Precedence for Policy settings in descending order](#precedence-for-policy-settings-in-descending-order).
+Policy settings are used by administrators to centrally manage PowerShell and  hosted applications.
 
 | Location     | Policy settings                                           | Regular settings                                           |
 |--------------|-----------------------------------------------------------|------------------------------------------------------------|
 | File section | "PowerShell": { "PolicySettings": {...} }                 | "PowerShell": { "RegularSettings": {...} }                 |
-| File section | "OtherPowerShellApplication": { "PolicySettings": {...} } | "OtherPowerShellApplication": { "RegularSettings": {...} } |
 | Registry key | Software\Policies\PowerShellCore                          | Software\PowerShellCore                                    |
 
 ### Policy settings Setting Fall-Back
 
 #### Motivation - Policy Setting Fall-Back
 
-This is to allow Fall-back to Windows PowerShell policies.
+This is to allow fall-back to Windows PowerShell policies.
 
 #### Implementation
 
 For Policy Settings,
 each policy should have a `Use Windows PowerShell Policy` which will indicate that the policy should the read from
 `SOFTWARE\Policies\Microsoft\Windows\PowerShell` instead of `Software\Policies\PowerShellCore`.
+The default in Group Policy is to have no policy, so it would not fall back to Windows PowerShell Policy, or apply PowerShell 7 policy.
 
 ### Precedence of applying settings
 
@@ -85,12 +89,12 @@ Because a configuration setting can be in several schemes, the setting wins acco
 
 | Scheme                      | Windows                                              | Unix                                                 |
 |-----------------------------|------------------------------------------------------|------------------------------------------------------|
-| GPO -> Computer Policy      | HKLM\Software\Policies\PowerShellCore                | /etc/powershell.config.json                          |
-| GPO -> User Policy          | HKCU\Software\Policies\PowerShellCore                | See `Comment A` below                                |
-| File -> Computer-Wide       | %ProgramFiles%/PowerShell/powershell.config.json     | /opt/Microsoft/powershell/powershell.config.json     |
+| GPO -> Computer Policy      | HKLM\Software\Policies\PowerShellCore                | /etc/powershell/powershell.config.json                         |
+| GPO -> User Policy          | HKCU\Software\Policies\PowerShellCore                | See [`Comment A`](#comment-a) below                                |
+| File -> Computer-Wide       | %ProgramFiles%/PowerShell/powershell.config.json     | /etc/powershell/powershell.config.json     |
 | File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
 | File -> User-Wide           | %APPDATA%/powershell.config.json                     | %XDG_CONFIG_HOME%/powershell.config.json             |
-| File -> Application-Wide    | $apphome/powershell.config.json                      | $apphome/powershell.config.json                      |
+| File -> Application-Wide    | $PSHome/powershell.config.json                      | $PSHome/powershell.config.json                      |
 
 Defaults:
 
@@ -98,12 +102,17 @@ Defaults:
 
 `%XDG_CONFIG_HOME%` - `HOME/.config`
 
+`$PSHome` definition from [about_powershell_config](https://docs.microsoft.com/powershell/module/microsoft.powershell.core/about/about_powershell_config?view=powershell-6) - The $PSHOME location is defined as the same directory as the executing System.Management.Automation.dll assembly.
+This applies to hosted PowerShell SDK instances as well.
 #### Parameter `-settingsfile`
 
 With `-settingsfile` parameter users can assign custom settings from the config file and overwrite user-wide and application-wide settings.
 
 ##### Computer-wide and user policy settings
 
+Definitions:
+  - System Lock-down mode:  When Windows Defender Application Control or AppLocker force PowerShell into Constrained Language mode and only trusted code runs in Full Language mode.  See [PowerShell Constrained Language Mode](https://devblogs.microsoft.com/powershell/powershell-constrained-language-mode/)
+  
 Admin/root users can overwrite computer-wide and user policy settings using `-settingsfile`,
 only when not in System Lock-down mode.
 
@@ -115,9 +124,9 @@ This will have performance impact on startup, but only when `-settingsfile` is s
 |-----------------------------|------------------------------------------------------|------------------------------------------------------|
 | File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
 | File -> Application-Wide    | $apphome\powershell.config.json                      | $apphome/powershell.config.json                      |
-| File -> User-Wide           | %APPDATA%\powershell.config.json                     | ~/powershell.config.json                             |
+| File -> User-Wide           | %APPDATA%\powershell.config.json                     | ~/.config/powershell/powershell.config.json                             |
 | File -> Computer-Wide       | %ProgramFiles%\PowerShell\powershell.config.json     | /opt/Microsoft/powershell/powershell.config.json     |
-| GPO -> User Config          | HKCU\Software\PowerShellCore                         | See `Comment A` below                                |
+| GPO -> User Config          | HKCU\Software\PowerShellCore                         | ~/.config/powershell/powershell.config.json                             |                               |
 | GPO -> Computer Config      | HKLM\Software\PowerShellCore                         | /etc/powershell.config.json                          |
 
 ### Configuration settings
@@ -182,15 +191,7 @@ I filed [#9632](https://github.com/PowerShell/PowerShell/issues/9632) on Updatab
     "PoliciesSettings": {
       ...
     }
-  },
-
-  "OtherPowerShellApplication": {
-    "RegularSettings": {
-      ...
-    },
-    "PolicySettings": {
-      ...
-    }
+  }
 }
 ```
 
@@ -198,37 +199,17 @@ I filed [#9632](https://github.com/PowerShell/PowerShell/issues/9632) on Updatab
 
 ### Automatically resolve Windows PowerShell policy conflicts
 
-We could attempt to resolve policy conflicts between PowerShell 7 policy and Windows PowerShell policy.
+#### Motivation
+
+This is a description of the alternative to [Policy settings Setting Fall-Back](#policy-settings-setting-fall-back).
+The main purpose of describing the alternative is to describe why it should not be pursued.
+
+#### Description
+
+PowerShell could attempt to resolve policy conflicts between PowerShell 7 policy and Windows PowerShell policy.
 This would make the `Precedence for Policy settings` not just a simple list but a complex set of rules that would not be easily understood.  See [this conversation](https://github.com/PowerShell/PowerShell/issues/9309?#issuecomment-480643922).
 
 ### Allowing environment variable in the JSON
 
-A new RFC should be drafted about how to allow environment variables in the JSON.
+A new RFC should be drafted about how to allow environment variables in the values in the JSON.
 This would allow consistent files across platforms.
-
-### Comment A
-
-Mainly for Unix we'd add `Users` section to computer wide JSON file (`/etc/powershell.config.json`) to allow administrators set policies and regular settings on user level base
-
-```json
-{
-  "PowerShell": {
-    "RegularSettings": {
-      ...
-    },
-    "PolicySettings": {
-      ...
-    },
-  "Users": {
-    "Smith": {
-      "PowerShell": {
-        "RegularSettings": {
-          ...
-        },
-        "PolicySettings": {
-          ...
-        }
-      }
-  }
-}
-```
