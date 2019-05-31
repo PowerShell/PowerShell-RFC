@@ -23,7 +23,7 @@ I based this off of @iSazonov 's RFC, for just a slightly different purpose.
 
 1. Specify how PowerShell 7 will deal with having both Windows PowerShell and PowerShell Core Group Policy.
     - This is covered in [Policy settings Setting Fall-Back](#policy-settings-setting-fall-back).
-1. Correct how the `pwsh -settingsfile` switch behaves.
+1. Define how the `pwsh -settingsfile` switch should behave.
     - This is covered in  [Parameter `-settingsfile`](#Parameter--settingsfile)
 
 ## Definitions
@@ -64,7 +64,7 @@ it fails to startup.
 
 If during startup PowerShell 7 cannot read user configuration files it uses _hardcoded_ defaults.
 
-If during operation PowerShell 7 cannot read configuration files it continue to use _current_ (runtime) configuration values.
+PowerShell 7 does not update configuration values from modified configuration files during a given session after the configuration has been loaded.
 
 ### Settings locations
 
