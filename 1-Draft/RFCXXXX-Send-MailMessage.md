@@ -27,7 +27,7 @@ It's great for one off emails from tools, but doesn't scale to modern requiremen
 
 ### Secondary
 
-    Most major mail platforms now have REST methods to send mail, which allows `Invoke-RestMethod' to allow sending mail messages.
+    Most major mail platforms now have REST methods to send mail, which allows `Invoke-RestMethod` to allow sending mail messages.
 
     * gmail
       * https://developers.google.com/gmail/api/v1/reference/users/messages/send
