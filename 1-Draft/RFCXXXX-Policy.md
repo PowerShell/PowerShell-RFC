@@ -28,14 +28,14 @@ I based this off of @iSazonov 's RFC, for just a slightly different purpose.
 
 ## Definitions
 
-- **Computer-Wide settings/policy**  - setting or policy applied to the entire operating system.
-- **User settings/policy** - setting or policy applied only to the user.
+- **Computer-Wide settings/policy**  - setting or policy applied to an operating system environment (OSE), affecting all users of the OSE.
+- **User settings/policy** - setting or policy applied to a specific user of an OSE, and not applied to the OSE as a whole.
 
 ## Specification
 
 `PowerShell 7` should be configured using the following schemes:
 
-- On Windows - Group Policy Objects (GPO), Group Policy Preferences (GPP) and settings files.
+- On Windows - Group Policy Objects (GPO), and settings files.
 - On Unix - settings files.
 
 The settings files have `JSON` format.
