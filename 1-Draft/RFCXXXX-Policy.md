@@ -51,14 +51,14 @@ Configuration schemes allow to customize `PowerShell 7` in the most flexible way
 
 ### Configuration defaults
 
-PowerShell 7 has hard-coded defaults for all configuration options.
+PowerShell 7 has hard-coded defaults for all configuration policies and settings.
 
 The default values must be `secure-by-default`.
 
 For release versions hard-coded defaults must be the same as ones in pre-installed configuration files. For preview versions they may vary (ex., enable experimental features and so on).
 
 Computer-wide configuration includes security sensitive setting,
-and failing to read those setting could result in an insecure system.
+and failing to read those setting, for example if the file is locked or corrupted, could result in an insecure system.
 So, if during startup, PowerShell 7 cannot read files read from the Computer-Wide scope,
 it fails to startup.
 
