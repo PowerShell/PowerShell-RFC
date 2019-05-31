@@ -60,8 +60,11 @@ For release versions hard-coded defaults must be the same as ones in pre-install
 
 Computer-wide configuration includes security sensitive setting,
 and failing to read those setting, for example if the file is locked or corrupted, could result in an insecure system.
-So, if during startup, PowerShell 7 cannot read files read from the Computer-Wide scope,
+So, if during startup, PowerShell 7 cannot read settings files from the Computer-Wide scope,
 it fails to startup.
+Because registry reads are more atomic,
+this is not an issue for group policy settings,
+but if we faced the same issues for these settings the solution would be the similar.
 
 If during startup PowerShell 7 cannot read user configuration files it uses _hardcoded_ defaults.
 
@@ -103,7 +106,7 @@ Because a configuration setting can be in several schemes, the setting wins acco
 | Scheme                      | Windows                                              | Unix                                                 |
 |-----------------------------|------------------------------------------------------|------------------------------------------------------|
 | GPO -> Computer Policy      | HKLM\Software\Policies\PowerShellCore                | See [Moving configuration out of PSHome][moving]     |
-| GPO -> User Policy          | HKCU\Software\Policies\PowerShellCore                | See [`Comment A`](#comment-a) below                  |
+| GPO -> User Policy          | HKCU\Software\Policies\PowerShellCore                | %XDG_CONFIG_HOME%/powershell.config.json             |
 | File -> Computer-Wide       | See [Moving configuration out of PSHome][moving]     | [Moving configuration out of PSHome][moving]         |
 | File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
 | File -> User-Wide           | %APPDATA%/powershell.config.json                     | %XDG_CONFIG_HOME%/powershell.config.json             |
@@ -132,14 +135,14 @@ only when not in System Lock-down mode.
 
 This will have performance impact on startup, but only when `-settingsfile` is specified.
 
-#### Priorities for Regular settings in descending order
+#### Precedence for Regular settings in descending order
 
 | Scheme                      | Windows                                              | Unix                                                 |
 |-----------------------------|------------------------------------------------------|------------------------------------------------------|
 | File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
-| File -> User-Wide           | %APPDATA%\powershell.config.json                     | ~/.config/powershell/powershell.config.json          |
-| File -> Computer-Wide       | %ProgramFiles%\PowerShell\powershell.config.json     | /opt/Microsoft/powershell/powershell.config.json     |
-| GPO -> User Config          | HKCU\Software\PowerShellCore                         | ~/.config/powershell/powershell.config.json|         |
+| File -> User-Wide           | %APPDATA%\powershell.config.json                     | %XDG_CONFIG_HOME%/powershell.config.json             |
+| File -> Computer-Wide       | See [Moving configuration out of PSHome][moving]     | /opt/Microsoft/powershell/powershell.config.json     |
+| GPO -> User Config          | HKCU\Software\PowerShellCore                         | %XDG_CONFIG_HOME%/powershell.config.json             |
 | GPO -> Computer Config      | HKLM\Software\PowerShellCore                         | /etc/powershell.config.json                          |
 
 ### Configuration settings
