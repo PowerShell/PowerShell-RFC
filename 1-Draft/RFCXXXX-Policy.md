@@ -12,7 +12,7 @@ Comments Due: 6/30/2019
 
 ## Motivation
 
-Consumers, developers, and enterprise system administrators should be able to flexibly and reliable configure PowerShell 7.
+Consumers, developers, and enterprise system administrators should be able to flexibly and reliably configure PowerShell 7.
 
 ## Acknowledgement
 
@@ -71,7 +71,7 @@ If during operation PowerShell 7 cannot read configuration files it continue to 
 `PowerShell 7` settings are grouped into `Policy settings` and `Regular settings`.
 Regular settings are normal configuration settings.
 Regular settings can be treated as default and recommended values.
-Policy settings is higher precedence.
+Policy settings have a higher precedence than regular settings.
 See [Precedence for Policy settings in descending order](#precedence-for-policy-settings-in-descending-order).
 Policy settings are used by administrators to centrally manage PowerShell.
 
