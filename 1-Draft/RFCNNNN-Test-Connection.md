@@ -49,7 +49,7 @@ class PingStatus
     string Source { get; }
     IPAddress Address { get; }
     string Destination { get; }
-    int RoundtripTime { get; }
+    int Latency { get; }
     int BufferSize { get; }
     PingOptions Options { get; }
     // Hidden in the formatter when not set; only populated & shown when using the -MtuSizeDetect switch
@@ -63,7 +63,7 @@ class PingStatus
 class TraceStatus
 {
     int Hop { get; }
-    int[] RoundTripTimes { get; }
+    int[] Latency { get; }
     string Destination { get; }
     IPAddress DestinationAddress { get; }
     IPAddress HopAddress { get; }
@@ -84,12 +84,12 @@ class TraceStatus
 **Resulting output:**
 ```code
    Destination: www.google.com
-Source  Address       RoundtripTime (ms) BufferSize
-------  -------       ------------------ ----------
-WS-JOEL 172.217.2.132                 36         32
-WS-JOEL 172.217.2.132                 21         32
-WS-JOEL 172.217.2.132                 25         32
-WS-JOEL 172.217.2.132                 25         32
+Source  Address       Latency (ms) BufferSize
+------  -------       ------------ ----------
+WS-JOEL 172.217.2.132           36         32
+WS-JOEL 172.217.2.132           21         32
+WS-JOEL 172.217.2.132           25         32
+WS-JOEL 172.217.2.132           25         32
 ```
 
 ### `Test-Connection www.google.com -TraceRoute`
@@ -102,20 +102,20 @@ WS-JOEL 172.217.2.132                 25         32
 **Resulting output:**
 ```code
    Destination: www.google.com
-Hop RoundtripTimes (ms) DestinationAddress HopAddress     BufferSize
---- ------------------- ------------------ ----------     ----------
-  1 {0, 0, 0}           172.217.2.132      192.168.22.254
-  2 {0, 0, 0}           172.217.2.132      75.144.219.238
-  3 {0, 0, 0}           172.217.2.132      96.120.37.17
-  4 {0, 0, 0}           172.217.2.132      96.110.136.65
-  5 {0, 0, 0}           172.217.2.132      69.139.180.170
-  6 {0, 0, 0}           172.217.2.132      68.85.127.121
-  7 {0, 0, 0}           172.217.2.132      68.86.165.161
-  8 {0, 0, 0}           172.217.2.132      68.86.90.205
-  9 {0, 0, 0}           172.217.2.132      68.86.82.154
- 10 {0, 0, 0}           172.217.2.132      66.208.233.242
- 11 {0, 0, 0}           172.217.2.132      0.0.0.0
- 12 {0, 0, 0}           172.217.2.132      216.239.59.124
- 13 {0, 0, 0}           172.217.2.132      216.239.59.61
- 14 {32, 28, 20}        172.217.2.132      172.217.2.132
+Hop Latency (ms) DestinationAddress HopAddress     BufferSize
+--- ------------ ------------------ ----------     ----------
+  1 {0, 0, 0}    172.217.2.132      192.168.22.254
+  2 {0, 0, 0}    172.217.2.132      75.144.219.238
+  3 {0, 0, 0}    172.217.2.132      96.120.37.17
+  4 {0, 0, 0}    172.217.2.132      96.110.136.65
+  5 {0, 0, 0}    172.217.2.132      69.139.180.170
+  6 {0, 0, 0}    172.217.2.132      68.85.127.121
+  7 {0, 0, 0}    172.217.2.132      68.86.165.161
+  8 {0, 0, 0}    172.217.2.132      68.86.90.205
+  9 {0, 0, 0}    172.217.2.132      68.86.82.154
+ 10 {0, 0, 0}    172.217.2.132      66.208.233.242
+ 11 {0, 0, 0}    172.217.2.132      0.0.0.0
+ 12 {0, 0, 0}    172.217.2.132      216.239.59.124
+ 13 {0, 0, 0}    172.217.2.132      216.239.59.61
+ 14 {32, 28, 20} 172.217.2.132      172.217.2.132
 ```
