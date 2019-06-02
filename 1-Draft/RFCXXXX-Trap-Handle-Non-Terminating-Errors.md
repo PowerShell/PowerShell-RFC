@@ -52,7 +52,7 @@ trap {
 
 ## Motivation
 
-The Trap statement has fallen out of favor in recent years to it's error handling cousin -
+The Trap statement has fallen out of favor in recent years to its error handling cousin -
 the try/catch block.
 
 This gives us an opportunity to revamp the Trap statement so that it can serve a purpose that the try/catch could not serve.
