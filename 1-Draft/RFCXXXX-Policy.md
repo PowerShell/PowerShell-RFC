@@ -144,7 +144,7 @@ Note, this is listed as `User, then Computer` in [Registry keys and settings](#r
 | Scheme                      | Windows                                              | Unix                                                 |
 |-----------------------------|------------------------------------------------------|------------------------------------------------------|
 | GPO -> User Config          | HKCU\Software\PowerShellCore                         | %XDG_CONFIG_HOME%/powershell.config.json             |
-| GPO -> Computer Config      | HKLM\Software\PowerShellCore                         | /etc/powershell.config.json                          |
+| GPO -> Computer Config      | HKLM\Software\PowerShellCore                         |  See [Moving configuration out of PSHome][moving]                          |
 | File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
 | File -> User-Wide           | %APPDATA%\powershell.config.json                     | %XDG_CONFIG_HOME%/powershell.config.json             |
 | File -> Computer-Wide       | See [Moving configuration out of PSHome][moving]     | /opt/Microsoft/powershell/powershell.config.json     |
@@ -155,7 +155,7 @@ Note, this is listed as `Computer` in [Registry keys and settings](#registry-key
 
 | Scheme                      | Windows                                              | Unix                                                 |
 |-----------------------------|------------------------------------------------------|------------------------------------------------------|
-| GPO -> Computer Config      | HKLM\Software\PowerShellCore                         | /etc/powershell.config.json                          |
+| GPO -> Computer Config      | HKLM\Software\PowerShellCore                         |  See [Moving configuration out of PSHome][moving]                          |
 | File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
 | File -> Computer-Wide       | See [Moving configuration out of PSHome][moving]     | /opt/Microsoft/powershell/powershell.config.json     |
 
