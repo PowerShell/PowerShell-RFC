@@ -5,7 +5,7 @@ Status: Draft
 SupercededBy: N/A
 Version: 1.0
 Area: Console
-Comments Due: June 6, 2019
+Comments Due: June 13, 2019
 Plan to implement: Yes
 ---
 
@@ -44,6 +44,14 @@ shell:
 #!/bin/sh -l
 exec /usr/local/bin/pwsh "$@"
 ```
+
+>[!NOTE]
+> The actual path would depend on the operation system and whether PowerShell
+> is a stable or preview release.
+> For Linux, the path would be `/usr/bin`.
+> For Snap, the path would be `/snap/bin`.
+> For macOS, the path would be `/usr/local/bin`.
+> Executable would be `pwsh-preview` for preview releases.
 
 This script will be called `pwsh-login` and should be used whenever you require
 a specific login shell.
