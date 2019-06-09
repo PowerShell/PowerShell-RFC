@@ -78,10 +78,19 @@ Get-OptionalFeature
 
 # Output:
 #
-# Name                              EnabledIn Source                              Description
-# ----                                ------- ------                              -----------
-# OptionalFeature1                   Manifest PSEngine                            Description of optional feature 1
-# OptionalFeature2                    Session PSEngine                            Description of optional feature 2
+#     EnabledIn: Script
+#
+# Name                              Source                              Description
+# ----                              ------                              -----------
+# OptionalFeature1                  PSEngine                            Description of optional feature 1
+# OptionalFeature2                  PSEngine                            Description of optional feature 2
+#
+#
+#     EnabledIn: NotEnabled
+#
+# Name                              Source                              Description
+# ----                              ------                              -----------
+# OptionalFeature3                  PSEngine                            Description of optional feature 3
 
 # Enable an optional feature by default in PowerShell
 Enable-OptionalFeature -Name OptionalFeature1
@@ -128,7 +137,15 @@ This new parameter would enable optional features in the current script file.
 Get-OptionalFeature [[-Name] <string[]>] [<CommonParameters>]
 ```
 
-This command would return the optional features that are available in PowerShell. The default output format would be of type table with the properties `Name`, `Enabled`, `Source`, and `Description`. All of those properties would be of type string except for `Enabled`, which would be an enumeration with the possible values of `NotEnabled`, `Session`, `Manifest`, and `Script`. This differs from experimental features where `Enabled` is a boolean value. Given the locations in which an optional feature can be enabled, it would be more informative to identify where it is enabled than simply showing `$true` or `$false`.
+This command would return the optional features that are available in PowerShell. The default output format would be of type table with the properties `Name`, `Source`, and `Description`, and with the results grouped by the value of the `EnableIn` property. All of those properties would be of type string except for `EnabledIn`, which would be an enumeration with the possible values of `NotEnabled`, `Session`, `Manifest`, `Script`, and `Scope`. This differs from experimental features where `Enabled` is a boolean value. Given the locations in which an optional feature can be enabled, it would be more informative to identify where it is enabled than simply showing `$true` or `$false`. The enumeration values have the following meaning:
+
+|Value|Description|How to set the feature up this way|
+|--|--|--|
+|NotEnabled|The optional feature is not enabled at all|Disable-OptionalFeature command|
+|Session|The optional feature is enabled by default in all PowerShell sessions|Enable-OptionalFeature command|
+|Manifest|The optional feature is enabled in the manifest for the current module|OptionalFeatures entry in module manifest|
+|Script|The optional feature is enabled in the current script|#requires entry in script file|
+|Scope|The optional feature is enabled the current scope|Use-OptionalFeature command|
 
 ### New command: Enable-OptionalFeature
 
@@ -163,3 +180,7 @@ Experimental features and optional features are very similar to one another, so 
 ### Supporting a `-Scope` parameter like the experimental feature cmdlets do
 
 The `Enable-OptionalFeature` and `Disable-OptionalFeature` cmdlets could support a `-Scope` parameter like their experimental feature cmdlet counterparts do. I felt it was better to remove this for optional features, because it may be risky to allow a command to enable an optional feature in a scope above the one in which it is invoked, influencing behaviour elsewhere.
+
+### Allow optional features to be disabled at a certain level
+
+Certain optional features may be so important that PowerShell should be installed with them to be on by default. In cases where this happens, scripters should be able to indicate that they want the opposite behaviour in a script file or module, so that they can ensure any compatibility issues are addressed before the feature is enabled in that module/script. With this in mind, we could either allow optional features to be disabled at a certain level, or stick with enable only, inversing how the optional feature is designed such that turning it on effectively disables a breaking fix that was deemed important enough to have fixed by default.

@@ -128,6 +128,8 @@ As per the optional feature specification, the optional feature can be enabled i
 
 [Some members of the community](https://github.com/PowerShell/PowerShell/issues/6745#issuecomment-499740080) feel it would better to break compatibility here. On the plus side, not having to deal with this an an optional parameter would be ideal; however, to increase adoption of PowerShell 7, it would be better to make the transition from PowerShell 5.1 into 7 easier by having as few breaking changes as possible.
 
+One way to achieve this while supporting users who don't want the breaking change would be to inverse the optional feature, where the breaking change is in place and users opt out of the breaking change instead of opting into it. Another way would be to change the optional feature design such that users can turn them off in scripts/modules if those scripts/modules are not ready to use the breaking change. See the alternate proposals and considerations section of RFCNNNN-Optional-Features for more information.
+
 ### Support `-DebugAction`, `-VerboseAction`, and `-ProgressAction` if those common parameters are added
 
 RFCNNNN-ScriptBlock-Action-Preference suggests that we consider adding `-DebugAction`, `-VerboseAction`, and `-ProgressAction` common parameters. These are important to consider adding, because beyond the `-Debug` and `-Verbose` switch common parameters (which only support `ActionPreference.Continue`), the new common parameters would be the only way to propagate execution preferences for debug, verbose, and progress messages to all commands that are invoked. See RFCNNNN-ScriptBlock-Action-Preference for more details.
