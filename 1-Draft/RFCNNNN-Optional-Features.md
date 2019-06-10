@@ -43,26 +43,11 @@ New-ModuleManifest -Path ./test.psd1 -OptionalFeatures @('OptionalFeature1','Opt
 #
 # <snip>
 #
-# # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
-# PrivateData = @{
-#
-#     <snip>
-#
-#     PSData = @{
-#
-#         # Optional features enabled in this module.
-#         OptionalFeatures = @(
-#             'OptionalFeature1'
-#             'OptionalFeature2'
-#         )
-#
-#         <snip>
-#
-#     } # End of PSData hashtable
-#
-#     <snip>
-#
-# } # End of PrivateData hashtable
+# # Optional features enabled in this module.
+# OptionalFeatures = @(
+#     'OptionalFeature1'
+#     'OptionalFeature2'
+# )
 #
 # }
 
