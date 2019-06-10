@@ -9,15 +9,42 @@ Comments Due: July 15, 2019
 Plan to implement: Yes
 ---
 
-# Title
+# Deprecate PSData and flatten the module manifest structure
 
 When PowerShell module support first came out in PowerShell 2.0, module manifests had a specific list of keys that could be used to define the manifest. Additional keys were added in PowerShell 3.0, but that hurt the end user experience because at the time, if you loaded a module with a manifest containing keys that were not recognized/supported in your version of PowerShell, PowerShell would return an unhelpful error about the module keys being invalid instead of checking for the minimum required version of PowerShell and returning an error indicating that the module only supports that version or later.
 
-Beyond PowerShell 3.0, keys started being added to a PSData subsection of the PrivateData area of modules. You can see these keys in use by the PowerShell Gallery. That approach has its own challenges, because now keys are defined in a hierarchy, which adds complexity and should not be necessary.
+Beyond PowerShell 3.0, keys started being added to a `PSData` subsection of the `PrivateData` area of modules. Up to this point, all of the keys that have been added there are used by the PowerShell Gallery. That approach has its own challenges, because now keys are defined in a hierarchy which adds complexity and should not be necessary. Here is an example manifest showing the PSData subsection in a module in the gallery:
 
-Fast forward to today, and things have changed enough that we can reconsider how we set up a module manifest. `Import-Module` has been checking the required version of PowerShell before validating key names for several years now (at least since PowerShell 5.1).  Earlier versions of Windows PowerShell are no longer on mainstream support.
+```PowerShell
+@{
+    ModuleToProcess = 'HistoryPx.psm1'
 
-With all of this in mind, I propose that we flatten the module manifest structure, reading values for keys at the root first, and then if they are not set at the root, looking in the PSData section under PrivateData for backwards compatibility support. Future keys added to the manifest as part of PowerShell should all be added to the root, leaving `PrivateData` for 3rd party or user information in a manifest, like it was intended.
+    ModuleVersion = '1.0.6.15'
+
+    GUID = '1ceaf4bf-dc01-4790-a06d-c8224daa7027'
+
+    Author = 'Kirk Munro'
+
+# <snip>
+
+    PrivateData = @{
+        PSData = @{
+            ExternalModuleDependencies = @(
+                'Microsoft.PowerShell.Utility'
+            )
+            Tags = 'history','Clear-History','Get-History','Out-Default'
+            LicenseUri = 'http://apache.org/licenses/LICENSE-2.0.txt'
+            ProjectUri = 'https://github.com/KirkMunro/HistoryPx'
+            IconUri = ''
+            ReleaseNotes = 'This module will not automatically load by invoking a *-History command because the native *-History cmdlets are loaded first in PowerShell. To start using HistoryPx, you should explicitly import the module either at the command line or as part of your profile by invoking "Import-Module HistoryPx".'
+        }
+    }
+}
+```
+
+Fast forward to today, and things have changed enough that we can reconsider how we set up a module manifest. `Import-Module` has been checking the required version of PowerShell before validating key names for several years now, at least since PowerShell 5.1, and earlier versions of Windows PowerShell are no longer on mainstream support.
+
+With all of this in mind, this proposal is to flatten the module manifest structure, reading values for keys at the root first, and then if they are not set at the root, looking in the `PSData` section under `PrivateData` for backwards compatibility support. Future keys added to the manifest as part of PowerShell should all be added to the root, leaving `PrivateData` for 3rd party or user information in a manifest, as originally intended.
 
 ## Motivation
 
@@ -149,8 +176,10 @@ PrivateData = @{}
 # ReleaseNotes of this module
 # ReleaseNotes = ''
 
-}
+# The names of required or nested modules that are not packaged with this module.
+# ExternalModuleDependencies = @()
 
+}
 ```
 
 ## Specification
@@ -160,11 +189,17 @@ The changes required for this RFC are relatively straightforward, and as follows
 1. `New-ModuleManifest` would generate a template like what is shown above, omitting any details about the `PSData` section.
 1. Module import logic would read the manifest and pull the values for `Tags`, `LicenseUri`, `ProjectUri`, `IconUri` and `ReleaseNotes` from the top-level keys. If top-level keys were not defined with these values, it would look for values in a `PSData` section for backward compatibility.
 1. If values are defined in both locations, an error would occur informing the module author that they need to remove one of the two keys.
+1. Add `-ExternalModuleDependencies` parameter to `New-ModuleManifest` (this is the only PowerShell Gallery value that is missing as a parameter).
+1. Update `New-ModuleManifest` documentation (examples are missing PowerShell Gallery keys).
 1. Update `Test-ModuleManifest` to validate the keys in the new locations.
 1. Update `Update-ModuleManifest` to set the keys in the existing location if it is in use, or in the new location otherwise.
 
 ## Alternate Proposals and Considerations
 
-### Move `Update-ModuleManifest` from PowerShellGet to Microsoft.PowerShell.Core
+### Co-locate the `*-ModuleManifest` cmdlets
 
-This is a question for consideration: why is `Update-ModuleManifest` part of PowerShellGet and not in the Microsoft.PowerShell.Core module? Shouldn't it be co-located with the other `*-ModuleManifest` cmdlets? If so, it could be moved as part of this RFC.
+`Update-ModuleManifest` is part of PowerShellGet and not in the Microsoft.PowerShell.Core module. Presumably this is to offer the functionality to downlevel versions of PowerShell, but that separates it from the other `*-ModuleManifest` cmdlets, which is an update challenge (these commands need to be updated together as a whole, not independently, because otherwise downlevel systems may have an Update-ModuleManifest command with parameters that aren't appropriate for that version of PowerShell). If `Update-ModuleManifest` is moved into Microsoft.PowerShell.Core, users lose downlevel updates, but downlevel updates for that command, aside from bug fixes, don't really make sense. I believe it would be better for `Update-ModuleManifest` to be moved out of PowerShellGet and into Microsoft.PowerShell.Core.
+
+### Keep `PSData` section in `New-ModuleManifest` output, but commented out with explanation
+
+@iSazonov proposed it may be clearer if the `PSData` section in `New-ModuleManifest` output, but commented out with a note indicating the keys have been moved to top level. I'm not convinced that would add clarity: it may confuse users as well. I think it would be better to identify the location change in the remarks section of the documentation for `New-ModuleManifest`, keeping `New-ModuleManifest` output clean, but I wanted to share the thought here for comment.
