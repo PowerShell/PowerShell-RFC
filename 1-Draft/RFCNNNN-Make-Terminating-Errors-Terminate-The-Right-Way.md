@@ -51,7 +51,14 @@ New-Module -Name ThisShouldNotImport {
 } | Import-Module
 ```
 
-If you invoke that snippet, the `ThisShouldNotImport` module imports successfully because the terminating error (`[System.Collections.Generics.List[string]]` is not a valid type name) does not actually terminate the loading of the module. This could cause your module to load in an unexpected state, which is a bad idea. If you loaded your module by invoking a command defined with that module, you won't see the terminating error that was raised during the loading of the module (the terminating error that was raised during the loading of the module is not shown at all in that scenario!), so you could end up with some undesirable behaviour when that command executes even though the loading of the module generated a "terminating" error, and not have a clue why. Further, the Test-RFC command exported by this module produces a terminating error, yet continues to execute after that error. Last, if the caller either loads your module or invokes your command inside of a `try` block, they will see different behaviour. Any execution of code beyond a terminating error should be intentional, not accidental like it is in both of these cases, and it most certainly should not be influenced by whether or not the caller loaded the module or invoked the command inside of a `try` block. Binary modules do not behave this way. Why should script modules be any different?
+There are several things wrong with this snippet:
+
+1. If you invoke that snippet, the `ThisShouldNotImport` module imports successfully because the terminating error (`[System.Collections.Generics.List[string]]` is not a valid type name) does not actually terminate the loading of the module. This could cause your module to load in an unexpected state, which is a bad idea.
+1. If you loaded your module by invoking a command defined with that module, you won't see the terminating error that was raised during the loading of the module (the terminating error that was raised during the loading of the module is not shown at all in that scenario!), so you could end up with some undesirable behaviour when that command executes even though the loading of the module generated a "terminating" error, and not have a clue why.
+1. The Test-RFC command exported by this module produces a terminating error, yet continues to execute after that error.
+1. If the caller either loads your module or invokes your command inside of a `try` block, they will see different behaviour.
+
+Any execution of code beyond a terminating error should be intentional, not accidental like it is in both of these cases, and it most certainly should not be influenced by whether or not the caller loaded the module or invoked the command inside of a `try` block. Binary modules do not behave this way. Why should script modules be any different?
 
 Now have a look at the same module definition, this time with some extra scaffolding in place to make sure that terminating errors actually terminate:
 
