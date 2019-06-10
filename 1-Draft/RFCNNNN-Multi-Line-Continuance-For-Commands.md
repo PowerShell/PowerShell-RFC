@@ -110,6 +110,40 @@ For example, consider this syntax:
 
 That command will not parse because there is no closing brace for the script block. What appears to be a closing brace is placed after the stop-parsing sigil, and therefore treated as an argument to the plink command. To correct this, the closing brace must be placed on a separate line, but in a multi-line command you cannot do that (because the command is multi-line, so where would the parser terminate after a stop-parsing sigil) and therefore, unless the sigil used to identify the end of the multi-line parameter/arguments was one that could be respected by the stop-parsing sigil, and safely be introduced without risk to breaking changes, enclosures simply cannot be used.
 
+### Allowing multi-line continuance for more than just commands
+
+Aside from easier multi-line wrapping parameters/arguments, there are scenarios where it would be useful to have easier multi-line wrapping for other statements as well, and some members of the community have [requested support for these scenarios](https://github.com/PowerShell/PowerShell/issues/9813). PowerShell currently supports line wrapping for objects when the line ends with the dot-reference operator, like this:
+
+```PowerShell
+$string.
+    ToUpper().
+    Trim().
+    Length
+```
+
+Other languages like C#, where an explicit line terminator is used, allow users to wrap such lines with the dot-reference operator at the beginning of a line, which looks something like this:
+
+```PowerShell
+$string
+    .ToUpper()
+    .Trim()
+    .Length
+```
+
+While the Parser could handle looking ahead for methods with arguments (round brackets), there is a problem with members or with methods with no arguments (which can be invoked in PowerShell to get the method signature(s)), because you can create a function with a name that starts with a dot (e.g. `function .dot {'see?'}; .dot`).
+
+If we support a single sigil as a general multi-line continuance (not just for command parameters) until a statement terminator or a blank line, then we could support this syntax:
+
+```PowerShell
+$string @
+    .ToUpper()
+    .Trim()
+    .Length
+
+```
+
+Since there is a blank line, that would just work. If it terminated with a semi-colon, that would work as well. Suddenly multi-line continuance becomes a general feature, more visible than backtick ever was, easier to use than backtick is since `@` is not an escape character, and resulting in cleaner, more elegant code that can be written to match the desired style of the author.
+
 ### Inline splatting
 
 There has also been some discussion about the idea of inline splatting, using a format like `-@{...}` or `-@(...)`. Inline splatting has also been discussed separately on [RFC0002: Generalized Splatting](https://github.com/PowerShell/PowerShell-RFC/blob/master/2-Draft-Accepted/RFC0002-Generalized-Splatting.md), but using the syntax `@@{...}` or `@@(...)`. Here is an example showing what that might look like:
