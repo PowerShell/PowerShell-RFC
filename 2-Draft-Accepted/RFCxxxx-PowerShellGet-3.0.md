@@ -3,10 +3,10 @@ RFC: RFCxxxx
 Author: Steve Lee
 Status: Draft
 SupercededBy: N/A
-Version: 0.1
+Version: 0.2
 Area: PowerShellGet
 Comments Due: 7/30
-Plan to implement: Yes
+Plan to implement: Yes, PS7
 ---
 
 # PowerShellGet 3.0 Module
@@ -56,41 +56,39 @@ PowerShellGet is currently written as PowerShell script with a dependency on Pac
 Proposal is to write PSResource in C# to reduce complexity and make easier to maintain.
 In addition, remove dependency on PackageManagement completely as well as dependency on
 nuget.exe.
-This module will only use REST APIs to get and publish nupkgs.
-This module would be shipped in PowerShell 7.
+This module will depend on https://www.nuget.org/packages/NuGet.Client.
+This module would be shipped in PowerShell 7 and on PSGallery supporting older
+versions of PowerShell.
 
 ### Side-by-side with PowerShellGet
 
-To ease transition due to the enormity of the breaking change, this module will
-have a different names for the cmdlets to allow for side by side use
-with the existing PowerShellGet module.
 Since the current PowerShellGet 2.x version is a script module and this new one
 is a C# based module, they can coexist side-by-side.
 
-### Cmdlet compatibility
-
-Function wrappers will be provided to provide compatibility with the two most often
-used cmdlets: `Install-Module` and `Find-Module`.
-These cmdlets will output a warning to use the new cmdlets.
+Script and module metadata will retain the same format as it exists with v2.
 
 ### Local cache
 
-Rather than connecting to PSGallery and other repositories for finding modules,
-the user must explicitly request the current metadata of
-modules from the repositories and that is cached locally.
-`Find-PSResource` (see below) works against this local cache.
+Instead of always connecting to PSGallery to perform an online search,
+`Find-PSResource` (see below) works against a local cache.
 This will also enable changes in PowerShell to use `Find-PSResource -Type Command` to look
 in this cache when it can't find a command and suggest to the user the module to install to
 get that command.
 This will be a local json file containing only the latest version of each module.
 The cache will be stored in the user path.
 There is no system cache that is shared.
+A system wide cache would require elevation or sudo to create and update preventing
+it from being useful.
 
 Example cache entry:
 
 ```json
 {
   "name": "This is my module",
+  "exportedFunctions": [
+    "Get-One",
+    "Set-Two"
+  ],
   "version": "1.0.0.0",
   "type": "module",
   "tags": [
@@ -102,7 +100,16 @@ Example cache entry:
 }
 ```
 
-An example cache with 5000 resources is ~700KB in compressed json form.
+An example cache with 5000 resources (approximately the number of unique packages
+currently published to PowerShellGallery.com) is ~700KB in compressed json form.
+
+The cache would have both latest stable and latest prerelease versions of resources.
+
+>[!NOTE]
+>Need to experiment if it makes sense to have a single cache file for a repositories
+>or a different cache per repository for size and perf reasons.
+
+Perf tests will determine if the cache needs to be in binary form.
 
 ### Automatic updating of the cache
 
@@ -111,20 +118,35 @@ see if the hash of the cache matches the current cache and if not, a new one
 is downloaded.
 If the repository doesn't support this new API, it falls back to current behavior
 in PSGet v2.
+This means that there is no local cache of that repository and operations will
+always connect to that repository.
 
 ### Repository management
 
 `Register-PSResourceRepository` will allow for registering additional repositories.
 A `-Default` switch enables registering PSGallery should it be accidentally removed.
-The `-URL` will accept the HTTP address without the need to specify `/api/v2` as
-that will be assumed and discovered at runtime.
+The `-URL` will accept the HTTP address without the need to specify `/api/v3` as
+that will be assumed and discovered at runtime (trying v3 first, then falling
+back to v2, then the literal URL).
 Support for local filesystem repositories must be maintained.
-A `-InstallationPolicy` switch accepts `Trusted` or `Untrusted` (default) indicating
-whether to prompt the user when installing resources from that repository.
+A `-Trusted` switch indicates whether to prompt the user when installing resources
+from that repository.
+By default, if this switch is not specified, the repository is untrusted.
+A `-Repositories` parameter will accept an array of hashtables equivalent to
+the parameter names.
+A `-Name` parameter allows for setting a friendly name.
+
+A `-Default` switch will set one repository as the default (when not specified
+with other cmdlets).
+Each time it is specified, it sets the new one as default and the previous default
+is no longer default.
+
+A `-Scope` parameter will support `AllUsers` and `CurrentUsers`.
 
 `Get-PSResourceRepository` will list out the registered repositories.
 
-`Set-PSResourceRepository` can be used to update a repository URL or installation policy.
+`Set-PSResourceRepository` can be used to update a repository URL, trust level,
+or if that repository is the default.
 
 `Unregister-PSResourceRepository` can be used to un-register a repository.
 
@@ -146,50 +168,90 @@ With support of the generic `PSResource`, this means we can also find and
 install arbitrary nupkgs that may only contain an assembly the user wants to
 use in their script.
 
-If the local cache does not exist, the cmdlet will call `Update-PSResourceCache`
-first and then attempt a search.
+For each repository, if the local cache does not exist, the cmdlet will call
+`Update-PSResourceCache` first and then attempt a search.
 However, this cmdlet does not update the cache if one exists.
+
+`Find-Module` will be retained to provide compatibility with v2.
 
 ### Installing resources
 
 `Install-PSResource` will only work for modules.
-A `-AllowPrerelease` switch allows installing prerelease versions.
+A `-Prerelease` switch allows installing prerelease versions.
 Other types will use `Save-PSResource` (see below).
-A `-Repository` parameter accepts a specific repository name.
+A `-Repository` parameter accepts a specific repository name or URL to the repository:
+
+```powershell
+Install-Module myModule -Repository 'https://mygallery.com'
+```
+
 If `-Repository` is not specified and the same resource is found in multiple
 repositories, then the resource is automatically installed quietly from the
 trusted repository with the highest version matching the `-Version` parameter
-(if specified, otherwise newest non-prerelease version unless `-AllowPrerelease`
+(if specified, otherwise newest non-prerelease version unless `-Prerelease`
 is used).
 If there are no trusted repositories matching the query, then the newest version
 fulfilling the query will be prompted to be installed.
 If there are multiple repositories with the same trust level containing the same
 version, the first one is used.
 
-`-AllowUntrusted` can be used to suppress being prompted for untrusted sources.
-`-AllowDifferentPublisher` can be used to suppress being prompted if the publisher
+`-TrustRepository` can be used to suppress being prompted for untrusted sources.
+`-IgnoreDifferentPublisher` can be used to suppress being prompted if the publisher
 of the module is different from the currently installed version.
-`-AllowReinstall` can be used to re-install a module.
+`-Reinstall` can be used to re-install a module.
+
+A `-DestinationPath` parameter allows specifying the target directory instead
+of the default one.
+This will be in a different parameter set than `-Scope`.
+
+A `-NoClobber` switch will prevent installing modules that have the same cmdlets
+as a differently named module already on the system.
 
 A `-Quiet` switch will suppress progress information.
 
+`-Scope` with `AllUsers` and `CurrentUser` will work the same as it does in v2.
+
+`Install-Module` cmdlet will be retained for compatibility with v2.
+
+A change from v2 is that installed modules use the full semver (if used) of
+the module, so PSReadLine would be in a folder called `2.0.0-beta4` instead of
+just `2.0.0` which resolves issues of attempting to overwrite assemblies currently
+loaded on Windows.
+
 ### Dependencies and version management
 
-`Install-PSResource` can accept a path to a psd1 file (using `-RequiredModulesFile`)
-or a hashtable (using `-RequiredModules`) where the key is the module name and the
+`Install-PSResource` can accept a path to a psd1 file (using `-RequiredResourcesFile`),
+or a hashtable or json (using `-RequiredResources`) where the key is the module name and the
 value is either the required version specified using Nuget version range syntax or
 a hash table where `repository` is set to the URL of the repository and
 `version` contains the [Nuget version range syntax](https://docs.microsoft.com/en-us/nuget/reference/package-versioning#version-ranges-and-wildcards).
 
 ```powershell
-Install-PSResource -RequiredModules @{
+Install-PSResource -RequiredResources @{
   "Configuration" = "[1.3.1,2.0)"
   "Pester"        = @{
     version = "[4.4.2,4.7.0]"
     repository = "https://www.powershellgallery.com"
+    credential = $cred
   }
 }
 ```
+
+The `repository` property can be the name of the registered repository or the URL
+to a repository.
+If no `repository` is specified, it will use the `default` repository.
+
+The older `System.Version` four part version type will be supported to retain
+compatibility with existing published modules using that format.
+
+Due to the differences between semver and `System.Version`, we may have to keep
+the two distinct.
+
+Dependent declared modules not found on the system will prompt to be installed
+including module name, version, and size unless `-IncludeDependencies` is
+specified which will install without prompting.
+Declared dependencies are only searched within the same repository as the original
+module to be installed.
 
 ### Saving resources
 
@@ -197,26 +259,36 @@ With the removal of PackageManagement, there is still a need to support saving
 arbitrary nupkgs (assemblies) used for scripts.
 
 `Save-PSResource -Type Library` will download nupkgs that have a `lib` folder.
-A `-AllowPrerelease` switch allows saving prerelease versions.
 The dependent native library in `runtimes` matching the current system runtime
-will be copied to the same destination.
+will be copied to the root of the destination specified.
+A `-IncludeAllRuntimes` can be used to explicitly retain the `runtimes` directory
+hierarchy within the nupkg to the root of the destination.
 
-This cmdlet has the same parameters as `Install-PSResource` with the addition
-of mandatory `-Path` or `-LiteralPath` parameters.
+A `-Prerelease` switch allows saving prerelease versions.
+If the `-Version` includes a prerelease label like `2.0.0-beta4`, then this
+switch is not necessary and the prerelease version will be installed.
+
+This cmdlet uses `Install-PSResource -DestinationPath`.
 
 ### Updating resources
 
-`Update-PSResource` will update all resources to most recent minor version by
-default.
-A `-OnlyMinorUpdates` switch will allow only updating to newer minor version.
+`Update-PSResource` will update all resources to most recent minor version by default.
+A `-AllowMajorVersionUpdate` switch will allow updating to newer major version.
+A `-PatchUpdateOnly` switch will allow updating only to patched versions.
+
 If the installed resource is a pre-release, it will automatically update to
 latest prerelease or stable version (if available).
 
 ### Publishing resources
 
 `Publish-PSResource` will supporting publishing modules and scripts.
-Modules will be given as a path to the module folder.
-Publishing by name and version is no longer supported.
+It will follow the same model as `Publish-Module` in v2.
+
+A `-DestinationPath` can be used to publish the resulting nupkg locally.
+`Publish-PSResource` can accept a path to the nupkg to publish to a repository.
+
+A `-Nuspec` parameter can be used to specify a nuspec file rather than relying
+on this module to produce one.
 
 ### Listing installed resources
 
@@ -231,6 +303,11 @@ Version  Name       Type    Repository  Description
 1.0.1    PSAutoMute Script  PSGallery   Powershell script to Auto Mute you sound devices …
 ```
 
+### Uninstalling resources
+
+`Uninstall-PSResource` will be available to remove installed resources.
+Uninstalling dependencies will be something to consider in the future.
+
 ## Alternate Proposals and Considerations
 
 This RFC does not cover the module authoring experience on publishing a cross-platform
@@ -240,3 +317,8 @@ If there is a desire to explicitly update the local cache (like `apt`), we can i
 `Update-PSResourceCache` cmdlet with property on a PSRepository indicating whether
 it auto-updates or not.
 This would not be a breaking change.
+
+The ability to set policy for PSGet is outside the scope of this RFC.
+
+Automatic cleanup of old resources is out of scope of this RFC.
+Keeping with current behavior, installs are always side-by-side.
