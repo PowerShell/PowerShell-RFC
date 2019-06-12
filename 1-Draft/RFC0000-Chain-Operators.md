@@ -422,6 +422,13 @@ an entire pipeline chain; `cmd1 & && cmd2` would be equivalent to
 `cmd1 &; cmd2` since a backgrounded pipeline
 will never fail in the invoking context.
 
+Such a change to the background operator precedence
+would cause ambiguity with uses like `return cmd1 &` and `throw cmd1 &`,
+where the background operator would currently apply to the pipeline under the keyword.
+To not break PowerShell's existing semantics,
+special behaviour would need to be defined for `return $expr &`.
+
+
 #### Reasons against
 
 - Pipelines have an established concept of "success" compared to statements
