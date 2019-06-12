@@ -5,7 +5,7 @@ Status: Draft
 SupercededBy: N/A
 Version: 0.2
 Area: PowerShellGet
-Comments Due: 7/30
+Comments Due: 6/30
 Plan to implement: Yes, PS7
 ---
 
