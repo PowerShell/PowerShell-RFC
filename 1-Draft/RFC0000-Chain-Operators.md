@@ -527,7 +527,7 @@ but the convention may not be as widespread on Windows platforms.
 
 - Commands can fail without writing an error
   and some utilities will write to standard error without having failed
-  (`time` being a good example on *nix).
+  (`time` being a good example on \*nix).
 
 - Having chain operators use their own failure semantics
   would create more conceptual complexity
