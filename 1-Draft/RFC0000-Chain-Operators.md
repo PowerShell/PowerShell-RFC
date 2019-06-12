@@ -53,16 +53,82 @@ instead the term **pipeline chains** is proposed.
 
 ## User Experience
 
-Example of user experience with example code/script.
-Include example of input and output.
-
 ```powershell
-Get-Example
+Write-Output "Hello" && Write-Output "Hello again"
 ```
 
 ```output
-Hello World
+Hello
+Hello again
 ```
+
+```powershell
+Write-Output "Hello" || Write-Output "Hello again"
+```
+
+```output
+Hello
+```
+
+```powershell
+Write-Error "Bad" && Write-Output "Hello again"
+```
+
+```output
+Write-Error "Bad" : Bad
++ CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
++ FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException
+```
+
+```powershell
+Write-Error "Bad" || Write-Output "Hello again"
+```
+
+```output
+Write-Error "Bad" : Bad
++ CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
++ FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException
+
+Hello again
+```
+
+Using `echo` as a convenient example of a successful command
+and `false` as an example of an unsuccesful command.
+
+```powershell
+echo "Hello" && Write-Output "Hi"
+```
+
+```output
+Hello
+Hi
+```
+
+```powershell
+false && Write-Output "Reached"
+```
+
+```output
+```
+
+```powershell
+false || Write-Output "Reached"
+```
+
+```output
+Reached
+```
+
+```powershell
+false || Write-Output "Command failed" && Write-Output "Backup"
+```
+
+```output
+Command failed
+Backup
+```
+
+Also see: [intended test cases for implementation](https://github.com/PowerShell/PowerShell/blob/f8b899e42c86957a1b58273be0029f40a67bf1b6/test/powershell/Language/Operators/BashControlOperator.Tests.ps1).
 
 ## Specification
 
