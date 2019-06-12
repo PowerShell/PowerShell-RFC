@@ -108,8 +108,7 @@ The cache would have both latest stable and latest prerelease versions of resour
 >[!NOTE]
 >Need to experiment if it makes sense to have a single cache file for a repositories
 >or a different cache per repository for size and perf reasons.
-
-Perf tests will determine if the cache needs to be in binary form.
+>Perf tests will determine if the cache needs to be in binary form.
 
 ### Automatic updating of the cache
 
@@ -176,7 +175,8 @@ However, this cmdlet does not update the cache if one exists.
 
 ### Installing resources
 
-`Install-PSResource` will only work for modules.
+`Install-PSResource` will only work for modules unless `-DestinationPath` is
+specified which works for all resource types.
 A `-Prerelease` switch allows installing prerelease versions.
 Other types will use `Save-PSResource` (see below).
 A `-Repository` parameter accepts a specific repository name or URL to the repository:
@@ -220,7 +220,7 @@ loaded on Windows.
 
 ### Dependencies and version management
 
-`Install-PSResource` can accept a path to a psd1 file (using `-RequiredResourcesFile`),
+`Install-PSResource` can accept a path to a psd1 or json file (using `-RequiredResourcesFile`),
 or a hashtable or json (using `-RequiredResources`) where the key is the module name and the
 value is either the required version specified using Nuget version range syntax or
 a hash table where `repository` is set to the URL of the repository and
@@ -236,6 +236,25 @@ Install-PSResource -RequiredResources @{
   }
 }
 ```
+
+The json format will be the same as if this hashtable is passed to `ConvertTo-Json`:
+
+```json
+{
+  "Pester": {
+    "version": "[4.4.2,4.7.0]",
+    "credential": null,
+    "repository": "https://www.powershellgallery.com"
+  },
+  "Configuration": "[1.3.1,2.0)"
+}
+```
+
+>[!NOTE]
+>Credentials management will be using an upcoming RFC for generalized
+>credential management.  Not sure how to make that work in json other
+>than requiring json to have credential as a json object but that means
+>password/secret is in clear text.
 
 The `repository` property can be the name of the registered repository or the URL
 to a repository.
@@ -255,6 +274,8 @@ module to be installed.
 
 ### Saving resources
 
+This cmdlet uses `Install-PSResource -DestinationPath`.
+
 With the removal of PackageManagement, there is still a need to support saving
 arbitrary nupkgs (assemblies) used for scripts.
 
@@ -264,11 +285,12 @@ will be copied to the root of the destination specified.
 A `-IncludeAllRuntimes` can be used to explicitly retain the `runtimes` directory
 hierarchy within the nupkg to the root of the destination.
 
+>[!NOTE]
+>Library support may not be available in 3.0.
+
 A `-Prerelease` switch allows saving prerelease versions.
 If the `-Version` includes a prerelease label like `2.0.0-beta4`, then this
 switch is not necessary and the prerelease version will be installed.
-
-This cmdlet uses `Install-PSResource -DestinationPath`.
 
 ### Updating resources
 
@@ -306,7 +328,9 @@ Version  Name       Type    Repository  Description
 ### Uninstalling resources
 
 `Uninstall-PSResource` will be available to remove installed resources.
-Uninstalling dependencies will be something to consider in the future.
+
+>[!NOTE]
+>Uninstalling dependencies automatically will be something to consider in the future.
 
 ## Alternate Proposals and Considerations
 
