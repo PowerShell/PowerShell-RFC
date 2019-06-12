@@ -351,6 +351,20 @@ Errors will have the same semantics as the equivalent
 `cmd1; if ($?) { cmd2 }` syntax.
 
 Terminating errors will terminate the entire pipeline chain.
+But output already emitted by earlier pipelines in the chain
+will be output by the chain before terminating:
+
+```powershell
+try
+{
+    $x = cmd1 && $(throw "Bad")
+}
+catch
+{
+}
+
+$x # Has values from cmd1
+```
 
 Non-terminating errors will cause the immediate pipeline to continue,
 and the pipeline chain will evaluate as normal based on the value of `$?`.
