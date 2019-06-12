@@ -53,26 +53,38 @@ instead the term **pipeline chains** is proposed.
 
 ## User Experience
 
+#### Example 1
+
 ```powershell
 Write-Output "Hello" && Write-Output "Hello again"
 ```
+
+Output:
 
 ```output
 Hello
 Hello again
 ```
+
+#### Example 2
 
 ```powershell
 Write-Output "Hello" || Write-Output "Hello again"
 ```
 
+Output:
+
 ```output
 Hello
 ```
 
+#### Example 3
+
 ```powershell
 Write-Error "Bad" && Write-Output "Hello again"
 ```
+
+Output:
 
 ```output
 Write-Error "Bad" : Bad
@@ -80,9 +92,13 @@ Write-Error "Bad" : Bad
 + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException
 ```
 
+#### Example 4
+
 ```powershell
 Write-Error "Bad" || Write-Output "Hello again"
 ```
+
+Output:
 
 ```output
 Write-Error "Bad" : Bad
@@ -91,6 +107,8 @@ Write-Error "Bad" : Bad
 
 Hello again
 ```
+
+#### Example 5
 
 Using `echo` as a convenient example of a successful command
 and `false` as an example of an unsuccesful command.
@@ -99,29 +117,43 @@ and `false` as an example of an unsuccesful command.
 echo "Hello" && Write-Output "Hi"
 ```
 
+Output:
+
 ```output
 Hello
 Hi
 ```
 
+#### Example 6
+
 ```powershell
 false && Write-Output "Reached"
 ```
 
+Output:
+
 ```output
 ```
+
+#### Example 7
 
 ```powershell
 false || Write-Output "Reached"
 ```
 
+Output:
+
 ```output
 Reached
 ```
 
+#### Example 8
+
 ```powershell
 false || Write-Output "Command failed" && Write-Output "Backup"
 ```
+
+Output:
 
 ```output
 Command failed
