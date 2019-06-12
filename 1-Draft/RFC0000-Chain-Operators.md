@@ -428,7 +428,6 @@ where the background operator would currently apply to the pipeline under the ke
 To not break PowerShell's existing semantics,
 special behaviour would need to be defined for `return $expr &`.
 
-
 #### Reasons against
 
 - Pipelines have an established concept of "success" compared to statements
