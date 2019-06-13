@@ -342,6 +342,12 @@ On the plus side, this strategy allows for new metadata to be defined in manifes
 
 On the down side, it requires the management of additional files when working on manifests, which isn't necessarily simplifying manifest management.
 
+### Add a `-BackwardCompatible` parameter to `New-ModuleManifest`
+
+@iSazonov proposed we consider adding a `-BackwardCompatible` switch parameter to `New-ModuleManifest`. When that parameter is used, the manifest would be generated in a backward compatible format with new values being stored in `PrivateData`. Otherwise, it would generate the manifest in the latest format with new values stored at the root.
+
+Based on how parameters have been added in recent versions, that would work for now, but going forward how would this work? For example, if one or more new keys are added to PowerShell 7, and then others in 7.x or 8, how would you generate a manifest to target the appropriate downlevel version? For that reason, I don't believe this is a good option to move forward with.
+
 ### General consideration to keep in mind
 
 While some people may find it difficult to justify these changes, at a minimum we need to have a clearly defined strategy for module manifest creation/consumption going forward that isn't held back by downlevel versions of PowerShell. In particular, we need to know where new keys should be stored, ideally in a way that makes sense to end users and is easy to manage. Please keep that in mind while considering the options presented here.
