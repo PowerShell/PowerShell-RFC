@@ -34,8 +34,8 @@ so that I can leverage new functionality that could break existing scripts.
 ## User experience
 
 ```powershell
-# Create a module manifest, specifically enabling one or more optional features in the manifest
-New-ModuleManifest -Path ./test.psd1 -OptionalFeatures @('OptionalFeature1','OptionalFeature2') -PassThru | Get-Content
+# Create a module manifest, specifically enabling or disabling one or more optional features in the manifest
+New-ModuleManifest -Path ./test.psd1 -OptionalFeatures @('OptionalFeature1',@{Name='OptionalFeature2';Enabled=$false}) -PassThru | Get-Content
 
 # Output:
 #
@@ -43,78 +43,149 @@ New-ModuleManifest -Path ./test.psd1 -OptionalFeatures @('OptionalFeature1','Opt
 #
 # <snip>
 #
-# # Optional features enabled in this module.
+# # Optional features enabled or disabled in this module.
 # OptionalFeatures = @(
 #     'OptionalFeature1'
-#     'OptionalFeature2'
+#     @{Name='OptionalFeature2';Enabled=$false}
 # )
 #
 # }
 
-# Create a script file, enabling one or more optional features in the file
+# Create a script file, enabling or disabling one or more optional features in the file
 @'
-#requires -OptionalFeature OptionalFeature1,OptionalFeature2
+#requires -OptionalFeature OptionalFeature1,@{Name='OptionalFeature2';Enabled=$false}
 
 <snip>
 '@ | Out-File -FilePath ./test.ps1
 
-# Get a list of optional features that are available
-Get-OptionalFeature
+# Get the current optional feature configuration for the current user and all users
+Get-OptionalFeatureConfiguration
 
 # Output:
 #
-#     EnabledIn: Script
+#     Scope: AllUsers
+#
+# Name                              Session                  NewManifest
+# ----                              ------                   -----------
+# OptionalFeature1                  False                    True
+# OptionalFeature2                  True                     False
+# OptionalFeature4                  True                     True
+# OptionalFeature5                  False                    False
+#
+#
+#     Scope: CurrentUser
+#
+# Name                              Session                  NewManifest
+# ----                              ------                   -----------
+# OptionalFeature2                  False                    True
+# OptionalFeature3                  False                    True
+#
+
+# Get a list of optional features, their source, and their descriptions
+Get-OptionalFeature
+
+# Output:
 #
 # Name                              Source                              Description
 # ----                              ------                              -----------
 # OptionalFeature1                  PSEngine                            Description of optional feature 1
 # OptionalFeature2                  PSEngine                            Description of optional feature 2
-#
-#
-#     EnabledIn: NotEnabled
-#
-# Name                              Source                              Description
-# ----                              ------                              -----------
 # OptionalFeature3                  PSEngine                            Description of optional feature 3
+# OptionalFeature4                  PSEngine                            Description of optional feature 4
 
-# Enable an optional feature by default in PowerShell
-Enable-OptionalFeature -Name OptionalFeature1
-
-# Output:
-# This works just like Enable-ExperimentalFeature, turning the optional
-# feature on by default for all future sessions in PowerShell.
-
-# Disable an optional feature by default in PowerShell
-Disable-OptionalFeature -Name OptionalFeature1
+# Enable an optional feature in current and future PowerShell sessions for all
+# users in PowerShell.
+Enable-OptionalFeature -Name OptionalFeature1 -UserScope AllUsers
 
 # Output:
-# This works ust like Disable-ExperimentalFeature, turning the optional
-# feature off by default for all future sessions in PowerShell.
+# None
 
-# Enable an optional feature by default in all new module manifests
-# created with New-ModuleManifest in all future sessions in PowerShell.
-Enable-OptionalFeature -Name OptionalFeature1 -NewModuleManifests
+# Disable an optional feature in current and future PowerShell sessions for the
+# current user in PowerShell.
+Disable-OptionalFeature -Name OptionalFeature1 -UserScope CurrentUser
 
-# Disable an optional feature by default in all new module manifests
-# created with New-ModuleManifest in all future sessions in PowerShell.
-Disable-OptionalFeature -Name OptionalFeature1 -NewModuleManifests
+# Output:
+# None, unless the feature was explicitly enabled for all users and is being
+# disabled only for the current user as an override, as is the case here,
+# in which case they get prompted to confirm.
+
+# Enable an optional feature in all new module manifests created with
+# New-ModuleManifest in the current and future PowerShell sessions for any user
+# in PowerShell.
+Enable-OptionalFeature -Name OptionalFeature2 -NewModuleManifests -UserScope AllUsers
+
+# Output:
+# None
+
+# Enable an optional feature in all new module manifests created with
+# New-ModuleManifest in the current and future PowerShell sessions for the
+# current user in PowerShell.
+Disable-OptionalFeature -Name OptionalFeature3 -NewModuleManifests
+
+# Output:
+# None
+
+# Enable an optional feature the duration of the script block being invoked.
+Use-OptionalFeature -Name OptionalFeature1 -ScriptBlock {
+    # Do things using OptionalFeature1 here
+}
 ```
 
 ## Specification
 
-Aside from closely (but not exactly, see below) mirroring what is already in place internally for experimental features in PowerShell, this RFC includes a few additional enhancements that will be useful for optional features, as follows:
+Unlike experimental features, which can only be enabled or disabled in PowerShell sessions created after enabling or disabling them, optional features can be enabled or disabled in the current PowerShell session as well as in future PowerShell sessions. This is necessary to allow certain functionality to be "lit up" in packaged modules or scripts.
+
+Below you will find details describing how this functionality will be implemented.
+
+### System and User scope powershell.config.json
+
+Enabling optional features automatically in future PowerShell sessions requires creating or updating one of two `powershell.config.json` configuration files that are read on startup of a new PowerShell session:
+
+* one in `$PSHOME`, which applies to all user sessions
+* one in `$HOME\Documents\PowerShell\powershell.config.json` on Windows or `$HOME/.config/powershell/powershell.config.json` on Linux and macOS, which applies only to current user sessions.
+
+This RFC will enable optional feature defaults to be read from these configuration files, with current user configuration taking precedence over system (all users) configuration. System config is not policy so this should be acceptable and expected.
 
 ### Add parameter to New-ModuleManifest
 
-`[-OptionalFeatures <string[]>]`
+`[-OptionalFeatures <object[]>]`
 
-This new parameter would assign specific optional features to new modules. Note that these would be in addition to optional features that are enabled by default in manifests created with `New-ModuleManifest`.
+This parameter would configure specific optional features in the new module manifest that is generated.
 
-### Add parameter to #requires statement
+The values provided to this parameter would be combined with optional features that are enabled or disabled by default according to the session configuration files, with the values specified in the `New-ModuleManifest` command overriding the settings for optional features with the same name that are configured in the configuration files. Entries in this collection would either be string (the name of the optional feature to enable) or a hashtable with two keys: `name` (a string) and `enabled` (a boolean value). The hashtable allows an optional feature to be specifically disabled instead of enabled within a module, which is necessary if an older module does not support a newer optional feature yet.
 
-`#requires -OptionalFeatures <string[]>`
+A terminating error is generated if the same optional feature name is used twice in the collection passed into the `-OptionalFeatures` parameter.
 
-This new parameter would enable optional features in the current script file.
+### Add parameter set to #requires statement
+
+`#requires -OptionalFeatures <object[]>`
+
+This parameter set would enable optional features in the current script file.
+
+Entries in this collection would either be string (the name of the optional feature to enable) or a hashtable with two keys: `name` and `enabled`. The hashtable allows an optional feature to be specifically disabled instead of enabled within a script.
+
+A terminating error is generated if the same optional feature name is used twice in the collection passed into the `-OptionalFeatures` parameter.
+
+### New command: Get-OptionalFeatureConfiguration
+
+```none
+Get-OptionalFeatureConfiguration [[-Name] <string[]>] [-UserScope { CurrentUser | AllUsers | Any }] [<CommonParameters>]
+```
+
+This command would return the current configuration of optional features that are available in PowerShell, read from the configuration files.
+
+The properties on the `S.M.A.OptionalFeatureConfiguration` object would be `Name`, `Session`, `NewManifest`, and `Scope`, defined as follows:
+
+|Property Name|Description|
+|--|--|
+|`Name`|A string value that identifies the optional feature name|
+|`Session`|A boolean value that identifies whether the optional feature is enabled or disabled in the current and new PowerShell sessions|
+|`NewManifest`|A boolean value that identifies whether the optional feature is enabled or disabled in manifests created by new module manifests in the current and new PowerShell sessions|
+|`Scope`|An enumeration identifying whether the optional feature configuration was set up for the `CurrentUser` or `AllUsers`|
+
+The default output format is of type table with the properties `Name`, `Session`, and `NewManifest` with the results grouped by `Scope`.
+
+When this command is invoked with the `-UserScope` parameter, the results are automatically filtered for that scope. The default value for `-UserScope` is `Any`, showing configuration values from both configuration files.
 
 ### New command: Get-OptionalFeature
 
@@ -122,31 +193,31 @@ This new parameter would enable optional features in the current script file.
 Get-OptionalFeature [[-Name] <string[]>] [<CommonParameters>]
 ```
 
-This command would return the optional features that are available in PowerShell. The default output format would be of type table with the properties `Name`, `Source`, and `Description`, and with the results grouped by the value of the `EnableIn` property. All of those properties would be of type string except for `EnabledIn`, which would be an enumeration with the possible values of `NotEnabled`, `Session`, `Manifest`, `Script`, and `Scope`. This differs from experimental features where `Enabled` is a boolean value. Given the locations in which an optional feature can be enabled, it would be more informative to identify where it is enabled than simply showing `$true` or `$false`. The enumeration values have the following meaning:
+This command will return a list of the optional features that are available in PowerShell, along with their source and description.
 
-|Value|Description|How to set the feature up this way|
-|--|--|--|
-|NotEnabled|The optional feature is not enabled at all|Disable-OptionalFeature command|
-|Session|The optional feature is enabled by default in all PowerShell sessions|Enable-OptionalFeature command|
-|Manifest|The optional feature is enabled in the manifest for the current module|OptionalFeatures entry in module manifest|
-|Script|The optional feature is enabled in the current script|#requires entry in script file|
-|Scope|The optional feature is enabled the current scope|Use-OptionalFeature command|
+The properties on the `S.M.A.OptionalFeature` object would be `Name`, `Source`, `Description`, defined as follows:
 
-### New command: Enable-OptionalFeature
+|Property Name|Description|
+|--|--|
+|`Name`|A string value that identifies the optional feature name|
+|`Source`|A string value that identifies the area of PowerShell that is affected by this optional feature|
+|`Description`|A string value that describes the optional feature|
 
-```none
-Enable-OptionalFeature [-Name] <string[]> [-NewModuleManifests] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
+The default output format would be of type table with the properties `Name`, `Source`, and `Description`.
 
-This command would enable an optional feature either globally (if the `-NewModuleManifests` switch is not used) or only in new module manifests created by `New-ModuleManifest`.
-
-### New command: Disable-OptionalFeature
+### Enabling and disabling optional features in current and future PowerShell sessions
 
 ```none
-Disable-OptionalFeature [-Name] <string[]> [-NewModuleManifests] [-WhatIf] [-Confirm] [<CommonParameters>]
+Enable-OptionalFeature [-Name] <string[]> [-NewModuleManifests] [-UserScope { CurrentUser | AllUsers }] [-WhatIf] [-Confirm] [<CommonParameters>]
+
+Disable-OptionalFeature [-Name] <string[]> [-NewModuleManifests] [-UserScope { CurrentUser | AllUsers }] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
-This command would disable an optional feature either globally (if the `-NewModuleManifests` switch is not used) or only in new module manifests created by `New-ModuleManifest`. If the optional feature is not enabled that way in the first place, nothing would happen.
+It is important to note up front that there are three default states for an optional feature: enabled by default, implicitly disabled by default, and explicitly disabled by default. The only time an optional feature needs to be explicitly disabled by default is if it is enabled by default in the AllUsers configuration file and a specific user wants to disable it for their sessions. This impacts how `Disable-OptionalFeature` works.
+
+The `Enable-OptionalFeature` command will enable an optional feature in current and future PowerShell sessions either globally (if the `-NewModuleManifests` switch is not used) or only in manifests created by `New-ModuleManifest`.
+
+The `Disable-OptionalFeature` command will disable an optional feature in current and future PowerShell sessions either globally (if the `-NewModuleManifests` switch is not used) or only in manifests created by `New-ModuleManifest`. If the `AllUsers` scope is used and the optional feature is completely disabled in that scope as a result of this command, the entry is removed from the configuration file. If the `AllUsers` scope is used and there is no entry in the system (all users) configuration file, nothing happens. If the `CurrentUser` scope is used there is no entry in the system (all users) or current user configuration files, nothing happens. If the `CurrentUser` scope is used and the optional feature is enabled in the `AllUsers` configuration file, users will be informed that this feature is enabled for all users and asked to confirm that they want to explicitly disable this feature for the current user in the current and future PowerShell sessions. They can always re-enable it later.
 
 ### New command: Use-OptionalFeature
 
@@ -156,16 +227,12 @@ Use-OptionalFeature [-Name] <string[]> [-ScriptBlock] <ScriptBlock> [-Confirm] [
 
 This command would enable an optional feature for the duration of the `ScriptBlock` identified in the `-ScriptBlock` parameter, and return the feature to its previous state afterwards. This allows for easy use of an optional feature over a small section of code.
 
+### Checking optional feature states within the PowerShell runtime
+
+Optional features can be enabled or disabled in a session, module, script, or script block. Since enabling or disabling an optional feature can happen at different levels, the current state of an optional feature should be maintained in a stack, where the validation logic simply peeks at the top of the stack to see if the feature is enabled or not, popping the top of the stack off when appropriate (when leaving the scope of the module, script, or script block where the feature is enabled).
+
 ## Alternate proposals and considerations
 
 ### Extend experimental features to support the enhancements defined in this RFC
 
-Experimental features and optional features are very similar to one another, so much so that they really only differ in name. Given the model for how both of these types of features are used, it may make sense to have them both use the same functionality when it comes to enabling/disabling them in scripts and modules. The downside I see to this approach is that optional features are permanent features in PowerShell while experimental features are not, so it may not be a good idea to support more permanent ways to enable experimental features such as `#requires` or enabling an experimental feature in a new module manifest.
-
-### Supporting a `-Scope` parameter like the experimental feature cmdlets do
-
-The `Enable-OptionalFeature` and `Disable-OptionalFeature` cmdlets could support a `-Scope` parameter like their experimental feature cmdlet counterparts do. I felt it was better to remove this for optional features, because it may be risky to allow a command to enable an optional feature in a scope above the one in which it is invoked, influencing behaviour elsewhere.
-
-### Allow optional features to be disabled at a certain level
-
-Certain optional features may be so important that PowerShell should be installed with them to be on by default. In cases where this happens, scripters should be able to indicate that they want the opposite behaviour in a script file or module, so that they can ensure any compatibility issues are addressed before the feature is enabled in that module/script. With this in mind, we could either allow optional features to be disabled at a certain level, or stick with enable only, inversing how the optional feature is designed such that turning it on effectively disables a breaking fix that was deemed important enough to have fixed by default.
+At a glance, experimental features and optional features are very similar to one another, so it was proposed that it may make sense to have them both use the same functionality when it comes to enabling/disabling them in scripts and modules; however, experimental features have a completely different intent (to try out new functionality in a PowerShell session), are only for future PowerShell sessions, and they only have a single on/off state. On the other hand, optional features are for the current and future PowerShell sessions, and may be enabled or disabled in various scopes within those sessions. For that reason, this approach doesn't seem like a viable solution. If we want to change that, perhaps someone should file an RFC against experimental features to make that change.
