@@ -344,9 +344,9 @@ On the down side, it requires the management of additional files when working on
 
 ### Add a `-BackwardCompatible` parameter to `New-ModuleManifest`
 
-@iSazonov proposed we consider adding a `-BackwardCompatible` switch parameter to `New-ModuleManifest`. When that parameter is used, the manifest would be generated in a backward compatible format with new values being stored in `PrivateData`. Otherwise, it would generate the manifest in the latest format with new values stored at the root.
+@iSazonov proposed we consider adding a `-BackwardCompatible` switch parameter to `New-ModuleManifest`. When that parameter is used, the manifest would be generated in a 3.0 compatible format with new values being stored in `PrivateData`. Otherwise, it would generate the manifest in the latest format with new values stored at the root.
 
-Based on how parameters have been added in recent versions, that would work for now, but going forward how would this work? For example, if one or more new keys are added to PowerShell 7, and then others in 7.x or 8, how would you generate a manifest to target the appropriate downlevel version? For that reason, I don't believe this is a good option to move forward with.
+My main question about this approach is, is it easier to follow than using the value of `-PowerShellVersion` to generate the right manifest? I don't feel that it is. Further, if one or more new keys are added to PowerShell 7, and then more added to 7.x or 8 or 9, etc. would generation of manifests that work with each of those versions be possible this way? Unless I'm mistaken, this would require `-PowerShellVersion` anyway, so that is probably a better approach to take.
 
 ### General consideration to keep in mind
 
