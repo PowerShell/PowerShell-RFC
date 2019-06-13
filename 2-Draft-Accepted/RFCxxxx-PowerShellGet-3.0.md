@@ -27,6 +27,10 @@ This RFC proposes some significant changes to address this.
     I can discover how to install missing cmdlets,
     so that I can be more productive.
 
+    As a PowerShell user,
+    I can easily install modules without specifying lots of switches,
+    so that I can be more productive.
+
     As a PowerShellGet contributor,
     I can more easily contribute code,
     so that PowerShellGet evolves more quickly.
@@ -115,6 +119,11 @@ The cache would have both latest stable and latest prerelease versions of resour
 On any operation that reaches out to a repository, a REST API will be called to
 see if the hash of the cache matches the current cache and if not, a new one
 is downloaded.
+
+>[!NOTE]
+>In the implementation we'll need to handle the case where the module attempts
+>to update the cache while it is being read.
+
 If the repository doesn't support this new API, it falls back to current behavior
 in PSGet v2.
 This means that there is no local cache of that repository and operations will
@@ -132,15 +141,21 @@ A `-Trusted` switch indicates whether to prompt the user when installing resourc
 from that repository.
 By default, if this switch is not specified, the repository is untrusted.
 A `-Repositories` parameter will accept an array of hashtables equivalent to
-the parameter names.
+the parameter names (like splatting).
+
+```powershell
+Register-PSResourceRepository -Repositories @(
+  @{ URL = "https://one.com"; Trusted = $true }
+  @{ URL = "https://powershellgallery.com"; Trusted = $true; Default = $true }
+)
+```
+
 A `-Name` parameter allows for setting a friendly name.
 
 A `-Default` switch will set one repository as the default (when not specified
 with other cmdlets).
 Each time it is specified, it sets the new one as default and the previous default
 is no longer default.
-
-A `-Scope` parameter will support `AllUsers` and `CurrentUsers`.
 
 `Get-PSResourceRepository` will list out the registered repositories.
 
@@ -182,6 +197,10 @@ Other types will use `Save-PSResource` (see below).
 A `-Repository` parameter accepts a specific repository name or URL to the repository:
 
 ```powershell
+Install-PSResource myModule -Repository 'https://mygallery.com'
+
+# or
+
 Install-Module myModule -Repository 'https://mygallery.com'
 ```
 
@@ -210,6 +229,7 @@ as a differently named module already on the system.
 A `-Quiet` switch will suppress progress information.
 
 `-Scope` with `AllUsers` and `CurrentUser` will work the same as it does in v2.
+Default is `CurrentUser`.
 
 `Install-Module` cmdlet will be retained for compatibility with v2.
 
@@ -292,6 +312,9 @@ A `-Prerelease` switch allows saving prerelease versions.
 If the `-Version` includes a prerelease label like `2.0.0-beta4`, then this
 switch is not necessary and the prerelease version will be installed.
 
+A `-AsNupkg` switch will save the resource as a nupkg (if it was originally a
+nupkg) instead of expanding it into a folder.
+
 ### Updating resources
 
 `Update-PSResource` will update all resources to most recent minor version by default.
@@ -311,6 +334,9 @@ A `-DestinationPath` can be used to publish the resulting nupkg locally.
 
 A `-Nuspec` parameter can be used to specify a nuspec file rather than relying
 on this module to produce one.
+
+A `-SkipDependenciesCheck` switch can be used to bypass the default check that
+all dependencies are present.
 
 ### Listing installed resources
 
@@ -332,6 +358,10 @@ Version  Name       Type    Repository  Description
 >[!NOTE]
 >Uninstalling dependencies automatically will be something to consider in the future.
 
+### Proxy support
+
+Each cmdlet will have `-Proxy` and `-ProxyCredential` parameters.
+
 ### PowerShellGallery status
 
 Upon failure to connect to PSGallery, the cmdlets should retrieve status from
@@ -343,9 +373,9 @@ This RFC does not cover the module authoring experience on publishing a cross-pl
 module with multiple dependencies and supporting multiple runtimes.
 
 If there is a desire to explicitly update the local cache (like `apt`), we can introduce a
-`Update-PSResourceCache` cmdlet with property on a PSRepository indicating whether
-it auto-updates or not.
-This would not be a breaking change.
+`Update-PSResourceCache` cmdlet in the future and a property on PSRepository registrations
+indicating whether it auto-updates or not.
+This would not be a breaking change, but not part of this initial release.
 
 The ability to set policy for PSGet is outside the scope of this RFC.
 
