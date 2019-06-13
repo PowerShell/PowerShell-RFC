@@ -332,6 +332,11 @@ Version  Name       Type    Repository  Description
 >[!NOTE]
 >Uninstalling dependencies automatically will be something to consider in the future.
 
+### PowerShellGallery status
+
+Upon failure to connect to PSGallery, the cmdlets should retrieve status from
+a well known REST API and return a more descriptive error message to the user.
+
 ## Alternate Proposals and Considerations
 
 This RFC does not cover the module authoring experience on publishing a cross-platform
