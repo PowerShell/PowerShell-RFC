@@ -106,7 +106,7 @@ currently published to PowerShellGallery.com) is ~700KB in compressed json form.
 The cache would have both latest stable and latest prerelease versions of resources.
 
 >[!NOTE]
->Need to experiment if it makes sense to have a single cache file for a repositories
+>Need to experiment if it makes sense to have a single cache file for all repositories
 >or a different cache per repository for size and perf reasons.
 >Perf tests will determine if the cache needs to be in binary form.
 
