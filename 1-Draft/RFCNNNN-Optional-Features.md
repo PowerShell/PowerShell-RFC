@@ -11,15 +11,15 @@ Plan to implement: Yes
 
 # Optional features in PowerShell
 
-There are several important issues in the PowerShell language that cannot be corrected without introducing breaking changes. At the same time, the number of breaking changes introduced in a new version of PowerShell needs to be as minimal as possible, so that there is a low barrier to adoption of new versions, allowing community members can transition scripts and modules across versions more easily. Given that those two statements are in conflict with one another, we need to consider how we can optionally introduce breaking changes into PowerShell over time.
+There are several important issues in the PowerShell language that cannot be corrected without introducing breaking changes. At the same time, the number of breaking changes introduced in a new version of PowerShell needs to be as minimal as possible, so that there is a low barrier to adoption of new versions, allowing community members to transition scripts and modules across versions more easily. Given that those two statements are in conflict with one another, we need to consider how we can optionally introduce breaking changes into PowerShell over time.
 
-PowerShell has support for experimental features, which some may think covers this need; however, the intent of experimental features is to allow the community to try pre-release versions of PowerShell with breaking changes that are deemed necessary so that they can more accurately assess the impact of those breaking changes. For release versions of PowerShell, an experimental feature has one of three possible outcomes:
+PowerShell has support for experimental features, which some may think covers this need; however, the intent of experimental features is to allow the community to try pre-release versions of PowerShell with breaking changes that are deemed necessary or new features that are not necessarily fully tested/polished so that they can more accurately assess the impact of those features. For release versions of PowerShell, an experimental feature has one of three possible outcomes:
 
-1. The breaking change in the experimental feature is deemed necessary and accepted by the community as not harmful to adoption of new versions, in which case the experimental feature is no longer marked as experimental.
-1. The breaking change in the experimental feature is deemed necessary, but considered harmful to adoption of new versions, in which case the experimental feature is changed to an optional feature.
-1. The breaking change in the experimental feature is deemed not useful enough, in which case the experimental feature is deprecated.
+1. The the experimental feature is deemed necessary, adequately tested/polished and accepted by the community as not harmful to adoption of new versions, in which case the experimental feature is no longer marked as experimental.
+1. The experimental feature is deemed necessary, and adequately tested/polished, but considered harmful to adoption of new versions, in which case the experimental feature is changed to an optional feature.
+1. The experimental feature is deemed not useful enough, in which case the experimental feature is deprecated.
 
-In some cases a breaking change may be implemented immediately as an optional feature, when it is known up front that such a breaking change would be considered harmful to adoption of new versions of PowerShell.
+In some cases a breaking change may be implemented immediately as an optional feature, when it is known up front that such a breaking change would be considered harmful to adoption of new versions of PowerShell if it was in place by default yet is still found important enough to implement as an optional feature.
 
 Given all of that, we need to add support for optional features in PowerShell so that what is described above becomes a reality.
 
@@ -28,8 +28,8 @@ As an example of a feature that will be optional if implemented, see RFCNNNN-Pro
 ## Motivation
 
 As a script, function, or module author,
-I can enable optional features in my scripts or modules,
-so that I can leverage new functionality that could break existing scripts.
+I can enable optional features in specific scopes,
+so that I can leverage new functionality that may break existing scripts without risk.
 
 ## User experience
 
@@ -53,7 +53,8 @@ New-ModuleManifest -Path ./test.psd1 -OptionalFeatures @('OptionalFeature1',@{Na
 
 # Create a script file, enabling or disabling one or more optional features in the file
 @'
-#requires -OptionalFeature OptionalFeature1,@{Name='OptionalFeature2';Enabled=$false}
+#requires -OptionalFeature OptionalFeature1
+#requires -OptionalFeature OptionalFeature2 -Disabled
 
 <snip>
 '@ | Out-File -FilePath ./test.ps1
@@ -107,7 +108,7 @@ Disable-OptionalFeature -Name OptionalFeature1 -UserScope CurrentUser
 # Output:
 # None, unless the feature was explicitly enabled for all users and is being
 # disabled only for the current user as an override, as is the case here,
-# in which case they get prompted to confirm.
+# in which case they get prompted to confirm. This is described below.
 
 # Enable an optional feature in all new module manifests created with
 # New-ModuleManifest in the current and future PowerShell sessions for any user
@@ -125,10 +126,16 @@ Disable-OptionalFeature -Name OptionalFeature3 -NewModuleManifests
 # Output:
 # None
 
-# Enable an optional feature the duration of the script block being invoked.
-Use-OptionalFeature -Name OptionalFeature1 -ScriptBlock {
+# Enable and disable an optional feature the duration of the script block being
+# invoked.
+Use-OptionalFeature -Enable OptionalFeature1 -Disable OptionalFeature2 -ScriptBlock {
     # Do things using OptionalFeature1 here
+    # OptionalFeature2 cannot be used here
 }
+# If OptionalFeature1 was not enabled before this invocation, it is still no
+# longerenabled here. If OptionalFeature2 was enabled before this invocation,
+# it is still enabled here. All to say, their state before the call is
+# preserved.
 ```
 
 ## Specification
@@ -158,13 +165,9 @@ A terminating error is generated if the same optional feature name is used twice
 
 ### Add parameter set to #requires statement
 
-`#requires -OptionalFeatures <object[]>`
+`#requires -OptionalFeatures <string[]> [-Disabled]`
 
-This parameter set would enable optional features in the current script file.
-
-Entries in this collection would either be string (the name of the optional feature to enable) or a hashtable with two keys: `name` and `enabled`. The hashtable allows an optional feature to be specifically disabled instead of enabled within a script.
-
-A terminating error is generated if the same optional feature name is used twice in the collection passed into the `-OptionalFeatures` parameter.
+This parameter set would enable, or disable if `-Disabled` is used, optional features identified by `-Name` in the current script file.
 
 ### New command: Get-OptionalFeatureConfiguration
 
@@ -222,10 +225,10 @@ The `Disable-OptionalFeature` command will disable an optional feature in curren
 ### New command: Use-OptionalFeature
 
 ```none
-Use-OptionalFeature [-Name] <string[]> [-ScriptBlock] <ScriptBlock> [-Confirm] [<CommonParameters>]
+Use-OptionalFeature [[-Enable] <string[]>] [[-Disable] <string[]>] [-ScriptBlock] <ScriptBlock> [-Confirm] [<CommonParameters>]
 ```
 
-This command would enable an optional feature for the duration of the `ScriptBlock` identified in the `-ScriptBlock` parameter, and return the feature to its previous state afterwards. This allows for easy use of an optional feature over a small section of code.
+This command would enable or disable the optional features whose names are identified in the `-Enable` and `-Disable` parameters for the duration of the `ScriptBlock` identified in the `-ScriptBlock` parameter, and return the features to their previous state afterwards. This allows for easy use of optional features over a small section of code. If neither `-Enable` or `-Disable` are used, a terminating error is thrown.
 
 ### Checking optional feature states within the PowerShell runtime
 
