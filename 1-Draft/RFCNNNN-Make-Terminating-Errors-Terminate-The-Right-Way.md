@@ -15,7 +15,8 @@ By default in PowerShell, terminating errors do not actually terminate. For exam
 
 ```PowerShell
 & {
-    1/0
+    $string = 'Hello'
+    $string.Substring(99)
     'Why?'
 }
 ```
@@ -24,16 +25,32 @@ PowerShell has upheld this behaviour since version 1.0 of the language. You can 
 
 ```PowerShell
 try {
-    1/0
+    $string = 'Hello'
+    $string.Substring(99)
     'Why?'
 } catch {
     throw
 }
 ```
 
-In that example, the exception raised by dividing by zero properly terminates execution of the running command.
+You can also convert the terminating-yet-handled-as-a-non-terminating error into an actual terminating error like this:
 
-The difference between these two examples poses a risk to scripters who share scripts or modules with the community. The risk is that end users using a shared resource such as a script or module may see different behaviour from the logic within that module depending on whether or not they were inside of a `try` block when they invoked the script or a command exported by the module. That risk is very undesirable, and as a result many community members who share scripts/modules with the community wrap their logic in a `try/catch{throw}` (or similar) scaffolding to ensure that the behavior of their code is consistent no matter where or how it was invoked.
+```PowerShell
+& {
+    $ErrorActionPreference = 'Stop'
+    $string = 'Hello'
+    $string.Substring(99)
+    'Why?'
+}
+```
+
+In those last two examples, the exception raised by the .NET method terminates execution of the running command.
+
+The difference between the first example and the workarounds poses a risk to scripters who share scripts or modules with the community.
+
+In the first workaround, the risk is that end users using a shared resource such as a script or module may see different behaviour from the logic within that module depending on whether or not they were inside of a `try` block when they invoked the script or a command exported by the module. That risk is very undesirable, and as a result many community members who share scripts/modules with the community wrap their logic in a `try/catch{throw}` (or similar) scaffolding to ensure that the behavior of their code is consistent no matter where or how it was invoked.
+
+In the second workaround, if the shared script does not use `$ErrorActionPreference = 'Stop'`, a caller can get different behaviour by manipulating their `$ErrorActionPreference`. The caller should not be able to manipulate terminating error behavior in commands that they invoke -- that's up to the command author, and they shouldn't have to use extra handling to make terminating errors terminate.
 
 Now consider this code snippet:
 
