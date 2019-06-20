@@ -1,0 +1,829 @@
+Anonymous
+Testing :) 
+
+Anonymous
+Testing :) 
+
+Anonymous
+also testing :D
+
+Steve Lee (POWERSHELL)
+Who is anonymous?
+(also testing :D)
+
+Lombardi
+Hoot hoot hoot
+
+Jonas Sommer Nielsen - mrhvid
+I see/hear you :) 
+
+Shawn Melton
+Echo echo
+
+Lombardi
+Hoot hoot hoot
+
+Shawn Melton
+Echo echo
+
+Jonas Sommer Nielsen - mrhvid
+I see/hear you :) 
+
+JB Lewis (AspenForester)
+Hello!
+
+Steve Lee (POWERSHELL)
+We're still working out some issues now that we've moved to Teams
+
+
+Joey Aiello
+Sorry everyone for the kinks! We'll make sure the video is published(Steve Lee (POWERSHELL) asked "We're still working out some issues now that we've moved to Teams
+")
+
+Joel Sallow
+Seems to be okay ATM!
+
+Shawn Melton
+Echo is all gone now
+
+Max Trinidad
+I'm connected!! Woohoo!
+
+Anonymous
+This link worked for me: https://aka.ms/JoinPSCall
+
+Anonymous
+This link worked for me: https://aka.ms/JoinPSCall
+
+Anonymous
+Audio / Video (Screenshare) working for me!
+
+Joel Sallow
+Hmm, looks like we can't hear the call and type on mobile. Why lol
+
+Joel Sallow
+Hmm, looks like we can't hear the call and type on mobile. Why lol
+
+Joey Aiello
+I heard just fine on my phone, no login...very strange(Joel Sallow asked "Hmm, looks like we can't hear the call and type on mobile. Why lol")
+
+Anonymous
+Audio / Video (Screenshare) working for me!
+
+Joel Sallow
+I can do one or the other lol
+
+Lombardi
+There's no chat afaict, just the qna which is a bit goofy
+
+Marc
+I can hear and see fine. 
+
+Francois-Xavier Cat
+looks good to me. I hear and see the screenshare
+
+Darwin
+Can we do audio on here?
+
+Keith Hill
+Hopefully inclusion in Windows doesn't mean we only get PowerShell updates via Window Update.  It's nice to be able to grab updated versions from GitHub.
+
+Steve Lee (POWERSHELL)
+We'll continue to publish previews on GitHub(Keith Hill asked "Hopefully inclusion in Windows doesn't mean we only get PowerShell updates via Window Update.  It's nice to be able to grab updated versions from GitHub.")
+
+Max Trinidad
+PowerShell 7 Preview??
+
+Steve Lee (POWERSHELL)
+May at the earliest, but depends on getting a working build(Max Trinidad asked "PowerShell 7 Preview??")
+
+Joel Sallow
+I can do one or the other lol
+
+Lombardi
+There's no chat afaict, just the qna which is a bit goofy
+
+Joey Aiello
+Sorry, not sure why chat isn't exposed to you(Lombardi asked "There's no chat afaict, just the qna which is a bit goofy")
+
+Marc
+I can hear and see fine. 
+
+Francois-Xavier Cat
+looks good to me. I hear and see the screenshare
+
+Darwin
+Can we do audio on here?
+
+Joey Aiello
+That is an issue, we'll have to figure that out for sure(Darwin asked "Can we do audio on here?")
+
+Keith Hill
+Hopefully inclusion in Windows doesn't mean we only get PowerShell updates via Window Update.  It's nice to be able to grab updated versions from GitHub.
+
+Joey Aiello
+Definitely not, GitHub will always get the latest(Keith Hill asked "Hopefully inclusion in Windows doesn't mean we only get PowerShell updates via Window Update.  It's nice to be able to grab updated versions from GitHub.")
+
+Max Trinidad
+PowerShell 7 Preview??
+
+Joey Aiello
+No ETA, but yes(Max Trinidad asked "PowerShell 7 Preview??")
+
+Darwin
+It is confusing when people who are not familiar with PowerShell 's release history wonder why we aren't installing PS 6 or 7 everywhere
+
+Darwin
+PowerShell 7 OSS ?
+
+Steve Lee (POWERSHELL)
+Of course!(Darwin asked "PowerShell 7 OSS ?")
+
+Corbob
+It tells me this: Questions won't be visible to everyone until a moderator approves them
+
+Darwin
+PowerShell 7 OSS ?
+
+Joey Aiello
+Definitely OSS(Darwin asked "PowerShell 7 OSS ?")
+
+Darwin
+It is confusing when people who are not familiar with PowerShell 's release history wonder why we aren't installing PS 6 or 7 everywhere
+
+Max Trinidad
+Lost Audio!
+
+Joey Aiello
+Can't help there, sorry...(Max Trinidad asked "Lost Audio!")
+
+Corbob
+It tells me this: Questions won't be visible to everyone until a moderator approves them
+
+Anonymous
+Teams Live doesn't offer anything but moderated.  bother the Teams guys.
+
+Steve Lee (POWERSHELL)
++1(Teams Live doesn't offer anything but moderated.  bother the Teams guys.)
+
+Anonymous
+Teams Live doesn't offer anything but moderated.  bother the Teams guys.
+
+Max Trinidad
+Lost Audio!
+
+Max Trinidad
+It's back!
+
+Jonas Sommer Nielsen - mrhvid
+We only see a questions pane ... no chat 
+
+Steve Lee (POWERSHELL)
+Seems to be limitation of Teams Live session(Jonas Sommer Nielsen - mrhvid asked "We only see a questions pane ... no chat ")
+
+Darwin
+It will only take 3 more years of voting on Teams Items to get parity functionality with today's Skype ;)
+
+Steve Lee (POWERSHELL)
+They still haven't gotten markdown right...(Darwin asked "It will only take 3 more years of voting on Teams Items to get parity functionality with today's Skype ;)")
+
+Jonas Sommer Nielsen - mrhvid
+We only see a questions pane ... no chat 
+
+I see the editor, is there video in another screen?
+You could send out a link to a test call to verify all the plumbing outside of the traditional community call.
+
+Steve Lee (POWERSHELL)
+Only Joey's editor is being shown, we don't have room camera this time(I see the editor, is there video in another screen? asked "You could send out a link to a test call to verify all the plumbing outside of the traditional community call.")
+
+Darwin
+It will only take 3 more years of voting on Teams Items to get parity functionality with today's Skype ;)
+
+I see the editor, is there video in another screen?
+You could send out a link to a test call to verify all the plumbing outside of the traditional community call.
+
+Max Trinidad
+Audio is back!
+
+Anonymous
+Will Snap-ins be added to PS7? Citrix XenApp snap-ins is one of the reasons my organization cannot move to PS Core.
+
+Steve Lee (POWERSHELL)
+No plans to bring back snapins, we've published a blog to port a snapin to a module and it's pretty straight forward.  Recommend reaching out to Citrix(Will Snap-ins be added to PS7? Citrix XenApp snap-ins is one of the reasons my organization cannot move to PS Core.)
+
+Constantin
+So we have to have PS 5.1 with PS 7?
+
+Steve Lee (POWERSHELL)
+Yes, they will initially be side-by-side is our current thinking(Constantin asked "So we have to have PS 5.1 with PS 7?")
+
+Mark Domansky
+Ask Preston Piene (@MSFT) how he setup his MS Office Hours.  He set it up not using Teams Live.  However, you have to go through an invite process to get people into it the Team.
+
+Steve Lee (POWERSHELL)
+The invite process is the problem(Mark Domansky asked "Ask Preston Piene (@MSFT) how he setup his MS Office Hours.  He set it up not using Teams Live.  However, you have to go through an invite process to get people into it the Team.")
+
+Mark Domansky
+I'm not sure how he did it, but he worked with the Teams group very early on.  They may have improved it by now.(Mark Domansky asked "Ask Preston Piene (@MSFT) how he setup his MS Office Hours.  He set it up not using Teams Live.  However, you have to go through an invite process to get people into it the Team.")
+
+Anonymous
+Will Snap-ins be added to PS7? Citrix XenApp snap-ins is one of the reasons my organization cannot move to PS Core.
+
+Constantin
+So we have to have PS 5.1 with PS 7?
+
+Joey Aiello
+Yes, for some time(Constantin asked "So we have to have PS 5.1 with PS 7?")
+
+Mark Domansky
+Ask Preston Piene (@MSFT) how he setup his MS Office Hours.  He set it up not using Teams Live.  However, you have to go through an invite process to get people into it the Team.
+
+Keith Hill
+Yeah, and those folks didn't have to wait for a feature update to Windows that only happens twice a year.  :-p
+
+Matt Harwood
+Sorry if this isn't relevant, and feel free to ignore if it is, but for someone coming from 15 years in the *nix world and away from the Windows world, what's the best resource in your opinion to get up to speed with PS (for someone that still has a technical background) please?
+
+Matt Harwood
+Thank you very much indeed :) (Matt Harwood asked "Sorry if this isn't relevant, and feel free to ignore if it is, but for someone coming from 15 years in the *nix world and away from the Windows world, what's the best resource in your opinion to get up to speed with PS (for someone that still has a technical background) please?")
+
+Keith Hill
+Yeah, and those folks didn't have to wait for a feature update to Windows that only happens twice a year.  :-p
+
+Jonas Sommer Nielsen - mrhvid
+Nice to have it in the Microsoft Store 
+
+Jonas Sommer Nielsen - mrhvid
+No worries that its a bit behind, as long as it is a stable release(Jonas Sommer Nielsen - mrhvid asked "Nice to have it in the Microsoft Store ")
+
+Mike F. Robbins
+Any plans to stop shipping Windows PowerShell with Windows once PowerShell 7 ships in the box?
+
+Steve Lee (POWERSHELL)
+Depending on customer usage, we would like to eventually make WinPS optional, and based on data could stop shipping it altogether in the distant future(Mike F. Robbins asked "Any plans to stop shipping Windows PowerShell with Windows once PowerShell 7 ships in the box?")
+
+Matt Harwood
+Sorry if this isn't relevant, and feel free to ignore if it is, but for someone coming from 15 years in the *nix world and away from the Windows world, what's the best resource in your opinion to get up to speed with PS (for someone that still has a technical background) please?
+
+Joey Aiello
+PowerShell in Action(Matt Harwood asked "Sorry if this isn't relevant, and feel free to ignore if it is, but for someone coming from 15 years in the *nix world and away from the Windows world, what's the best resource in your opinion to get up to speed with PS (for someone that still has a technical background) please?")
+
+Steve Lee (POWERSHELL)
+We have some links in our github repo for Learning PowerShell.  Joel Sallow who's on this call also has a great project called PSKoans as a way to interactively learn PS(Matt Harwood asked "Sorry if this isn't relevant, and feel free to ignore if it is, but for someone coming from 15 years in the *nix world and away from the Windows world, what's the best resource in your opinion to get up to speed with PS (for someone that still has a technical background) please?")
+
+Kelvin Tegelaar
+How about server SKUs? I just joined so might have missed it. :)
+
+Steve Lee (POWERSHELL)
+We will ship PS7 in server SKUs, the mention about Server is that Server doesn't support Microsoft Store(Kelvin Tegelaar asked "How about server SKUs? I just joined so might have missed it. :)")
+
+Keith Hill
+Yeah, I remember back when PowerShell wasn't shipped with Windows and we all said it should be shipped in Windows.  But then it shipped in Windows and it was years before we could get a new release (with a new release of Windows).  That was then, and things have changed now. Just a bit of deja-vue on my side.  :-)
+
+Steve Lee (POWERSHELL)
+Yes, the old development cycle of WinPS was strictly aligned with Windows release cycle.(Keith Hill asked "Yeah, I remember back when PowerShell wasn't shipped with Windows and we all said it should be shipped in Windows.  But then it shipped in Windows and it was years before we could get a new release (with a new release of Windows).  That was then, and things have changed now. Just a bit of deja-vue on my side.  :-)")
+
+Max Trinidad
+What about the experimental features?
+
+Steve Lee (POWERSHELL)
+Can you be more specific about your question?(Max Trinidad asked "What about the experimental features?")
+
+Mike F. Robbins
+Any plans to stop shipping Windows PowerShell with Windows once PowerShell 7 ships in the box?
+
+Joey Aiello
+Maybe. At most, it would just off by default(Mike F. Robbins asked "Any plans to stop shipping Windows PowerShell with Windows once PowerShell 7 ships in the box?")
+
+Jonas Sommer Nielsen - mrhvid
+Nice to have it in the Microsoft Store 
+
+Kelvin Tegelaar
+How about server SKUs? I just joined so might have missed it. :)
+
+Anonymous
+w/o instant chat and no participant list feels less collaborative in this call
+
+Steve Lee (POWERSHELL)
+Yup, we'll figure this out(w/o instant chat and no participant list feels less collaborative in this call)
+
+Anonymous
+Thanks(w/o instant chat and no participant list feels less collaborative in this call)
+
+Max Trinidad
+What about the experimental features?
+
+Steve Lee (POWERSHELL)
+Thought I replied to this, can you expand on this question?(Max Trinidad asked "What about the experimental features?")
+
+Keith Hill
+Yeah, I remember back when PowerShell wasn't shipped with Windows and we all said it should be shipped in Windows.  But then it shipped in Windows and it was years before we could get a new release (with a new release of Windows).  That was then, and things have changed now. Just a bit of deja-vue on my side.  :-)
+
+Max Trinidad
+Is ti going to be available in PowerShell 7 (preview)?
+
+Steve Lee (POWERSHELL)
+Is what going to be available in PS7 preview?(Max Trinidad asked "Is ti going to be available in PowerShell 7 (preview)?")
+
+Anonymous
+w/o instant chat and no participant list feels less collaborative in this call
+
+Joey Aiello
+Agreed, we need to work it out somehow, this is our first run(w/o instant chat and no participant list feels less collaborative in this call)
+
+Anonymous
+Is there a replacement for Powershell 3 MVA yet perhaps on a newer MVA for Core?
+
+Andrey
+What is the future of DSC?
+
+Andrew
+What's the PowerShell 7 impact on DSC (LCM/Invoke-DSCResource)? With those continue to function as is leveraging CIM?
+
+Steve Lee (POWERSHELL)
+CIM cmdlets will continue to be supported in PS7.  DSC team is aware of our plans.  Nothing to announce at this time.(Andrew asked "What's the PowerShell 7 impact on DSC (LCM/Invoke-DSCResource)? With those continue to function as is leveraging CIM?")
+
+Shane O'Neill
+Weird question - is there going to be a standard on where to get modules e.g. Github, PowerShellGet, Nuget, Chocolatey, etc? or not important right now?
+
+Steve Lee (POWERSHELL)
+The standard right now is PSGallery via PSGet(Shane O'Neill asked "Weird question - is there going to be a standard on where to get modules e.g. Github, PowerShellGet, Nuget, Chocolatey, etc? or not important right now?")
+
+Shane O'Neill
+Lovely, thanking you!(Shane O'Neill asked "Weird question - is there going to be a standard on where to get modules e.g. Github, PowerShellGet, Nuget, Chocolatey, etc? or not important right now?")
+
+Kelvin Tegelaar
+Maybe I'm getting ahead of the presentation, but I see Azure Functions mentioned. Officially Microsoft does not support PowerShell yet in functions(Or atleast call it "Experimental") Will support come with PowerShell 7 or are we going to have to wait a bit longer for that? :)
+
+Max Trinidad
+Is ti going to be available in PowerShell 7 (preview)?
+
+Shawn Melton
+Maybe for community call we use Discord :)
+
+Romero126
+Is there a replacement for Powershell 3 MVA yet perhaps on a newer MVA for Core?
+
+Anonymous
+What is the future of DSC?
+
+Andrey
+What is the future of DSC?
+
+Max Trinidad
+Any one talking?? Audio seems gone again. :P
+
+Steve Lee (POWERSHELL)
+Seems to only be you(Max Trinidad asked "Any one talking?? Audio seems gone again. :P")
+
+Kelvin Tegelaar
+Maybe I'm getting ahead of the presentation, but I see Azure Functions mentioned. Officially Microsoft does not support PowerShell yet in functions(Or atleast call it "Experimental") Will support come with PowerShell 7 or are we going to have to wait a bit longer for that? :)
+
+Shawn Melton
+There is a community call for DSC as well
+
+Steve Lee (POWERSHELL)
+Yes!  Forgot about this, but that would be the best place for DSC questions.(Shawn Melton asked "There is a community call for DSC as well")
+
+Shane O'Neill
+Weird question - is there going to be a standard on where to get modules e.g. Github, PowerShellGet, Nuget, Chocolatey, etc? or not important right now?
+
+Edwin Young
+As Steve said in private response, the standard place to publish and share modules is www.powershellgallery.com 
+(Shane O'Neill asked "Weird question - is there going to be a standard on where to get modules e.g. Github, PowerShellGet, Nuget, Chocolatey, etc? or not important right now?")
+
+Jonas Sommer Nielsen - mrhvid
+It would be nice to be able to update powershell from inside a ps session ... experience like when you update your modules from the gallery (ofcause this is more complicated...) 
+
+Steve Lee (POWERSHELL)
+We've talked about this, but it's not easy on Windows due to open file handles.(Jonas Sommer Nielsen - mrhvid asked "It would be nice to be able to update powershell from inside a ps session ... experience like when you update your modules from the gallery (ofcause this is more complicated...) ")
+
+Jonas Sommer Nielsen - mrhvid
+Ahh ... now the private notice makes more sense :) (Jonas Sommer Nielsen - mrhvid asked "It would be nice to be able to update powershell from inside a ps session ... experience like when you update your modules from the gallery (ofcause this is more complicated...) ")
+
+prasoon
+DSC vNext ! Nice.
+
+Andrew
+What's the PowerShell 7 impact on DSC (LCM/Invoke-DSCResource)? With those continue to function as is leveraging CIM?
+
+Shawn Melton
+Maybe for community call we use Discord :)
+
+Max Trinidad
+There's delay in showing the messages in the chat.
+
+Steve Lee (POWERSHELL)
+Q&A needs moderator publishing before it shows up.(Max Trinidad asked "There's delay in showing the messages in the chat.")
+
+Corbob
+Is there a way for us to provide out feedback to you (or the Teams team) regarding what we're seeing as deficiencies with this call, as opposed to flooding you with off topic notes here?
+
+Steve Lee (POWERSHELL)
+I believe there's a Uservoice page for Teams.  I'd suggest finding or opening an issue and getting your friends to upvote it :)(Corbob asked "Is there a way for us to provide out feedback to you (or the Teams team) regarding what we're seeing as deficiencies with this call, as opposed to flooding you with off topic notes here?")
+
+Max Trinidad
+Any one talking?? Audio seems gone again. :P
+
+Lombardi
+Since we use invoke-dscresource for CM tools (chef/puppet/ansible all rely on it), are there changes that will break that functionality or change the api surface? Would love to follow up about this.
+
+Shawn Melton
+There is a community call for DSC as well
+
+Max Trinidad
+I was trying to ask.. are Experimental Features still going to exist in PowerShell 7 (or 7 preview only).  
+
+Romero126
+Is there a replacement for Powershell 3 MVA yet perhaps on a newer MVA for Core?
+
+Andrey
+will Win32-OpenSSH/openssh-portable have .net based or powershell-based APIs?
+
+Lombardi
+Since we use invoke-dscresource for CM tools (chef/puppet/ansible all rely on it), are there changes that will break that functionality or change the api surface? Would love to follow up about this.
+
+Jonas Sommer Nielsen - mrhvid
+It would be nice to be able to update powershell from inside a ps session ... experience like when you update your modules from the gallery (ofcause this is more complicated...) 
+
+prasoon
+DSC vNext ! Nice.
+
+Max Trinidad
+I was trying to ask.. are Experimental Features still going to exist in PowerShell 7 (or 7 preview only).  
+
+Max Trinidad
+There's delay in showing the messages in the chat.
+
+Max Trinidad
+No audio! :(
+
+Andrey
+will Win32-OpenSSH/openssh-portable have .net based or powershell-based APIs?
+
+Steve Lee (POWERSHELL)
+We've made an ask to the team doing the OpenSSH port to have a managed client library and also a powershell abstraction for sshd.config.  It's not high on their priority list right now.(Andrey asked "will Win32-OpenSSH/openssh-portable have .net based or powershell-based APIs?")
+
+Anonymous
+What is the status for Update-Package for PackageManagement (OneGet) its been open since 2014 and longest open issue? It's a main blocker for no Chocolatey provider.
+
+https://github.com/OneGet/oneget/issues/6
+
+Corbob
+Is there a way for us to provide out feedback to you (or the Teams team) regarding what we're seeing as deficiencies with this call, as opposed to flooding you with off topic notes here?
+
+Anonymous
+What is the status for Update-Package for PackageManagement (OneGet) its been open since 2014 and longest open issue? It's a main blocker for no Chocolatey provider.
+
+https://github.com/OneGet/oneget/issues/6
+
+Max Trinidad
+I can't hear anything ... but I'll post..  
+
+Anonymous
+Is there a replacement for Powershell 3 MVA yet perhaps on a newer MVA for Core?
+
+Anonymous
+What is the future of DSC?
+
+Darwin
+Put in a uservoice on that eh?
+
+Corey Webster
+I believe the majority of the issues that you are describing about teams are being experienced are because this appears to be a live event, which is a little different that a team meeting. Just my opinion I am thinking a regualr teams meeting might be more benefical than a live event. Just my opinion. 
+
+Corey Webster
+https://support.office.com/en-us/article/schedule-a-teams-live-event-7a9ce97c-e1cd-470f-acaf-e6dfc179a0e2
+(Corey Webster asked "I believe the majority of the issues that you are describing about teams are being experienced are because this appears to be a live event, which is a little different that a team meeting. Just my opinion I am thinking a regualr teams meeting might be more benefical than a live event. Just my opinion. ")
+
+Corey Webster
+I believe the majority of the issues that you are describing about teams are being experienced are because this appears to be a live event, which is a little different that a team meeting. Just my opinion I am thinking a regualr teams meeting might be more benefical than a live event. Just my opinion. 
+
+Darwin
+Show him this video :)
+
+Max Trinidad
+Waht about when the OpenSSH issue will be corrected to prevent PSremoting connecting Linux to Windows?
+
+Darwin
+Show him this video :)
+
+Max Trinidad
+Waht about when the OpenSSH issue will be corrected to prevent PSremoting connecting Linux to Windows?
+
+Steve Lee (POWERSHELL)
+Are you referring to the problem with whitespace in the path to pwsh?(Max Trinidad asked "Waht about when the OpenSSH issue will be corrected to prevent PSremoting connecting Linux to Windows?")
+
+Steve Lee (POWERSHELL)
+My recommendation is to get folks to upvote that github issue.  Workaround is to create symlink to the folder that contains pwsh(Max Trinidad asked "Waht about when the OpenSSH issue will be corrected to prevent PSremoting connecting Linux to Windows?")
+
+Kelvin Tegelaar
+Not sure if my question got trough, Teams client seems a bit buggy today. 
+
+Maybe I'm getting ahead of the presentation, but I see Azure Functions mentioned. Officially Microsoft does not support PowerShell yet in functions(Or atleast call it "Experimental") Will support come with PowerShell 7 or are we going to have to wait a bit longer for that? :)
+
+Max Trinidad
+Yes! the OPenssh issue with whitespaces! :)
+
+Kelvin Tegelaar
+Not sure if my question got trough, Teams client seems a bit buggy today. 
+
+Maybe I'm getting ahead of the presentation, but I see Azure Functions mentioned. Officially Microsoft does not support PowerShell yet in functions(Or atleast call it "Experimental") Will support come with PowerShell 7 or are we going to have to wait a bit longer for that? :)
+
+Steve Lee (POWERSHELL)
+Just wait until Joey gets to that topic next(Kelvin Tegelaar asked "Not sure if my question got trough, Teams client seems a bit buggy today. 
+
+Maybe I'm getting ahead of the presentation, but I see Azure Functions mentioned. Officially Microsoft does not support PowerShell yet in functions(Or atleast call it "Experimental") Will support come with PowerShell 7 or are we going to have to wait a bit longer for that? :)")
+
+prasoon
+Recent messages are not show until I scroll down !
+
+while(1){$Teams.Chat.Scroll.Down()}
+
+Mark Domansky
+I heard the possibility of telemetry for module devs being included (2 mo ago?)  Any word/commitment on that?
+
+Max Trinidad
+Yes! the OPenssh issue with whitespaces! :)
+
+prasoon
+Recent messages are not show until I scroll down !
+
+while(1){$Teams.Chat.Scroll.Down()}
+
+Steve Lee (POWERSHELL)
+Yeah, pretty annoying(prasoon asked "Recent messages are not show until I scroll down !
+
+while(1){$Teams.Chat.Scroll.Down()}")
+
+Mark Domansky
+I heard the possibility of telemetry for module devs being included (2 mo ago?)  Any word/commitment on that?
+
+Steve Lee (POWERSHELL)
+Yes, it part of the Telemetry RFC(Mark Domansky asked "I heard the possibility of telemetry for module devs being included (2 mo ago?)  Any word/commitment on that?")
+
+Joey Aiello
+https://github.com/PowerShell/PowerShell-RFC/pull/158(Mark Domansky asked "I heard the possibility of telemetry for module devs being included (2 mo ago?)  Any word/commitment on that?")
+
+Kelvin Tegelaar
+We always want the bleeding edge, so that counts for Teams too. I don't mind stuff bieing a bit buggy, we all learn from it.
+
+Kelvin Tegelaar
+We always want the bleeding edge, so that counts for Teams too. I don't mind stuff bieing a bit buggy, we all learn from it.
+
+Lombardi
+So these are providers like filesystem/registry/etc, or a new paradigm / expansion to that model?
+
+Lombardi
+How does this differ from additional modules with compiled libraries?(Lombardi asked "So these are providers like filesystem/registry/etc, or a new paradigm / expansion to that model?")
+
+Lombardi
+So these are providers like filesystem/registry/etc, or a new paradigm / expansion to that model?
+
+Constantin
+The PSFramework has some kind of that with loggingproviders
+
+Joel Sallow
+Heh, I smell dynamic params rearing their heads again...
+
+Constantin
+The PSFramework has some kind of that with loggingproviders
+
+Joel Sallow
+Heh, I smell dynamic params rearing their heads again...
+
+Steve Lee (POWERSHELL)
+Probably as no abstraction can be perfect and still be useful(Joel Sallow asked "Heh, I smell dynamic params rearing their heads again...")
+
+Shane O'Neill
+Are these calls/transcritps still going to be available afterwards for those that have to leave early?
+
+Joel Sallow
+Oh hey can you tell Azure folks to stop putting preview modules on the test gallery and put them on the actual gallery with a preview flag?
+
+Joel Sallow
+very undiscoverable, esp for folks that need/want to use them
+
+Joel Sallow
+Cheers!(Joel Sallow asked "very undiscoverable, esp for folks that need/want to use them")
+
+Shane O'Neill
+Are these calls/transcritps still going to be available afterwards for those that have to leave early?
+
+Joey Aiello
+Yes, there will be recording and some kind of written transcript(Shane O'Neill asked "Are these calls/transcritps still going to be available afterwards for those that have to leave early?")
+
+Joel Sallow
+Oh hey can you tell Azure folks to stop putting preview modules on the test gallery and put them on the actual gallery with a preview flag?
+
+Joel Sallow
+very undiscoverable, esp for folks that need/want to use them
+
+Joey Aiello
+report at cgadmin@microsoft.com(Joel Sallow asked "very undiscoverable, esp for folks that need/want to use them")
+
+Shawn Melton
+Can the PS Team please go speak with the Azure Automation team? There has been discussion with a few on the MVP DL for Azure. Azure Automation accounts is stuck using PowerShell 5.1. We cannot use PowerShell 6+; they do something that the whole module management does not allow side-by-side and it is just so outdated. (Modules in new accounts are from years ago.) 
+
+Shawn Melton
+Azure functions don't allow you to talk to on-premise environments so they are not an option. It is also tied to using DSC code.(Shawn Melton asked "Can the PS Team please go speak with the Azure Automation team? There has been discussion with a few on the MVP DL for Azure. Azure Automation accounts is stuck using PowerShell 5.1. We cannot use PowerShell 6+; they do something that the whole module management does not allow side-by-side and it is just so outdated. (Modules in new accounts are from years ago.) ")
+
+Shawn Melton
+Can the PS Team please go speak with the Azure Automation team? There has been discussion with a few on the MVP DL for Azure. Azure Automation accounts is stuck using PowerShell 5.1. We cannot use PowerShell 6+; they do something that the whole module management does not allow side-by-side and it is just so outdated. (Modules in new accounts are from years ago.) 
+
+Joey Aiello
+No immediate plans, but we will continue talking to them (Shawn Melton asked "Can the PS Team please go speak with the Azure Automation team? There has been discussion with a few on the MVP DL for Azure. Azure Automation accounts is stuck using PowerShell 5.1. We cannot use PowerShell 6+; they do something that the whole module management does not allow side-by-side and it is just so outdated. (Modules in new accounts are from years ago.) ")
+
+Joel Sallow
+There's an AzureAD module iirc on the test gallery that works on PS Core, that isn't available normally
+
+Joel Sallow
+it's been there a while I think(Joel Sallow asked "There's an AzureAD module iirc on the test gallery that works on PS Core, that isn't available normally")
+
+Joel Sallow
+Awesome ^^(Joel Sallow asked "There's an AzureAD module iirc on the test gallery that works on PS Core, that isn't available normally")
+
+Kelvin Tegelaar
+You're making me so happy right now. (L)
+
+Joel Sallow
+There's an AzureAD module iirc on the test gallery that works on PS Core, that isn't available normally
+
+Edwin Young
+I don't recommend using it. When there is a version of AzureAD which is compatible with core and the team is able to support it, it will be on the main gallery.(Joel Sallow asked "There's an AzureAD module iirc on the test gallery that works on PS Core, that isn't available normally")
+
+Kelvin Tegelaar
+You're making me so happy right now. (L)
+
+Anonymous
+Can new releases for DSC Resource Kit modules be updated to use semver?
+
+Anonymous
+All of these modules use a 4 digit version number:
+https://devblogs.microsoft.com/powershell/dsc-resource-kit-release-november-2018/(Can new releases for DSC Resource Kit modules be updated to use semver?)
+
+Anonymous
+Can new releases for DSC Resource Kit modules be updated to use semver?
+
+Joey Aiello
+How are they not using semver? (Can new releases for DSC Resource Kit modules be updated to use semver?)
+
+Joey Aiello
+File an issue at https://github.com/powershell/dscresources(Can new releases for DSC Resource Kit modules be updated to use semver?)
+
+Joel Sallow
+We aren't allowed to public reply :/
+
+Joel Sallow
+Literally no buttons for it :((Joel Sallow asked "We aren't allowed to public reply :/")
+
+Joel Sallow
+We aren't allowed to public reply :/
+
+Darwin
+[Version] does not handle alpha
+
+Darwin
+[Version] does not handle alpha
+
+Darwin
+or dash
+
+Jonas Sommer Nielsen - mrhvid
+We only have a ask question. We can't even reply to the previous question.
+
+Jonas Sommer Nielsen - mrhvid
+We only have a ask question. We can't even reply to the previous question.
+
+Mark Domansky
+He has ~500, and it's the MSFT org
+
+Mark Domansky
+as I understand(Mark Domansky asked "He has ~500, and it's the MSFT org")
+
+Darwin
+or dash
+
+Joel Sallow
+Teams isn't setup for public things hehe
+
+Joel Sallow
+APpreciate your guys efforts to get stuff sorted :D
+
+Jonas Sommer Nielsen - mrhvid
+set up a IRC chat  :P
+
+Mark Domansky
+He has ~500, and it's the MSFT org
+
+Joel Sallow
+nope, we see no chats
+
+Joel Sallow
+APpreciate your guys efforts to get stuff sorted :D
+
+Jonas Sommer Nielsen - mrhvid
+set up a IRC chat  :P
+
+Joel Sallow
+Teams isn't setup for public things hehe
+
+Joel Sallow
+No, just use Twitch chat tbh
+
+Joel Sallow
+nope, we see no chats
+
+Joel Sallow
+nice and flexible
+
+Joel Sallow
+nice and flexible
+
+Joel Sallow
+No, just use Twitch chat tbh
+
+Joel Sallow
+you can popout a chat window or w/e while you're on the call
+
+Shawn Melton
+It wouldn't even let me login with my LiveID Account. Teams app shows it is logging me in but just takes me back to the start page, I can only join the call as anonymous.
+
+Joel Sallow
+you can popout a chat window or w/e while you're on the call
+
+Shawn Melton
+It wouldn't even let me login with my LiveID Account. Teams app shows it is logging me in but just takes me back to the start page, I can only join the call as anonymous.
+
+Corey Webster
+Joey just use a normal teams meeting ans share the link and not the live meeting feature. The live meeting broadcast is suppose to be more a one way convesation today.
+
+Shawn Melton
+Visual Studio uses Twitch
+
+Corey Webster
+Joey just use a normal teams meeting ans share the link and not the live meeting feature. The live meeting broadcast is suppose to be more a one way convesation today.
+
+Shawn Melton
+Visual Studio uses Twitch
+
+Joel Sallow
+I'll have to catch whatever recordings you guys can get, hope y'all have fun at the summit! :D
+
+Joel Sallow
+I'll have to catch whatever recordings you guys can get, hope y'all have fun at the summit! :D
+
+Keith Hill
+One more piece of feedback for Teams team - I can't tell if my microphone is live/muted. 
+
+JB Lewis
+Thanks all!  See some of you at Summit!
+
+Keith Hill
+One more piece of feedback for Teams team - I can't tell if my microphone is live/muted. 
+
+Joey Aiello
+Tyler is streaming right after this at https://twitch.tv/tylerleonhardt
+
+JB Lewis
+Thanks all!  See some of you at Summit!
+
+Darwin
+Thanks!
+
+Darwin
+Thanks!
+
+Joel Sallow
+YAYYYY TYLER
+
+Jonas Sommer Nielsen - mrhvid
+Thanks a nice call :) Keep up the good work :) 
+
+prasoon
+$Thanks
+
+Corey Webster
+Thanks awesome information as alway!
+
+Joel Sallow
+RE: The Azure module on preview gallery -- it's included in cloud shell by default apparently
+
+Keith Hill
+Screaming Tyler!   Er, streaming Tyler.  Eh, the first one sound better.  :-)
+
+Joel Sallow
+weird
+
+Joel Sallow
+o/
+
+Prateek Singh @SinghPrateik
+Are you guys coming to PowerShell Conference Asia at Bangalore, India? September 19-21
+
+Jon J
+Cheers, see you at Summit
+
+prasoon
+why can't we switch back to skype call ?
+
