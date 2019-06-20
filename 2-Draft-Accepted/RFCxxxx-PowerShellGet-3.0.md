@@ -132,7 +132,7 @@ always connect to that repository.
 ### Repository management
 
 `Register-PSResourceRepository` will allow for registering additional repositories.
-A `-Default` switch enables registering PSGallery should it be accidentally removed.
+A `-PSGallery` switch enables registering PSGallery should it be accidentally removed.
 The `-URL` will accept the HTTP address without the need to specify `/api/v3` as
 that will be assumed and discovered at runtime (trying v3 first, then falling
 back to v2, then the literal URL).
@@ -145,22 +145,22 @@ the parameter names (like splatting).
 
 ```powershell
 Register-PSResourceRepository -Repositories @(
-  @{ URL = "https://one.com"; Trusted = $true }
-  @{ URL = "https://powershellgallery.com"; Trusted = $true; Default = $true }
+  @{ URL = "https://one.com"; Name = "One"; Trusted = $true; Credential }
+  @{ URL = "https://powershellgallery.com"; Name = "PSGallery"; Trusted = $true; Default = $true }
 )
 ```
 
 A `-Name` parameter allows for setting a friendly name.
 
-A `-Default` switch will set one repository as the default (when not specified
-with other cmdlets).
-Each time it is specified, it sets the new one as default and the previous default
-is no longer default.
+A `-Priority` parameter allows setting the search order of repositories.
+A lower value has higher priority.
+If not specified, the default value is 50.
+PSGallery will have a default value of 25.
 
 `Get-PSResourceRepository` will list out the registered repositories.
 
 `Set-PSResourceRepository` can be used to update a repository URL, trust level,
-or if that repository is the default.
+or priority.
 
 `Unregister-PSResourceRepository` can be used to un-register a repository.
 
@@ -318,8 +318,10 @@ nupkg) instead of expanding it into a folder.
 ### Updating resources
 
 `Update-PSResource` will update all resources to most recent minor version by default.
-A `-AllowMajorVersionUpdate` switch will allow updating to newer major version.
-A `-PatchUpdateOnly` switch will allow updating only to patched versions.
+
+A `-UpdateTo` parameter has values `MinorVersion` (as default), `MajorVersion`, `PatchVersion`.
+`MajorVersion` allows updating to latest major version.
+`PatchVersion` allows updating to latest patch version (e.g. 6.2.1 to 6.2.4).
 
 If the installed resource is a pre-release, it will automatically update to
 latest prerelease or stable version (if available).
@@ -369,15 +371,22 @@ a well known REST API and return a more descriptive error message to the user.
 
 ## Alternate Proposals and Considerations
 
-This RFC does not cover the module authoring experience on publishing a cross-platform
-module with multiple dependencies and supporting multiple runtimes.
+These are items are outside the scope of this RFC and version 3.0.
+Many of these items can be addressed in a future version of PowerShellGet without
+introducing a breaking change:
 
-If there is a desire to explicitly update the local cache (like `apt`), we can introduce a
-`Update-PSResourceCache` cmdlet in the future and a property on PSRepository registrations
-indicating whether it auto-updates or not.
-This would not be a breaking change, but not part of this initial release.
+- This RFC does not cover the module authoring experience on publishing a cross-platform
+  module with multiple dependencies and supporting multiple runtimes.
 
-The ability to set policy for PSGet is outside the scope of this RFC.
+- If there is a desire to explicitly update the local cache (like `apt`), we can introduce a
+  `Update-PSResourceCache` cmdlet in the future and a property on PSRepository registrations
+  indicating whether it auto-updates or not.
 
-Automatic cleanup of old resources is out of scope of this RFC.
-Keeping with current behavior, installs are always side-by-side.
+- The ability to set policy for PSGet
+
+- Automatic cleanup of old resources when upgrading or removing resources
+
+- Signing incorporated into `Publish-PSResource`
+
+- `-Trusted` switch to `Install-PSResource` and `Find-PSResource` that pre-validates
+  the signing cert is trusted on the system
