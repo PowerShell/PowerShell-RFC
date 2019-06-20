@@ -372,7 +372,7 @@ a well known REST API and return a more descriptive error message to the user.
 ## Alternate Proposals and Considerations
 
 These are items are outside the scope of this RFC and version 3.0.
-Many of these items can be addressed in a future version of PowerShellGet without
+Many of these items can be addressed in a future version of PowerShellGet 3.x without
 introducing a breaking change:
 
 - This RFC does not cover the module authoring experience on publishing a cross-platform
@@ -390,3 +390,5 @@ introducing a breaking change:
 
 - `-Trusted` switch to `Install-PSResource` and `Find-PSResource` that pre-validates
   the signing cert is trusted on the system
+
+- Notify users that they have outdated versions of a module (just patch versions?)
