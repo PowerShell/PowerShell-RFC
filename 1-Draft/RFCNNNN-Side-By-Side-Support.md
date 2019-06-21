@@ -167,6 +167,7 @@ Version                    InstallLocation
 ```bash
 # This launches the latest version of PowerShell, gets the installation
 # location of the specified version, launches pwsh for that version, and exits
+# when the launched version exits
 pwsh -Version 6.2.1
 # This does the same thing
 pwsh -v 6.2.1
