@@ -27,7 +27,7 @@ and should do better.
 ## Motivation
 
 As a user,<br/>
-I can reference the most recent job launched with `Start-Job` or the `&` background operator in a `$!` variable<br/>
+I can reference the most recent job(s) launched with `Start-Job` or the `&` background operator in a `$!` variable<br/>
 So that I can write my handling of those jobs in a consistent way without the job object or id, using the same variable that is used in bash for the same purpose.
 
 As a user,<br/>
@@ -106,6 +106,24 @@ the command before it.
 The `&!` operator permits launching a job using an operator without any of the
 messages from the various streams appearing by default in the console.
 
+### Fanning out to multiple background jobs and referencing the jobs with the `$!` variable
+
+```powershell
+$null = cmd1 & cmd2 & cmd3 &
+$!
+```
+
+```output
+Id     Name            PSJobTypeName   State         HasMoreData     Location             Command
+--     ----            -------------   -----         -----------     --------             -------
+1      Job1            BackgroundJob   Running       True            localhost            Microsoft.PowerShell.Man...
+2      Job1            BackgroundJob   Running       True            localhost            Microsoft.PowerShell.Man...
+3      Job1            BackgroundJob   Running       True            localhost            Microsoft.PowerShell.Man...
+```
+
+The `$!` variable in those two commands returns the jobs that were created with
+the command before it.
+
 ### Launching a legacy command with the stop-parsing sigil and either the `&` or `&!` background operator
 
 This corrects a limitation with the background operator(s), which currently
@@ -119,7 +137,7 @@ sigil.
 ```output
 Id     Name            PSJobTypeName   State         HasMoreData     Location             Command
 --     ----            -------------   -----         -----------     --------             -------
-1      Job1            BackgroundJob   Running       True            localhost            Microsoft.PowerShell.Man…
+1      Job1            BackgroundJob   Running       True            localhost            Microsoft.PowerShell.Man...
 ```
 
 ### Showing or hiding the data from one or more jobs
@@ -131,7 +149,7 @@ This allows job data to be shown or hidden on demand for any jobs.
 Show-JobData -Id 1..5
 # Hide the data from job name Job2
 Hide-JobData -Name Job2
-# Show the data for the last job we launched
+# Show the data for the last job (or jobs) we launched
 Show-JobData -Job $!
 ```
 
@@ -148,7 +166,7 @@ $!.ProcessId
 ```
 
 ```output
-# The process id for the background job
+# The process id for the background job(s)
 ```
 
 ## Specification
@@ -158,7 +176,7 @@ $!.ProcessId
 1. Add a boolean property to `BackgroundJob` objects called `ShowData` that identifies if the job is currently configured to show data or not.
 1. Add an integer property to `BackgroundJob` objects called `ProcessId` that identifies the ID of the process where the job is running.
 1. Add a `-ShowInHost` parameter to `Start-Job` that sets `ShowData` to true and hooks up event handlers as described in the first item in this list.
-1. Add a `$!` variable to store the most recently run job.
+1. Add a `$!` variable to store the most recently run job (or jobs if multiple jobs are launched at the same time, e.g. `cmd1 & cmd2 & cmd3`).
 
 ## Alternate Proposals and Considerations
 
