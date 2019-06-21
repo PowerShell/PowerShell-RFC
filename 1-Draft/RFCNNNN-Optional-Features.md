@@ -239,3 +239,18 @@ Optional features can be enabled or disabled in a session, module, script, or sc
 ### Extend experimental features to support the enhancements defined in this RFC
 
 At a glance, experimental features and optional features are very similar to one another, so it was proposed that it may make sense to have them both use the same functionality when it comes to enabling/disabling them in scripts and modules; however, experimental features have a completely different intent (to try out new functionality in a PowerShell session), are only for future PowerShell sessions, and they only have a single on/off state. On the other hand, optional features are for the current and future PowerShell sessions, for the current user or all users, and may be enabled or disabled in various scopes within those sessions. For that reason, this approach doesn't seem like a viable solution. If we want to change that, perhaps someone should file an RFC against experimental features to make that change.
+
+### Enable/disable optional features in jobs according to their current state when the job is launched
+
+Jobs run in the background have their own session, and therefore will not automatically have optional features enabled or disabled according to the current state when the job is launched. We should consider updating how jobs are launched in the engine such that they do "inherit" optional feature configuration to allow them to use optional features without additional code.
+
+You might think that you can accomplish this using `#requires` in a script block launched as a job, but that doesn't work -- the `#requires` statement is ignored when you do this at the moment. For example, the see the results of the following script when launched from PowerShell Core:
+
+```PowerShell
+Start-Job {
+    #requires -PSEdition Desktop
+    $PSVersionTable
+} | Receive-Job -Wait
+```
+
+The result of that command shows that the version of PowerShell where the job was run was Core, not Desktop, yet the job ran anyway despite the `#requires` statement. This may be a bug. If it is, and if that bug is corrected, then you could use #requires to enable/disable features, but regardless it would still be preferable (and more intuitive) for jobs to "inherit" the current optional feature configuration when they are invoked.
