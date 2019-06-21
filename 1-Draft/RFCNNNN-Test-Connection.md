@@ -23,13 +23,13 @@ Test-Connection [-TargetName] <string[]> [-IPv4] [-IPv6] [-ResolveDestination] [
 [-Ping] [-Continues] [-Delay <int>] [-Source <string>] [-MaxHops <int>]  [-BufferSize <int>] [-DontFragment] 
 
 # Set 3
-Test-Connection [-TargetName] <string[]> -Traceroute [-Source <string>] [-MaxHops <int>] 
+-Traceroute [-Source <string>] [-MaxHops <int>] 
 
 # Set 4
-Test-Connection [-TargetName] <string[]> -MTUSizeDetect
+-MTUSizeDetect
 
 # Set 5
-Test-Connection [-TargetName] <string[]> -TCPPort <int> [-Source <string>]
+-TCPPort <int> [-Source <string>]
 ```
 
 ## Changes
