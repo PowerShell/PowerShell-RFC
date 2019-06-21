@@ -199,3 +199,12 @@ installed version of Windows PowerShell along with its location, and having
 launch any installed PowerShell version from `pwsh.exe`, making it easy to set
 up automation with one command to invoke. Arguments from `pwsh.exe` could be
 mapped to arguments on `powershell.exe`.
+
+### Are containers and Docker enough to solve this need?
+
+While discussing this with a colleague of mine, they asked if this is really
+needed, or if containers and Docker solve this problem already. While I believe
+containers can allow users to use different versions of PowerShell, I also
+suspect that most users don't know how to set that up, if they even use Docker
+at all. I think it would be easier for everyone if we could just launch the
+proper version of PowerShell via `pwsh.exe`.
