@@ -11,28 +11,190 @@ Plan to implement: Maybe
 
 # Side-by-side support in PowerShell 7 and later
 
-Description and rationale.
+Historically, upgrading Windows PowerShell meant replacing your existing
+version with a newer version. The were only two notions of side-by-side support
+with Windows PowerShell:
+
+1. Support for running `powershell.exe -version 2` in Windows PowerShell
+versions 3.x-5.x. That wasn't quite the same as running PowerShell version 2
+though, because your modules that were installed by default and not available
+in the PowerShell Gallery may not be compatible with version 2 and therefore
+couldn't load.
+1. Support for installing multiple versions of modules side-by-side and
+importing the version that you needed in Windows PowerShell version 3.x-5.x.
+
+Unfortunately, there are many scenarios where upgrading Windows PowerShell
+isn't an option for users, such as:
+
+1. When you are using a product that has a dependency on a specific version
+of PowerShell.
+1. When you have automation scripts or other management solutions that have a
+dependency on a specific version of PowerShell.
+
+In order to keep systems and management processes running the way they must in
+an enterprise, many users have no choice but to stick with a downlevel version
+of Windows PowerShell for a very long time. There are even some organizations
+still using PowerShell version 2 today!
+
+All of this has lead to much of the community pushing hard for downlevel
+support for updates via modules as much as possible so that they can use the
+new features and functionality in older versions of PowerShell. The serious
+downside to that approach is that modules that offer downlevel support have to
+be designed for downlevel versions, perhaps opting in to additional
+functionality with logic that checks for specific versions of PowerShell. The
+end result is that this holds us back as a community, and we need to find a way
+to enable us to move forward more quickly.
+
+Fortunately, the upcoming release of PowerShell 7 provides a rare opportunity
+for the PowerShell Community: its release marks the first time that a successor
+to a Windows PowerShell release can be installed side-by-side with Windows
+PowerShell (note: PowerShell Core 6.x was not a true successor to Windows
+PowerShell, but PowerShell 7 is the successor to both Windows PowerShell 5.x
+and PowerShell Core 6.x). It will even have a separate executable (`pwsh.exe`),
+and can be installed to specific locations. That means users will be able to
+install and use PowerShell 7 side-by-side with other versions of PowerShell,
+which is a great help for users looking for opportunities to move forward.
+There are still some products and/or scenarios that aren't supported in
+PowerShell 7, but this release brings us much, much closer to parity and gives
+us an opportunity to spend more time looking forward than backward.
+
+Unfortunately, according to the [Microsoft blog post about the forthcoming
+PowerShell 7 release](https://devblogs.microsoft.com/powershell/the-next-release-of-powershell-powershell-7/),
+PowerShell 7 will align more closely with the .NET Core support lifecycle,
+which brings in support for LTS (Long Term Servicing) and non-LTS releases.
+Non-LTS (aka Current) releases are supported for three months after a
+subsequent Current release or an LTS release. This means you'll have to update
+those releases regularly, which helps move the community forward. On the other
+hand, LTS releases will be supported either for three years after general
+availability or for a 12 month maintenance period after the next LTS release
+ships, whichever is longer (i.e. if it takes them longer than expected to get
+an LTS release out the door for some reason, the previous LTS release could be
+supported for even longer). This means you'll be able to stick your heels in
+the ground and use an LTS release for a very long time, which risks holding us
+back.
+
+In order to keep the focus on moving forward, the purpose of this proposal is
+to support side-by-side installations of PowerShell such that...:
+
+* ...it is easy to see what versions of PowerShell are installed.
+* ...it is easy to launch a specific installed version of PowerShell from a
+command line.
+* ...having multiple installed versions of PowerShell doesn't cause problems
+for automation, products, or services built for a specific version of PowerShell.
 
 ## Motivation
 
-    As a scripter,
-    I can choose and launch the version of PowerShell I need,
-    so that I can use automation built/tested against for downlevel LTS versions of PowerShell while still being able to use the latest versions on the same system.
+    As a user,
+    I can easily install newer versions of PowerShell side-by-side with old versions,
+    so that I can continue to use products/solutions for specific versions of PowerShell while using newer versions when needed.
+
+    As a user,
+    I can use the command line to see which versions of PowerShell are installed,
+    so that I can know what versions are available to me to use.
+
+    As a user,
+    I can launch the version of PowerShell I need from the command line,
+    so that I can use automation built and tested against specific versions of PowerShell while still being able to use the latest version on the same system.
 
 ## User Experience
 
-Example of user experience with example code/script.
-Include example of input and output.
+### Installing a specific version of PowerShell
 
-```powershell
-Get-Example
+The end goal is for users to be easily able to do any of the following with a
+PowerShell installer:
+
+* install the latest version of PowerShell side-by-side with an existing
+version from a UI (e.g. `.msi`, `.pkg`, `.deb`)
+* install the latest version of PowerShell side-by-side with an existing
+version from the command line (e.g. `sudo apt-get install ...`, `brew cask
+install ...`, `choco install ...`)
+
+_Note: I'm a little uncertain of these details here, so please correct me where
+appropriate._
+
+The current release process seems to include updated published versions of
+packages in the various package repositories (for `apt-get`, homebrew, and
+Chocolatey). The problem with this approach is that it does not support
+side-by-side installations at the command line. For example, if I have
+PowerShell Core 6.2.0 installed on macOS and I want to install PowerShell Core
+6.2.1 side-by-side, I cannot. I can upgrade my installed version, reinstall
+the current version, or install a preview version (since that comes from a
+different package name), but I cannot install a different version side-by-side.
+
+Instead, if the release process not only updated the latest package but also
+created a version-specific package in the various repositories, then users
+could specify a specific version that they want to install (e.g. `brew cask
+install powershell@6.2.0`) to install different versions of PowerShell
+side-by-side with one another, with the versions automatically being installed
+in an appropriate version folder (which they are already anyway). Chocolatey
+already has support for installing a specific version, but it does not seem to
+work at the moment (I tried installing PowerShell Core 6.2.0 and ended up with
+6.2.1, with an error indicating that 6.2.0 was not installed).
+
+The UI installers should provide options to upgrade the latest installed
+version of PowerShell or install a new version side-by-side.
+
+### Listing installed versions of PowerShell
+
+```bash
+# This launches the latest version of PowerShell, returns a list of installed
+# versions and their installation locations and exits
+pwsh -ListVersions
+# This does the same thing
+pwsh -lv
 ```
 
 ```output
-Hello World
+6.2.1 /usr/local/microsoft/powershell/6.2.1/]
+7.0.100-preview1 [/usr/local/microsoft/powershell/7.0.100-preview1]
+```
+
+```powershell
+# This returns a list of installed versions and their installation locations
+# as objects
+Get-InstalledPSVersion
+```
+
+```output
+Version                    InstallLocation
+-------                    ---------------
+6.2.1                      C:\ProgramFiles\PowerShell\6.2.1
+7.0.100-preview1           C:\ProgramFiles\PowerShell\7.0.100-preview1
+```
+
+### Launching a specific version of PowerShell
+
+```bash
+# This launches the latest version of PowerShell, gets the installation
+# location of the specified version, launches pwsh for that version, and exits
+pwsh -Version 6.2.1
+# This does the same thing
+pwsh -v 6.2.1
+```
+
+```output
+# A new window with the desired version of PowerShell open.
+# If it is possible to do have this window on a new tab in the new Terminal,
+# that would be great.
 ```
 
 ## Specification
 
+* create a `Get-InstalledPSVersion [<CommonParameters>]` cmdlet that returns
+the installed versions of PowerShell along with their locations
+* update the `-version` argument of `pwsh.exe` to attempt to launch a specific
+version of PowerShell
+* add a `-ListVersions` argument to `pwsh.exe` that internally invokes
+`Get-InstalledPSVersion`, formats and outputs the results, and exits
+* update the release packaging process to produce versioned packages
+
 ## Alternate Proposals and Considerations
 
+### Include Windows PowerShell version support
+
+It would be worth considering having `Get-InstalledPSVersion` return the
+installed version of Windows PowerShell along with its location, and having
+`pwsh -version` support launching Windows PowerShell. That would allow users to
+launch any installed PowerShell version from `pwsh.exe`, making it easy to set
+up automation with one command to invoke. Arguments from `pwsh.exe` could be
+mapped to arguments on `powershell.exe`.
