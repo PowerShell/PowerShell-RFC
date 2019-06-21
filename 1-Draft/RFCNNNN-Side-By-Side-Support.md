@@ -208,3 +208,10 @@ containers can allow users to use different versions of PowerShell, I also
 suspect that most users don't know how to set that up, if they even use Docker
 at all. I think it would be easier for everyone if we could just launch the
 proper version of PowerShell via `pwsh.exe`.
+
+### Maintain backwards compatibility with pwsh.exe -version
+
+In PowerShell Core 6.2, if you invoke `pwsh -version` you get the current
+PowerShell version. That support could remain in place if this RFC is approved,
+returning the current (latest) version when invoked without a version, or
+launching the requested version when invoked with a version.
