@@ -17,7 +17,9 @@ PowerShell is getting more and more support for multi-threaded use, such as:
 * `S.M.A.PowerShell.InvokeAsync` and `S.M.A.PowerShell.StopAsync`
 * parallelization in `ForEach-Object` (related RFC: #194)
 
-With these either available now or being made available soon, it would be helpful if scripters could easily create concurrent alternatives to arrays (`@()`) and hashtables (`@{}`).
+With these either available now or being made available soon, it would be
+helpful if scripters could easily create concurrent alternatives to arrays
+(`@()`) and hashtables (`@{}`).
 
 ## Motivation
 
@@ -67,8 +69,15 @@ The data gathered in each key in the $dictionary collection.
 
 * define `~@()` enclosures as `System.Collections.Concurrent.ConcurrentBag<PSObject>`
 * define `~@{}` enclosures as `System.Collections.Concurrent.ConcurrentDictionary<PSObject>`
-* ensure that the `+=` operator adds data to a `ConcurrentBag` (right now using that operator with `ConcurrentBag` results in it being converted to an array of objects instead)
-* show a warning (suggestion) users if they use `[]` index operators with a `ConcurrentBag` indicating that the `ConcurrentBag` collection is unordered and therefore cannot be used with index operators, and suggesting that users should use the `.ToArray()` method of `ConcurrentBag` once the collection has been populated if they want to convert it to an array and process items using their index.
+* ensure that the `+=` operator adds data to a `ConcurrentBag` (right now using
+that operator with `ConcurrentBag` results in it being converted to an array of
+objects instead)
+* show a warning (suggestion) users if they use `[]` index operators with a
+`ConcurrentBag` indicating that the `ConcurrentBag` collection is unordered and
+therefore cannot be used with index operators, and suggesting that users should
+use the `.ToArray()` method of `ConcurrentBag` once the collection has been
+populated if they want to convert it to an array and process items using their
+index.
 
 ## Alternate Proposals and Considerations
 
@@ -76,7 +85,26 @@ The data gathered in each key in the $dictionary collection.
 
 There are technically two breaking changes in this RFC:
 
-1. Adding items to `ConcurrentBag` with `+=` results in the collection being converted into an array.
-1. You can create a command named `~@` in PowerShell, so anyone using that command name will break if we add `~@()` as enclosures.
+1. Adding items to `ConcurrentBag` with `+=` results in the collection being
+converted into an array.
+1. You can create a command named `~@` in PowerShell, so anyone using that
+command name will break if we add `~@()` as enclosures.
 
-I believe both of these are low-risk breaking changes that are worth making so that we can have easier concurrent collection support in PowerShell moving forward.
+I believe both of these are low-risk breaking changes that are worth making so
+that we can have easier concurrent collection support in PowerShell moving
+forward.
+
+### Alternative syntax
+
+To simplify the syntax somewhat, we could implement `~()` for `ConcurrentBag`
+and `~{}` for `ConcurrentDictionary`.
+
+On the plus side, these are shorter and therefore easier to type. Also, by
+removing the `@` character from `~@()`, it becomes a little less like an array
+(which it is not, since arrays are ordered and you cannot index into a
+`ConcurrentBag`, which is unordered).
+
+On the downside, the potential for the second breaking change increases
+because someone may have created an alias for `~` that means something to them.
+That would only break, however, if they were invoking that command with round
+brackets with at least one value inside (e.g. `~('something')`).
