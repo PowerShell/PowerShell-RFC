@@ -138,20 +138,21 @@ version of PowerShell or install a new version side-by-side.
 
 ```bash
 # This launches the latest version of PowerShell, returns a list of installed
-# versions and their installation locations and exits
+# versions and their installation location, and then exits
 pwsh -ListVersions
 # This does the same thing
 pwsh -lv
 ```
 
 ```output
-6.2.1 /usr/local/microsoft/powershell/6.2.1/]
+6.2.1 [/usr/local/microsoft/powershell/6.2.1/]
 7.0.100-preview1 [/usr/local/microsoft/powershell/7.0.100-preview1]
 ```
 
 ```powershell
-# This returns a list of installed versions and their installation locations
-# as objects
+
+# This returns a list of installed versions and their installation location as
+# objects
 Get-InstalledPSVersion
 ```
 
@@ -215,3 +216,38 @@ In PowerShell Core 6.2, if you invoke `pwsh -version` you get the current
 PowerShell version. That support could remain in place if this RFC is approved,
 returning the current (latest) version when invoked without a version, or
 launching the requested version when invoked with a version.
+
+### Windows Update
+
+If PowerShell is added back as a component of Windows, some consideration needs
+to be given to Windows Update. With side-by-side installations, it would not
+make much sense to update older versions, so the most recently installed stable
+version should be treated as the default version to check for updates.
+
+Unfortunately I do not have much insight into what Windows Update requires.
+@iSazonov mentioned he remembers it requiring the _same_ installation folder,
+and if that is the case, how would that work with a SxS updateable PowerShell.
+If someone who knows what is actually required to make Windows Update work
+could share what could/should be done here, that would be appreciated. Ideally
+PowerShell would work like dotnet works, supporting side-by-side installations
+while being updateable via Windows Update as well.
+
+### Version discovery and registration
+
+Currently the PowerShell installer allows you to install PowerShell into any
+folder you want. This flexibility comes at a cost, because it means registering
+installations of PowerShell on a system to make sure they are discoverable.
+
+Since PowerShell is a runtime that other products need to be able to depend on,
+some thought needs to be given towards how best to install it. I believe it
+would be better to only install to known locations for all users/system or for
+the current user so that we could check the filesystem to discover versions of
+PowerShell that are installed, regardless of what platform we are on. It is
+likely that this would also make building solutions on top of side-by-side
+installations of PowerShell easier, so that they can check for the required
+version easily.
+
+It is worth mentioning that the dotnet sdk installer does not ask you where
+you want to install it. Instead it installs to one of two locations, depending
+on whether or not you are an admin (i.e. it installs to an all users/system
+location if you are admin, or to a user location if you are not).
