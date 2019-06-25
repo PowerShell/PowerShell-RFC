@@ -57,7 +57,7 @@ Wireframe of the new design.
 The wireframe is intended for visual reference, it is **not** a pixel perfect representation.
 The most important part to note is the new layout for filters as opposed to the original "Criteria Panel".
 
-![Out-GridViewMockup](../assets/Out-GridView/out_gridview_mockup.png)
+![Out-GridViewMockup](https://github.com/PowerShell/PowerShell-RFC/blob/9112feb522323ffbb55782ada8cdb6d618bbd83b/assets/Out-GridView/out_gridview_mockup.png)
 
 ## Module
 
