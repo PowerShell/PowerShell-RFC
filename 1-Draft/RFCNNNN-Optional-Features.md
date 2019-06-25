@@ -253,4 +253,4 @@ Start-Job {
 } | Receive-Job -Wait
 ```
 
-The result of that command shows that the version of PowerShell where the job was run was Core, not Desktop, yet the job ran anyway despite the `#requires` statement. This may be a bug. If it is, and if that bug is corrected, then you could use #requires to enable/disable features, but regardless it would still be preferable (and more intuitive) for jobs to "inherit" the current optional feature configuration when they are invoked.
+The result of that command shows that the version of PowerShell where the job was run was Core, not Desktop, yet the job ran anyway despite the `#requires` statement. This may be a bug. If it is, and if that bug is corrected, then you could use #requires to enable/disable features, but regardless it would still be preferable (and more intuitive) for jobs to "inherit" the current optional feature configuration when they are invoked. This includes jobs launched with `Start-Job`, `Start-ThreadJob`, the `&` background operator, parallelized `foreach` statements or `ForEach-Object` commands, or the generic `-AsJob` parameter.
