@@ -86,13 +86,15 @@ index.
 There are technically two breaking changes in this RFC:
 
 1. Adding items to `ConcurrentBag` with `+=` results in the collection being
-converted into an array.
+converted into an array in current PowerShell versions.
 1. You can create a command named `~@` in PowerShell, so anyone using that
 command name will break if we add `~@()` as enclosures.
 
 I believe both of these are low-risk breaking changes that are worth making so
 that we can have easier concurrent collection support in PowerShell moving
-forward.
+forward. Further, the first one could be identified as a bug and is likely not
+what you want, and the second one is only breaking if you happen to be invoking
+your `~@` command using parentheses with at least one value inside (e.g. `@(1)`).
 
 ### Alternative syntax
 
