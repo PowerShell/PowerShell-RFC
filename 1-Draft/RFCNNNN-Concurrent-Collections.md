@@ -107,6 +107,7 @@ removing the `@` character from `~@()`, it becomes a little less like an array
 `ConcurrentBag`, which is unordered).
 
 On the downside, the potential for the second breaking change increases
-because someone may have created an alias for `~` that means something to them.
+because it is more likely that someone has created an alias of `~` than `~@`.
 That would only break, however, if they were invoking that command with round
-brackets with at least one value inside (e.g. `~('something')`).
+brackets with at least one value inside (e.g. `~('something')`), so it would
+still be a very low risk breaking change.
