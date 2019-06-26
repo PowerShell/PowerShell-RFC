@@ -68,7 +68,7 @@ The data gathered in each key in the $dictionary collection.
 ## Specification
 
 * define `~@()` enclosures as `System.Collections.Concurrent.ConcurrentBag<PSObject>`
-* define `~@{}` enclosures as `System.Collections.Concurrent.ConcurrentDictionary<PSObject>`
+* define `~@{}` enclosures as `System.Collections.Concurrent.ConcurrentDictionary<PSObject,PSObject>`
 * ensure that the `+=` operator adds data to a `ConcurrentBag` (right now using
 that operator with `ConcurrentBag` results in it being converted to an array of
 objects instead)
