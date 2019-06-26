@@ -34,12 +34,13 @@ cmdlet, we end up with a common framework for faster automation where
 asynchronous invocation would be advantageous that can be applied to any
 advanced function or cmdlet.
 
-Note that [RFC 204](https://github.com/PowerShell/PowerShell-RFC/pull/204) is very closely related to this RFC and both should be
-implemented at the same time, assuming that both are approved. If you haven't
-already, have a quick look at that RFC and share feedback on it. It's very
-straightforward.
+Note that [the RFC in PR 204](https://github.com/PowerShell/PowerShell-RFC/pull/204) is very closely related to this RFC and both should
+be implemented at the same time, assuming that both are approved. If you
+haven't already, have a quick look at that RFC and share feedback on it. It's
+very straightforward.
 
-Also note that 
+[The RFC in PR 205](https://github.com/PowerShell/PowerShell-RFC/pull/205) is also related to this
+RFC and should be another quick read.
 
 ## Motivation
 
@@ -184,23 +185,84 @@ function Invoke-Command {
     }
     process {
         # NEW! The way this is invoked depends on whether or not the parameter
-        # set that was used supports parallelization or not, and whether or not
-        # the command was invoked with `-AsThreadJob` or `-ThreadJobPrefix`.
+        # set that was used supports parallelization or not.
         #
         # For a parameter set that does not support parallelization, this would
         # be invoked synchronously.
         #
         # For a parameter set that supports parallelization, this would be
-        # invoked in a thread job. If that 
+        # invoked in a thread job, and the command would wait for all thread
+        # jobs to complete before continuing with end (and dispose) blocks.
+
+        # NEW! Unlike Start-Job commands where you must use the "using:" prefix
+        # on variables to access variables that are defined outside of the
+        # scope of the script block, all variables that are defined in the
+        # current scope would be accessible when the command is invoked with
+        # parallel processing without having to use the "using:" prefix. This
+        # is a smarter design for working with variables from other runspaces,
+        # and allows for easier transition of a command that does not support
+        # parallel processing into a command that does support parallel
+        # processing. The "using:" qualifier should only be used when you want
+        # to reference a variable that is outside of the scope of the local
+        # function.
+
+        # NEW! "using:" does not allow for transport of script blocks. This was
+        # done as a security measure (see [PowerShell Issue 9703](https://github.com/PowerShell/PowerShell/issues/9703) for details);
+        # however, there are valid cases where script blocks must be
+        # transportable into jobs, and this feature is one such case. Any
+        # variables that contain script blocks (i.e. parameters, variables
+        # defined in a begin block, etc.) must be made available to the thread
+        # jobs where process is invoked. Additionally, local functions defined
+        # in a begin block must be made available to the thread jobs where
+        # process is invoked. In general, local variables (from parameters or
+        # the begin block) and any resources that are created in the begin
+        # block such as functions, etc. must be made available in the runspaces
+        # where the threadjobs will run.
     }
+    end {
+        # No changes here, this would be invoked synchronously in the current
+        # session.
+    }
+}
+
+$twoSessions = @($session1, $session2)
+Invoke-Command -Parallel -Session $twoSessions -ScriptBlock {
+    'This will be run in a thread job for each session.'
+}
+
+Invoke-Command -Session $twoSessions -ScriptBlock {
+    'This will be run once for each session, sequentially.'
 }
 ```
 
 ```output
-Hello World
+This will be run in a thread job for each session.
+This will be run in a thread job for each session.
+This will be run once for each session, sequentially.
+This will be run once for each session, sequentially.
 ```
 
 ## Specification
+
+For this to work, the following rough list of changes would have to be implemented:
+
+* update `CmdletBinding` to store the names of parameter sets that support
+parallel execution in the `PSCmdlet` object.
+* update the common parameter assignment to add `-Parallel`, `-ThreadLimit`,
+and `-TimeoutSecs` parameters to parameter sets that support `SupportsParallel`.
+* add logic to the command processor that identifies the local variables and
+any resources such as functions defined in the `begin` block that need to be
+made available to a `ThreadJob`, and make them available there as if the `using:`
+qualifier was used on them.
+* update the command processor to support invocation of the `ProcessRecord`
+method inside of a `ThreadJob` when the command is invoked with one of the new
+common parameters.
+* update the command processor such that it waits for `ThreadJob` instances it
+creates to complete, and then writes their results to the pipeline as they
+finish execution.
+* update `ForEach-Object` to be the first command that support `SupportsParallel`,
+so that users have an easy way to create multi-threaded, multi-runspace
+execution paths in PowerShell.
 
 ## Alternate Proposals and Considerations
 
@@ -208,19 +270,41 @@ Hello World
 
 Parallelization is about being able to perform multi-threaded processing of
 objects in a pipeline. This is what is natively supported by the enhancements
-outlined in this RFC. 
+outlined in this RFC. The RFC that originally inspired this approach included
+an `-AsJob` parameter that would allow for asynchronous invocation of the process
+block of `ForEach-Object`. There are two problem with `-AsJob` in this scenario:
 
-        # [-AsThreadJob] : A switch that tells PowerShell to create a thread
-        #                  job and return it for each invocation of the process
-        #                  block. This parameter is not required if the next
-        #                  parameter is used.
-        # [-ThreadJobPrefix <string>] : A string prefix that will be applied to
-        #                               each thread job created. Thread jobs
-        #                               are named Job<n> by default, where <n>
-        #                               is an ordinal number. If a prefix is
-        #                               provided, it is used in place of "Job"
-        #                               in the job name.
+1. (Minor) Other commands use `-AsJob` as a parameter today to return a
+background job that is run in a separate child process, which in turn may
+contain multiple child background jobs. Having this parameter also used to
+return one or more thread jobs is bound to confuse some people. The solution
+here is straightforward: use a `-AsThreadJob` parameter name instead of `-AsJob`.
+1. (Major) Pipelines in PowerShell have a very specific processing sequence. In
+general, first the `begin` blocks in the pipeline are processed, then the `process`
+blocks, and last the `end` blocks. In the future we will also see a `dispose` block
+that gets processed after the end block, or on terminating error. Introducing a
+parameter that makes a command optionally return a job from a process block means
+that command cannot properly handle logic in the `end` or `dispose` blocks,
+because those should only be invoked after the `process` block work has
+finished execution, and returning a job defers that execution until later.
 
+The second issue is so significant that it highlights a very important detail
+when considering adding parallel support to a command:
 
-### Multiple processes vs multiple threads
+_Commands that support parallel processing must be run to completion so that
+`end` and `dispose` blocks do their work in the proper sequence, and any
+decision to make the pipeline in which those commands are used run as a
+background job or as a thread job needs to be made outside of the pipeline._
 
+With that in mind, parameters related to creating a job have been excluded from
+this RFC, and a related RFC has been created to facilitate invocation of a
+pipeline in a thread job by using an operator that is external to the pipeline.
+
+### Runspace pooling (and other possible future parallel improvements)
+
+It may be desired to allow users to create a pool of runspaces, and then cycle
+through those runspaces as thread jobs are executed in the pipeline. Since this
+proposal uses the common parameter approach, it would be easy to add more
+common parameters that extend the support to include specific runspace pooling
+in the future, and all commands that support parallel processing will
+automatically gain the benefit of that work if it is added.
