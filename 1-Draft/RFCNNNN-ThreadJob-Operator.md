@@ -16,7 +16,7 @@ facilitate easy invocation of a pipeline in a background job. This is useful,
 but there are also scenarios when you want each invocation of a pipeline in a
 thread job.
 
-For example, in [PR 123](LINK) there is an RFC to easily add parallel processing to any
+For example, in [PR 206](https://github.com/PowerShell/PowerShell-RFC/pull/206) there is an RFC to easily add parallel processing to any
 advanced function or cmdlet in PowerShell. With that capability plus a `~&`
 ThreadJob operator, scripters would be able to easily leverage parallel
 processing in a pipeline, and additionally run the entire pipeline in a thread
@@ -32,19 +32,18 @@ in their script or command.
 ## User Experience
 
 ```powershell
+$twoSessions = @($session1, $session2)
+
 # Run a command in a threadjob
-$job = Get-Process -Id 12345678 2>&1 ~&
+$job = Invoke-Command -Parallel -Session $twoSessions -ScriptBlock {'ThreadJob data'} ~&
+
 # Get the results from the threadjob
-$job | Receive-Job
+$job | Wait-Job | Receive-Job
 ```
 
 ```output
-Get-Process : Cannot find a process with the process identifier 12345678.
-At line:1 char:1
-+ Get-Process -Id 12345678 2>&1
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+ CategoryInfo          : ObjectNotFound: (12345678:Int32) [Get-Process], ProcessCommandException
-+ FullyQualifiedErrorId : NoProcessFoundForGivenId,Microsoft.PowerShell.Commands.GetProcessCommand
+ThreadJob data
+ThreadJob data
 ```
 
 ## Specification
@@ -53,6 +52,8 @@ The implementation of this operator would mirror what was done for the `&`
 background operator, but launching a thread job instead of a background job.
 
 ## Alternate Proposals and Considerations
+
+### Dispatching commands on a runspace/runspace pool
 
 @BrucePay suggested that he always figured they would support dispatching
 commands on a runspace or runspace pool using syntax something like the
@@ -73,3 +74,21 @@ necessarily for a single pipeline like this, but moreso for commands that are
 configured to support parallel processing (as described in the RFC behind [PR
 123](link)), where common parameters can be augmented to support passing in a
 specific runspace or a runspace pool.
+
+### Using `&~` instead of `~&` for the operator
+
+I had originally considered using `&~` for the operator for this, but ultimately
+decided to flip it around. This decision was made in consideration for the [RFC
+in PR 193](https://github.com/PowerShell/PowerShell-RFC/pull/193), which proposes additional background operators that control how job
+data is displayed in a PowerShell terminal. If that RFC gets traction, it would
+be better for both `&` and `~&` to have an equivalent where the `!` follows the
+ampersand in both operators for consistency. That is why the operator that is
+proposed for thread jobs has the `~` placed in front of the `&`.
+
+### Breaking changes
+
+If there is a script today that uses the `&` background operator after a command
+whose name finishes with a `~` or that ends with a `~` argument with no spaces
+between the two, this change will break that command. I believe this is very,
+very low risk, but wanted to call it out so that we're aware of the potential
+for a breaking change.
