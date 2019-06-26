@@ -15,7 +15,7 @@ PowerShell is getting more and more support for multi-threaded use, such as:
 
 * the PSThreadJob module
 * `S.M.A.PowerShell.InvokeAsync` and `S.M.A.PowerShell.StopAsync`
-* parallelization in `ForEach-Object` (related RFC: #194)
+* parallelization in `ForEach-Object` ([see related RFC 194](https://github.com/PowerShell/PowerShell-RFC/pull/194))
 
 With these either available now or being made available soon, it would be
 helpful if scripters could easily create concurrent alternatives to arrays
