@@ -24,11 +24,11 @@ helpful if scripters could easily create concurrent alternatives to arrays
 ## Motivation
 
     As a scripter,
-    I can easily define a ConcurrentBag<PSObject>,
+    I can easily define and work with a ConcurrentBag<PSObject>,
     so that I can collect unordered objects from multiple threads in thread-safe manner.
 
     As a scripter,
-    I can easily define a ConcurrentDictionary<PSObject, PSObject>,
+    I can easily define and work with a ConcurrentDictionary<PSObject, PSObject>,
     so that I can store objects relative to keys in a dictionary in thread-safe manner.
 
 ## User Experience
