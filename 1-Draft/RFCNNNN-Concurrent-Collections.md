@@ -44,7 +44,7 @@ $dictionary = ~@{}
 $computers = 's1','s2','s3'
 $computers | Start-ThreadJob {
     # Retrieve the data and store it in a thread-safe collection
-    $collection += Get-LogData -ComputerName $_
+    $using:collection += Get-LogData -ComputerName $_
     # Retrieve the data and store it in a thread-safe dictionary
     $dictionary[$_] = Get-LogData
 }
