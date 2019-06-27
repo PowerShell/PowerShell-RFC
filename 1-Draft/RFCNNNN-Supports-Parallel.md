@@ -119,7 +119,7 @@ is implemented in `Invoke-Command`:
 
 1. Only half of the parameter sets that support `-AsJob` allow you to name the
 job that is created with a `-JobName` parameter, but they all should support
-that.
+that if they support `-AsJob`.
 1. Some of the parameter sets that support parallelism don't allow you to set a
 throttle limit, but they all should.
 1. `Invoke-Command` uses multi-process parallelism with the same parameter
@@ -178,6 +178,12 @@ function Invoke-Command {
         #                        for all threads to complete. This parameter
         #                        cannot be used in conjunction with the next
         #                        two parameters.
+
+        # NOTE! [-AsJob] and [-JobName <string>] are intentionally excluded
+        # from this list because that work must be done external to the
+        # pipeline. The reasoning for this decision is explained in the
+        # "Alternate Proposals and Considerations" section below, under the
+        # subheading of "Running a parallelized command asynchronously".
     )
     begin {
         # No changes here, this would be invoked synchronously in the current
