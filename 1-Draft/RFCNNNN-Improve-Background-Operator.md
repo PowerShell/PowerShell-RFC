@@ -24,6 +24,8 @@ checklist item that is partially checked off than a feature that adds
 significant, tangible value to the PowerShell community. In a nutshell, we can
 and should do better.
 
+Note that there is a [related RFC about adding a `~&` ThreadJob operator](https://github.com/PowerShell/PowerShell-RFC/pull/205).
+
 ## Motivation
 
 As a user,<br/>
@@ -45,7 +47,7 @@ So that I can launch legacy commands in the background more easily, without havi
 Also, for completeness/functional parity with cmdlets:
 
 As a user,<br/>
-I can see the output of jobs launched with `Start-Job` in my current host by using a new `-ShowInHost` switch<br/>
+I can see the output of jobs launched with `Start-Job` or `Start-ThreadJob` in my current host by using a new `-ShowInHost` switch<br/>
 So that I can launch multiple background jobs and watch their concurrent progress in my host without blocking my console.
 
 As a user,<br/>
