@@ -94,7 +94,7 @@ I believe both of these are low-risk breaking changes that are worth making so
 that we can have easier concurrent collection support in PowerShell moving
 forward.
 
-### Alternative syntax
+### Alternative syntaxes
 
 To simplify the syntax somewhat, we could implement `~()` for `ConcurrentBag`
 and `~{}` for `ConcurrentDictionary`.
@@ -107,4 +107,16 @@ removing the `@` character from `~@()`, it becomes a little less like an array
 On the downside, the potential for the second breaking change increases
 because someone may have created an alias for `~` that means something to them.
 That would only break, however, if they were invoking that command with round
-brackets with at least one value inside (e.g. `~('something')`).
+brackets with at least one value inside (e.g. `~('something')`
+
+We could also flip the enclosures, defining `@~()` as a `ConcurrentBag` and
+`@~{}` as a `ConcurrentDictionary`. The advantage here is that they result in
+parser errors, so wouldn't be a breaking change. The disadvantage is that the
+syntax is obscure and really doesn't present itself very well at all.
+
+### Related discussion
+
+There is a long running thread where some community members have been
+[discussing a new enclosure for `List<PSObject>`](https://github.com/PowerShell/PowerShell/issues/5643). Those thoughts should be
+reviewed and considered when looking at this proposal so that we come up with
+a unified strategy to move forward with.
