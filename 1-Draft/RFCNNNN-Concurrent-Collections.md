@@ -117,6 +117,39 @@ We could also flip the enclosures, defining `@~()` as a `ConcurrentBag` and
 parser errors, so wouldn't be a breaking change. The disadvantage is that the
 syntax is obscure and really doesn't present itself very well at all.
 
+### Don't add the enclosures because we have using
+
+Since scripters can use the `using` statement to make it easier to work with
+namespaces, they could do the following:
+
+```PowerShell
+using namespace System.Collections.Concurrent
+
+$x = [ConcurrentBag[PSObject]]::new()
+```
+
+That works, but it lacks discovery of enclosures that should be used when
+working with threads. One of the advantages of new enclosures is not simply
+syntactic sugar. It's also beneficial for discovery. Users could learn about
+different types of collections in one place, and learn when it is appropriate
+to use one type over another.
+
+The other key advantage to using enclosures, particularly for
+`ConcurrentDictionary`, is ease of use in pre-population of the data. This
+syntax is familiar and very straightforward:
+
+```PowerShell
+$x = ~@{
+    PropOne = 1
+    PropTwo = 2
+}
+```
+
+The alternative is having to use the `Add` method on the collection to populate
+it. You could use the index operator to create keys and assign values, but when
+you are assigning multiple values at once, that is much less PowerShell-like
+than simply defining the dictionary and assigning values to it in one step.
+
 ### Related discussion
 
 There is a long running thread where some community members have been
