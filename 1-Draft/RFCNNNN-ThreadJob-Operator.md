@@ -27,7 +27,7 @@ in their script or command.
 
     As a scripter,
     I want an operator that allows me to create a thread job in which a single pipeline is executed
-    so that I can run pipelines on threads more easily in PowerShell.
+    so that I can discover it easily (when learning about the & background operator) and run my pipelines on threads more easily in PowerShell.
 
 ## User Experience
 
@@ -92,3 +92,24 @@ whose name finishes with a `~` or that ends with a `~` argument with no spaces
 between the two, this change will break that command. I believe this is very,
 very low risk, but wanted to call it out so that we're aware of the potential
 for a breaking change.
+
+### Eliminating any need for an `-AsJob` parameter
+
+Some proposals come up from time to time that suggest adding an `-AsJob`
+parameter to a PowerShell cmdlet. This is a bad design approach for a language
+that already has the `&` background operator and that has both background jobs
+and thread jobs, for many reasons:
+
+* the operator approach works for _all pipelines_, vs. `-AsJob` only working on
+the command where it is a parameter
+* the `-AsJob` name does not indicate if it creates a thread job or a
+background job, which is an important detail to be aware of, and which should
+be consistent across commands
+* using `-AsJob` as a parameter changes what is output by the command, which
+causes challenges for thread jobs if the resources should be released in an end
+block
+
+For these reasons, a better design that promotes consistency, discoverability,
+and applicability anywhere in the language regardless of the commands being
+used is either the `Start-*Job` cmdlets or, for simplicity and ease of use, the
+`&` background operator and the `~&` threadjob operator.
