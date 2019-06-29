@@ -72,6 +72,89 @@ Terminating errors can also be thrown from a `dispose{}` block, which will skip 
   - This can include changes to the existing command disposal behaviour, to enable commands to dispose their resources as soon as their tasks in the pipeline are completed, instead of waiting for the entire pipeline to complete.
   - Also required with this is an additional layer of `try/finally` during `Dispose()` events as we are opening up the possibility for users to throw terminating errors _during_ a command's disposal, and as such we must ensure that disposal still completes appropriately.
 
+### Examples
+
+#### Pinging a Remote System
+
+```powershell
+using namespace System.Net.NetworkInformation
+
+function Get-PingReply {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [Alias('IPAddress', 'Destination')]
+        [string]
+        $Target
+    )
+    begin {
+        $Ping = [Ping]::new()
+
+        # Timeout is in ms
+        $Timeout = 2500
+        [byte[]] $Buffer = 1..32
+
+        # 128 TTL and avoid fragmentation
+        $PingOptions = [PingOptions]::new(128, $true)
+    }
+    process {
+        $Ping.Send($Target, $Timeout, $Buffer, $PingOptions)
+    }
+    dispose {
+        if ($Ping) {
+            $Ping.Dispose()
+        }
+    }
+}
+
+'1.2.3.4', 'www.google.com', '8.8.8.8' | Get-PingReply
+```
+
+#### Write to a File Using .NET Streams
+
+```powershell
+using namespace System.IO
+
+function Write-File {
+    [CmdletBinding(PositionalBinding = $false)]
+    param(
+        [Parameter(ValueFromPipeline)]
+        [string] $InputObject,
+
+        [Parameter(Position = 0, Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string] $Path
+    )
+    begin {
+        $fileStream = [FileStream]::new(
+            <# path:   #> $Path,
+            <# mode:   #> [FileMode]::Open,
+            <# access: #> [FileAccess]::Write,
+            <# share:  #> [FileShare]::Read)
+
+        $streamWriter = [StreamWriter]::new($fileStream)
+    }
+    process {
+        if ([string]::IsNullOrWhiteSpace($InputObject)) {
+            return
+        }
+
+        $streamWriter.WriteLine($InputObject)
+    }
+    dispose {
+        if ($streamWriter) {
+            $streamWriter.Dispose()
+        }
+
+        if ($fileStream) {
+            $fileStream.Dispose()
+        }
+    }
+}
+
+"Text" | Write-File -Path "C:\tmp.txt"
+```
+
 ### Alternate Proposals and Considerations
 
 #### Reuse the `End{}` Block
