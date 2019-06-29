@@ -141,6 +141,9 @@ function Write-File {
 
         $streamWriter.WriteLine($InputObject)
     }
+    end {
+        $StreamWriter.Flush()
+    }
     dispose {
         if ($streamWriter) {
             $streamWriter.Dispose()
