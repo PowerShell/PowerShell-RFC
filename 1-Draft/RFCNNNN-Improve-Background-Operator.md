@@ -173,15 +173,36 @@ $!.ProcessId
 
 ## Specification
 
-1. For jobs invoked with `&` or `Start-Job -ShowInHost`, or for jobs referenced in `Show-JobData`, hook up event handlers on the data stream collections for the job objects to capture the data from the jobs as it is added in real time, and show that data in the current terminal with the job ID in front of that data. Mirror how `ProgressInformation` is rendered when it comes to showing job data this way.
+1. For jobs invoked with `&` or `Start-Job -ShowInHost`, or for jobs referenced
+in `Show-JobData`, hook up event handlers on the data stream collections for
+the job objects to capture the data from the jobs as it is added in real time,
+and show that data in the current terminal with the job ID in front of that
+data. Mirror how `ProgressInformation` is rendered when it comes to showing job
+data this way.
 1. Add a `&!` operator that starts a job with the data display turned off.
-1. Add a boolean property to `BackgroundJob` objects called `ShowData` that identifies if the job is currently configured to show data or not.
-1. Add an integer property to `BackgroundJob` objects called `ProcessId` that identifies the ID of the process where the job is running.
-1. Add a `-ShowInHost` parameter to `Start-Job` that sets `ShowData` to true and hooks up event handlers as described in the first item in this list.
-1. Add a `$!` variable to store the most recently run job (or jobs if multiple jobs are launched at the same time, e.g. `cmd1 & cmd2 & cmd3`).
+1. Add a boolean property to `BackgroundJob` objects called `ShowData` that
+identifies if the job is currently configured to show data or not.
+1. Add an integer property to `BackgroundJob` objects called `ProcessId` that
+identifies the ID of the process where the job is running.
+1. Add a `-ShowInHost` parameter to `Start-Job` that sets `ShowData` to true
+and hooks up event handlers as described in the first item in this list.
+1. Add a `$!` variable to store the most recently run job (or jobs if multiple
+jobs are launched at the same time, e.g. `cmd1 & cmd2 & cmd3`).
 
 ## Alternate Proposals and Considerations
 
 ### Add the process ID to the default output for a background job
 
-It may seem like a good idea to show the process ID for a background job in the default tabular output. While this would be convenient, we also have thread jobs that don't have a process ID, so it is probably better to leave it out for consistency across all jobs. It is always accessible via the `ProcessID` member of background jobs regardless.
+It may seem like a good idea to show the process ID for a background job in the
+default tabular output. While this would be convenient, we also have thread
+jobs that don't have a process ID, so it is probably better to leave it out for
+consistency across all jobs. It is always accessible via the `ProcessID` member
+of background jobs regardless.
+
+### Flip the silent/noisy approach with the operators
+
+Since we've already shipped the `&` background operator, and since it already
+runs silent today, leave that as is and make the `&!` background operator run
+with output showing in the overlay. While this is not consistent with bash, it
+may be less disruptive to folks using `&` already, and still offers options
+with and without data showing in an overlay.
