@@ -43,11 +43,11 @@ So that I can launch legacy commands in the background more easily, without havi
 Also, for completeness/functional parity with cmdlets:
 
 As a user,<br/>
-I can see the output of jobs launched with `Start-Job` or `Start-ThreadJob` in my current host by using a new `-ShowData` switch<br/>
+I can see the output of jobs launched with `Start-Job` or `Start-ThreadJob` in my current host by using a new `-ShowOutput` switch<br/>
 So that I can launch multiple background jobs and watch their concurrent progress in my host without blocking my console.
 
 As a user,<br/>
-I can show or hide the output of running jobs by using new `Show-JobData` and `Hide-JobData` cmdlets<br/>
+I can show or hide the output of running jobs by using new `Show-JobOutput` and `Hide-JobOutput` cmdlets<br/>
 So that I can control the display and monitoring of running jobs without having to muck around with `Receive-Job -Keep`.
 
 As a PowerShell contributor,<br/>
@@ -69,7 +69,7 @@ So that I can easily run pipelines as jobs in my automation solutions without sh
 # This command:
 Get-Process &!
 # Would return the same output as this command:
-Start-Job {Get-Process} -ShowData
+Start-Job {Get-Process} -ShowOutput
 ```
 
 ```output
@@ -81,7 +81,7 @@ Id     Name            PSJobTypeName   State         HasMoreData     Location   
 In addition to the output above, which is the job object created by the command
 that was invoked, PowerShell would show the output from the job (and any other
 job) launched this way in an overlay much like the output from Write-Progress,
-with the job data from any stream appearing as it is output in the overlay,
+with the job output from any stream appearing as it is output in the overlay,
 prefixed with "[JobName]:" (e.g. [Job1]: ). This overlay would be slightly
 larger than Write-Progress so that users could see more output from the job in
 the overlay, and when all jobs sharing output complete the overlay would
@@ -146,21 +146,21 @@ Id     Name            PSJobTypeName   State         HasMoreData     Location   
 1      Job1            BackgroundJob   Running       True            localhost            Microsoft.PowerShell.Man...
 ```
 
-### Showing or hiding the data from one or more jobs
+### Showing or hiding the output from one or more jobs
 
-This allows job data to be shown or hidden on demand for any jobs.
+This allows job output to be shown or hidden on demand for any jobs.
 
 ```powershell
-# Show the data from job ids 1-5
-Show-JobData -Id 1..5
-# Hide the data from job name Job2
-Hide-JobData -Name Job2
-# Show the data for the last job (or jobs) we launched
-Show-JobData -Job $!
+# Show the output from job ids 1-5
+Show-JobOutput -Id 1..5
+# Hide the output from job name Job2
+Hide-JobOutput -Name Job2
+# Show the output for the last job (or jobs) we launched
+Show-JobOutput -Job $!
 ```
 
 ```output
-# As described in the comments above, with the data showing in an overlay
+# As described in the comments above, with the output showing in an overlay
 ```
 
 ### Viewing the process ID for a job
@@ -177,18 +177,18 @@ $!.ProcessId
 
 ## Specification
 
-1. For jobs invoked with `&!` or `Start-Job -ShowData`, or for jobs referenced
-in `Show-JobData`, hook up event handlers on the data stream collections for
-the job objects to capture the data from the jobs as it is added in real time,
-and show that data in the current terminal with the job name or ID in front of
-that data. Mirror how `ProgressInformation` is rendered when it comes to
-showing job data this way.
-1. Add a `&!` operator that starts a job with the data display turned on.
-1. Add a boolean property to `BackgroundJob` objects called `ShowData` that
-identifies if the job is currently configured to show data or not.
+1. For jobs invoked with `&!` or `Start-Job -ShowOutput`, or for jobs referenced
+in `Show-JobOutput`, hook up event handlers on the output stream collections for
+the job objects to capture the output from the jobs as it is added in real
+time, and show that output in the current terminal with the job name or ID in
+front of each output record. Mirror how `ProgressInformation` is rendered when
+it comes to showing job output this way.
+1. Add a `&!` operator that starts a job with the output display turned on.
+1. Add a boolean property to `BackgroundJob` objects called `ShowOutput` that
+identifies if the job is currently configured to show output or not.
 1. Add an integer property to `BackgroundJob` objects called `ProcessId` that
 identifies the ID of the process where the job is running.
-1. Add a `-ShowData` parameter to `Start-Job` that sets `ShowData` to true
+1. Add a `-ShowOutput` parameter to `Start-Job` that sets `ShowOutput` to true
 and hooks up event handlers as described in the first item in this list.
 1. Add a `$!` variable to store the most recently run job (or jobs if multiple
 jobs are launched at the same time, e.g. `cmd1 & cmd2 & cmd3 &`).
