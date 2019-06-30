@@ -43,7 +43,7 @@ So that I can launch legacy commands in the background more easily, without havi
 Also, for completeness/functional parity with cmdlets:
 
 As a user,<br/>
-I can see the output of jobs launched with `Start-Job` or `Start-ThreadJob` in my current host by using a new `-ShowInHost` switch<br/>
+I can see the output of jobs launched with `Start-Job` or `Start-ThreadJob` in my current host by using a new `-ShowData` switch<br/>
 So that I can launch multiple background jobs and watch their concurrent progress in my host without blocking my console.
 
 As a user,<br/>
@@ -69,7 +69,7 @@ So that I can easily run pipelines as jobs in my automation solutions without sh
 # This command:
 Get-Process &!
 # Would return the same output as this command:
-Start-Job {Get-Process} -ShowInHost
+Start-Job {Get-Process} -ShowData
 ```
 
 ```output
@@ -177,18 +177,18 @@ $!.ProcessId
 
 ## Specification
 
-1. For jobs invoked with `&!` or `Start-Job -ShowInHost`, or for jobs
-referenced in `Show-JobData`, hook up event handlers on the data stream
-collections for the job objects to capture the data from the jobs as it is
-added in real time, and show that data in the current terminal with the job ID
-in front of that data. Mirror how `ProgressInformation` is rendered when it
-comes to showing job data this way.
+1. For jobs invoked with `&!` or `Start-Job -ShowData`, or for jobs referenced
+in `Show-JobData`, hook up event handlers on the data stream collections for
+the job objects to capture the data from the jobs as it is added in real time,
+and show that data in the current terminal with the job name or ID in front of
+that data. Mirror how `ProgressInformation` is rendered when it comes to
+showing job data this way.
 1. Add a `&!` operator that starts a job with the data display turned on.
 1. Add a boolean property to `BackgroundJob` objects called `ShowData` that
 identifies if the job is currently configured to show data or not.
 1. Add an integer property to `BackgroundJob` objects called `ProcessId` that
 identifies the ID of the process where the job is running.
-1. Add a `-ShowInHost` parameter to `Start-Job` that sets `ShowData` to true
+1. Add a `-ShowData` parameter to `Start-Job` that sets `ShowData` to true
 and hooks up event handlers as described in the first item in this list.
 1. Add a `$!` variable to store the most recently run job (or jobs if multiple
 jobs are launched at the same time, e.g. `cmd1 & cmd2 & cmd3 &`).
