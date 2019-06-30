@@ -72,6 +72,15 @@ Terminating errors can also be thrown from a `dispose{}` block, which will skip 
   - This can include changes to the existing command disposal behaviour, to enable commands to dispose their resources as soon as their tasks in the pipeline are completed, instead of waiting for the entire pipeline to complete.
   - Also required with this is an additional layer of `try/finally` during `Dispose()` events as we are opening up the possibility for users to throw terminating errors _during_ a command's disposal, and as such we must ensure that disposal still completes appropriately.
 
+#### `Cmdlet` / `PSCmdlet`
+
+Commands inheriting from `Cmdlet` or `PSCmdlet` can already implement a version of this behaviour.
+To do so, such commands need also implement `IDisposable` and the `Dispose()` method.
+This RFC would simply change when the dispose method is called.
+Currently, the method is called during pipeline disposal.
+This RFC would ensure it is called immediately after `EndProcessing()` completes during normal pipeline operation.
+It will continue to be called in the case of a terminating error as it is currently.
+
 #### `ForEach-Object` Additions
 
 - `ForEachObjectCommand` should implement `IDisposable` to enable similar behaviour for the cmdlet.
