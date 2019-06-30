@@ -72,6 +72,14 @@ Terminating errors can also be thrown from a `dispose{}` block, which will skip 
   - This can include changes to the existing command disposal behaviour, to enable commands to dispose their resources as soon as their tasks in the pipeline are completed, instead of waiting for the entire pipeline to complete.
   - Also required with this is an additional layer of `try/finally` during `Dispose()` events as we are opening up the possibility for users to throw terminating errors _during_ a command's disposal, and as such we must ensure that disposal still completes appropriately.
 
+#### `ForEach-Object` Additions
+
+- `ForEachObjectCommand` should implement `IDisposable` to enable similar behaviour for the cmdlet.
+- A `-DisposeBlock` parameter can be exposed to allow it to be called from scripts.
+  - The slightly different parameter name is necessary as C# does not permit a property name to collide with a method name, and `IDisposable` mandates a method named `Dispose()`.
+  - To improve consistency, the parameter can be explicitly aliased to `-Dispose`.
+  - The parameter _must_ be assigned explicitly by name, and never be assumed based on number of provided scriptblock parameters as the command currently does with `begin`/`process`/`end`.
+
 ### Examples
 
 #### Pinging a Remote System
