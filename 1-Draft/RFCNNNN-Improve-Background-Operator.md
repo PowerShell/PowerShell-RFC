@@ -33,12 +33,8 @@ I can reference the most recent job(s) launched with `Start-Job` or the `&` back
 So that I can write my handling of those jobs in a consistent way without the job object or id, using the same variable that is used in bash for the same purpose.
 
 As a user,<br/>
-I can see the output of jobs launched with the `&` background operator in my current host by default<br/>
-So that I can launch multiple background jobs and watch their concurrent progress in my host without blocking my console.
-
-As a user,<br/>
-I can launch jobs silently with a new `&!` background operator<br/>
-So that their output is only available when I use `Receive-Job` to receive that output.
+I can launch jobs with a new `&!` background operator that will show job progress in an overlay<br/>
+So that watch the concurrent progress of multiple background jobs in my host without blocking my console.
 
 As a user,<br/>
 I can use the `&` operator (and the proposed `&!` operator) after the stop parsing sigil (`--%`)<br/>
@@ -58,13 +54,20 @@ As a PowerShell contributor,<br/>
 I can see the process ID associated with any background job by looking at the job members<br/>
 So that I can more easily attach the Visual Studio debugger to that job when I need to.
 
+Last, one describing the existing motivation for the `&` background operator
+(this is already in place today):
+
+As a user,<br/>
+I can launch jobs silently with the `&` background operator<br/>
+So that I can easily run pipelines as jobs in my automation solutions without showing output.
+
 ## User Experience
 
 ### Launching a background job with the output visible in the host
 
 ```powershell
 # This command:
-Get-Process &
+Get-Process &!
 # Would return the same output as this command:
 Start-Job {Get-Process} -ShowInHost
 ```
@@ -89,7 +92,7 @@ appear above the output.
 
 ```powershell
 # These commands:
-$null = Get-Process &!
+$null = Get-Process &
 $!
 # Would return the same output as these commands:
 $null = Start-Job {Get-Process}
@@ -102,11 +105,12 @@ Id     Name            PSJobTypeName   State         HasMoreData     Location   
 1      Job1            BackgroundJob   Running       True            localhost            Microsoft.PowerShell.Man…
 ```
 
-The `$!` variable in those two commands returns the job that was created with
-the command before it.
+The `&` operator permits launching a job using an operator without any of the
+messages from the various streams appearing by default in the console (this is
+how this operator works today).
 
-The `&!` operator permits launching a job using an operator without any of the
-messages from the various streams appearing by default in the console.
+The `$!` variable in the subsequent command returns the job that was created
+with the command before it.
 
 ### Fanning out to multiple background jobs and referencing the jobs with the `$!` variable
 
@@ -173,13 +177,13 @@ $!.ProcessId
 
 ## Specification
 
-1. For jobs invoked with `&` or `Start-Job -ShowInHost`, or for jobs referenced
-in `Show-JobData`, hook up event handlers on the data stream collections for
-the job objects to capture the data from the jobs as it is added in real time,
-and show that data in the current terminal with the job ID in front of that
-data. Mirror how `ProgressInformation` is rendered when it comes to showing job
-data this way.
-1. Add a `&!` operator that starts a job with the data display turned off.
+1. For jobs invoked with `&!` or `Start-Job -ShowInHost`, or for jobs
+referenced in `Show-JobData`, hook up event handlers on the data stream
+collections for the job objects to capture the data from the jobs as it is
+added in real time, and show that data in the current terminal with the job ID
+in front of that data. Mirror how `ProgressInformation` is rendered when it
+comes to showing job data this way.
+1. Add a `&!` operator that starts a job with the data display turned on.
 1. Add a boolean property to `BackgroundJob` objects called `ShowData` that
 identifies if the job is currently configured to show data or not.
 1. Add an integer property to `BackgroundJob` objects called `ProcessId` that
@@ -187,7 +191,7 @@ identifies the ID of the process where the job is running.
 1. Add a `-ShowInHost` parameter to `Start-Job` that sets `ShowData` to true
 and hooks up event handlers as described in the first item in this list.
 1. Add a `$!` variable to store the most recently run job (or jobs if multiple
-jobs are launched at the same time, e.g. `cmd1 & cmd2 & cmd3`).
+jobs are launched at the same time, e.g. `cmd1 & cmd2 & cmd3 &`).
 
 ## Alternate Proposals and Considerations
 
@@ -201,8 +205,12 @@ of background jobs regardless.
 
 ### Flip the silent/noisy approach with the operators
 
-Since we've already shipped the `&` background operator, and since it already
-runs silent today, leave that as is and make the `&!` background operator run
-with output showing in the overlay. While this is not consistent with bash, it
-may be less disruptive to folks using `&` already, and still offers options
-with and without data showing in an overlay.
+This approach is proposed because we've already shipped the `&` background
+operator, with jobs running silent by default. In bash, if you run a command in
+the background using the `&` control operator, the output is displayed in the
+current terminal. This discrepancy may be confusing to users. If we feel that
+the PowerShell `&` background operator should be more consistent with the bash
+equivalent, we could make the `&` background operator show output by default
+and have the new `&!` background operator run silent. This wouldn't be a
+breaking change, but it would change the behavior for any scripts that are
+already using the `&` background operator today.
