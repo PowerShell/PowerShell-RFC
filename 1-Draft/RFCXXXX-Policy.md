@@ -29,7 +29,7 @@ I based this off of @iSazonov 's RFC, for just a slightly different purpose.
 ## Definitions
 
 - **Computer-Wide settings/policy**  - setting or policy applied to an operating system environment (OSE), affecting all users of the OSE.
-- **User settings/policy** - setting or policy applied to a specific user of an OSE, and not applied to the OSE as a whole.
+- **Per-User settings/policy** - setting or policy applied to a specific user of an OSE, and not applied to the OSE as a whole.
 
 ## Specification
 
@@ -130,14 +130,14 @@ With `-settingsfile` parameter users can assign custom settings from the config 
   only trusted code runs in Full Language mode.
   See [PowerShell Constrained Language Mode](https://devblogs.microsoft.com/powershell/powershell-constrained-language-mode/)
 
-##### Computer-wide and user policy settings
+##### Computer-wide and per-user policy settings
 
-Admin/root users can overwrite computer-wide and user policy settings using `-settingsfile`,
+Admin/root users can overwrite computer-wide and per-user policy settings using `-settingsfile`,
 only when not in System Lock-down mode.
 
 This will have performance impact on startup, but only when `-settingsfile` is specified.
 
-#### Precedence for User settings in descending order
+#### Precedence for Per-user settings in descending order
 
 Note, this is listed as `User, then Computer` in [Registry keys and settings](#registry-keys-and-settings).
 
@@ -187,7 +187,7 @@ Notes:
 | Transcription               | OutputDirectory                    | String | Computer, Then User |
 | UpdatableHelp               | DefaultSourcePath                  | String | Computer Wide       |
 
-I filed [#9632](https://github.com/PowerShell/PowerShell/issues/9632) on UpdatableHelp-DefaultSourcePath to make it allow User settings.
+I filed [#9632](https://github.com/PowerShell/PowerShell/issues/9632) on UpdatableHelp-DefaultSourcePath to make it allow Per-user settings.
 
 #### JSON file settings format
 
