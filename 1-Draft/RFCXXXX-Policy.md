@@ -45,7 +45,7 @@ The settings files have `JSON` format.
 Configuration schemes allow to customize `PowerShell 7` in the most flexible way:
 
 - Enterprise system administrators can use GPO,
-    GPP and computer-wide settings files to apply approved configuration settings and mandatory security settings in a centralized manner.
+    Computer-wide settings files to apply approved configuration settings and mandatory security settings in a centralized manner.
     Most settings can be applied either to the user or computer-wide.
     We will cover the precedence of these in [Registry keys and settings](#registry-keys-and-settings).
 - Developers and consumers can use user, or computer-wide level setting files.
