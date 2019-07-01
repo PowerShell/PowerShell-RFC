@@ -71,7 +71,7 @@ if (! (Get-Module -Name MyLogsModule -ListAvailable)) {
 $computerNames = 'computer1','computer2','computer3','computer4','computer5'
 $logs = $computerNames | ForEach-Object -Parallel -ThrottleLimit 10 -TimeoutSecs 1800 -ScriptBlock {
     Get-Logs -ComputerName $_
-} -InitializationScript $initScript
+}
 ```
 
 ```powershell
@@ -106,7 +106,7 @@ $logResults = ForEach-Object -Parallel -InputObject $computerNames -ScriptBlock 
 # Variables must be passed in via $using: keyword
 $LogNameToUse = "IISLogs"
 $computers | ForEach-Object -Parallel -ScriptBlock {
-    # This will fail because $LogName has not been defined in this scope
+    # This will fail because $LogNameToUse has not been defined in this scope
     Get-Log -ComputerName $_ -LogName $LogNameToUse
 }
 ```
