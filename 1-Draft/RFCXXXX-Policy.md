@@ -88,7 +88,7 @@ Policy settings are used by administrators to centrally manage PowerShell.
 
 #### Motivation - Policy Setting Fall-Back
 
-This is to allow fall-back to Windows PowerShell policies.
+Help to transition from Windows PowerShell to PowerShell 7.
 
 #### Implementation
 
