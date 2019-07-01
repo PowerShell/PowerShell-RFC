@@ -5,8 +5,8 @@ Status: Draft
 SupercededBy: N/A
 Version: 1.0
 Area: Console
-Comments Due: June 13, 2019
-Plan to implement: Yes
+Comments Due: July 15, 2019
+Plan to implement: Yes, PS7
 ---
 
 # Enable PowerShell as Login Shell on POSIX-based systems
@@ -27,34 +27,26 @@ environment changes.
 Many existing tools expect `-l` to be accepted by a shell and to act as a login
 shell.
 
-`-l` (expanded form is `-LoadProfile`) will explicitly have pwsh load the PowerShell
-profile.
-This is effectively a no-op as if this switch is not specified, pwsh will load
-the PowerShell profile and only doesn't load it if `-noprofile` is specified.
+`-l` (expanded form is `-Login`) will:
 
-This will allow tools that expect `-l` to be accepted to work.
-There is no additional work to process `/etc/profile` when `-l` is used.
-
-For cases where you do need `/etc/profile` to be processed,
-such as using pwsh as your default shell,
-the proposal is to include a Bourne shell script that can be specified as the
-shell:
-
-```sh
-#!/bin/sh -l
-exec /usr/local/bin/pwsh "$@"
-```
+- On Windows, do nothing as the login shell concept doesn't exist.
+  No error, this param is ignored.
+- On Unix based systems, exec `pwsh` using `sh -l` so that the normal login
+  shell processing occurs and the environment is pre-populated as expected.
 
 >[!NOTE]
-> The actual path would depend on the operation system and whether PowerShell
-> is a stable or preview release.
+> The actual path to `sh` would depend on the operating system.
 > For Linux, the path would be `/usr/bin`.
 > For Snap, the path would be `/snap/bin`.
 > For macOS, the path would be `/usr/local/bin`.
-> Executable would be `pwsh-preview` for preview releases.
 
-This script will be called `pwsh-login` and should be used whenever you require
-a specific login shell.
+Since `pwsh` is simply starting an instance of itself, it should work the same
+regardless if a stable or preview release.
+
+Initial performance tests indicate that `pwsh -l` will incur a 6% startup hit.
+There is opportunity to bring this down a bit, but the impact seems acceptable
+given that the login shell is typically the first shell you create and subsequent
+use of `pwsh` would not be a login shell.
 
 ## Alternate Proposals and Considerations
 
@@ -70,10 +62,17 @@ The downsides to this approach is additional code to maintain,
 but more importantly not getting a complete login shell environment as things
 like ulimit and umask would not be inherited into pwsh.
 
-### pwsh to start `/bin/sh -l -c "exec pwsh"`
+### `pwsh-login` script
 
-This proposal would have pwsh when given the `-l` switch to start Bourne shell
-as a login shell and start pwsh within that process.
+This proposal would be to include a Bourne shell script called `pwsh-login`
+that would contain:
 
-This would result in a complete login shell environment, however, would
-incur the performance penalty of starting pwsh twice.
+```sh
+#!/bin/sh -l
+exec /usr/local/bin/pwsh "$@"
+```
+
+The location of `sh` would depend on the specific operating system.
+
+The perf impact of this compared to starting pwsh as a non-login shell is
+approximately 4%.
