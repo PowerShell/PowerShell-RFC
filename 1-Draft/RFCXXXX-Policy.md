@@ -25,6 +25,7 @@ I based this off of @iSazonov 's RFC, for just a slightly different purpose.
     - This is covered in [Policy settings Setting Fall-Back](#policy-settings-setting-fall-back).
 1. Define how the `pwsh -settingsfile` switch should behave.
     - This is covered in  [Parameter `-settingsfile`](#Parameter--settingsfile)
+1. Specify where setting will be read from on various supported platforms.
 
 ## Definitions
 
