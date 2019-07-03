@@ -73,12 +73,13 @@ Script and module metadata will retain the same format as it exists with v2.
 
 ### Local cache
 
-Instead of always connecting to PSGallery to perform an online search,
+Instead of always connecting to a repository to perform an online search,
 `Find-PSResource` (see below) works against a local cache.
 This will also enable changes in PowerShell to use `Find-PSResource -Type Command` to look
 in this cache when it can't find a command and suggest to the user the module to install to
 get that command.
-This will be a local json file containing only the latest version of each module.
+This will be a local json file (one per repository) containing sufficient metadata
+for searching for resources and their dependencies.
 The cache will be stored in the user path.
 There is no system cache that is shared.
 A system wide cache would require elevation or sudo to create and update preventing
@@ -133,20 +134,26 @@ always connect to that repository.
 
 `Register-PSResourceRepository` will allow for registering additional repositories.
 A `-PSGallery` switch enables registering PSGallery should it be accidentally removed.
+This would be in a different parameter set from `-URL` and `-Repositories`.
+
 The `-URL` will accept the HTTP address without the need to specify `/api/v3` as
 that will be assumed and discovered at runtime (trying v3 first, then falling
 back to v2, then the literal URL).
 Support for local filesystem repositories must be maintained.
 A `-Trusted` switch indicates whether to prompt the user when installing resources
 from that repository.
+Trusted repositories automatically have a priority of 0.
+`-Trusted` is a different parameter set from `-Priority`.
+
 By default, if this switch is not specified, the repository is untrusted.
 A `-Repositories` parameter will accept an array of hashtables equivalent to
 the parameter names (like splatting).
 
 ```powershell
 Register-PSResourceRepository -Repositories @(
-  @{ URL = "https://one.com"; Name = "One"; Trusted = $true; Credential }
+  @{ URL = "https://one.com"; Name = "One"; Trusted = $true; Credential = $cred }
   @{ URL = "https://powershellgallery.com"; Name = "PSGallery"; Trusted = $true; Default = $true }
+  @{ URL = "\\server\share\myrepository"; Name="Enterprise"; Trusted = $true }
 )
 ```
 
@@ -154,8 +161,8 @@ A `-Name` parameter allows for setting a friendly name.
 
 A `-Priority` parameter allows setting the search order of repositories.
 A lower value has higher priority.
-If not specified, the default value is 50.
-PSGallery will have a default value of 25.
+If not specified, the default value is 25.
+PSGallery will have a default value of 50.
 
 `Get-PSResourceRepository` will list out the registered repositories.
 
@@ -210,9 +217,10 @@ trusted repository with the highest version matching the `-Version` parameter
 (if specified, otherwise newest non-prerelease version unless `-Prerelease`
 is used).
 If there are no trusted repositories matching the query, then the newest version
-fulfilling the query will be prompted to be installed.
-If there are multiple repositories with the same trust level containing the same
-version, the first one is used.
+fulfilling the query will be prompted to be installed from the highest priority
+repositories.
+If there are multiple repositories with the same priority level containing the same
+version, the first one is used and will be prompted to install.
 
 `-TrustRepository` can be used to suppress being prompted for untrusted sources.
 `-IgnoreDifferentPublisher` can be used to suppress being prompted if the publisher
@@ -286,11 +294,21 @@ compatibility with existing published modules using that format.
 Due to the differences between semver and `System.Version`, we may have to keep
 the two distinct.
 
-Dependent declared modules not found on the system will prompt to be installed
-including module name, version, and size unless `-IncludeDependencies` is
-specified which will install without prompting.
-Declared dependencies are only searched within the same repository as the original
-module to be installed.
+If the resource requires dependencies that are not already installed, then
+a prompt will appear _before anything is installed_, listing all the resources
+including module name, version, size, and repository to be installed unless
+`-IncludeDependencies` is specified which will install without prompting.
+Rejecting the prompt will result in nothing being installed.
+
+Declared dependencies are searched and installed using the same trust algorithm
+as described for `Install-PSResource` above.
+
+>[!NOTE]
+>Installing dependencies is following the `apt` experience in that it prompts
+>by default instead of automatically installing dependencies.  Since dependencies
+>can be quite large, this would be equivalent to `ConfirmImpact=High` which
+>would prompt by default.
+>Dependency installation works with `-DestinationPath` parameter.
 
 ### Saving resources
 
@@ -392,3 +410,9 @@ introducing a breaking change:
   the signing cert is trusted on the system
 
 - Notify users that they have outdated versions of a module (just patch versions?)
+
+- A way to filter resources to those allowed to be installed on the system
+
+- Enterprise management of local cache
+
+PowerShell module loading needs to be updated to [understand semver](https://github.com/PowerShell/PowerShell/issues/2983).
