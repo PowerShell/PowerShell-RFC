@@ -21,4 +21,3 @@
     * Agreed to leave files as reporting `l` in the mode
     * Jim was concerned .NET Core not making their Win32 wrapper API public
     * Might make sense to add a property for surrogate reparse points to make the info scriptable
-* 
