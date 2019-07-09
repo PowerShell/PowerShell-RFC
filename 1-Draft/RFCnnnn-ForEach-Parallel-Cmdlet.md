@@ -28,7 +28,7 @@ A new `-Parallel` parameter set will be added to the existing ForEach-Object cmd
 
 - `-ThrottleLimit` parameter takes an integer value that determines the maximum number of script blocks running at the same time
 
-- `-TimeoutSecs` parameter takes an integer that specifies the maximum time to wait for completion before the command is aborted
+- `-TimeoutSeconds` parameter takes an integer that specifies the maximum time to wait for completion before the command is aborted
 
 - `-AsJob` parameter switch indicates that a job is returned, which represents the command running asynchronously
 
@@ -48,7 +48,7 @@ A script that defines a constant function would fail if the function is already 
 The initial assumption will be that runspace/thread creation time is insignificant compared to the time needed to execute the script block, either because of high compute needs or because of long wait times for results.
 If this assumption is not true then the user should consider batching the work load to each foreach-object iteration, or simply use the sequential/non-parallel form of the cmdlet.
 
-The 'TimeoutSecs' parameter will attempt to halt all script block executions after the timeout time has passed, however it may not be immediately successful if the running script is calling a native command or API, in which case it needs for the call to return before it can halt the running script.
+The 'TimeoutSeconds' parameter will attempt to halt all script block executions after the timeout time has passed, however it may not be immediately successful if the running script is calling a native command or API, in which case it needs for the call to return before it can halt the running script.
 
 ### Variable passing
 
@@ -56,7 +56,35 @@ ForEach-Object -Parallel will support the PowerShell `$_` current piped item var
 It will also support the `$using:` directive for passing variables from script scope into the parallel executed script block scope.  
 If the passed in variable is a value type, a copy of the value is passed to the script block.  
 If the passed in variable is a reference type, the reference is passed and each running script block can modify it.
-Since the script blocks are running in different threads, modifying a reference type that is not thread safe will result in undefined behavior.
+Since the script blocks are running in different threads, modifying a reference type that is not thread safe will result in undefined behavior.  
+
+Script block variables will be special cased because they have runspace affinity.
+Therefore script block variables will not be passed by reference and instead a new script block object instance will be created from the original script block variable Ast (abstract syntax tree).
+
+### Exceptions
+
+For critical exceptions, such as out of memory or stack overflow, the CLR will crash the process.
+Since all parallel running script blocks run in different threads in the same process, all running script blocks will terminate, and queued script blocks will never run.
+This is different from PowerShell jobs (Start-Job) where each job script runs in a separate child process, and therefore has better isolation to crashes.
+The lack of process isolation is one of the costs of better performance while using threads for parallelization.  
+
+For all other catchable exceptions, PowerShell will catch them from each thread and write them as non-terminating error records to the error data stream.
+If the `ErrorAction` parameter is set to 'Stop' then cmdlet will attempt to stop the parallel execution on any error.
+
+### Stop behavior
+
+Whenever a timeout, a terminating error (-ErrorAction Stop), or a stop command (Ctrl+C) occurs, a stop signal will be sent to all running script blocks, and any queued script block iterations will be dequeued.
+This does not guarantee that a running script will stop immediately, if that script is running a native command or making an API call.
+So it is possible for a stop command to be ineffective if one running thread is busy or hung.  
+
+We can consider including some kind of 'forcetimeout' parameter that would kill any threads that did not end in a specified time.  
+
+If a job object is returned (-AsJob) the child jobs that were dequeued by the stop command will remain at 'NotStarted' state.
+
+### Data streams
+
+Warning, Error, Debug, Verbose data streams will be written to the cmdlet data streams as received from each running parallel script block.  
+Progress data streams will not be supported, but can be added later if desired.
 
 ### Supported scenarios
 
@@ -69,14 +97,14 @@ if (! (Get-Module -Name MyLogsModule -ListAvailable)) {
 
 ```powershell
 $computerNames = 'computer1','computer2','computer3','computer4','computer5'
-$logs = $computerNames | ForEach-Object -Parallel -ThrottleLimit 10 -TimeoutSecs 1800 -ScriptBlock {
+$logs = $computerNames | ForEach-Object -Parallel -ThrottleLimit 10 -TimeoutSeconds 1800 -ScriptBlock {
     Get-Logs -ComputerName $_
 }
 ```
 
 ```powershell
 $computerNames = 'computer1','computer2','computer3','computer4','computer5'
-$job = ForEach-Object -Parallel -ThrottleLimit 10 -InputObject $computerNames -TimeoutSecs 1800 -AsJob -ScriptBlock {
+$job = ForEach-Object -Parallel -ThrottleLimit 10 -InputObject $computerNames -TimeoutSeconds 1800 -AsJob -ScriptBlock {
     Get-Logs -ComputerName $_
 }
 $logs = $job | Wait-Job | Receive-Job
