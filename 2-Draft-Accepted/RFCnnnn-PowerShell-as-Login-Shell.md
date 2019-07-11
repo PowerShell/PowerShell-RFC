@@ -44,9 +44,20 @@ Since `pwsh` is simply starting an instance of itself, it should work the same
 regardless if a stable or preview release.
 
 Initial performance tests indicate that `pwsh -l` will incur a 6% startup hit.
-There is opportunity to bring this down a bit, but the impact seems acceptable
-given that the login shell is typically the first shell you create and subsequent
-use of `pwsh` would not be a login shell.
+Compared to a pure Bourne shell script which has a 4% startup hit.
+Most of that is simply processing the Bourne shell scripts to setup the environment.
+As such, there is a relative 2% additional perf hit with this proposal.
+
+The impact seems acceptable given that the login shell is typically the first
+shell you create and subsequent use of `pwsh` would not be a login shell.
+
+In addition, `pwsh` will need to be updated to detect if it was started with
+a hyphen (for example, `-pwsh`) as that is another way that Unix based operating
+systems start the default login shell and doesn't necessarily use `-l`.
+
+On Linux, this will be implemented by inspecting `/proc` on the filesystem.
+On macOS, this will be implemented by calling `sysctl()` getting the process
+information for the current process and inspecting `argv[0]`.
 
 ## Alternate Proposals and Considerations
 
