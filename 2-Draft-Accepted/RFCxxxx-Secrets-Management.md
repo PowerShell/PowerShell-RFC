@@ -26,13 +26,14 @@ This RFC proposes new cmdlets to make this simpler and secure.
 
 ## High Level Design
 
+This is a new independent module called `Microsoft.PowerShell.SecretsManagement`.
 Secrets are stored securely in a local vault.
 The local vault is expected to only allow access to the user who owns that
 vault.
 Secrets required to access remote vaults are stored in the local vault and used by the secrets management
 cmdlets to retrieve remote secrets.
 
-`User Context` --> `Local Vault` --> `SecretsVaultExtension` --> `Remote Vault`
+`User Context` --> `Local Vault` --> `SecretsVault` --> `Remote Vault`
 
 ## User Experience
 
@@ -45,8 +46,8 @@ Registering and using remote secrets:
 Install-Module Az.KeyVault
 
 # In this example, we explicitly register this extension
-Register-SecretsVaultExtension -Name Azure -Cmdlet Get-AzKeyVaultSecret `
-  -Module Az.KeyVault -Version 1.0.0
+Register-SecretsVault -Name Azure -Cmdlet Get-AzKeyVaultSecret `
+  -Module Az.KeyVault
 
 # When using remote vaults, expectation is that secrets are
 # stored using their tooling, so this module is only for retrieving secrets
@@ -60,7 +61,7 @@ Registering and using local secret:
 ```powershell
 # For local vault, we can register custom secrets
 # In this example, we store a PSCredential object
-Register-Secret -Secret $cred -Name MyCreds
+Add-Secret -Secret $cred -Name MyCreds
 New-PSSession -ComputerName myServer -Credential (Get-Secret -Name MyCreds)
 ```
 
@@ -86,43 +87,83 @@ A local vault, by default, is already created and named `Default`.
 
 Vault extensions whether they are local or remote are provided as modules.
 
-Extensions are modules that provide a `Get-Secret` cmdlet that accepts a
-`-Credential` or `-AccessToken` parameter for authentication.
-Expectation is that each module will have their own cmdlet and not literally
-named `Get-Secret`.
+Extensions are modules that either:
 
-Extensions register themselves by calling `Register-SecretsVaultExtension`
-passing the name of the relevant cmdlet to `-Cmdlet`, the module name to `-Module`,
-and the module version to `-ModuleVersion`.
-This can be done as part of importing the module or explicitly by the user.
+- Call `Register-SecretsVault` upon loading the module, or
+- Expose a command to the user which calls `Register-SecretsVault` using
+  input from the user
 
-`Register-SecretsVaultExtension` has a `-Default` switch to register the
+Modules that provide a vault extension should have the tag `SecretsVaultExtension`.
+
+Extensions can register themselves by calling `Register-SecretsVault`
+passing the name of the relevant cmdlet to `-Cmdlet` and the module name to `-Module`.
+A `-Name` parameter is used for the user to define a friendly name.
+There is an optional `-Parameters` parameter that takes a hashtable that will
+be splatted to the extension cmdlet to support additional metadata needed
+by the extension (such as authentication).
+
+When using this model, the extension cmdlet would have to match the parameters and
+output of `Get-Secret` to be compatible.
+
+Alternatively, a `-ScriptBlock` parameter can be used instead of `-Cmdlet` and `-Module`
+to allow using existing cmdlets without the need to write a wrapper module:
+
+```powershell
+Register-SecretsVault -Name AzKeyVault {
+  param($Name)
+  Get-AzKeyVaultSecret -VaultName (Get-Secret AzureKeyVaultName) -Name $Name |
+    Select -Expand SecretValue
+}
+```
+
+`Register-SecretsVault` has a `-Default` switch to register the
 default local vault (if applicable, see above) if it has been unregistered.
 
-`Register-SecretsVaultExtension` takes a `-AccessToken` or `-Credential` parameter
-for authenticating with the remote vault.
 If neither are supplied, then the current user context is used and relies on
 the extension cmdlet to handle authentication.
 
-`Unregister-SecretsVaultExtension` should be used to remove any existing
-registration or when updating a registration to a new version.
+If registering a vault with a Name that already exists, an error will be returned.
 
-`Get-SecretsVaultExtension` will enumerate registered extensions returning
-the module name, module version, and cmdlet used.
+`Unregister-SecretsVault` should be used to remove any existing
+registration or when updating a registration to a new version.
+A `-Name` parameter is mandatory to remove a specific extension.
+
+`Get-SecretsVault` will enumerate registered extensions returning
+the module name and cmdlet used (if appropriate) and the friendly name.
+
+A `SecretsVaultInfo` object will contain properties for all supported
+parameters by registration.
+
+```output
+Name       Module     Cmdlet               ScriptBlock
+----       ------     ------               -----------
+AzKeyVault AzKeyVault Get-AzKeyVaultSecret
+myVault                                    param($Name)
+```
 
 ### Storing Secrets
 
-The `Register-Secret` cmdlet is used to store a secret.
-The `-Name` must be unique across all secrets regardless if local or remote.
-A `-Secret` parameter accepts an object that can be either a PSCredential
-or SecureString.
+The `Add-Secret` cmdlet is used to store a secret.
+The `-Name` must be unique within a vault.
+The `-Vault` parameter defaults to the local vault.
+A `-NoClobber` parameter will cause this cmdlet to fail if the secret already exists.
+A `-Secret` parameter accepts one of the supported types outlined below.
 
 ### Retrieving Secrets
 
-The `Get-Secret` cmdlet is used to retrieve secrets.
-The `-Name` parameter is mandatory and retrieves the secret associated with
-that name.
-The returned object will either be a PSCredential or SecureString.
+The `Get-Secret` cmdlet is used to retrieve secrets as the same type as they
+were originally added.
+The `-Name` parameter retrieves the secret associated with that name.
+The `-Vault` parameter defaults to the local vault.
+The returned object will be the original stored secret type.
+
+`Get-Secret` without `-Name` will enumerate all stored secrets returning the
+name and the vault.
+`-Vault` can be used to filter to a specific vault for the enumeration.
+
+### Removing Secrets
+
+The `Remove-Secret` cmdlet is used to remove a stored secret.
 
 ### Authorization
 
@@ -137,6 +178,9 @@ Secrets supported will be:
 
 - PSCredential
 - SecureString
+- String
+- HashTable
+- Byte[]
 
 ## Alternate Proposals and Considerations
 
@@ -145,6 +189,7 @@ In this release, the following are non-goals that can be addressed in the future
 - Provision to rotate certs/access tokens
 - Sharing local vaults across different computer systems
 - Sharing local vault across different user contexts
-- Support for other types of secrets (certs)
 - A PSProvider for a Secrets: PSDrive
 - C# interface for extensions
+- Delegation support
+- Local vault requiring to be unlocked automatically
