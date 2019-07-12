@@ -9,7 +9,7 @@ Area: Microsoft.PowerShell.DesiredStateConfiguration
 
 # Invoke-DscResource
 
-Add support for `Invoke-DscResource` in PowerShell 7+.
+Add cross-platform support for `Invoke-DscResource` in PowerShell 7+ without dependency on LCM and WMI.
 
 This RFC addresses the need to leverage the DSC ecosystem of resources from newer versions of PowerShell, the way to decouple the execution of resources from the LCM and CIM/WMI, and the user experience from a consumer and solution vendor/integrator point of view.
 
