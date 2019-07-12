@@ -56,6 +56,7 @@ Now consider this code snippet:
 
 ```PowerShell
 New-Module -Name ThisShouldNotImport {
+    # The next line uses "Generics" in the type name, when it should use "Generic"
     $myList = [System.Collections.Generics.List[string]]::new()
 
     function Test-RFC {
