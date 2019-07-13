@@ -7,6 +7,7 @@ Version: <Major>.<Minor>
 Area: <Area within the PowerShell language>
 Comments Due: <Date for submitting comments to current draft (minimum 1 month)>
 Plan to implement: <Yes | No>
+Require Support to implement:  <Yes | No>
 ---
 
 # Title
@@ -36,3 +37,6 @@ Hello World
 
 ## Alternate Proposals and Considerations
 
+## Supporting Adoption 
+
+## Support required to Implement
