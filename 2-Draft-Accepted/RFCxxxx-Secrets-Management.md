@@ -194,5 +194,6 @@ In this release, the following are non-goals that can be addressed in the future
 - Sharing local vault across different user contexts
 - A PSProvider for a Secrets: PSDrive
 - C# interface for extensions
+- C# API to retrieve secrets for C# based modules
 - Delegation support
 - Local vault requiring to be unlocked automatically
