@@ -77,11 +77,14 @@ A local vault, by default, is already created and named `Default`.
 >[!NOTE]
 >KeyChain support is unlikely to be available in the first release of this feature.
 
-`Default` on Linux is [Hashicorp Vault](https://www.vaultproject.io/).
+`Default` on Linux is [Gnome Keyring](https://wiki.gnome.org/Projects/GnomeKeyring/).
 
 >[!NOTE]
->Linux has many options for local credential management, additional support may be
->added in the future or via community provided extensions.
+>Linux has many options for local credential management.  The choice of Gnome Keyring
+>is that it's a simple local vault we can easily test against and validate that our
+>design works with a well-known Linux local vault.  Since the extension model is
+>open, we expect additional vault support to come from owners of those vaults or
+>the community.
 
 ### Credential Vault Extensions
 
