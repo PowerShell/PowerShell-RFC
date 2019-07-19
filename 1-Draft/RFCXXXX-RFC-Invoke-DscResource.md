@@ -37,7 +37,7 @@ While we attempt to maintain the same command syntax, the behaviour will not be 
 
 Specifically, we already know some features that **will not be supported** in this initial scope of work:
 
-- Support for non-powershell resources (i.e. the Native/Binary or Python resources won't be supported)
+- Support for non-PowerShell resources (i.e. the native/binary or Python resources won't be supported)
 - Running as System by default ([Discussed later in this document](#Default-Execution-Scope:-Current-runspace))
 - Schema validation of invocation/results (It will only validate against the Resource's functions' signatures)
 
