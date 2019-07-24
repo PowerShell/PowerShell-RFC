@@ -114,7 +114,7 @@ It is up to the user to sequence the execution safely, or to create appropriate 
 
 # Out of Scope for initial work & other notes
 
-We're aware that some extra work or feature could be solved at the same time, but we're trying to have the MVP out as soon as possible, to help addressing the points raised in the [Motivation](#Motivation) section.
+We're aware that some extra work or feature could be solved at the same time, but we're trying to have the MVP (minimum viable product) out as soon as possible, to help addressing the points raised in the [Motivation](#Motivation) section.
 
 ## Invoke-DscResource will not clear the Builtin Provider Cache
 
@@ -122,7 +122,7 @@ The Built-in provider cache, located in `$env:ProgramData\Microsoft\Windows\Powe
 
 With an Invoke-DscResource advanced function as described in this RFC, it is not guaranteed to have enough permissions to that path (it's running in the current user context unless using `PSDscRunAsCredential`), nor do we assume exclusivity (LCM might be in use and running).
 
-For those reasons, it is not reasonable to expect `Invoke-DscResource` for PowerShell 7 to clear the cache, at least for scope of the MVP.
+For those reasons, it is not reasonable to expect `Invoke-DscResource` for PowerShell 7 to clear the cache, at least for the scope of the MVP.
 
 DSC Resources that rely on this may experience unexpected behavior (compared to running `Invoke-DscResource` in WMF 5.1). It is up to the maintainers of those resource modules to handle (or not) this new possibility.
 
