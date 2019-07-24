@@ -9,6 +9,8 @@ Plan to implement: Yes
 
 # Pipeline Chain Operators
 
+## Background
+
 POSIX shells have what may be referred to as *AND-OR lists*,
 what the [Open Group's Shell Command Language specification](https://pubs.opengroup.org/onlinepubs/007904875/utilities/xcu_chap02.html#tag_02_09_03)
 describes as:
@@ -31,60 +33,228 @@ false && echo foo || echo bar # Writes only "bar" to stdout (operators are left-
 true || echo foo && echo bar # Writes only "bar" to stdout
 ```
 
-Also from the Shell Command Language specification:
+Similarly, `cmd.exe` also supports `&&` and `||`, which it terms *conditional processing symbols*.
+From the [Command shell overview page](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-xp/bb490954(v=technet.10)#using-multiple-commands-and-conditional-processing-symbols):
 
-> A ';' or &lt;newline&gt; terminator shall cause the preceding AND-OR list to be executed sequentially;
-> an '&' shall cause asynchronous execution of the preceding AND-OR list.
+> When you run multiple commands with conditional processing symbols,
+> the commands to the right of the conditional processing symbol act
+> based upon the results of the command to the left of the conditional processing symbol.
+>
+> ...
+>
+> `&&`: Use to run the command following `&&` only if the command preceding the symbol is successful.
+> Cmd.exe runs the first command,
+> and then runs the second command only if the first command completed successfully.
+>
+> ...
+>
+> `||`: Use to run the command following `||` only if the command preceding `||` fails.
+> Cmd.exe runs the first command,
+> and then runs the second command only if the first command did not complete successfully
+> (receives an error code greater than zero).
 
-Meaning that the entire AND-OR list is backgrounded:
+Despite the wording here, `&&` has a lower precedence than `|` in `cmd.exe`
+and can be used to sequence pipelines:
 
-```bash
-true && echo 'Success' & # The list `true && echo 'Success'` is executed in the background
+```cmd
+dir C:\ | sort && echo 'done'
 ```
 
-This RFC proposes adding AND-OR lists to PowerShell, using the same `&&` and `||`.
-Because "AND-OR list" is neither intuitive nor common as a terminology,
-instead the term **pipeline chains** is proposed.
+Historically, these operators have been reserved for implementation in PowerShell for some time.
+Since PowerShell v2, including a `&&` token in a PowerShell script results in the following parse error:
+
+> The token '&&' is not a valid statement separator in this version.
+
+Despite the error message implying the intent to separate statements,
+[the code to parse these operators](https://github.com/PowerShell/PowerShell/blob/6f0dacddc1b6ddc47a886f3943b56725d3d2e2f4/src/System.Management.Automation/engine/parser/Parser.cs#L5859-L5871)
+occurs *within* the pipeline parsing logic,
+possibly implying the intent to implement them as *command separators* (within a pipeline).
+
+## Proposal outline
+
+This RFC proposes:
+
+- The addition of `&&` and `||` as *pipeline chain operators* to PowerShell.
+- That `&&` and `||` may be used between PowerShell pipelines to conditionally sequence them.
+- That `$?` (PowerShell's execution success indicator) be used to determine the sequence from pipeline to pipeline.
+- That such sequences of pipelines using `&&` and `||` be called **pipeline chains**.
+- To also allow control flow statements (`throw`, `break`, `continue`, `return` and `exit`) at the end of such chains
 
 ## Motivation
 
-> As a PowerShell user, I can chain commands with `&&` and `||`
+> As a PowerShell user, I can chain commands and pipelines with `&&` and `||`
 > so that I have an ergonomic syntax to conditionally invoke side-effectful commands.
+
+The chief motivation of pipeline chain operators is to make native commands
+(i.e. commands run by invoking an executable as a subprocess)
+simpler to use and sequence, as they are in other shells.
+
+Often these commands perform some action,
+emit some informational output (and/or error output) and return an exit code.
+
+The aim of chain operators is to make the action success as easy to process as the output,
+providing a convenient way to manipulate control flow around command outcome rather than output.
+This is also the motivation behind allowing control flow statements at the end of pipelines.
 
 ## User Experience
 
-#### Example 1
+Also see: [test cases for implementation](https://github.com/PowerShell/PowerShell/blob/0b700828f22824c29eac70f8db1d2bf504b212d1/test/powershell/Language/Operators/PipelineChainOperator.Tests.ps1).
+
+
+Pipeline chain operators are intended to behave
+as if pipelines were written as a sequence of statements conditioned on `$?`:
+
+```powershell
+cmd1 && cmd2 || cmd3
+```
+
+should be the same as
+
+```powershell
+cmd1
+if ($?) { cmd2 }
+if (-not $?) { cmd3 }
+```
+
+### Native commands
+
+In these examples:
+
+- `echo` is a native command that writes its argument as output and returns an exit code of 0
+- `error` is a native command that writes its argument as output and returns an exit code of 1
+
+```powershell
+echo 'Hello' && echo 'Again'
+```
+
+```output
+Hello
+Again
+```
+
+---
+
+```powershell
+echo 'Hello' && error 'Bad'
+```
+
+```output
+Hello
+Bad
+```
+
+---
+
+```powershell
+error 'Bad' && echo 'Hello'
+```
+
+```output
+Bad
+```
+
+---
+
+```powershell
+error 'Bad' || echo 'Hello'
+```
+
+```output
+Bad
+Hello
+```
+
+---
+
+```powershell
+echo 'Hello' || echo 'Again'
+```
+
+```output
+Hello
+```
+
+---
+
+```powershell
+error 'Bad' || error 'Very bad'
+```
+
+```output
+Bad
+Very bad
+```
+
+---
+
+```powershell
+echo 'Hi' || echo 'Message' && echo '2nd message'
+```
+
+```output
+Hi
+```
+
+---
+
+```powershell
+error 'Bad' || echo 'Message' && echo '2nd message'
+```
+
+```output
+Bad
+Message
+2nd message
+```
+
+---
+
+```powershell
+echo 'Hi' && error 'Bad' || echo 'Message'
+```
+
+```
+Hi
+Bad
+Message
+```
+
+---
+
+###  Cmdlets and Functions
+
+Cmdlets and functions work just like native commands,
+except they don't set `$LASTEXITCODE`
+and have other ways of expressing error conditions.
+
+Here the same principle applies as with native commands;
+the statements proceed as if the next is
+wrapped in `if ($?) { ... }`.
 
 ```powershell
 Write-Output "Hello" && Write-Output "Hello again"
 ```
 
-Output:
-
 ```output
 Hello
 Hello again
 ```
 
-#### Example 2
+---
 
 ```powershell
 Write-Output "Hello" || Write-Output "Hello again"
 ```
 
-Output:
-
 ```output
 Hello
 ```
 
-#### Example 3
+---
 
 ```powershell
 Write-Error "Bad" && Write-Output "Hello again"
 ```
-
-Output:
 
 ```output
 Write-Error "Bad" : Bad
@@ -92,13 +262,14 @@ Write-Error "Bad" : Bad
 + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException
 ```
 
-#### Example 4
+`Write-Error` here emits a non-terminating error
+and so we proceed to evaluate `$?`.
+
+---
 
 ```powershell
 Write-Error "Bad" || Write-Output "Hello again"
 ```
-
-Output:
 
 ```output
 Write-Error "Bad" : Bad
@@ -108,59 +279,400 @@ Write-Error "Bad" : Bad
 Hello again
 ```
 
-#### Example 5
-
-Using `echo` as a convenient example of a successful command
-and `false` as an example of an unsuccesful command.
-
 ```powershell
-echo "Hello" && Write-Output "Hi"
+echo 'Hi' && Write-Output 'Hello'
 ```
 
-Output:
+```output
+Hi
+Hello
+```
+
+---
+
+```powershell
+error 'Bad' && Write-Output 'Hello'
+```
+
+```
+Bad
+```
+
+---
+
+```powershell
+Write-Error 'Bad' || echo 'Message'
+```
 
 ```output
+Bad
+Message
+```
+
+---
+
+### Pipelines
+
+Pipeline chains allow whole pipelines between chain operators.
+As above, when a pipeline ends other than with a terminating error,
+`$?` determines the chain logic.
+
+The whole pipeline on the left-hand side of an operator
+will be evaluated before evaluating chain condition
+and then right-hand side.
+
+```powershell
+1,2,3 | ForEach-Object { $_ + 1 } && Write-Output 'Hello'
+```
+
+```output
+2
+3
+4
 Hello
+```
+
+---
+
+```powershell
+1,2,3 | ForEach-Object { if ($_ -eq 2) { Write-Error 'Bad' } else { $_ } } && Write-Output 'Hello'
+```
+
+```output
+1
+1,2,3 | ForEach-Object { if ($_ -eq 2) { Write-Error 'Bad' } else { $_ } } && Write-Output 'Hello' : Bad
++ CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
++ FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException
+
+3
+Hello
+```
+
+---
+
+```powershell
+function FailInProcess
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(ValueFromPipeline)]
+        $Value
+    )
+
+    process
+    {
+        if ($_ -eq 3)
+        {
+            $err = Write-Error 'Bad' 2>&1
+            $PSCmdlet.WriteError($err)
+            return
+        }
+
+        $PSCmdlet.WriteObject($_)
+    }
+}
+
+1,2,3,4 | FailInProcess && Write-Output 'Succeeded'
+```
+
+```output
+1
+2
+FailInProcess : Bad
+At line:22 char:11
++ 1,2,3,4 | FailInProcess && Write-Output 'Succeeded'
++           ~~~~~~~~~~~~~
++ CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
++ FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,FailInProcess
+
+4
+```
+
+(Even though the process block keeps going, `$?` is false)
+
+---
+
+### Terminating errors and error handling
+
+Terminating errors supercede chain sequencing,
+just as they would in a semicolon-separated sequence of statements.
+
+Uncaught errors will terminate the script.
+
+```powershell
+function ThrowBad
+{
+    throw 'Bad'
+}
+
+ThrowBad && Write-Output 'Success'
+```
+
+```output
+Bad
+At line:3 char:5
++     throw 'Bad'                                                                                   +     ~~~~~~~~~~~
++ CategoryInfo          : OperationStopped: (Bad:String) [], RuntimeException
++ FullyQualifiedErrorId : Bad
+```
+
+---
+
+This is the same with cmdlet terminating errors.
+
+```powershell
+function ThrowTerminating
+{
+    [CmdletBinding()]
+    param()
+
+    $err = Write-Error 'Bad' 2>&1
+    $PSCmdlet.ThrowTerminatingError($err)
+}
+
+ThrowTerminating && Write-Output 'Success'
+```
+
+```output
+ThrowTerminating : Bad
+At line:1 char:1
++ ThrowTerminating && Write-Output 'Success'
++ ~~~~~~~~~~~~~~~~
++ CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
++ FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,ThrowTerminating 
+```
+
+---
+
+When the error is caught,
+the flow of control abandons the chain for the catch as expected.
+
+```powershell
+function ThrowBad
+{
+    throw 'Bad'
+}
+
+try
+{
+    ThrowBad && Write-Output 'Success'
+}
+catch
+{
+    Write-Output $_.FullyQualifiedErrorId
+}
+```
+
+```output
+Bad
+```
+
+---
+
+When the error is suppressed with an error action preference,
+the result is again based on `$?`.
+
+```powershell
+function ThrowTerminating
+{
+    [CmdletBinding()]
+    param()
+
+    Write-Output 'In ThrowTerminating'
+    $ex = [System.Exception]::new('Bad')
+    $errId = 'Bad'
+    $errCat = 'NotSpecified'
+    $err = [System.Management.Automation.ErrorRecord]::new($ex, $errId, $errCat, $null)
+    $PSCmdlet.ThrowTerminatingError($err)
+}
+
+ThrowTerminating -ErrorAction Ignore && Write-Output 'Success'
+```
+
+```output
+In ThrowTerminating
+```
+
+---
+
+```powershell
+function ThrowTerminating
+{
+    [CmdletBinding()]
+    param()
+
+    Write-Output 'In ThrowTerminating'
+    $ex = [System.Exception]::new('Bad')
+    $errId = 'Bad'
+    $errCat = 'NotSpecified'
+    $err = [System.Management.Automation.ErrorRecord]::new($ex, $errId, $errCat, $null)
+    $PSCmdlet.ThrowTerminatingError($err)
+}
+
+ThrowTerminating -ErrorAction Ignore || Write-Output 'Success'
+```
+
+```output
+In ThrowTerminating
+Success
+```
+
+---
+
+If traps are set, they will continue or break the pipeline chain as configured.
+
+```powershell
+trap
+{
+    Write-Output 'TRAP'
+    break
+}
+
+function ThrowTerminating
+{
+    [CmdletBinding()]
+    param()
+
+    Write-Output 'In ThrowTerminating'
+    $ex = [System.Exception]::new('Bad')
+    $errId = 'Bad'
+    $errCat = 'NotSpecified'
+    $err = [System.Management.Automation.ErrorRecord]::new($ex, $errId, $errCat, $null)
+    $PSCmdlet.ThrowTerminatingError($err)
+}
+
+ThrowTerminating && Write-Output 'Success'
+```
+
+```output
+In ThrowTerminating
+TRAP
+ThrowTerminating : Bad
+At line:20 char:1
++ ThrowTerminating && Write-Output 'Success'
++ ~~~~~~~~~~~~~~~~
++ CategoryInfo          : NotSpecified: (:) [ThrowTerminating], Exception
++ FullyQualifiedErrorId : Bad,ThrowTerminating
+
+```
+
+---
+
+```powershell
+trap
+{
+    Write-Output 'TRAP'
+    continue
+}
+
+function ThrowTerminating
+{
+    [CmdletBinding()]
+    param()
+
+    Write-Output 'In ThrowTerminating'
+    $ex = [System.Exception]::new('Bad')
+    $errId = 'Bad'
+    $errCat = 'NotSpecified'
+    $err = [System.Management.Automation.ErrorRecord]::new($ex, $errId, $errCat, $null)
+    $PSCmdlet.ThrowTerminatingError($err)
+}
+
+ThrowTerminating && Write-Output 'Success'
+```
+
+```output
+In ThrowTerminating
+TRAP
+```
+
+---
+
+```powershell
+trap
+{
+    Write-Output 'TRAP'
+    continue
+}
+
+function ThrowTerminating
+{
+    [CmdletBinding()]
+    param()
+
+    Write-Output 'In ThrowTerminating'
+    $ex = [System.Exception]::new('Bad')
+    $errId = 'Bad'
+    $errCat = 'NotSpecified'
+    $err = [System.Management.Automation.ErrorRecord]::new($ex, $errId, $errCat, $null)
+    $PSCmdlet.ThrowTerminatingError($err)
+}
+
+ThrowTerminating || Write-Output 'Success'
+```
+
+```output
+In ThrowTerminating
+TRAP
+Success
+```
+
+---
+
+### Assignment
+
+Because pipeline chains are statements, they can be assigned from.
+
+```powershell
+$x = Write-Output 'Hi' && Write-Output 'Hello'
+$x
+```
+
+```output
+Hi
+Hello
+```
+
+---
+
+With pipeline chains, if it would be written to the pipeline,
+it's captured by assignment.
+This is true even if something in the chain later throws.
+
+```powershell
+try
+{
+    $x = Write-Output 'Hi' && throw 'Bad'
+}
+catch
+{
+    $_.FullyQualifiedErrorId
+}
+$x
+```
+
+```output
+Bad
 Hi
 ```
 
-#### Example 6
+(Compare this to `$x = $(1;2; throw 'Bad')`.)
+
+---
+
+### Flow control statements
+
+Finally, pipeline chains can use flow control statements.
 
 ```powershell
-false && Write-Output "Reached"
 ```
-
-Output:
 
 ```output
 ```
 
-#### Example 7
+---
 
-```powershell
-false || Write-Output "Reached"
-```
-
-Output:
-
-```output
-Reached
-```
-
-#### Example 8
-
-```powershell
-false || Write-Output "Command failed" && Write-Output "Backup"
-```
-
-Output:
-
-```output
-Command failed
-Backup
-```
-
-Also see: [intended test cases for implementation](https://github.com/PowerShell/PowerShell/blob/f8b899e42c86957a1b58273be0029f40a67bf1b6/test/powershell/Language/Operators/BashControlOperator.Tests.ps1).
+---
 
 ## Specification
 
@@ -227,11 +739,11 @@ This will be grouped as:
 As a syntax tree, this would look like:
 
 ```none
-            "||"
-          /      \
-        "&&"     "cmd3"
-      /      \
-   "cmd1"    "cmd2"
+            ||
+          /    \
+        &&      cmd3
+      /     \
+   cmd1    cmd2
 ```
 
 With the syntax tree deepening on the left as more operators are chained.
@@ -260,11 +772,11 @@ Will bind as:
 Having the syntax tree:
 
 ```none
-            <statement>
-           /           \
-         "&&"          "&"
-        /    \
-     "cmd1"  "cmd2"
+           <statement>
+          /           \
+         &&            &
+       /    \
+     cmd1  cmd2
 ```
 
 The consequence of this will be that an entire pipeline chain
@@ -413,18 +925,62 @@ Also see the [alternate proposals section](#alternate-proposals-and-consideratio
 
 - Original issue: [PowerShell/PowerShell #3241](https://github.com/PowerShell/PowerShell/issues/3241).
 
-- Work-in-progress implementation: [PowerShell/PowerShell #9849](https://github.com/PowerShell/PowerShell/pull/9849).
+- Implementation: [PowerShell/PowerShell #9849](https://github.com/PowerShell/PowerShell/pull/9849).
 
 - [Current handling of `&&` and `||` in the parser](https://github.com/PowerShell/PowerShell/blob/af1de9e88d28014438ff3414e82298e5b14f6e81/src/System.Management.Automation/engine/parser/Parser.cs#L5846-L5860).
 
 ## Alternate Proposals and Considerations
 
-### `&&` and `||` as a statement separator
+### Command vs pipeline vs statement separation
 
-To be more bash-like, an alternative implementation might treat
-`&&` and `||` with the same precedence as `;`, as a way to separate statements.
+An important syntactic and semantic question is
+what level `&&` and `||` operate at
+(using brackets to denote syntactic groupings in `$x = cmd1 | cmd2 && cmd3`):
 
-This would allow assignment within chains, like:
+- Between commands, where they occur within pipelines (`$x = [[cmd1] | [cmd2 && cmd3]]`)
+- Between pipelines, where they occur within statements (`$x = [[cmd1 | cmd2] && cmd3]]`)
+- Between statements (`[$x = [cmd1 | cmd2]] && [cmd3]`)
+
+In the POSIX shell, `&&` and `||` separate pipelines,
+but pipelines encompass all statements.
+Statelines like `if`, `for` and `case` are *compound commands*
+where between keywords like `if` and `fi`,
+everything is considered a single command.
+
+So for example the following is possible:
+
+```sh
+if [ -e ./file.txt ]; then echo 'File exists'; fi && echo 'File does not exist' | cat -
+```
+
+(This always prints `File does not exist`, since the `if` is always considered to succeed.)
+
+In `cmd.exe`, the more template-driven approach means that
+`if` and `for` being commands treat `&&` as part of the argument:
+
+```cmd
+>for %i in (1 2 3) do echo %i && echo 'done'
+```
+
+```output
+>echo 1   && echo 'done'
+1
+'done'
+
+>echo 2   && echo 'done'
+2
+'done'
+
+>echo 3   && echo 'done'
+3
+'done'
+```
+
+In PowerShell, unlike in the POSIX shell,
+all pipelines are statements but not all statements are pipelines.
+This means we must choose between separating statements and separating pipelines.
+
+Allowing `&&` and `||` between statements in PowerShell might look like:
 
 ```powershell
 $x = cmd1 && $y = cmd2 && $x + $y
@@ -476,9 +1032,10 @@ special behaviour would need to be defined for `return $expr &`.
 
 #### Reasons against
 
-- Pipelines have an established concept of "success" compared to statements
+- Pipelines have an established concept of "success",
+  whereas other statements generally do not.
 - Background operators become less useful with respect to chains unless their
-  syntax is changed in a significant way
+  syntax is changed in a significant way.
 
 ### Allowing control flow statements at the end of chains
 
