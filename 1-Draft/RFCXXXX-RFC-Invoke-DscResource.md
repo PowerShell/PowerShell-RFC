@@ -33,7 +33,9 @@ Open-sourcing this module should be a priority, but is out of scope for this RFC
 
 ### Backward compatibility with Invoke-DscResource from PS 5.1
 
-While we attempt to maintain the same command syntax, the behaviour will not be on par with `Invoke-DscResource` as found in PowerShell 5.1.
+It is **not the intention to have feature parity** between the version found with Windows PowerShell 5.1 and the one described in this RFC.
+
+While we attempt to maintain the same command syntax, the behavior will not be on par with `Invoke-DscResource` as found in PowerShell 5.1.
 
 Specifically, we already know some features that **will not be supported** in this initial scope of work:
 
@@ -53,7 +55,7 @@ Invoke-DscResource [-Name] <string> [-Method] <string> -ModuleName <ModuleSpecif
 
 #### Default Execution Scope: Current runspace
 
-We aim at enabling existing scripts using `Invoke-DscResource`, written for Windows PowerShell 5.1, to "just work" in PowerShell 7+, but **in the current user context** if the **PsDscRunAsCredential** DSC common property is not supplied.
+We aim at enabling existing scripts using `Invoke-DscResource`, written for Windows PowerShell 5.1, to "just work" in PowerShell 7+, but **in the current user context** when the **PsDscRunAsCredential** DSC common property is **not** supplied.
 
 ```PowerShell
 Invoke-DscResource -Name xFile -ModuleName @{ModuleName='PSDscResources';ModuleVersion='2.12.0.0'} -Method 'Set' -Properties @{
@@ -77,6 +79,7 @@ The Parameter will be extracted from the `-Properties` argument, and used to inv
 It will be equivalent as (from within the `Invoke-DscResource` command point of view):
 
 So calling:
+
 ```PowerShell
 Invoke-DscResource -Name Script -ModuleName @{ModuleName='PSDscResources';ModuleVersion='2.12.0.0'} -Method 'Set' -Properties @{
     GetScript  = '<# My Get ScriptBlock #>'
@@ -101,9 +104,27 @@ Start-Job -Credential $Credential -ScriptBlock {
 
 > NOTES: We're avoiding to take dependencies on other technologies that would require extra configurations or permissions (such as remoting), or would not be available on other OSes.
 
+#### Independent and isolated execution
+
+`Invoke-DscResource` in PowerShell 7+ will not be aware of other instances being executed, and as such it will be possible to execute several instances in parallel when isolated in their own runspaces, or run in parallel with the LCM.
+
+This means that it enables concurrent execution, but also risks conflict if two conflicting resources are run simultaneously.
+
+It is up to the user to sequence the execution safely, or to create appropriate resources.
+
 # Out of Scope for initial work & other notes
 
-We're aware that some extra work or feature could be solved at the same time, but we're trying to have the MVP out as soon as possible, to help addressing the points raised in the [Motivation](#Motivation) section.
+We're aware that some extra work or feature could be solved at the same time, but we're trying to have the MVP (minimum viable product) out as soon as possible, to help addressing the points raised in the [Motivation](#Motivation) section.
+
+## Invoke-DscResource will not clear the Builtin Provider Cache
+
+The Built-in provider cache, located in `$env:ProgramData\Microsoft\Windows\PowerShell\Configuration\BuiltinProvCache`, is currently cleared by the LCM (in WMF 5.1).
+
+With an Invoke-DscResource advanced function as described in this RFC, it is not guaranteed to have enough permissions to that path (it's running in the current user context unless using `PSDscRunAsCredential`), nor do we assume exclusivity (LCM might be in use and running).
+
+For those reasons, it is not reasonable to expect `Invoke-DscResource` for PowerShell 7 to clear the cache, at least for the scope of the MVP.
+
+DSC Resources that rely on this may experience unexpected behavior (compared to running `Invoke-DscResource` in WMF 5.1). It is up to the maintainers of those resource modules to handle (or not) this new possibility.
 
 ## File Resource not supported
 
