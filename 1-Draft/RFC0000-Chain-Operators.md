@@ -79,6 +79,7 @@ This RFC proposes:
 - That `$?` (PowerShell's execution success indicator) be used to determine the sequence from pipeline to pipeline.
 - That such sequences of pipelines using `&&` and `||` be called **pipeline chains**.
 - To also allow control flow statements (`throw`, `break`, `continue`, `return` and `exit`) at the end of such chains
+  when the chain could be used as a statement (not just a pipeline).
 
 ## Motivation
 
@@ -656,7 +657,7 @@ Bad
 Hi
 ```
 
-(Compare this to `$x = $(1;2; throw 'Bad')`.)
+(Compare this to `$x = . { 1;2; throw 'Bad' }`.)
 
 ---
 
@@ -664,13 +665,116 @@ Hi
 
 Finally, pipeline chains can use flow control statements.
 
-```powershell
+Here we assume a native command `exitwith`,
+which requires its first argument to be an integer,
+prints that argument to the console
+and returns it as an exit code:
+
+```
+> exitwith 0
+0
+> $LASTEXITCODE
+0
 ```
 
-```output
+```
+> exitwith 42
+42
+> $LASTEXITCODE
+42
 ```
 
 ---
+
+Here, `|| break` means the loop will stop early
+when `exitwith` returns a non-zero exit code (`exitwith 1`).
+
+```powershell
+for ($i = 0; $i -lt 10; $i++)
+{
+    exitwith $i || break
+}
+```
+
+```output
+0
+1
+```
+
+---
+
+Here the loop continues when `exitwith` succeeds:
+
+```powershell
+$codes = 0,0,1,0
+foreach ($i in $codes)
+{
+    exitwith $i && continue
+    Write-Information 'Cleaning up'
+}
+```
+
+```output
+0
+0
+1
+Cleaning up
+0
+```
+
+---
+
+When a native command succeeds,
+that might mean we have a useful value to return.
+
+```powershell
+function Get-Thing
+{
+    exitwith 0 && return 'SUCCESS'
+
+    return 'FAILURE'
+}
+
+Get-Thing
+```
+
+```output
+0
+SUCCESS
+```
+
+---
+
+Alternatively, a native command may fail
+but we want to use an exception for that.
+
+```powershell
+exitwith 1 || throw 'ERROR!'
+```
+
+```output
+1
+
+ERROR!
+At line:1 char:14
++ exitwith 1 || throw 'ERROR!'
++               ~~~~~~~~~~~~~~
++ CategoryInfo          : OperationStopped: (ERROR!:String) [], RuntimeException
++ FullyQualifiedErrorId : ERROR!
+```
+
+---
+
+In dire circumstances, you might actually want to exit.
+
+```powershell
+exitwith 1 || exit 1
+```
+
+```output
+1
+# PowerShell exits...
+```
 
 ---
 
@@ -689,8 +793,8 @@ statement:
 
 pipeline_chain:
     | pipeline
-    | pipeline_chain "&&" [newlines] pipeline
-    | pipeline_chain "||" [newlines] pipeline
+    | pipeline_chain [newline] "&&" [newlines] pipeline
+    | pipeline_chain [newline] "||" [newlines] pipeline
 ```
 
 #### Optional pipeline chaining
@@ -713,6 +817,15 @@ For example, the following would be a single pipeline chain:
 cmd1 &&
     cmd2 ||
     cmd3
+```
+
+Following on from the recent pipeline pre-continuation addition to PowerShell,
+the following is also proposed:
+
+```powershell
+cmd1
+    && cmd2
+    || cmd3
 ```
 
 If the end of file is reached after a pipeline chain operator,
@@ -783,6 +896,55 @@ The consequence of this will be that an entire pipeline chain
 can be sent to a background job for evaluation,
 rather than individual pipelines within it.
 
+#### Pipeline chains vs statement chains
+
+Currently, there are circumstances in PowerShell
+where a pipeline can be used as one of any statements,
+such as after assignment or in a subexpression.
+There are also places where a only a pipeline can be used,
+such as in an `if` condition or in a subpipeline.
+
+To accomodate this difference
+and the inclusion of flow control statements on the ends of pipelines,
+there is a proposed distinction between chains that must be pipelines
+and chains that may be used as statements,
+with the former being *pipeline chains*
+and the latter being *statement chains*.
+
+In effect there is no user experience difference other than
+not being able to use `return`/`continue`/`break`/`throw`/`exit`
+at the ends of pipelines used in pipeline-specific scenarios.
+
+For example:
+
+```powershell
+if ('Thing' && throw 'Bad')
+{
+    'Hi'
+}
+```
+
+will not recognise `throw` as a keyword.
+
+To match `if (throw 'Bad') { ... }`, the proposed behaviour is to parse it as a command,
+so that invoking the above gives:
+
+```output
+throw : The term 'throw' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:10
++ if (1 && throw 'Bad') { 'Hi' }
++          ~~~~~
++ CategoryInfo          : ObjectNotFound: (throw:String) [], CommandNotFoundException
++ FullyQualifiedErrorId : CommandNotFoundException
+```
+
+These control flow statements would only be allowed *at the end* of chains because:
+
+- Control flow makes any invocation after the statement unreachable
+- `return` and `throw` allow pipelines as subordinate expressions,
+   meaning it would be grammatically impossible to use those statements mid-chain.
+
 ### Semantics
 
 #### Pipeline "success"
@@ -806,7 +968,7 @@ cmd1 && cmd2
     |
     v
 
-$(cmd1; if ($?) { cmd2 })
+. { cmd1; if ($?) { cmd2 } }
 ```
 
 ```none
@@ -815,7 +977,7 @@ cmd1 || cmd2
     |
     v
 
-$(cmd1; if (-not $?) { cmd2 })
+. { cmd1; if (-not $?) { cmd2 } }
 ```
 
 ```none
@@ -824,7 +986,7 @@ cmd1 && cmd2 || cmd3
     |
     v
 
-$(cmd1; if ($?) { cmd2 }; if (-not $?) { cmd3 })
+. { cmd1; if ($?) { cmd2 }; if (-not $?) { cmd3 } }
 # Note that cmd1 failing runs cmd3
 ```
 
@@ -869,7 +1031,7 @@ will be output by the chain before terminating:
 ```powershell
 try
 {
-    $x = cmd1 && $(throw "Bad")
+    $x = cmd1 && throw "Bad"
 }
 catch
 {
@@ -885,12 +1047,20 @@ and the pipeline chain will evaluate as normal based on the value of `$?`.
 
 #### New Abstract Syntax Tree (AST) types
 
-The new AST type, `PipelineChainAst`,
-will be created to represent a pipeline chain.
-This will inherit from `PipelineBaseAst`
-and may occur anywhere a `PipelineBaseAst` does in a PowerShell AST.
+Two new AST types are proposed:
 
-`ICustomAstVisitor2` and `AstVisitor2` would be extended to deal with this AST,
+- `PipelineChainAst`, which refers to a pipeline chain
+  that can be used anywhere where a pipeline could be currently.
+  This inherits from `PipelineBaseAst`.
+- `StatementChainAst`, which refers to a pipeline chain
+  used anywhere a statement could be currently.
+  This inherits from `StatementAst`
+
+The separation of these ASTs means it remains impossible
+to create certain constructions using AST constructors
+that the parser would not allow.
+
+`ICustomAstVisitor2` and `AstVisitor2` would be extended to deal with these ASTs,
 and .NET Core 3's new default interface implementation feature would be
 leveraged to ensure this does not break things
 as previous syntactic introductions have been forced to.
@@ -1037,74 +1207,41 @@ special behaviour would need to be defined for `return $expr &`.
 - Background operators become less useful with respect to chains unless their
   syntax is changed in a significant way.
 
-### Allowing control flow statements at the end of chains
+### Not allowing control flow statements at the end of chains
 
-A compromise to the above is to only allow "control flow statements"
-at the end of chains.
+The main proposal suggests adding control flow
+statements to the end of pipeline chains.
 
-For example:
+This introduces complications:
 
-```powershell
-cmd1 || throw "cmd1 failed"
-```
+- A pipeline chain can be both over and under a `return`:
 
-```powershell
-function Invoke-Command
-{
-    cmd1 && return
+    ```powershell
+    cmd1 && return cmd2 && cmd3
+    ```
 
-    cmd2
-}
-```
+    groups as
 
-```powershell
-foreach ($v in 1..100)
-{
-    cmd1 $v && break
-}
-```
+    ```text
+    cmd1 && [return [cmd2 && cmd3]]
+    ```
 
-These would only be allowed *at the end* of chains because:
+- A `throw` can do the same,
+  but the proposal is to explicitly disallow this:
 
-- Control flow makes any invocation after the statement unreachable
-- `return` and `throw` allow pipelines as subordinate expressions,
-   meaning it would be grammatically impossible to use those statements mid-chain.
-   See below for more details.
+    ```powershell
+    cmd1 && throw 'a' && 'b'
+    ```
 
-#### Reasons against
+    ```output
+    At line:1 char:19
+    + cmd1 && throw 'a' && 'b'
+    +                   ~~
+    + Pipeline chain operators '&&' and '||' may not be used after 'throw'.
+    ```
 
-- `throw` and `return` currently allow a subordinate pipeline:
-
-   ```powershell
-   throw "Bad"
-   ```
-
-   ```powershell
-   throw 1,2,3 | Write-Output
-   ```
-
-   ```powershell
-   throw "Useless" & # Throws a background job...
-   ```
-
-   If we keep the principle that anywhere a pipeline is allowed,
-   a pipeline chain is now allowed, then constructions like this are possible:
-
-   ```powershell
-   cmd1 || throw "Bad" && cmd3
-   ```
-
-   However the grouping is this:
-
-   ```none
-   [cmd1 || throw ["Bad" && cmd3]]
-   ```
-
-   This could lead to confusing semantic corner cases
-
-- The compromise nature of this approach means the PowerShell Language
-  becomes more complicated and arguably less consistent,
-  both conceptually and in terms of maintenance.
+    This is proposed since `throw` stringifies its given value,
+    making a construction like the above much less useful than for `return`.
 
 ### Different evaluations of command "success"
 
