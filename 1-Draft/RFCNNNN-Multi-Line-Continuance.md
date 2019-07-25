@@ -172,7 +172,7 @@ following:
 ```
 
 All this would do is prevent newline tokens within the enclosures from being
-treated as statement terminators.
+treated as statement terminators in the current statement.
 
 The closing closure could also be a recognized statement terminator even when
 used after the stop parsing sigil, allowing those commands to be wrapped across
