@@ -965,8 +965,8 @@ That is, there are the following direct equivalents:
 ```none
 cmd1 && cmd2
 
-    |
-    v
+      |
+      v
 
 . { cmd1; if ($?) { cmd2 } }
 ```
@@ -974,8 +974,8 @@ cmd1 && cmd2
 ```none
 cmd1 || cmd2
 
-    |
-    v
+      |
+      v
 
 . { cmd1; if (-not $?) { cmd2 } }
 ```
@@ -983,8 +983,8 @@ cmd1 || cmd2
 ```none
 cmd1 && cmd2 || cmd3
 
-    |
-    v
+         |
+         v
 
 . { cmd1; if ($?) { cmd2 }; if (-not $?) { cmd3 } }
 # Note that cmd1 failing runs cmd3
@@ -1242,6 +1242,23 @@ This introduces complications:
 
     This is proposed since `throw` stringifies its given value,
     making a construction like the above much less useful than for `return`.
+
+This also complicates the grammar and the AST, since:
+
+- We have to complexify logic about stamtents vs pipelines and control flow logic
+- More AST types may be needed to prevent bad AST constructions
+
+Not including control flow operators in pipelines would mean:
+
+- The grammar is simplified
+- We only need one AST type
+- There's no confusing embedding of chains over and under a `return`
+
+#### Reasons against
+
+- Control flow manipulation with native commands is currently not ergonomic
+- A construction like `cmd || throw 'Failed'` is very handy
+- Bad or confusing cases are corner cases, unlikely to be hit under normal usage
 
 ### Different evaluations of command "success"
 
