@@ -3,7 +3,7 @@ RFC: RFCnnnn
 Author: Kirk Munro
 Status: Draft
 SupercededBy: N/A
-Version: 0.2
+Version: 0.3
 Area: Parser/Tokenizer
 Comments Due: June 16, 2019
 Plan to implement: Yes
@@ -115,7 +115,9 @@ character.
 
 **Cons:**
 
-* no known cons at this time
+* using a blank line as a statement terminator will be hard for some to accept
+(if you're one of those folks, read below to the alternative proposals and
+considerations section).
 
 ## Motivation
 
@@ -153,31 +155,95 @@ to PowerShell.
 
 ### Enclosures instead of a sigil
 
-The original draft also included some proposals for enclosures instead of a
-single leading sigil. While it may seem up front that enclosures make good
-sense, some thought needs to be given to the stop-parsing sigil, which causes
-PowerShell to treat closing enclosures as arguments for a command.
-
-For example, consider this syntax:
+Instead of only requiring a single leading sigil, some users prefer the notion
+of enclosures such that the multi-line command parsing mode would have a very
+clear and well defined start and end. To meet that need, we could follow the
+here-string syntax in PowerShell as an example, offering syntax like the
+following:
 
 ```PowerShell
-. {"./plink.exe" @
+. {"./plink.exe" @`
     --% 
     $Hostname
     -l $Username
     -pw $Password
-    $Command}
+    $Command
+`@}
 ```
 
-That command will not parse because there is no closing brace for the script
-block. What appears to be a closing brace is placed after the stop-parsing
-sigil, and therefore treated as an argument to the plink command. To correct
-this, the closing brace must be placed on a separate line, but in a multi-line
-command you cannot do that (because the command is multi-line, so where would
-the parser terminate after a stop-parsing sigil) and therefore, unless the
-sigil used to identify the end of the multi-line parameter/arguments was one
-that could be respected by the stop-parsing sigil, and safely be introduced
-without risk to breaking changes, enclosures simply cannot be used.
+All this would do is prevent newline tokens within the enclosures from being
+treated as statement terminators.
+
+The closing closure could also be a recognized statement terminator even when
+used after the stop parsing sigil, allowing those commands to be wrapped across
+multiple lines as well.
+
+Like here-string enclosures, we could require that the opening closure be the
+last token on a line. Unlike here-string enclosures, however, it would be
+preferable if the closing closure did not have to be at the start of a line,
+since there is no need for it to be. It would simply have to be the first token
+on line to close the statement, allowing for indentation within scripts.
+
+This alternative also allows for blank lines to be used within the enclosures,
+such that Scenario 3 in @dragonwolf83's comment could be supported and written
+like this:
+
+```PowerShell
+New-ADUser @`
+    -Name 'Jack Robinson'
+    -GivenName 'Jack'
+    -Surname 'Robinson'
+    -SamAccountName 'J.Robinson'
+
+    -UserPrincipalName (
+        'J.Robinson@enterprise.com'
+    )
+
+   # Get the list of regions for where a user would reside in to put the user into the correct region
+    -Path (
+        $region = Get-Region -Name 'Jack Robinson'
+        "OU=Users,OU=$region,DC=enterprise,DC=com"
+    )
+
+    -AccountPassword (
+        Read-Host -AsSecureString 'Input Password'
+    )
+
+    -Enabled $true
+`@
+
+Get-ChildItem @`
+    $rootFolder
+    -File
+    -Filter '*.ps*1'
+`@
+```
+
+The best part is that it doesn't appear this syntax would introduce a breaking
+change at all.
+
+If people feel the backtick is still not visible enough here (and therefore not
+desirable for this purpose), we should keep the `@` portion of the enclosures
+so that we can avoid breaking changes, and simply replace the backtick with
+something else. For example, we could do this instead:
+
+```PowerShell
+Get-ChildItem @-
+    $rootFolder
+    -File
+    -Filter '*.ps*1'
+-@
+```
+
+Backticks offer the advantage of continuing what they represent in PowerShell
+already (line continuation), and they are syntactically very similar to here-
+strings when used with the `@` symbol. That last point could be seen as a
+disadvantage as well, because they may be visually harder to distinguish from
+a single-quoted here-string.
+
+The `@-|-@` alternative doesn't pick up on the backtick for line continuation,
+but it is visually unique and easy to see in a script. The `-` character could
+be seen as representing the line that makes up the statement as well.
 
 ### Inline splatting
 
@@ -226,7 +292,8 @@ is not a reason not to do it, but it is more code to write and maintain.
 
 ### Breaking changes
 
-None.
+No known breaking changes in the original proposal, nor the alternative version
+that uses enclosures.
 
 All previous options from the original RFC and the discussion about it that
 would have introduced breaking changes have been removed in favor of a syntax
