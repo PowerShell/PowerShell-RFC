@@ -9,7 +9,7 @@ Comments Due: June 16, 2019
 Plan to implement: Yes
 ---
 
-# Multi-line continuance
+# Multi-line continuation
 
 Consider this example of a New-ADUser command invocation:
 
@@ -73,8 +73,8 @@ cacls @
 
 ```
 
-Further, by generalizing multi-line continuance with a `@` character, we're
-allowing users to apply line continuance the way they want to, which opens the
+Further, by generalizing multi-line continuation with a `@` character, we're
+allowing users to apply line continuation the way they want to, which opens the
 door to more C#-like line wrapping when you're working with multiple members or
 methods in .NET, one after another. For example, this would work:
 
@@ -102,7 +102,7 @@ The pros/cons to this new syntax are as follows:
 
 * allows the scripter to wrap commands how they see fit, while still getting
 Intellisense and tab completion, without using backticks.
-* aside from the `@` character to initiate multi-line continuance, the rest of
+* aside from the `@` character to initiate multi-line continuation, the rest of
 the command is entered the exact same way it would be if it was entered on a
 single line.
 * ad hoc could support this syntax as well (PSReadline could wait for a
