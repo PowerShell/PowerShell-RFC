@@ -1,7 +1,7 @@
 ---
-RFC: RFCnnnn
+RFC: RFC0039
 Author: Kirk Munro
-Status: Draft
+Status: Rejected
 SupercededBy: 
 Version: 1.0
 Area: Module Manifests
