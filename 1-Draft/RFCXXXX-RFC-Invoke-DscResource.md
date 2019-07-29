@@ -3,7 +3,7 @@ RFC: RFCXXXX
 Author: Gael Colas
 Status: Draft
 SupersededBy: N/A
-Version: 0.6
+Version: 0.8
 Area: Microsoft.PowerShell.DesiredStateConfiguration
 ---
 
@@ -145,3 +145,7 @@ This resource won't be supported with this initial work. Only Resources `Impleme
 The **Composite resources** won't be supported for this initial scope. The support for composite would require `Invoke-DscResource` to understand and extract individual Resources called within the composite which is currently handled either in the PowerShell engine or through the `Configuration` function in the PSDesiredStateConfiguration module.
 
 Although it would be great to enable this scenario, decoupling the `Configuration` keyword from the MOF compilation is out of scope for this initial work.
+
+# Alternate Proposals and Considerations
+
+none
