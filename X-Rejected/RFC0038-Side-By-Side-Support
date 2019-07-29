@@ -1,7 +1,7 @@
 ---
-RFC: RFCNNNN
+RFC: RFC0038
 Author: Kirk Munro
-Status: Draft
+Status: Rejected
 SupercededBy: none
 Version: 0.1
 Area: CLI, SDK
