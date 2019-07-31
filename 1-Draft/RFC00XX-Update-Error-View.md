@@ -7,7 +7,7 @@ Area: PowerShell
 Comments Due: 
 ---
 
-# Update $ErrorView with Single Line Error Messages
+# Update $ErrorView with Single String Error Messages
 
 When an error occurs in PowerShell, the customers on-screen error message experience currently
 provides a level of detail that obscures the inner exception message from being read by
@@ -168,13 +168,14 @@ Legend: V = Verbose, W = Warning, E = Error(non-terminating future), F = Fatal
 ```powershell
 V: You are running your code - what could possibly go wrong.
 
-W: You are about to try something that probably won't work.
+W: You are about to try something that probably will not work.
 
-E: Your code broke, but I'm still running. At line:1 char:1
+E: Your something broke, but Im still running. At line:1 char:1
 
-E: Your code broke, but I'm still running. At line:1 char:1
+E: Your something broke, but Im still running. At line:1 char:1
 
-E: Your code broke, but I'm still running. At line:1 char:1
+E: Your something broke, but Im still running. At line:1 char:1
 
 F: Now you really broke me. At line:1 char:1
+
 ```
