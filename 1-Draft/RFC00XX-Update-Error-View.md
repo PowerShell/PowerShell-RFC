@@ -152,8 +152,29 @@ ERROR: Cannot find path ‘C:\blah’ because it does not exist: At line:1 char:
 ERROR:<CommandName>:<Alias>:<Exception Message>: <Position>
 ERROR: get-item: gi: Cannot find path ‘C:\blah’ because it does not exist: At line:1 char:1
 ```
+
 __Alternative color for all errors__
 
 1. We could change the default error message color from the current RED foreground and BLACK background to...
 2. Differentiating errors based on termination condition: terminating versus non-terminating is currently not intuitive. We are examining differentiating these conditions on the console. Example, adding a new property $host.PrivateData.NonTerminatingErrorForegroundColor ='Red'.
 For occasional customers, all error messages remain as color Red. For advanced customers, they can change non-terminating errors to another color to separate the error termination type in the console.
+
+__Alternative For Error, Warning, Verbose__
+
+1. We could be more terse in our messages and increase consistency with verbose and warning messages by using a single letter to identify the message.
+
+Legend: V = Verbose, W = Warning, E = Error(non-terminating future), F = Fatal
+
+```powershell
+V: You are running your code - what could possibly go wrong.
+
+W: You are about to try something that probably won't work.
+
+E: Your code broke, but I'm still running. At line:1 char:1
+
+E: Your code broke, but I'm still running. At line:1 char:1
+
+E: Your code broke, but I'm still running. At line:1 char:1
+
+F: Now you really broke me. At line:1 char:1
+```
