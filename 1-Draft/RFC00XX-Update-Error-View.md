@@ -155,3 +155,5 @@ ERROR: get-item: gi: Cannot find path ‘C:\blah’ because it does not exist: A
 __Alternative color for all errors__
 
 1. We could change the default error message color from the current RED foreground and BLACK background to...
+2. Differentiating errors based on termination condition: terminating versus non-terminating is currently not intuitive. We are examining differentiating these conditions on the console. Example, adding a new property $host.PrivateData.NonTerminatingErrorForegroundColor ='Red'.
+For occasional customers, all error messages remain as color Red. For advanced customers, they can change non-terminating errors to another color to separate the error termination type in the console.
