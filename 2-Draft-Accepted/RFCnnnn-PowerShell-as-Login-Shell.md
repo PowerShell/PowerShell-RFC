@@ -87,3 +87,9 @@ The location of `sh` would depend on the specific operating system.
 
 The perf impact of this compared to starting pwsh as a non-login shell is
 approximately 4%.
+
+### Supporting different default login shells
+
+In the future, if relying on `sh` (and thus `/etc/profile`) is not sufficient,
+we can allow an optional argument to `-login` to indicate the shell to use
+to process the script that creates the environment.
