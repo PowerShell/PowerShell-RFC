@@ -38,7 +38,9 @@ shell.
 > The actual path to `sh` would depend on the operating system.
 > For Linux, the path would be `/usr/bin`.
 > For Snap, the path would be `/snap/bin`.
-> For macOS, the path would be `/usr/local/bin`.
+> For macOS, there is an issue with `sh` not loading the login profile with
+> our usage, so `pwsh` will use `zsh` with `sh` emulation mode to enable
+> proper initialization of the environment.
 
 Since `pwsh` is simply starting an instance of itself, it should work the same
 regardless if a stable or preview release.
@@ -93,3 +95,9 @@ approximately 4%.
 In the future, if relying on `sh` (and thus `/etc/profile`) is not sufficient,
 we can allow an optional argument to `-login` to indicate the shell to use
 to process the script that creates the environment.
+
+### macOS moving to Zsh by default
+
+Expectation is that macOS intends to switch to `zsh` as the default shell so
+it may make sense to revisit this in the future to default to using `zsh` so
+that `zprofile` gets processed.
