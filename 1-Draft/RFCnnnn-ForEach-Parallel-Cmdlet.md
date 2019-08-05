@@ -22,9 +22,7 @@ This RFC proposes a new parameter set for the existing ForEach-Object cmdlet to 
 
 A new `-Parallel` parameter set will be added to the existing ForEach-Object cmdlet that supports running piped input concurrently in a provided script block.  
 
-- `-Parallel` parameter switch specifies parallel script block execution
-
-- `-ScriptBlock` parameter takes a script block that is executed in parallel for each piped input variable
+- `-Parallel` parameter takes a script block that is executed in parallel for each piped input variable
 
 - `-ThrottleLimit` parameter takes an integer value that determines the maximum number of script blocks running at the same time
 
@@ -79,7 +77,7 @@ So it is possible for a stop command to be ineffective if one running thread is 
 
 We can consider including some kind of 'forcetimeout' parameter that would kill any threads that did not end in a specified time.  
 
-If a job object is returned (-AsJob) the child jobs that were dequeued by the stop command will remain at 'NotStarted' state.
+If a job object is returned (-AsJob) the child jobs that were dequeued by the stop command will be at 'NotStarted' state.
 
 ### Data streams
 
@@ -97,14 +95,14 @@ if (! (Get-Module -Name MyLogsModule -ListAvailable)) {
 
 ```powershell
 $computerNames = 'computer1','computer2','computer3','computer4','computer5'
-$logs = $computerNames | ForEach-Object -Parallel -ThrottleLimit 10 -TimeoutSeconds 1800 -ScriptBlock {
+$logs = $computerNames | ForEach-Object -ThrottleLimit 10 -TimeoutSeconds 1800 -Parallel {
     Get-Logs -ComputerName $_
 }
 ```
 
 ```powershell
 $computerNames = 'computer1','computer2','computer3','computer4','computer5'
-$job = ForEach-Object -Parallel -ThrottleLimit 10 -InputObject $computerNames -TimeoutSeconds 1800 -AsJob -ScriptBlock {
+$job = ForEach-Object -ThrottleLimit 10 -InputObject $computerNames -TimeoutSeconds 1800 -AsJob -Parallel {
     Get-Logs -ComputerName $_
 }
 $logs = $job | Wait-Job | Receive-Job
@@ -113,7 +111,7 @@ $logs = $job | Wait-Job | Receive-Job
 ```powershell
 $computerNames = 'computer1','computer2','computer3','computer4','computer5'
 $logNames = 'System','SQL'
-$logs = ForEach-Object -Parallel -InputObject $computerNames -ScriptBlock {
+$logs = ForEach-Object -InputObject $computerNames -Parallel {
     Get-Logs -ComputerName $_ -LogNames $using:logNames
 }
 ```
@@ -121,7 +119,7 @@ $logs = ForEach-Object -Parallel -InputObject $computerNames -ScriptBlock {
 ```powershell
 $computerNames = 'computer1','computer2','computer3','computer4','computer5'
 $logNames = 'System','SQL','AD','IIS'
-$logResults = ForEach-Object -Parallel -InputObject $computerNames -ScriptBlock {
+$logResults = ForEach-Object -InputObject $computerNames -Parallel {
     Get-Logs -ComputerName $_ -LogNames $using:logNames
 } | ForEach-Object -Parallel -ScriptBlock {
     Process-Log $_
@@ -133,7 +131,7 @@ $logResults = ForEach-Object -Parallel -InputObject $computerNames -ScriptBlock 
 ```powershell
 # Variables must be passed in via $using: keyword
 $LogNameToUse = "IISLogs"
-$computers | ForEach-Object -Parallel -ScriptBlock {
+$computers | ForEach-Object -Parallel {
     # This will fail because $LogNameToUse has not been defined in this scope
     Get-Log -ComputerName $_ -LogName $LogNameToUse
 }
@@ -142,14 +140,14 @@ $computers | ForEach-Object -Parallel -ScriptBlock {
 ```powershell
 # Passed in reference variables should not be assigned to
 $MyLogs = @()
-$computers | ForEach-Object -Parallel -ScriptBlock {
+$computers | ForEach-Object -Parallel {
     # Not thread safe, undefined behavior
     # Cannot assign to using variable
     $using:MyLogs += Get-Logs -ComputerName $_
 }
 
 $dict = [System.Collections.Generic.Dictionary[string,object]]::New()
-$computers | ForEach-Object -Parallel -ScriptBlock {
+$computers | ForEach-Object -Parallel {
     $dict = $using:dict
     $logs = Get-Logs -ComputerName $_
     # Not thread safe, undefined behavior
@@ -160,7 +158,7 @@ $computers | ForEach-Object -Parallel -ScriptBlock {
 ```powershell
 # Value types not passed by reference
 $count = 0
-$computers | ForEach-Object -Parallel -ScriptBlock {
+$computers | ForEach-Object -Parallel {
     # Can't assign to using variable
     $using:count += 1
     $logs = Get-Logs -ComputerName $_
