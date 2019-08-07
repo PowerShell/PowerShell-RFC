@@ -4,7 +4,8 @@ Author: Jason Helmick
 Status: Draft
 Version: 0.0.0
 Area: PowerShell
-Comments Due: 
+Comments Due: 08/31/2019
+Plan to implement: Yes
 ---
 
 # Update $ErrorView with Single String Error Messages
