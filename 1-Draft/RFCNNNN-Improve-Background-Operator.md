@@ -188,5 +188,13 @@ jobs are launched at the same time, e.g. `cmd1 & cmd2 & cmd3 &`).
 
 ## Alternate Proposals and Considerations
 
-All alternative proposals and considerations identified so far have either been
-dismissed or incorporated into the RFC.
+### Use transformation attribute instead of three parameter sets for `Watch-Job`
+
+Instead of using multiple parameter sets, one that accepts a job name, another
+that accepts a job instance ID, and a third that accepts a job ID, `Watch-Job`
+could be implemented with a single parameter set that accepts a `Job` object,
+but that uses a `Job()` transformation attribute to also accept a job name, ID,
+or instance ID. This would make for easy pipelining without having to present
+so many parameter sets to end users. On the downside, transformation attributes
+and the types they support are not discoverable in the default syntax output
+for parameters at this time.
