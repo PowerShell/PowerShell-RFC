@@ -67,7 +67,7 @@ Because registry reads are more atomic,
 this is not an issue for group policy settings,
 but if we faced the same issues for these settings the solution would be the similar.
 
-If during startup PowerShell 7 cannot read user configuration files it uses _hardcoded_ defaults.
+If during startup PowerShell 7 cannot read user configuration files it uses _hardcoded_ defaults and emits a warning.
 
 PowerShell 7 does not update configuration values from modified configuration files during a given session after the configuration has been loaded.
 
