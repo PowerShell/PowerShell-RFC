@@ -33,25 +33,21 @@ I can reference the most recent job(s) launched with `Start-Job` or the `&` back
 So that I can write my handling of those jobs in a consistent way without the job object or id, using the same variable that is used in bash for the same purpose.
 
 As a user,<br/>
-I can launch jobs with a new `&!` background operator that will show job progress in an overlay<br/>
-So that watch the concurrent progress of multiple background jobs in my host without blocking my console.
-
-As a user,<br/>
-I can use the `&` operator (and the proposed `&!` operator) after the stop parsing sigil (`--%`)<br/>
-So that I can launch legacy commands in the background more easily, without having to use `Start-Job`.
+I can launch jobs with a new `&!` background operator that will show job stream data in my console<br/>
+So that watch the concurrent progress of multiple background jobs in my host when needed without blocking my console.
 
 Also, for completeness/functional parity with cmdlets:
 
 As a user,<br/>
-I can see the output of jobs launched with `Start-Job` or `Start-ThreadJob` in my current host by using a new `-ShowOutput` switch<br/>
+I can see the output of jobs launched with `Start-Job` or `Start-ThreadJob` in my current host by using a new `-Watch` switch<br/>
 So that I can launch multiple background jobs and watch their concurrent progress in my host without blocking my console.
 
 As a user,<br/>
-I can show or hide the output of running jobs by using new `Show-JobOutput` and `Hide-JobOutput` cmdlets<br/>
+I can show or hide the output of running jobs by using a new `Watch-Job` cmdlet (with `Watch-Job -Off` to stop watching)<br/>
 So that I can control the display and monitoring of running jobs without having to muck around with `Receive-Job -Keep`.
 
 As a PowerShell contributor,<br/>
-I can see the process ID associated with any background job by looking at the job members<br/>
+I can see the process ID associated with any job by looking at the job members<br/>
 So that I can more easily attach the Visual Studio debugger to that job when I need to.
 
 Last, one describing the existing motivation for the `&` background operator
@@ -59,7 +55,7 @@ Last, one describing the existing motivation for the `&` background operator
 
 As a user,<br/>
 I can launch jobs silently with the `&` background operator<br/>
-So that I can easily run pipelines as jobs in my automation solutions without showing output.
+So that I can easily run pipelines as jobs in my automation solutions without producing output.
 
 ## User Experience
 
@@ -69,7 +65,7 @@ So that I can easily run pipelines as jobs in my automation solutions without sh
 # This command:
 Get-Process &!
 # Would return the same output as this command:
-Start-Job {Get-Process} -ShowOutput
+Start-Job {Get-Process} -Watch
 ```
 
 ```output
@@ -79,14 +75,10 @@ Id     Name            PSJobTypeName   State         HasMoreData     Location   
 ```
 
 In addition to the output above, which is the job object created by the command
-that was invoked, PowerShell would show the output from the job (and any other
-job) launched this way in an overlay much like the output from Write-Progress,
-with the job output from any stream appearing as it is output in the overlay,
-prefixed with "[JobName]:" (e.g. [Job1]: ). This overlay would be slightly
-larger than Write-Progress so that users could see more output from the job in
-the overlay, and when all jobs sharing output complete the overlay would
-disappear after a delay (5 seconds). Progress messages from the jobs would
-appear above the output.
+that was invoked, PowerShell will monitor any jobs launched this way and show
+their stream output in the current console, with the job output from any stream
+prefixed with "[JobName]:" (e.g. [Job1]: ). Progress messages from jobs would
+appear in textual format in the console.
 
 ### Launching a background job quietly and referencing the job with the `$!` variable
 
@@ -130,37 +122,21 @@ Id     Name            PSJobTypeName   State         HasMoreData     Location   
 The `$!` variable in those two commands returns the jobs that were created with
 the command before it.
 
-### Launching a legacy command with the stop-parsing sigil and either the `&` or `&!` background operator
+### Monitoring the output from one or more jobs
 
-This corrects a limitation with the background operator(s), which currently
-treat `&` (and `&!`) as an argument instead when used after the stop-parsing
-sigil.
+This allows job output monitoring to be turned on or off for any job.
 
 ```powershell
-./plink.exe" --% $Hostname -l $Username -pw $Password $Command &
+# Monitor the output from job ids 1-5
+Watch-Job -Id 1..5
+# Turn off the monitor for the job named Job2
+Watch-Job -Off -Name Job2
+# Monitor the output for the last job (or jobs) we launched
+Watch-Job -Job $!
 ```
 
 ```output
-Id     Name            PSJobTypeName   State         HasMoreData     Location             Command
---     ----            -------------   -----         -----------     --------             -------
-1      Job1            BackgroundJob   Running       True            localhost            Microsoft.PowerShell.Man...
-```
-
-### Showing or hiding the output from one or more jobs
-
-This allows job output to be shown or hidden on demand for any jobs.
-
-```powershell
-# Show the output from job ids 1-5
-Show-JobOutput -Id 1..5
-# Hide the output from job name Job2
-Hide-JobOutput -Name Job2
-# Show the output for the last job (or jobs) we launched
-Show-JobOutput -Job $!
-```
-
-```output
-# As described in the comments above, with the output showing in an overlay
+# As described in the comments above, with the output showing in the console.
 ```
 
 ### Viewing the process ID for a job
@@ -175,42 +151,42 @@ $!.ProcessId
 # The process id for the background job(s)
 ```
 
+In the case of `ThreadJob` instances, `ProcessId` would contain the ID of the
+current process.
+
 ## Specification
 
-1. For jobs invoked with `&!` or `Start-Job -ShowOutput`, or for jobs referenced
-in `Show-JobOutput`, hook up event handlers on the output stream collections for
+1. Define a `Watch-Job` cmdlet with the following syntax:
+
+    ```powershell
+    Watch-Job [-Name] <string[]> [-Off] [<CommonParameters>]
+
+    Watch-Job [-InstanceId] <guid[]> [-Off] [<CommonParameters>]
+
+    Watch-Job [-Id] <int[]> [-Off] [<CommonParameters>]
+    ```
+
+    This cmdlet would turn monitoring on/off for jobs. See the next item for
+    details on what happens when monitoring is on.
+
+1. For jobs invoked with `&!` or `Start-Job -Watch`, or for jobs referenced
+in `Watch-Job`, hook up event handlers on the output stream collections for
 the job objects to capture the output from the jobs as it is added in real
 time, and show that output in the current terminal with the job name or ID in
-front of each output record. Mirror how `ProgressInformation` is rendered when
-it comes to showing job output this way.
-1. Add a `&!` operator that starts a job with the output display turned on.
-1. Add a boolean property to `BackgroundJob` objects called `ShowOutput` that
+front of each output record. Records for all stream types will be shown using
+their string representation when monitored this way.
+1. Add a `&!` operator that starts a job with monitoring turned on.
+1. Add a boolean property to `BackgroundJob` objects called `Watch` that
 identifies if the job is currently configured to show output or not.
 1. Add an integer property to `BackgroundJob` objects called `ProcessId` that
 identifies the ID of the process where the job is running.
-1. Add a `-ShowOutput` parameter to `Start-Job` that sets `ShowOutput` to true
+1. Add a `-Watch` parameter to `Start-Job` that sets `Watch` to true
 and hooks up event handlers as described in the first item in this list.
 1. Add a `$!` variable to store the most recently run job (or jobs if multiple
 jobs are launched at the same time, e.g. `cmd1 & cmd2 & cmd3 &`).
+1. Add the `ProcessId` property to the default output for all jobs.
 
 ## Alternate Proposals and Considerations
 
-### Add the process ID to the default output for a background job
-
-It may seem like a good idea to show the process ID for a background job in the
-default tabular output. While this would be convenient, we also have thread
-jobs that don't have a process ID, so it is probably better to leave it out for
-consistency across all jobs. It is always accessible via the `ProcessID` member
-of background jobs regardless.
-
-### Flip the silent/noisy approach with the operators
-
-This approach is proposed because we've already shipped the `&` background
-operator, with jobs running silent by default. In bash, if you run a command in
-the background using the `&` control operator, the output is displayed in the
-current terminal. This discrepancy may be confusing to users. If we feel that
-the PowerShell `&` background operator should be more consistent with the bash
-equivalent, we could make the `&` background operator show output by default
-and have the new `&!` background operator run silent. This wouldn't be a
-breaking change, but it would change the behavior for any scripts that are
-already using the `&` background operator today.
+All alternative proposals and considerations identified so far have either been
+dismissed or incorporated into the RFC.
