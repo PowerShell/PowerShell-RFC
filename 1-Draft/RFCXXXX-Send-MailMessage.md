@@ -43,13 +43,6 @@ In a 6.2, we have added an obsolete warning to `Send-MailMessage` that an altern
 
 **Note:** Adding an obsolete warning should not break compatibility in any way.
 
-### Positive confirmation of issue in 6.3
-
-We will add a switch requiring the user to accept the risk of using older **possibly** less secure implementations.
-This switch would be called `-AllowUnsecureConnection` and would be mandatory
-
-**Note:** The switch name is based on the [DSC Property](https://docs.microsoft.com/en-us/powershell/dsc/managing-nodes/metaconfig#configuration-server-blocks)
-
 ### If needed, develop an alternative
 
 If needed, develop a new cmdlet based on the DotNet recommended solution of [MailKit](https://github.com/jstedfast/MailKit).
@@ -66,6 +59,17 @@ Feedback on this option was negative and the RFC has been updated with then next
 
 The community could develop a replacement that can could be incorporated back into PowerShell Core.
 This has the disadvantage of increasing the size of PowerShell Core and delaying the solution.
+
+### Positive confirmation of issue in 6.3
+
+We could add a switch requiring the user to accept the risk of using older **possibly** less secure implementations.
+This switch would be called `-AllowUnsecureConnection` and would be mandatory.
+
+**Note:** The switch name is based on the [DSC Property](https://docs.microsoft.com/en-us/powershell/dsc/managing-nodes/metaconfig#configuration-server-blocks)
+
+However, given the high usage of `Send-MailMessage` in automated scenarios (like scheduled tasks),
+and the plan to work on a `MailKit` based alternative, we'd rather leave the cmdlet working as-is
+for the time being.
 
 ### Additional considerations
 
