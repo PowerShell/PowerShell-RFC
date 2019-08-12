@@ -1,7 +1,7 @@
 ---
-RFC: RFC0000
+RFC: RFC0043
 Author: Dongbo Wang
-Status: Draft
+Status: Withdrawn
 SupercededBy: N/A
 Version: 1.0
 Area: Microsoft.PowerShell.Core
