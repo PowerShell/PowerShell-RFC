@@ -1,13 +1,22 @@
 # PowerShell Core Community Call
 
-The PowerShell Core Community Call is held on the 3rd Thursday of every month.
-Topics include PowerShell Core, PSEditorServices/VSCode-PS, and PSScriptAnalyzer.
+The PowerShell Community Call is held on the 3rd Thursday of every month.
+Topics include PowerShell Core, PSEditorServices/VSCode-PowerShell, PSScriptAnalyzer,
+PowerShell Gallery, and any other projects owned by the PowerShell Team.
 
-Use [this ICS file](RecurringCommunityCall.ics) (right-click `Raw` and select `Save Target/Link As` in order to download the file correctly) to put this recurring event on your calendar.
-Or use this link if you already have Skype installed: https://meet.lync.com/microsoft/jaiello/ZRC25BBR
+You can join our Teams live event at https://aka.ms/JoinPSCall
+
+Use [this ICS file](https://raw.githubusercontent.com/PowerShell/PowerShell-RFC/master/CommunityCall/PSTeamsCall.ics) (right-click and select
+`Save Target/Link As` in order to download the file correctly) to put a
+recurring event on your calendar.
 
 ## Notes
 
+* [June 20, 2019](./20190620_Notes.md) ([YouTube recording](https://youtu.be/yJF-O9tH89Q) and [transcript](./20190620_ChatTranscript.txt))
+* [May 16, 2019](./20190516_Notes.md) ([YouTube recording](https://youtu.be/Qmu8J6m9HNI) and [transcript](20190516_ChatTranscript.txt))
+* [April 18, 2019](./20190418_Notes.md) ([YouTube recording](https://youtu.be/d5f5BAOMie8) and [transcript](20190418_ChatTranscript.txt))
+* March 21, 2019 (Cancelled)
+* [February 21, 2019](./20190221_Notes.md)] ([transcript](20190221_ChatTranscript.txt), missing YouTube recording 😞)
 * [January 17, 2019](./20190117_Notes.md) ([YouTube recording](https://youtu.be/GkA3d1_DnfY) and [transcript](20190117_ChatTranscript.txt))
 * [December 20, 2018](./20181220_Notes.md) ([YouTube recording](https://youtu.be/PNeyaqJcG7o) and [transcript](20181220_ChatTranscript.txt))
 * [November 15, 2018](./20181115_Notes.md) ([YouTube recording](https://youtu.be/tXNApuN7t98) and [transcript](./20181115_ChatTranscript.txt))
@@ -22,10 +31,10 @@ Or use this link if you already have Skype installed: https://meet.lync.com/micr
 * [Feb 15, 2018](./20180215_Notes.md) ([YouTube recording](https://youtu.be/fz8KxMoQDaM) and [transcript](20180215_ChatTranscript.txt))
 * Jan 18, 2018 ([YouTube recording](https://youtu.be/SFz-fFue0dg))
 * [November 16, 2017](./20171116_Notes.md) ([YouTube recording](https://youtu.be/EZ-UqdP_bxQ) and [transcript](./20171116_ChatTranscript.txt))
-* [July 20, 2017](./20170720_Notes.md) ([YouTube recording](https://www.youtube.com/watch?v=DF2L5ezX7AE) and [transcript](./20170720_ChatTranscript.txt))
-* [June 15, 2017](./20170615_ChatTranscript.txt) ([YouTube recording](https://www.youtube.com/watch?v=Iu_Q_3cUxTQ))
-* [May 18, 2017](./20170518_ChatTranscript.txt) ([YouTube recording](https://www.youtube.com/watch?v=f8WXuFrVSKM))
-* Apr 20, 2017 ([YouTube recording](https://www.youtube.com/watch?v=7NFct1AxFOU))
-* Mar 16, 2017 ([YouTube recording](https://www.youtube.com/watch?v=tkBiVxd7l2I))
-* [Jan 26, 2017](./20170126_ChatTranscript.txt) ([YouTube recording (partial)](https://www.youtube.com/watch?v=j7g5UbVFYqQ))
-* [Dec 8, 2016](./20161208_Notes.md) - The first community call! ([YouTube recording (audio only)](https://www.youtube.com/watch?v=N_i0He9jauY))
+* [July 20, 2017](./20170720_Notes.md) ([YouTube recording](https://youtu.be/DF2L5ezX7AE) and [transcript](./20170720_ChatTranscript.txt))
+* [June 15, 2017](./20170615_ChatTranscript.txt) ([YouTube recording](https://youtu.be/Iu_Q_3cUxTQQ))
+* [May 18, 2017](./20170518_ChatTranscript.txt) ([YouTube recording](https://youtu.be/f8WXuFrVSKM))
+* Apr 20, 2017 ([YouTube recording](hhttps://youtu.be/7NFct1AxFOU))
+* Mar 16, 2017 ([YouTube recording](https://youtu.be/tkBiVxd7l2I))
+* [Jan 26, 2017](./20170126_ChatTranscript.txt) ([YouTube recording (partial)](https://youtu.be/j7g5UbVFYqQ))
+* [Dec 8, 2016](./20161208_Notes.md) - The first community call! ([YouTube recording (audio only)](https://youtu.be/j7g5UbVFYqQ))

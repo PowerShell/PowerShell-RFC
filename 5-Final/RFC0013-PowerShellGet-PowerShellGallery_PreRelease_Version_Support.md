@@ -1,8 +1,8 @@
 ---
 RFC: RFC0013
 Author: Keith Bankston, Manikyam Bavanda
-Status: Draft 
-Version: 0.3.0
+Status: Final
+Version: 1.0.0
 Area: PowerShellGet, PowerShell Gallery
 Comments Due: 12/23/2016
 ---

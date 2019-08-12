@@ -1,0 +1,295 @@
+Gregg
+I hear
+
+Joey Aiello
+Can anyone hear us? Are any of the attendees outside Microsoft? 
+
+Anonymous
+Yes!
+
+Anonymous
+You're good
+
+Chris B
+Can hear you
+
+Roberth Strand
+Can hear you (y)
+
+kvprasoon
+yup, I can
+
+Hey Joey.. Streamiming its just fine!!
+miss typed Streaming
+
+Hey Joey.. Streamiming its just fine!!
+cool
+
+Thomas Rayner
+:O for once, a meeting free morning where I can actually attend this!
+
+Joel Sallow
+I found some fun things with expression switches work nicely in some places. So nice to have some fancy new C# toys :D
+
+Ryan Yates
+Is there a list of these modules that weren't expected to be compatable avail somewhere?
+
+Kirk Munro
+Why do you only promote/push RFCs for review here that come from the PS Team? There are other RFCs for review that community members contribute and would like to move forward in the PowerShell 7 timeframe that should be listed here.
+
+What is the roadmap/timeline to ship PowerShell with Windows OS's? And what does that look like?
+What is the roadmap/timeline to ship PowerShell with Windows OS's? And what does that look like?If known. 
+
+Justin Grote
+Can OnError maybe be used to trigger a breakpoint on error? That would be huge to be able to trigger a breakpoint on exception in VSCode instead of "guessing" where the error is
+
+Kirk Munro
+There are some well-founded concerns on the differences between bash and PowerShell in the Chaining Operator RFC. It would be helpful if other folks could chime in, particularly those who use bash.
+
+Joel Sallow
+They fixed a bunch of formatting things that were thoroughly annoying <3
+
+Mike O'Neill
+I'm the one that asked about the update to win OS
+
+Joel Sallow
+Also shoutout for the Test-Connection RFC that could probably use some more comments ;)
+
+Kirk Munro
+Also regarding the RFC process, the chaining operator RFC needs feedback from the community (bash users need to chime in, not just the PowerShell afficionados who eagerly watch for PRs in that repo), but the current PR feedback system is just horrible (as has been shared). What can we do now to get the right amount of feedback (PowerShell and bash users combined) speficially on the chaining RFC, and other RFCs that are open?
+
+Kirk Munro
+Also regarding the RFC process, the chaining operator RFC needs feedback from the community (bash users need to chime in, not just the PowerShell afficionados who eagerly watch for PRs in that repo), but the current PR feedback system is just horrible (as has been shared). What can we do now to get the right amount of feedback (PowerShell and bash users combined) speficially on the chaining RFC, and other RFCs that are open?
+
+Joel Sallow
+Also shoutout for the Test-Connection RFC that could probably use some more comments ;)
+
+Mike O'Neill
+I'm the one that asked about the update to win OS
+
+Kirk Munro
+There are some well-founded concerns on the differences between bash and PowerShell in the Chaining Operator RFC. It would be helpful if other folks could chime in, particularly those who use bash.
+
+Joel Sallow
+They fixed a bunch of formatting things that were thoroughly annoying <3
+
+Justin Grote
+Can OnError maybe be used to trigger a breakpoint on error? That would be huge to be able to trigger a breakpoint on exception in VSCode instead of "guessing" where the error is
+
+What is the roadmap/timeline to ship PowerShell with Windows OS's? And what does that look like?
+What is the roadmap/timeline to ship PowerShell with Windows OS's? And what does that look like?If known. 
+
+Mike O'Neill
+What is the roadmap/timeline to ship PowerShell with Windows OS's? And what does that look like?If known.
+
+Kirk Munro
+We have break on error and break on exception in a PR that is in progress (`-ErrorAction Break`, and `[ActionPreference]::Break`).
+
+Mike O'Neill
+What is the roadmap/timeline to ship PowerShell with Windows OS's? And what does that look like?If known.
+
+Kirk Munro
+Why do you only promote/push RFCs for review here that come from the PS Team? There are other RFCs for review that community members contribute and would like to move forward in the PowerShell 7 timeframe that should be listed here.
+
+Fabian Campo (Col)
+What about Windows Terminal? is as cool as the video showed that? are you pointing to integrate with a Bash console on the same app? 
+
+Ryan Yates
+Is there a list of these modules that weren't expected to be compatable avail somewhere?
+
+Kirk Munro
+We have break on error and break on exception in a PR that is in progress (`-ErrorAction Break`, and `[ActionPreference]::Break`).
+
+Fabian Campo (Col)
+What about Windows Terminal? is as cool as the video showed that? are you pointing to integrate with a Bash console on the same app? 
+
+Joel Sallow
+I found some fun things with expression switches work nicely in some places. So nice to have some fancy new C# toys :D
+
+Fabian Campo (Col)
+Joey. Why you don't try to take the notes on the same TEAMS app, to share this notes and urls with all of us.-?
+
+Fabian Campo (Col)
+thank you.-(Fabian Campo (Col) asked "Joey. Why you don't try to take the notes on the same TEAMS app, to share this notes and urls with all of us.-?")
+
+Mike O'Neill
+Does Windows terminal integrate with VSC?
+
+Fabian Campo (Col)
+Joey. Why you don't try to take the notes on the same TEAMS app, to share this notes and urls with all of us.-?
+
+Mike O'Neill
+Does Windows terminal integrate with VSC?
+
+Justin Grote
+I see your shell
+
+kvprasoon
+0 && ls
+1 && ls
+
+and in CMD ;)
+|| and && also work in CMD
+
+kvprasoon
+@Mike - Win Terminal in VSC, that'll be too much :-)
+
+Anonymous
+Is it possible to use || and && in the same statement for two different outcomes?
+
+Justin Grote
+I see your shell
+
+kvprasoon
+0 && ls
+1 && ls
+
+and in CMD ;)
+|| and && also work in CMD
+
+kvprasoon
+@Mike - Win Terminal in VSC, that'll be too much :-)
+
+Anonymous
+Is it possible to use || and && in the same statement for two different outcomes?
+
+Joey Aiello
+Good question, I'll ask when Rob is finished with this demo(Is it possible to use || and && in the same statement for two different outcomes?)
+
+Joel Sallow
+pretty sure combining && and || statements is possible aye, but they have the same precedence if I recall the details of the RFC/PR right
+
+Joel Sallow
+As a result, you'll need parentheses or something, probably, to get the results you want a lot of the time
+
+Joel Sallow
+I've noticed the more detailed committee review comments & very much appreciate the extra context, it really helps. ΓÖÑ
+
+Joel Sallow
+I've noticed the more detailed committee review comments & very much appreciate the extra context, it really helps. ΓÖÑ
+
+Joel Sallow
+pretty sure combining && and || statements is possible aye, but they have the same precedence if I recall the details of the RFC/PR right
+
+Joel Sallow
+As a result, you'll need parentheses or something, probably, to get the results you want a lot of the time
+
+Joel Sallow
+It might make sense to split Review of RFC out from Comments & Questions of an RFC
+
+Joel Sallow
+Google Docs has a comment system
+
+Joel Sallow
+it's pretty easy to work with iirc
+
+Joel Bennett
+There are quite a few more sophisticated code-review tools -- like Pull Panda ... which GitHub just bought ...
+
+Joel Sallow
+It might make sense to split Review of RFC out from Comments & Questions of an RFC
+
+Joel Sallow
+Google Docs has a comment system
+
+Joel Sallow
+it's pretty easy to work with iirc
+
+Joel Bennett
+There are quite a few more sophisticated code-review tools -- like Pull Panda ... which GitHub just bought ...
+
+kvprasoon
+How about on Markdown for help system
+
+Joel Sallow
+oh yeah, with the ?? and ? : operator things are we also possibly getting ?. operator?
+
+Edwin Young
+In case we don't get to it there's a bit of background on PowerShellGallery outage at https://github.com/PowerShell/PowerShellGallery/blob/master/psgallery_status.md
+
+Joel Sallow
+Ah, good, you're getting to some xternal committee members... been thinking on that recently hehehe
+
+Mike O'Neill
+Are these recorded for others to view later?
+
+kvprasoon
+How about on Markdown for help system
+
+Joel Sallow
+oh yeah, with the ?? and ? : operator things are we also possibly getting ?. operator?
+
+Joel Sallow
+Ah, good, you're getting to some xternal committee members... been thinking on that recently hehehe
+
+Mike O'Neill
+Are these recorded for others to view later?
+
+Joel Sallow
+I think Tyler has been recording over Twitch
+
+Mike O'Neill
+What is the roadmap/timeline to ship PowerShell with Windows OS's? And what does that look like?If known.
+
+Joel Sallow
+so check tylerleonhardt on Twitch for that
+
+Joel Sallow
+I think Tyler has been recording over Twitch
+
+Joel Sallow
+so check tylerleonhardt on Twitch for that
+
+Mike O'Neill
+What is the roadmap/timeline to ship PowerShell with Windows OS's? And what does that look like?If known.
+
+Mike O'Neill
+ok, thank you. 
+
+Joel Bennett
+Since I've mentioned PullPanda ... you should also try RubberDuck.io for code reviews (not much help for RFCs, imho). 
+
+And I do still like Reviewable because it pushes threading better, keeps track of which comments I've already seen -- which is the hard part of RFC conversations, and maybe even keeps better track of issues that have not actually been decided even if the code around them changes (although I'll admit I haven't used it on anything that churned as much as the PowerShellGet RFC).
+
+Mike O'Neill
+ok, thank you. 
+
+Ryan Yates
+RE inboxing in Windows - My Expectation is it would come in a Windows Feature Update @mike like OpenSSH client / server did in windows 10 1803
+
+This would IMO be after 7 gets released
+
+Fabian Campo (Col)
+things happen.. 
+
+Joel Bennett
+Since I've mentioned PullPanda ... you should also try RubberDuck.io for code reviews (not much help for RFCs, imho). 
+
+And I do still like Reviewable because it pushes threading better, keeps track of which comments I've already seen -- which is the hard part of RFC conversations, and maybe even keeps better track of issues that have not actually been decided even if the code around them changes (although I'll admit I haven't used it on anything that churned as much as the PowerShellGet RFC).
+
+Ryan Yates
+RE inboxing in Windows - My Expectation is it would come in a Windows Feature Update @mike like OpenSSH client / server did in windows 10 1803
+
+This would IMO be after 7 gets released
+
+Fabian Campo (Col)
+things happen.. 
+
+Anonymous
+I want a say Joey status!!
+
+Anonymous
+er Sad Joey
+
+Anonymous
+I want a say Joey status!!
+
+Anonymous
+er Sad Joey
+
+JB "AspenForester" Lewis
+Thanks!
+
+kvprasoon
+It's Joel bennet recommended vexx32Joel Swallow
+

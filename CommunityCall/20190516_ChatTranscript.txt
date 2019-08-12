@@ -1,0 +1,495 @@
+Anonymous
+Am I in the right place?
+
+Darwin
+Testing with my name.
+
+Anonymous
+Am I in the right place?
+
+Joey Aiello
+Yup!(Am I in the right place?)
+
+Darwin
+Testing with my name.
+
+Joey Aiello
+Hey Darwin!(Darwin asked "Testing with my name.")
+
+Haiko Hertes
+Hi there!
+
+Haiko Hertes
+Hi there!
+
+Anonymous
+When is the call expected to start, please?
+
+Anonymous
+When is the call expected to start, please?
+
+Joey Aiello
+Right now!(When is the call expected to start, please?)
+
+Christoph Bergmeister
+Hiya everyone
+
+Darwin
+Teams could do a better job of letting those of us in the lobby understand that the meeting organizers are active :(
+
+Christoph Bergmeister
+Hiya everyone
+
+Anonymous
+I'm not seeing a way to mute myself. Are we all auto muted? I got background noise
+
+Darwin
+Teams could do a better job of letting those of us in the lobby understand that the meeting organizers are active :(
+
+Anonymous
+I'm not seeing a way to mute myself. Are we all auto muted? I got background noise
+
+Joey Aiello
+You aren't able to talk in the call, unfortunately, we're looking at how to fix this with Teams(I'm not seeing a way to mute myself. Are we all auto muted? I got background noise)
+
+Joel Sallow
+*waves*
+
+Joel Sallow
+*waves*
+
+Jaykul
+This is slightly confusing. Now I have a play button, but nothing else. Is that just me?
+
+Anonymous
+yEs
+
+Joel Sallow
+I see Steve typing in VS Code etc
+
+Joel Sallow
+Is it steve? whoever that is(Joel Sallow asked "I see Steve typing in VS Code etc")
+
+Anonymous
+I can see it
+
+Anonymous
+I can see the screen share
+
+Anonymous
+Yes
+
+Anonymous
+I can see it
+
+Anonymous
+I can see the screen share
+
+Joel Sallow
+I see Steve typing in VS Code etc
+
+Anonymous
+yEs
+
+Haiko Hertes
+It works!
+
+Constantin
+yes I can see it
+
+Jaykul
+This is slightly confusing. Now I have a play button, but nothing else. Is that just me?
+
+Haiko Hertes
+It works!
+
+Constantin
+yes I can see it
+
+Anonymous
+Yes
+
+Jon
+I can see the presentation. I just had to rejoin the call after staying in the first time.
+
+Kyle Ruddy
+Can confirm, I do see Joey's desktop
+
+Roman
+See it!
+
+Adam
+I can see the screen
+
+Joel Sallow
+Joel, might wanna try exiting and rejoining. Teams is a bit funky sometimes
+
+Darwin
+Just a play button for me
+
+Anonymous
+I see the play button, but it is unresponsive
+
+Darwin
+So this is what I hate about applying "Agile Discovery" to a well known problem domain like Video Conferencing in a Chat client.  You really don't have to have customers ask you for ever tiny feature.  If 90% of current products have it, it's probably good to put it on the roadmap. 
+
+Attempted Agile Discovery of a Well Known Problem Domain = Productivity Antipattern
+
+Christoph Bergmeister
+I've already used PS 7 for WinForms/WPF and it worked reasonably well
+
+Joel Sallow
+Enjoy native binary numbers kids ;)
+
+Darwin
+Actually:
+
+Attempted Agile Discovery of a Well Know Problem Domain = Problem / Solution Fit Antipattern
+
+Anonymous
+Who followed who? PS team or the .NET team on dropping core from the name?  :-)
+
+Darwin
+I cant' see anything and play button does not work.
+
+Christoph Bergmeister
+I've already used PS 7 for WinForms/WPF and it worked reasonably well
+
+Joel Sallow
+Enjoy native binary numbers kids ;)
+
+Anonymous
+Who followed who? PS team or the .NET team on dropping core from the name?  :-)
+
+Darwin
+Had to rejoin
+
+Darwin
+So this is what I hate about applying "Agile Discovery" to a well known problem domain like Video Conferencing in a Chat client.  You really don't have to have customers ask you for ever tiny feature.  If 90% of current products have it, it's probably good to put it on the roadmap. 
+
+Attempted Agile Discovery of a Well Known Problem Domain = Productivity Antipattern
+
+Christoph Bergmeister
+See my demo here for an example of the PSSA compatibility rules:
+https://github.com/bergmeister/PSHSummit2019/tree/master/2_PSSA_Demo
+
+Darwin
+Seems like if you hit "play" before you guys are broadcasting, you have to quit and rejoin to get the stream.
+
+Jon
+I can see the presentation. I just had to rejoin the call after staying in the first time.
+
+Kyle Ruddy
+Can confirm, I do see Joey's desktop
+
+Roman
+See it!
+
+Adam
+I can see the screen
+
+Joel Sallow
+Joel, might wanna try exiting and rejoining. Teams is a bit funky sometimes
+
+Darwin
+Just a play button for me
+
+Anonymous
+I see the play button, but it is unresponsive
+
+Darwin
+Actually:
+
+Attempted Agile Discovery of a Well Know Problem Domain = Problem / Solution Fit Antipattern
+
+Darwin
+I cant' see anything and play button does not work.
+
+Darwin
+Had to rejoin
+
+Christoph Bergmeister
+See my demo here for an example of the PSSA compatibility rules:
+https://github.com/bergmeister/PSHSummit2019/tree/master/2_PSSA_Demo
+
+Darwin
+Seems like if you hit "play" before you guys are broadcasting, you have to quit and rejoin to get the stream.
+
+Flavien Michaleczek
+Hello everyone !
+
+Michael B.
+please make sure it works with psexec!
+
+Joel Sallow
+Yeah,the current Test-Connection does a great job of getting the data. It's just hard to use it programmatically in the PowerShell ecosystem.
+
+Michael B.
+please make sure it works with psexec!
+
+Joel Sallow
+Yeah,the current Test-Connection does a great job of getting the data. It's just hard to use it programmatically in the PowerShell ecosystem.
+
+Flavien Michaleczek
+Hello everyone !
+
+Anonymous
+What is the impact on PowerShell with the annoucement of Windows Terminal? https://devblogs.microsoft.com/commandline/introducing-windows-terminal/
+
+Anonymous
+What is the impact on PowerShell with the annoucement of Windows Terminal? https://devblogs.microsoft.com/commandline/introducing-windows-terminal/
+
+Joel Sallow
+Summary -- cmdlets that process strings (e.g., Select-String et al) need to respect culture values when doing comparisons and need parameters to help work with nonlocal cultures
+
+Anonymous
+How is the association of login shell setup scripts scoped?  It's not clear to me how it's any different than starting up pwsh with a profile...  (unless login shells have more profile association/scoping mechanisms than what pwsh profiles currently do)
+
+Adil Leghari
+Important question for Tyler and Steve: PowerShell T-Shirts? :-P
+
+Adil Leghari
+Important question for Tyler and Steve: PowerShell T-Shirts? :-P
+
+Anonymous
+How is the association of login shell setup scripts scoped?  It's not clear to me how it's any different than starting up pwsh with a profile...  (unless login shells have more profile association/scoping mechanisms than what pwsh profiles currently do)
+
+Joel Sallow
+Summary -- cmdlets that process strings (e.g., Select-String et al) need to respect culture values when doing comparisons and need parameters to help work with nonlocal cultures
+
+Mati
+Will .NET 5 "Java interoperability" add new features to Powershell down the line?
+
+Edyoung
+Hey Joey, can you move closer to the mic?
+
+Edyoung
+better now(Edyoung asked "Hey Joey, can you move closer to the mic?")
+
+Nicholas M. Getchell
+Just found the the WindowsUpdateProvider but it contains no documentation. It causes errors when running Update-Help. The issue is at https://github.com/MicrosoftDocs/windows-powershell-docs/issues/139
+
+Anonymous
+During the last call there was a question for packaging a script as an application package with all its dependencies... Any idea if this will be supported or if it's on a roadmap at all?
+
+Joel Sallow
+re: releases and such -- are we able to get concurrent releases posted to, for example, chocolatey?
+
+Joel Sallow
+currently the delay is up to like a week or so after release for I think Stevie? currently has it maintained on choco
+
+Mati
+Will .NET 5 "Java interoperability" add new features to Powershell down the line?
+
+Edyoung
+Hey Joey, can you move closer to the mic?
+
+Nicholas M. Getchell
+Just found the the WindowsUpdateProvider but it contains no documentation. It causes errors when running Update-Help. The issue is at https://github.com/MicrosoftDocs/windows-powershell-docs/issues/139
+
+Anonymous
+During the last call there was a question for packaging a script as an application package with all its dependencies... Any idea if this will be supported or if it's on a roadmap at all?
+
+Joel Sallow
+re: releases and such -- are we able to get concurrent releases posted to, for example, chocolatey?
+
+Joel Sallow
+currently the delay is up to like a week or so after release for I think Stevie? currently has it maintained on choco
+
+Joel Sallow
+I don't think a python3 style break is a good idea at all haha, but yeah consistency is sometimes in itself a valuable ideal; but yes, it's not always the best route for everything
+
+Anonymous
+I think Darwin maintains the choco package
+
+Jaykul
+So basically ... no new language features in 7 -- it's officially the "Finally catching up with 5.1" release?
+
+Flavien Michaleczek
+Response about class is the same since 5.0, 5.1, 6.0, 6.1, 6,2 : later. We need a little engagement ... 
+
+Joel Sallow
+PSMore or something like it is something I'd love to take a look at. It needs a more thorough look... but I don't know anyone familiar enough with the formatting subsystems to really have a good look at it, much as I'd like. :(
+
+Anonymous
+Null conditionals FTW!!
+
+Joel Sallow
+I don't think a python3 style break is a good idea at all haha, but yeah consistency is sometimes in itself a valuable ideal; but yes, it's not always the best route for everything
+
+Darwin
+Not liking how new native utilities are only forward-provided (e.g. tar / cur).  Is the new terminal going to be downloadable for other windows distros ;)
+
+Anonymous
+I think Darwin maintains the choco package
+
+Anonymous
+Would be good to have the PS team interacting with Windows Terminal team to make sure they're representing PS adequately in the default settings - like blue bg only for PS 5 and dark bg for PS 6/7.  Also, would like to see PS 6/7 use new Cascadia Code font (or at least Consolas) instead of Courier New.  
+
+Jaykul
+So basically ... no new language features in 7 -- it's officially the "Finally catching up with 5.1" release?
+
+Flavien Michaleczek
+Response about class is the same since 5.0, 5.1, 6.0, 6.1, 6,2 : later. We need a little engagement ... 
+
+Joel Sallow
+PSMore or something like it is something I'd love to take a look at. It needs a more thorough look... but I don't know anyone familiar enough with the formatting subsystems to really have a good look at it, much as I'd like. :(
+
+Anonymous
+Null conditionals FTW!!
+
+Darwin
+Not liking how new native utilities are only forward-provided (e.g. tar / cur).  Is the new terminal going to be downloadable for other windows distros ;)
+
+Anonymous
+Would be good to have the PS team interacting with Windows Terminal team to make sure they're representing PS adequately in the default settings - like blue bg only for PS 5 and dark bg for PS 6/7.  Also, would like to see PS 6/7 use new Cascadia Code font (or at least Consolas) instead of Courier New.  
+
+Michael B.
+will powershell support the ligatures in terminal?
+
+Darwin
+I maintain choco and have a page monitor and usually go for same day  - but have had a miss or two - apologies.
+
+Michael B.
+will powershell support the ligatures in terminal?
+
+Darwin
+I maintain choco and have a page monitor and usually go for same day  - but have had a miss or two - apologies.
+
+Joel Sallow
+Guaranteed Adil is making t shirt designs, I know it.
+
+Kirk Munro
+For folks wanting Joey/Steve to move closer to the mic, note that moving your mousewheel down while hovering over the screen share will turn down the volume, which may explain why you'd like them to move closer to the mic. ;)
+
+Joel Sallow
+re: internal module pipeline -- is there any internal efforts at consistency of MS-designed module quality? Sharepoint PNP is a good example of how it can be great, and there are quite a lot of modules across the board that are... much less nice to work with, unfortunately.  :/
+
+Adil Leghari
+Re: WindowsUpdateProvider , Issue was filed in Feb. 2018
+https://github.com/MicrosoftDocs/PowerShell-Docs/issues/2117
+
+Darwin
+You guys setup all kinds of Linux package feeds, but can't manage a nupkg feed ;)
+
+Michael B.
+v1903 and above only
+
+Kirk Munro
+@Joel Sallow: FormatPx is another one to look at that works downlevel with the existing F&O system -- was written before PS became open source.
+
+Jaykul
+They CANNOT take Windows Terminal downlevel. It's built on ConPTY.
+
+Anonymous
+WT is a UWP app so probably not unless MS is taking UWP downlevel to Win7.
+
+Joel Sallow
+Guaranteed Adil is making t shirt designs, I know it.
+
+Kirk Munro
+For folks wanting Joey/Steve to move closer to the mic, note that moving your mousewheel down while hovering over the screen share will turn down the volume, which may explain why you'd like them to move closer to the mic. ;)
+
+Joel Sallow
+re: internal module pipeline -- is there any internal efforts at consistency of MS-designed module quality? Sharepoint PNP is a good example of how it can be great, and there are quite a lot of modules across the board that are... much less nice to work with, unfortunately.  :/
+
+Adil Leghari
+Re: WindowsUpdateProvider , Issue was filed in Feb. 2018
+https://github.com/MicrosoftDocs/PowerShell-Docs/issues/2117
+
+Darwin
+You guys setup all kinds of Linux package feeds, but can't manage a nupkg feed ;)
+
+Michael B.
+v1903 and above only
+
+Kirk Munro
+@Joel Sallow: FormatPx is another one to look at that works downlevel with the existing F&O system -- was written before PS became open source.
+
+Jaykul
+They CANNOT take Windows Terminal downlevel. It's built on ConPTY.
+
+Anonymous
+WT is a UWP app so probably not unless MS is taking UWP downlevel to Win7.
+
+Joel Sallow
+Azure's little "Az" bumble... ≡ƒÿé
+
+Christoph Bergmeister
+@Jakul The Windows terminal still has some  shared components with conhost.exe, therefore if improvements are made in this area, they will also reach downlevel.
+
+Joel Sallow
+Good to know Kirk, ty! I'm thinking it would be great to reframe the formatting subsystem so that we ditch the whole "formatting objects" idea and move the data to ETS properties or something, such that piping objects to Format-Table etc doesn't actually chew up the useful data and instead just applies an ETS property that the eventual formatter works with to render the data appropriately
+
+Anonymous
+Any documentation for gotchas on moving from AZ PS function v1 to v2?
+
+Joel Sallow
+That way you can safely use Format-Table etc to actually DEFINE the format for your function's output without destroying downstream cmdlets' ability to use the data
+
+Joel Sallow
+Azure's little "Az" bumble... ≡ƒÿé
+
+Christoph Bergmeister
+@Jakul The Windows terminal still has some  shared components with conhost.exe, therefore if improvements are made in this area, they will also reach downlevel.
+
+Joel Sallow
+Good to know Kirk, ty! I'm thinking it would be great to reframe the formatting subsystem so that we ditch the whole "formatting objects" idea and move the data to ETS properties or something, such that piping objects to Format-Table etc doesn't actually chew up the useful data and instead just applies an ETS property that the eventual formatter works with to render the data appropriately
+
+Anonymous
+Any documentation for gotchas on moving from AZ PS function v1 to v2?
+
+Joel Sallow
+That way you can safely use Format-Table etc to actually DEFINE the format for your function's output without destroying downstream cmdlets' ability to use the data
+
+MSAdministrator
+Any support system.directoryservices - not sure if that is your team or windows platform team?
+
+MSAdministrator
+Any support system.directoryservices - not sure if that is your team or windows platform team?
+
+Darwin
+My concern about no downlevel for native stuff extends to the Windows Server PMs enthusiasm for a command line editor
+
+Darwin
+Not very useful if it only does windows 2019 and later(Darwin asked "My concern about no downlevel for native stuff extends to the Windows Server PMs enthusiasm for a command line editor")
+
+MSAdministrator
+yea, for non-windows (macOS, *nix, etc.)
+
+Darwin
+My concern about no downlevel for native stuff extends to the Windows Server PMs enthusiasm for a command line editor
+
+MSAdministrator
+yea, for non-windows (macOS, *nix, etc.)
+
+Joey Aiello
+https://github.com/dotnet/corefx/issues/24843(MSAdministrator asked "yea, for non-windows (macOS, *nix, etc.)")
+
+Anonymous
+PSReadline MenuComplete option doesn't exist on Linux.
+
+Anonymous
+PSReadline MenuComplete option doesn't exist on Linux.
+
+Nicholas M. Getchell
+Thanks PS Team
+
+Anonymous
+thx!
+
+Joel Sallow
+thank y'all!
+
+Flop
+Hi! where do I start learning powershell for Cyber Security ?
+
+Anonymous
+Hi! where do I start learning powershell for Cyber Security ?
+
+Flop
+Hi! where do I start learning powershell for Cyber Security ?
+
+Flop
+kk(Flop asked "Hi! where do I start learning powershell for Cyber Security ?")
+
