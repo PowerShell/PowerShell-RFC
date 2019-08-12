@@ -73,7 +73,7 @@ PowerShell 7 does not update configuration values from modified configuration fi
 
 ### Settings locations
 
-`PowerShell 7` settings are grouped into `Policy settings` and `Regular settings`.
+`PowerShell 7` settings are grouped into `Policy settings` and `Non-policy settings`.
 Regular settings are normal configuration settings.
 Regular settings can be treated as default and recommended values.
 Policy settings have a higher precedence than regular settings.
