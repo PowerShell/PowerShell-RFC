@@ -1,7 +1,7 @@
 ---
-RFC: RFCXXXX
+RFC: RFC0042
 Author: Travis Plunk
-Status: Draft
+Status: Final
 SupercededBy: N/A
 Version: 1.0
 Area: cmdlets
@@ -85,15 +85,3 @@ https://code.google.com/p/stringencoders/wiki/WebSafeBase64
 #### Something to compose the MIME message
 
 For GMail, you have to pass the MIME message.
-
----------------
-
-## PowerShell Committee Decision
-
-### Voting Results
-
-### Majority Decision
-
-### Minority Decision
-
-N/A
