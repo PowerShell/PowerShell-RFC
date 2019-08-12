@@ -161,7 +161,7 @@ A `-Name` parameter allows for setting a friendly name.
 
 A `-Priority` parameter allows setting the search order of repositories.
 A lower value has higher priority.
-If not specified, the default value is 25.
+If not specified, the default value is 50.
 PSGallery will have a default value of 50.
 
 `Get-PSResourceRepository` will list out the registered repositories.
@@ -241,10 +241,8 @@ Default is `CurrentUser`.
 
 `Install-Module` cmdlet will be retained for compatibility with v2.
 
-A change from v2 is that installed modules use the full semver (if used) of
-the module, so PSReadLine would be in a folder called `2.0.0-beta4` instead of
-just `2.0.0` which resolves issues of attempting to overwrite assemblies currently
-loaded on Windows.
+v3 will continue to use the versioning folder format as v2 in that it will be
+Major.Minor.Patch and not contain the semver prerelease label.
 
 ### Dependencies and version management
 
@@ -261,6 +259,7 @@ Install-PSResource -RequiredResources @{
     version = "[4.4.2,4.7.0]"
     repository = "https://www.powershellgallery.com"
     credential = $cred
+    allowPrerelease = $true
   }
 }
 ```
@@ -269,20 +268,19 @@ The json format will be the same as if this hashtable is passed to `ConvertTo-Js
 
 ```json
 {
+  "Configuration": "[1.3.1,2.0)",
   "Pester": {
     "version": "[4.4.2,4.7.0]",
     "credential": null,
-    "repository": "https://www.powershellgallery.com"
-  },
-  "Configuration": "[1.3.1,2.0)"
+    "repository": "https://www.powershellgallery.com",
+    "allowPrerelease": true
+  }
 }
 ```
 
 >[!NOTE]
->Credentials management will be using an upcoming RFC for generalized
->credential management.  Not sure how to make that work in json other
->than requiring json to have credential as a json object but that means
->password/secret is in clear text.
+>Credentials management will be using [Secrets Management RFC](https://github.com/PowerShell/PowerShell-RFC/pull/208)
+> for generalized credential management.
 
 The `repository` property can be the name of the registered repository or the URL
 to a repository.
@@ -290,9 +288,6 @@ If no `repository` is specified, it will use the `default` repository.
 
 The older `System.Version` four part version type will be supported to retain
 compatibility with existing published modules using that format.
-
-Due to the differences between semver and `System.Version`, we may have to keep
-the two distinct.
 
 If the resource requires dependencies that are not already installed, then
 a prompt will appear _before anything is installed_, listing all the resources
@@ -415,4 +410,12 @@ introducing a breaking change:
 
 - Enterprise management of local cache
 
+- Full semver support won't happen until there is a semver type in .NET
+
+- Consider using a merkle tree to validate modules
+
 PowerShell module loading needs to be updated to [understand semver](https://github.com/PowerShell/PowerShell/issues/2983).
+
+Instead of `Find-PSResource`, call it `Find-Resource`.
+Context may be understandable since the cmdlet comes from PowerShellGet, but
+`Resource` as a noun is pretty general.
