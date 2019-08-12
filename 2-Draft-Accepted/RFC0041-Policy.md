@@ -1,7 +1,7 @@
 ---
-RFC:  RFCnnnn
-Author:  travisez13
-Status:  Draft
+RFC: RFC0041
+Author: travisez13
+Status: Draft-Accepted
 SupercededBy:  N/A
 Version: 0.1
 Area: Engine
