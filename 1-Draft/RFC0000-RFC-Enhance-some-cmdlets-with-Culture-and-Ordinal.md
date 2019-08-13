@@ -20,6 +20,7 @@ Also sometimes PowerShell users need to do non-linguistic (Invariant culture) an
 Such scenarios would be communicating with localized applications and searching in log files.
 
 Users want to get performance comparable to utilites like `grep`, `egrep` and `ripgrep`.
+In the RFC context it is achieved by `Ordinal` (optionally `SimpelCaseFolding`) string comparison.
 
 ## Specification
 
@@ -52,43 +53,10 @@ Select-String -Culture ru-RU -CaseSensetive         # lingustic as expected for 
 Select-String -Culture ru-RU                        # lingustic
 
 Select-String -Comparison Ordinal -CaseSensetive    # non-lingustic
-Select-String -Comparison Ordinal                   # lingustic - OrdinalIgnoreCase
+Select-String -Comparison Ordinal                   # lingustic - corresponds to `OrdinalIgnoreCase`
 Select-String -Comparison Invariant -CaseSensetive  # lingustic
-Select-String -Comparison Invariant                 # lingustic - InvariantCultureIgnoreCase
+Select-String -Comparison Invariant                 # lingustic - corresponds to `InvariantCultureIgnoreCase`
 Select-String -Comparison SimpleCaseFolding         # non-lingustic
-```
-
-#### `FastMatch` parameter
-
-Add `FastMatch` parameter to `Select-String`.
-
-The new parameter will invoke a simple Regex engine.
-
-The engine is non-linguistic and based on SimpleCaseFolding like `ripgrep` utility.
-
-The engine implements limited subset of Regex standard - "^","$",".","*","+","\d","\r","\n","\t","\w" without backtracking.
-
-It is expected that the engine will be 5-10 times faster than full-featured .Net Regex.
-
-##### Samples
-
-```powershell
-Select-String -Pattern "^Error.+count" -SimpleMatch      # Old. Linguistic - current default is CurrentCulture
-Select-String -FastMatch "^Error.+count"                 # New. Non-linguistic - based on SimpleCaseFolding. Very fast.
-
-Select-String -Pattern "Error" -SimpleMatch | Select-String -Pattern "^Error.+count"   # Old.
-Select-String -FastMatch "^Error (.+) count" -Pattern "<Full Regex>"   # New. First do fast search a candidate string in large file
-                                                                       # then parse it with full-featured Regex
-```
-
-#### `AsByteStream` parameter
-
-A separate problem is that the `grep` / `ripgrep` utilities have an option to interpret the input stream from the file as byte ("binary" in their terms) which can be useful. `FileSystemProvider` offers us the `AsByteStream` parameter, which can also be useful here.
-This parameter has been separated from the `Encoding` parameter. This parameter is used in Select-String but not in other above mentioned cmdlets. Perhaps we should unify the cmdlets to use `Encoding` and `A`sByteStream` wherever `Path` / `LiteralPath` parameters are used.
-
-```powershell
-Select-String -Path source.txt -AsByteStream -SimpleMatch "qwerty"
-Select-String -Path source.txt -Encoding Utf8 -SimpleMatch "qwerty"
 ```
 
 # Alternate Proposal
@@ -99,3 +67,48 @@ Use C# `CultureInfo` type for `Culture` parameter and introduce `Comparison` par
 That means deprecating `CaseSensitive` parameter. It is not removed for backward compatibility but hided.
 
 With the proposal developers use the same API for both script and C# development without confusing.
+
+# Additional considerations
+
+Proposals below is for another RFC and presents here only for information.
+
+## Additional parameters
+
+To get more performance improvements we could add follow two parameters:
+
+### `FastMatch` parameter
+
+Add `FastMatch` parameter to `Select-String`.
+
+The new parameter will invoke a simple Regex engine.
+
+The engine is non-linguistic and based on SimpleCaseFolding like `ripgrep` utility.
+
+The engine implements limited subset of Regex standard - "^","$",".","*","+","\d","\r","\n","\t","\w" without backtracking.
+
+It is expected that the engine will be 5-10 times faster than full-featured .Net Core Regex.
+
+#### Samples
+
+```powershell
+Select-String -Pattern "^Error.+count" -SimpleMatch      # Old. Linguistic - current default is CurrentCulture
+Select-String -FastMatch "^Error.+count"                 # New. Non-linguistic - based on SimpleCaseFolding. Very fast.
+
+Select-String -Pattern "Error" -SimpleMatch | Select-String -Pattern "^Error.+count"   # Old.
+Select-String -FastMatch "^Error (.+) count" -Pattern "<Full Regex>"   # New. First do fast search a candidate string in large file
+                                                                       # then parse it with full-featured Regex
+```
+
+### `AsByteStream` parameter
+
+A separate problem is that the `grep` / `ripgrep` utilities have an option to interpret the input stream from the file as byte ("binary" in their terms) which can be useful. `FileSystemProvider` offers us the `AsByteStream` parameter, which can also be useful here.
+This parameter has been separated from the `Encoding` parameter. This parameter is used in Select-String but not in other above mentioned cmdlets. Perhaps we should unify the cmdlets to use `Encoding` and `A`sByteStream` wherever `Path` / `LiteralPath` parameters are used.
+
+It is expected that we could get performance improvements due to the exclusion of transcoding.
+
+#### Samples
+
+```powershell
+Select-String -Path source.txt -AsByteStream -SimpleMatch "qwerty"
+Select-String -Path source.txt -Encoding Utf8 -SimpleMatch "qwerty"
+```
