@@ -3,7 +3,7 @@ RFC: RFCXXXX
 Author: Gael Colas
 Status: Draft
 SupersededBy: N/A
-Version: 0.8
+Version: 0.9
 Area: Microsoft.PowerShell.DesiredStateConfiguration
 ---
 
@@ -45,7 +45,7 @@ Specifically, we already know some features that **will not be supported** in th
 
 #### Syntax
 
-As we don't plan on changing the usage, plus the functions is currently not available outside of PowerShell, and there is currently no command for PowerShell 7+, there is no need to change the Syntax found in Windows PowerShell 5.1.
+As we don't plan on changing the usage much, plus the functions is currently not available outside of PowerShell, and there is currently no command for PowerShell 7+, so there is no need to change the Syntax found in Windows PowerShell 5.1.
 
 The increment in PowerShell [MAJOR](https://semver.org/#spec-item-8)'s version field is enough to indicate the change of public API (as per [Semantic Versioning](https://semver.org/)).
 
@@ -58,7 +58,7 @@ Invoke-DscResource [-Name] <string> [-Method] <string> -ModuleName <ModuleSpecif
 We aim at enabling existing scripts using `Invoke-DscResource`, written for Windows PowerShell 5.1, to "just work" in PowerShell 7+, but **in the current user context** when the **PsDscRunAsCredential** DSC common property is **not** supplied.
 
 ```PowerShell
-Invoke-DscResource -Name xFile -ModuleName @{ModuleName='PSDscResources';ModuleVersion='2.12.0.0'} -Method 'Set' -Properties @{
+Invoke-DscResource -Name Script -ModuleName @{ModuleName='PSDscResources';ModuleVersion='2.12.0.0'} -Method 'Set' -Property @{
     GetScript  = '<# My Get ScriptBlock #>'
     SetScript  = '<# My Set ScriptBlock #>'
     TestScript = '<# My Test ScriptBlock #>'
@@ -67,16 +67,29 @@ Invoke-DscResource -Name xFile -ModuleName @{ModuleName='PSDscResources';ModuleV
 
 This should run in the current session state where the command is invoked.
 
-#### PsDscRunAsCredential: New Process as different user
+#### PsDscRunAsCredential: throw exception if supplied
 
-It's the user's responsibility to either leverage [PsDscRunAsCredential](https://docs.microsoft.com/en-us/powershell/dsc/configurations/runasuser) to execute the resource in a user context that has the required privilege, or wrapping the call in a user context that runs as system (such as using [Invoke-CommandAs](https://www.powershellgallery.com/packages/Invoke-CommandAs) by Mark Kellerman).
+After more discussions (with @Jaykul & @TravisEz13) and thinking this through,
+it is **not** right to build the support for PsDscRunAsCredential in this command
+(more on why later in this RFC).
 
-`PsDscRunAsCredential` is a recommended practice to implement [least-privilege Administrative Models](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/implementing-least-privilege-administrative-models).
+It's the user's responsibility to wrap the call in the required user context
+(such as using [Invoke-CommandAs](https://www.powershellgallery.com/packages/Invoke-CommandAs)
+by Mark Kellerman).
 
-Since we're now bypassing the LCM, we need to provide the feature in the `Invoke-DscResource`.
+Although `PsDscRunAsCredential` is a recommended practice for DSC in WMF 5.1 to
+implement [least-privilege Administrative Models](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/implementing-least-privilege-administrative-models),
+it will **not** be supported as part of this implementation of `Invoke-DscResource`.
 
-The Parameter will be extracted from the `-Properties` argument, and used to invoke the Resource in a process running as that user.
-It will be equivalent as (from within the `Invoke-DscResource` command point of view):
+Instead, we'll aim at providing an example function in a script published
+on the PowerShell Gallery to proxy this command, so that it handles `PsDscRunAsCredential`
+to invoke the resource in a different user context, using PowerShell Jobs.
+
+If the key `PsDscRunAsCredential` is to be found amongst the keys of the
+`-Properties` parameter, then `Invoke-DscResource` will throw an exception,
+unless the `Invoke-DscResource` is invoked with the (new) switch parameter `-IgnorePsDscRunAsCredential`,
+in which case it will invoke the DSC Resource method after stripping
+the `PsDscRunAsCredential` key/value pair from the properties.
 
 So calling:
 
@@ -90,31 +103,113 @@ Invoke-DscResource -Name Script -ModuleName @{ModuleName='PSDscResources';Module
 
 ```
 
-What will be executed will be equivalent (in terms of scope) to:
-
-```PowerShell
-Start-Job -Credential $Credential -ScriptBlock {
-    Invoke-DscResource -Name Script -ModuleName @{ModuleName='PSDscResources';ModuleVersion='2.12.0.0'} -Method 'Set' -Properties @{
-        GetScript  = '<# My Get ScriptBlock #>'
-        SetScript  = '<# My Set ScriptBlock #>'
-        TestScript = '<# My Test ScriptBlock #>'
-    } -Verbose
-}
-```
+Will **throw an exception**, because of the `PsDscRunAsCredential` key.
 
 > NOTES: We're avoiding to take dependencies on other technologies that would require extra configurations or permissions (such as remoting), or would not be available on other OSes.
 
 #### Independent and isolated execution
 
-`Invoke-DscResource` in PowerShell 7+ will not be aware of other instances being executed, and as such it will be possible to execute several instances in parallel when isolated in their own runspaces, or run in parallel with the LCM.
+`Invoke-DscResource` in PowerShell 7+ will not be aware of other instances being executed, and as such it will be possible to execute several instances in parallel when isolated in their own runspace, or run in parallel with the LCM.
 
 This means that it enables concurrent execution, but also risks conflict if two conflicting resources are run simultaneously.
 
 It is up to the user to sequence the execution safely, or to create appropriate resources.
 
+#### Output & Types
+
+##### Get
+
+The `GET` function invoked via the LCM (WMF 5.1) returns a CIM representation of a hashtable,
+and will be a `hashtable` for `Invoke-DscResource` in PS7+.
+
+##### Test
+
+The `TEST` function in WMF 5.1 returns a CIM object, with a `[bool]` NoteProperty
+`InDesiredState` that has the boolean result of the test.
+
+```PowerShell
+InDesiredState
+--------------
+True
+```
+
+In PS7+, `Invoke-DscResource -Method Test ...` will return an object (not CIM)
+that has the same `InDesiredState` Property.
+
+##### Set
+
+The `SET` function in WMF 5.1 returns a CIM object, with a `[bool]` NoteProperty
+`RebootRequired`, corresponding whether the `$global:DSCMachineStatus` has been
+set to 1.
+
+```PowerShell
+RebootRequired
+--------------
+False
+```
+
+In PS7+, `Invoke-DscResource -Method Set ...` will return an object (not CIM) that
+has the same `RebootRequired` Property, based on whether `$global:DSCMachineStatus`
+has been set to 1.
+
 # Out of Scope for initial work & other notes
 
 We're aware that some extra work or feature could be solved at the same time, but we're trying to have the MVP (minimum viable product) out as soon as possible, to help addressing the points raised in the [Motivation](#Motivation) section.
+
+## DSC Resource Parameters & Supported Types
+
+As the `Invoke-DscResource` does not need to serialize and deserialize parameters
+using CIM (via MOF objects), it is not limiting the types it can accept for the
+DSC Resource functions (Get, Set, Test).
+
+In simple words, a resource could in theory accept an `[hashtable]` as a parameter
+type, instead of a `[Microsoft.Management.Infrastructure.CimInstance[]]`.
+
+The downside here is that it's not backward compatible, for this reason, we
+can't recommend any other type to be used for now.
+
+Also, not all types are easily serializable and deserializable, so be careful
+when the Configuration Data has to be passed to the resource invocation over
+the network.
+
+## PsDscRunAsCredential Support not built-in
+
+Here's why we've decided to not handle the `PsDscRunAsCredential` from the `Invoke-DscResource`
+advanced function, and instead will try to publish a wrapper on the PS Gallery.
+
+To be truly cross platform and support invoking a resource's method under another
+credential, Linux/Unix OSes creates another process under that user. In Windows
+it is also possible to Impersonate a user, using `Win32.AdvApi32` for instance.
+
+In WMF 5.1, the LCM is in charge of this. But in PowerShell 7+, the only cross platform
+way to do this is by using PowerShell Jobs, which are relatively slow, heavy, and
+a bit more tricky to troubleshoot, as they need a way to serialize and deserialize
+objects.
+
+In PowerShell, executing commands as job returns what we informally call "dead objects":
+the object after it was serialized and then deserialized, pertaining most of its
+properties but not an "live" object that still has its methods available.
+
+Here, we could have `Invoke-DscResource` to always use Jobs, but that would severely
+impact performance, and would make troubleshooting difficult.
+
+We could, as initially thought, handle both case: directly as the current user when
+`PsDscRunAsCredential` is not specified, and as Job when specified, but it would
+then have two different behavior, depending on the `-Properties` value (and not
+the command's actual signature), obfuscating the potential issue to the user.
+
+In the end, this is very much an Agent feature, and each agent author may want to
+(and already do) support this themselves, so it's unnecessary code and complexity
+for them.
+
+For those reasons, and with the possibility that an elegant or standardized solution
+emerges from the community, we believe it's best to leave it outside the scope of
+the `Invoke-DscResource` MVP.
+
+In order to enable existing users to support the same behavior than the LCM,
+we will try to provide, separately, a function that wraps around this `Invoke-DscResource`
+and creates a job when `PsRunAsCredential` is specified, but this won't be part
+of the `PSDesiredStateConfiguration` module work.
 
 ## Invoke-DscResource will not clear the Builtin Provider Cache
 
