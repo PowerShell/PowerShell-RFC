@@ -86,7 +86,7 @@ on the PowerShell Gallery to proxy this command, so that it handles `PsDscRunAsC
 to invoke the resource in a different user context, using PowerShell Jobs.
 
 If the key `PsDscRunAsCredential` is to be found amongst the keys of the
-`-Properties` parameter, then `Invoke-DscResource` will throw an exception,
+`-Property` parameter, then `Invoke-DscResource` will throw an exception,
 unless the `Invoke-DscResource` is invoked with the (new) switch parameter `-IgnorePsDscRunAsCredential`,
 in which case it will invoke the DSC Resource method after stripping
 the `PsDscRunAsCredential` key/value pair from the properties.
