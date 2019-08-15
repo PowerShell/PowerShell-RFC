@@ -1,0 +1,139 @@
+Joey Aiello
+We'll be getting started in just a couple minutes!
+
+Anonymous
+We can hear you now
+
+JB Lewis (@AspenForester)
+I can hear you now!
+
+Ben Gelens 
+Yes
+
+Ayan Mullick
+Will the 'Foerach -Parallel' feature be available in PowerShell 7 ?
+
+DarwinJS
+The US Patent process leans a lot on sales of Patent Pending products for juding patent worthiness - so a similar pattern to what you are proposing.
+
+DarwinJS
+The US Patent process leans a lot on sales of Patent Pending products for juding patent worthiness - so a similar pattern to what you are proposing.
+
+Ayan Mullick
+Will the 'Foerach -Parallel' feature be available in PowerShell 7 ?
+
+Joey Aiello
+Barring rejection of the RFC, that's our current plan, yes(Ayan Mullick asked "Will the 'Foerach -Parallel' feature be available in PowerShell 7 ?")
+
+MaxT
+Any voting for the Experimental Features to be implemented?
+
+MaxT
+Any voting for the Experimental Features to be implemented?
+
+Justin Grote @JustinWGrote
+Comment: Making VSCode Debug Experience Stable since it is now the official "default" editor *is* a feature :)
+
+Justin Grote @JustinWGrote
+Comment: Making VSCode Debug Experience Stable since it is now the official "default" editor *is* a feature :)
+
+Joey Aiello
+Agreed! :) (Justin Grote @JustinWGrote asked "Comment: Making VSCode Debug Experience Stable since it is now the official "default" editor *is* a feature :)")
+
+Eric
+Any future for VS code running on Ipads for travel needs? Is it on a road map?
+
+Eric
+Any future for VS code running on Ipads for travel needs? Is it on a road map?
+
+Tyler Leonhardt (POWERSHELL)
+https://github.com/Microsoft/vscode/issues/70764
+
+Upvote this!(Eric asked "Any future for VS code running on Ipads for travel needs? Is it on a road map?")
+
+Tyler Leonhardt (POWERSHELL)
+Maybe look at coder.com in the meantime which supports the PowerShell extension.
+
+The vscode team is working on a similar thing to coder.com but that's not ready yet(Eric asked "Any future for VS code running on Ipads for travel needs? Is it on a road map?")
+
+MaxT
+Who's that guiy!!
+
+Anonymous
+Talked about DSC compilation & Get-DscResource for PS7?
+
+Anonymous
+Any roadmap for Cloud Shell?
+
+Ryan
+Regarding the RFC Process, this currently feels like theres some holes with the template - can you review / add Comments in Issue 211 / PR 212
+
+Ayan Mullick
+Is it feasible to make circuit PowerShell like AdaFruit's CircuitPython for working on IoT?
+
+andreyv
+Hi, what about adding ^ operator, like 2^2 = 4; or 2**2, whatever )
+
+did audio cut out?
+back now. must've been on my end
+
+Tyler Leonhardt (POWERSHELL)
+welcome back!(did audio cut out? asked "back now. must've been on my end")
+
+Anonymous
+Talked about DSC compilation & Get-DscResource for PS7?
+
+Sean Wheeler
+Call for Community contributors to write/update docs for the v7 features they write
+
+Tyler Leonhardt (POWERSHELL)
+test 
+
+Anonymous
+Any roadmap for Cloud Shell?
+
+Ryan
+Regarding the RFC Process, this currently feels like theres some holes with the template - can you review / add Comments in Issue 211 / PR 212
+
+Thomas Nieto
+If the module does not adhere to NuGet version normalization nuget.exe will create a version mismatch between the package and psd1 version. PowerShellGet uses the package version number to create the module version folder not psd1. This causes Import-Module to throw an error. 
+
+Ayan Mullick
+Is it feasible to make circuit PowerShell like AdaFruit's CircuitPython for working on IoT?
+
+Joey Aiello
+If you haven't already, check out https://github.com/PowerShell/PowerShell-IoT(Ayan Mullick asked "Is it feasible to make circuit PowerShell like AdaFruit's CircuitPython for working on IoT?")
+
+Ayan Mullick
+You could run code on the circuit board directly from the IDE without having to compile it first.
+
+Joel Sallow
+^ operator is being used in C# for their Index/Range types that are coming up. Not sure it's a great idea to go against that ourselves.
+
+andreyv
+Hi, what about adding ^ operator, like 2^2 = 4; or 2**2, whatever )
+
+michael b.
+[math]::pow()
+
+Thomas Nieto
+If the module does not adhere to NuGet version normalization nuget.exe will create a version mismatch between the package and psd1 version. PowerShellGet uses the package version number to create the module version folder not psd1. This causes Import-Module to throw an error. 
+
+Sean Wheeler
+Call for Community contributors to write/update docs for the v7 features they write
+
+Ayan Mullick
+I'll check out link . Thanks
+
+Ayan Mullick
+You could run code on the circuit board directly from the IDE without having to compile it first.
+
+michael b.
+[math]::pow()
+
+Ayan Mullick
+I'll check out link . Thanks
+
+Joel Sallow
+^ operator is being used in C# for their Index/Range types that are coming up. Not sure it's a great idea to go against that ourselves.
+
