@@ -195,7 +195,7 @@ impact performance, and would make troubleshooting difficult.
 
 We could, as initially thought, handle both case: directly as the current user when
 `PsDscRunAsCredential` is not specified, and as Job when specified, but it would
-then have two different behavior, depending on the `-Properties` value (and not
+then have two different behavior, depending on the `-Property` value (and not
 the command's actual signature), obfuscating the potential issue to the user.
 
 In the end, this is very much an Agent feature, and each agent author may want to
