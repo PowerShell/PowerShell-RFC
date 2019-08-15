@@ -94,7 +94,7 @@ the `PsDscRunAsCredential` key/value pair from the properties.
 So calling:
 
 ```PowerShell
-Invoke-DscResource -Name Script -ModuleName @{ModuleName='PSDscResources';ModuleVersion='2.12.0.0'} -Method 'Set' -Properties @{
+Invoke-DscResource -Name Script -ModuleName @{ModuleName='PSDscResources';ModuleVersion='2.12.0.0'} -Method 'Set' -Property @{
     GetScript  = '<# My Get ScriptBlock #>'
     SetScript  = '<# My Set ScriptBlock #>'
     TestScript = '<# My Test ScriptBlock #>'
