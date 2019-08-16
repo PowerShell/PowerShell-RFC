@@ -197,3 +197,11 @@ In this release, the following are non-goals that can be addressed in the future
 - C# API to retrieve secrets for C# based modules
 - Delegation support
 - Local vault requiring to be unlocked automatically
+- Ubiquitous `-Secret` parameter taking a hashtable to automatically populate
+  a cmdlet's parameter taking a secret from the vault:
+
+```powershell
+Invoke-WebRequest -Secret @{Credential="GitHubCred"}
+# this retrieves the secret called GitHubCred and passes it to the `-Credential`
+# parameter of Invoke-WebRequest
+```
