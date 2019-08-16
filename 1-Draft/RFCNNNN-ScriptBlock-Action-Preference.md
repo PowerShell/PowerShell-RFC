@@ -9,7 +9,7 @@ Comments Due: September 15, 2019
 Plan to implement: Yes
 ---
 
-# ScriptBlocks to handle non-terminating message processing
+# ScriptBlocks to handle error and message processing
 
 @jpsnover suggested in
 [PowerShell Issue #6010](https://github.com/PowerShell/PowerShell/issues/6010)
