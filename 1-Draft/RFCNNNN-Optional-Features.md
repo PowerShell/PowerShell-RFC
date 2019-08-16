@@ -3,7 +3,7 @@ RFC: RFCnnnn
 Author: Kirk Munro
 Status: Draft
 SupercededBy: 
-Version: 1.0
+Version: 0.1
 Area: Engine
 Comments Due: September 15, 2019
 Plan to implement: Yes
@@ -65,15 +65,32 @@ $manifest | Get-Content
 #
 # <snip>
 #
-# # Optional features enabled in this module.
-# OptionalFeatures = @(
-#     'OptionalFeature1'
-# )
+# # Private data to pass to the module specified in RootModule/ModuleToProcess.
+# # This may also contain a PSData hashtable with additional module metadata
+# # used by PowerShell.
+# PrivateData = @{
 #
-# # Optional features disabled in this module.
-# DisabledOptionalFeatures = @(
-#     'OptionalFeature2'
-# )
+#     <snip>
+#
+#     PSData = @{
+#
+#         # Optional features enabled in this module.
+#         OptionalFeatures = @(
+#             'OptionalFeature1'
+#         )
+#
+#         # Optional features disabled in this module.
+#         DisabledOptionalFeatures = @(
+#             'OptionalFeature2'
+#         )
+#
+#         <snip>
+#
+#     } # End of PSData hashtable
+#
+#     <snip>
+#
+# } # End of PrivateData hashtable
 #
 # }
 
@@ -178,8 +195,10 @@ This parameter would enable specific optional features in the new module
 manifest that is generated.
 
 The values provided to this parameter would be added to a module manifest under
-a new `OptionalFeatures` key. When the module is loaded, any optional features
-named in this key will be enabled in the module scope.
+a new `OptionalFeatures` key. This key will be part of `PSData` to maintain
+backwards compatibility. When the module is loaded in a version of PowerShell
+that supports optional features, any optional features named in this key will
+be enabled in the module scope.
 
 A terminating error is generated if the same optional feature name is used
 twice in the collection passed into the `-OptionalFeatures` parameter.
@@ -190,8 +209,10 @@ This parameter would disable specific optional features in the new module
 manifest that is generated.
 
 The values provided to this parameter would be added to a module manifest under
-a new `DisabledOptionalFeatures` key. When the module is loaded, any optional
-features named in this key will be disabled in the module scope.
+a new `DisabledOptionalFeatures` key. This key will be part of `PSData` to
+maintain backwards compatibility. When the module is loaded in a version of
+PowerShell that supports optional features, any optional features named in this
+key will be disabled in the module scope.
 
 Allowing a feature to be disabled within a module is necessary if an older
 module does not support a newer optional feature yet, and the module author
