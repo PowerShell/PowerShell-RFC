@@ -30,8 +30,8 @@ A new `-Parallel` parameter set will be added to the existing ForEach-Object cmd
 
 - `-AsJob` parameter switch indicates that a job is returned, which represents the command running asynchronously
 
-The 'ForEach-Object -Parallel' command will return only after all piped input have been processed.
-Unless the '-AsJob' switch is used, in which case a job object is returned immediately that monitors the ongoing execution state and collects generated data.
+The `ForEach-Object -Parallel` command will stream output to the console until all piped input has been processed.
+If the `-AsJob` switch is used then a job object is returned and remains in the running state while input is being processed.
 The returned job object can be used with all PowerShell cmdlets that manipulate jobs.
 
 ### Implementation details
@@ -56,8 +56,10 @@ If the passed in variable is a value type, a copy of the value is passed to the 
 If the passed in variable is a reference type, the reference is passed and each running script block can modify it.
 Since the script blocks are running in different threads, modifying a reference type that is not thread safe will result in undefined behavior.  
 
-Script block variables will be special cased because they have runspace affinity.
-Therefore script block variables will not be passed by reference and instead a new script block object instance will be created from the original script block variable Ast (abstract syntax tree).
+ScriptBlock variables are a special case because they have runspace affinity, and cannot be safely passed to other runspace script blocks for parallel execution.
+Consequently, an error will be generated if a ScriptBlock object is directly passed through the input pipeline, or if passed to the parallel script block via the `$using:` directive.
+However, it is still possible to pass in a ScriptBlock object indirectly such as through an object method returning a ScriptBlock.
+This is not recommended and will result in undefined behavior.
 
 ### Exceptions
 
