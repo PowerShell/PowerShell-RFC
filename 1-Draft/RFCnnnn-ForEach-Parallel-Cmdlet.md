@@ -128,6 +128,15 @@ $logResults = ForEach-Object -InputObject $computerNames -Parallel {
 }
 ```
 
+```powershell
+$threadSafeDictionary = [System.Collections.Concurrent.ConcurrentDictionary[string,object]]::new()
+Get-Process | ForEach-Object -Parallel {
+    # This works because the passed in object is a concurrent dictionary that is thread safe
+    $dict = $using:threadSafeDictionary
+    $dict.TryAdd($_.ProcessName, $_)
+}
+```
+
 ### Unsupported scenarios
 
 ```powershell
@@ -143,10 +152,15 @@ $computers | ForEach-Object -Parallel {
 # Passed in reference variables should not be assigned to
 $MyLogs = @()
 $computers | ForEach-Object -Parallel {
-    # Not thread safe, undefined behavior
-    # Cannot assign to using variable
+    # Throws error, cannot assign to using variable
     $using:MyLogs += Get-Logs -ComputerName $_
 }
+At line:3 char:5
++     $using:MyLogs += Get-Logs -ComputerName $_
++     ~~~~~~~~~~~~~
+The assignment expression is not valid. The input to an assignment operator must be an object that is able to accept assignments, such as a variable or a property.
++ CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
++ FullyQualifiedErrorId : InvalidLeftHandSide
 
 $dict = [System.Collections.Generic.Dictionary[string,object]]::New()
 $computers | ForEach-Object -Parallel {
