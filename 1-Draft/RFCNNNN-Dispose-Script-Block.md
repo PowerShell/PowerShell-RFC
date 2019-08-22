@@ -35,6 +35,9 @@ I want to be able to ensure that any necessary logging or other necessary admini
 
 A `dispose{}` block is required for these use cases.
 
+`IDisposable` can be implemented by PowerShell classes, but at the time of writing utilizing a PS-based class for a cmdlet is not feasible.
+There are outstanding issues with PowerShell classes that complicate the possibility of creating a cmdlet with them, especially when working with modules.
+
 ### Execution
 
 The `dispose{}` block will execute:
@@ -49,6 +52,7 @@ The `dispose{}` block _does not_ guarantee output, but neither does it prevent i
 
 - If output is received from the `dispose{}` block during normal command operation, it will be sent along the pipeline as per usual.
 - If output is received from the `dispose{}` block during a halting pipeline, it will be **discarded**.
+    - A halting pipeline may occur either due to a normal terminating error being thrown from within the pipeline, or from a Ctrl+C / pipeline stop.
 
 As a result, documentation should advise that `dispose{}` is _not intended_ for any standard output and the limitations of doing so.
 Additionally, all other PowerShell data streams are accessible from `dispose{}`, meaning there is no issue using any of the following streams from within `dispose{}`:
@@ -58,6 +62,8 @@ Additionally, all other PowerShell data streams are accessible from `dispose{}`,
 - Verbose
 - Debug
 - Information
+
+#### Error States
 
 Terminating errors can also be thrown from a `dispose{}` block, which will skip the invocation of the rest of that `dispose{}` block, without preventing other `dispose{}` blocks from being executed.
 
