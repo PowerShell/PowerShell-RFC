@@ -9,9 +9,15 @@ Area: Microsoft.PowerShell.DesiredStateConfiguration
 
 # Invoke-DscResource
 
-Add cross-platform support for `Invoke-DscResource` in PowerShell 7+ without dependency on LCM and WMI.
+Add cross-platform support for `Invoke-DscResource` in PowerShell 7+ without dependency
+on the [Local Configuration Manager](https://docs.microsoft.com/en-us/powershell/dsc/managing-nodes/metaconfig)
+(LCM), the
+[Common Information Model (CIM) or Windows Management Instrumentation (WMI)](https://devblogs.microsoft.com/scripting/should-i-use-cim-or-wmi-with-windows-powershell/).
 
-This RFC addresses the need to leverage the DSC ecosystem of resources from newer versions of PowerShell, the way to decouple the execution of resources from the LCM and CIM/WMI, and the user experience from a consumer and solution vendor/integrator point of view.
+This RFC addresses the need to leverage the DSC ecosystem of resources from newer
+versions of PowerShell, the way to decouple the execution of resources from the
+LCM and CIM/WMI, and the user experience from a consumer and solution vendor/integrator
+point of view.
 
 ## Motivation
 
@@ -55,7 +61,9 @@ Invoke-DscResource [-Name] <string> [-Method] <string> -ModuleName <ModuleSpecif
 
 #### Default Execution Scope: Current runspace
 
-We aim at enabling existing scripts using `Invoke-DscResource`, written for Windows PowerShell 5.1, to "just work" in PowerShell 7+, but **in the current user context** when the **PsDscRunAsCredential** DSC common property is **not** supplied.
+We aim at enabling existing scripts using `Invoke-DscResource`, written for Windows
+PowerShell 5.1, to "just work" in PowerShell 7+, but they will run resources
+**in the current user context**.
 
 ```PowerShell
 Invoke-DscResource -Name Script -ModuleName @{ModuleName='PSDscResources';ModuleVersion='2.12.0.0'} -Method 'Set' -Property @{
@@ -140,7 +148,7 @@ that has the same `InDesiredState` Property.
 
 The `SET` function in WMF 5.1 returns a CIM object, with a `[bool]` NoteProperty
 `RebootRequired`, corresponding whether the `$global:DSCMachineStatus` has been
-set to 1.
+set to 1 in the resource.
 
 ```PowerShell
 RebootRequired
@@ -150,7 +158,15 @@ False
 
 In PS7+, `Invoke-DscResource -Method Set ...` will return an object (not CIM) that
 has the same `RebootRequired` Property, based on whether `$global:DSCMachineStatus`
-has been set to 1.
+has been set to 1. This property from the returned object is what the users should
+use, and not the `$global:DSCMachineStatus` variable, subject to manipulation.
+
+To avoid the manipulation of behavior by global variable,
+the `$global:DSCMachineStatus` variable will be reset before invoking the resource.
+
+For the same security concerns and to avoid misuse, the `Invoke-DscResource` cmdlet
+will remove the variable `$global:DSCMachineStatus` from the session after invoking
+the DSC Resource.
 
 # Out of Scope for initial work & other notes
 
@@ -197,10 +213,6 @@ We could, as initially thought, handle both case: directly as the current user w
 `PsDscRunAsCredential` is not specified, and as Job when specified, but it would
 then have two different behavior, depending on the `-Property` value (and not
 the command's actual signature), obfuscating the potential issue to the user.
-
-In the end, this is very much an Agent feature, and each agent author may want to
-(and already do) support this themselves, so it's unnecessary code and complexity
-for them.
 
 For those reasons, and with the possibility that an elegant or standardized solution
 emerges from the community, we believe it's best to leave it outside the scope of
