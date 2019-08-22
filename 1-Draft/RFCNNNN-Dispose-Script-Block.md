@@ -187,3 +187,11 @@ If the `end{}` block were unskippable for logging purposes, pipeline and command
 It is quite common for functions to be designed to do much of their processing in the `end{}` block.
 Even if we prevented output from occurring in that instance as we are with `dispose{}`, the processing to produce said output would still be occurring.
 This would significantly slow down intentional or necessary pipeline stops and reduce the utility of `Select-Object -First X` immensely.
+
+#### Completely Suppress Output from `Dispose{}`
+
+Rather than permitting output only on the condition that execution completes without errors, we could investigate the possibility of completely suppressing output.
+This is currently complicated by the internal pipeline handling methods, which appear to have a way to suppres _both_ output and error streams as a whole but no capability to permit one while suppressing the other. 
+As the pipeline handling is currently implemented, preventing output would also prevent non-terminating errors from being submitted from the `Dispose{}` block, which is undesirable.
+
+If a method to prevent standard output while not preventing submission of messages to the error stream is available, this may be revisited, but to date such a method has not been identified.
