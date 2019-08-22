@@ -59,7 +59,7 @@ This is one use case I see withe this approach. I hope my fellow PowerShell peep
 When having collections containing empty/null object, else statement can be used to handle the case.
 
 ```
-$EmptyCollection = @('Element1',$null,'Element1')
+$EmptyCollection = @('Element1',$null,'Element2')
 Foreach($Element in $EmptyCollection){
     DoStuff -Element $Element
 }
@@ -71,7 +71,7 @@ else{
 In this case, the else will be part of the loop and will behave like
 
 ```
-$EmptyCollection = @('Element1',$null,'Element1')
+$EmptyCollection = @('Element1',$null,'Element2')
 Foreach($Element in $EmptyCollection){
     if($Element -ne $Null){
         DoStuff -Element $Element
