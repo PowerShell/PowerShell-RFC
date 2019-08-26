@@ -8,7 +8,7 @@ Area: Language
 
 # Support for Foreach-Else statement
 
-PowerShell foreach statment always works with empty collections which is known as a gotcha from begining (AFAIK). This RFC is to propose a solution to that gotcha without changing the existing behavior as I see it as breaking change.
+This RFC is to add an else clause to the foreach keyword which gives a better way to handle empty collections provided to foreach without using a `if/else` statement inside it.
 
 ## Motivation
 
@@ -24,11 +24,11 @@ else:
     cannotDo()
 ```
 
-## Syntax
+## Proposed Syntax
 
 Implementing an else statement which will avoid having an if-else to check the collection before calling foreach.
 
-### Current
+### Without the else clause
 
 ```
 if($Null -ne $EmptyCollection){
@@ -41,6 +41,8 @@ else{
 }
 ```
 
+
+### With else clause
 ```
 Foreach($Element in $EmptyCollection){
     DoStuff -Element $Element
@@ -54,7 +56,7 @@ else{
 This is one use case I see withe this approach. I hope my fellow PowerShell peeps can find more usecase/cons of this approach.
 
 
-## Alternate proposal
+## Alternate proposal 1
 
 When having collections containing empty/null object, else statement can be used to handle the case.
 
@@ -79,5 +81,45 @@ Foreach($Element in $EmptyCollection){
     else{
         # Do something else
     }
+}
+```
+
+## Alternate proposal 2
+
+Rather than an alternate proposal, this will acheive one more use case of handling the coditional statement with in the foreach loop.
+
+```
+$Collection
+
+
+Name   Type
+----   ----
+Group1 Group
+User1  User
+Group2 Group
+User2  User
+
+# How we currently handle this situation, this will handle only for Group type
+Foreach($Element in $Collection.Where({$_.Type -eq 'Group'})){
+    DoForGroup -Element $Element
+}
+
+# How we currently handle this situation for both the types
+Foreach($Element -like in $Collection){
+    if($Element.Type -eq 'Group'){
+        DoForGroup -Element $Element
+    }
+    else{
+        DoForUser -Element $Element
+    }
+}
+
+# Proposal for above two scenarios
+
+Foreach($Element.Type -eq 'Group' in $Collection){
+    DoForGroup -Element $Element
+}
+else{
+    DoForUser -Element $Element
 }
 ```
