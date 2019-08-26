@@ -19,8 +19,13 @@ containing the error will be displayed.  A cmdlet will provide the full error de
 ## Motivation
 
 The on-screen experience, when receiving an error message,
+<<<<<<< HEAD
 is controlled through the views NormalView (the default) and CategoryView. These are user selectable though the preference variable $ErrorView.
 The addition of a “SimpleView” as default that contains only specific error
+=======
+is controlled through the views NormalView (the default) and CategoryView. These are user selectable through the existing preference variable `$ErrorView`.
+The addition of a “ConciseView” as default that contains only specific error
+>>>>>>> fb60588b64b9e95e6d8adeda37150f75ef51a95a
 information producing a single line on screen and in logs will improve customer success.
 
 Comprehensive error information is available to the customer through
