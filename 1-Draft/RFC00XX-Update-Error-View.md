@@ -19,7 +19,7 @@ containing the error will be displayed.  A cmdlet will provide the full error de
 ## Motivation
 
 The on-screen experience, when receiving an error message,
-is controlled through the views NormalView (the default) and CategoryView. These are user selectable though the preference variable $ErrorView.
+is controlled through the views NormalView (the default) and CategoryView. These are user selectable through the existing preference variable `$ErrorView`.
 The addition of a “ConciseView” as default that contains only specific error
 information producing a single line on screen and in logs will improve customer success.
 
