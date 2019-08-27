@@ -27,7 +27,7 @@ and this RFC is mainly to capture the design points and implementation details.
 We will follow the C# ternary operator syntax:
 
 ```none
-<condition-expression> ? <if-true-expression> : <if-false-expression>
+<condition> ? <if-true> : <if-false>
 ```
 
 Two basic design points:
@@ -77,6 +77,12 @@ public class TernaryExpressionAst : ExpressionAst
 
     public Ast Copy();
 }
+```
+
+The parsing grammer is as follows:
+
+```none
+<expression>  '?'  new-lines:opt  <expression>  new-lines:opt  ':'  new-lines:opt  <expression>
 ```
 
 The challenge in the parser update is around how to deal with number constant expressions more naturally with the ternary operators.
@@ -150,5 +156,10 @@ Different syntax proposals were brought up in the discussions:
 <condition-expression> -ternary <then-expression>, <else-expression>
 ```
 
-After a discussion at length, the PowerShell committee agrees to align with the C# syntax given
-the expectation that most usage of this new language element will be from C# developers.
+One of the concerns with using `? :` is the visual acuity impact of scanning code where `?` typically has only been used as the alias for `Where-Object`.
+However, we expect that as we implement other language features like null-coalescing, null-conditional assignment, and null-conditional access,
+we are likely to use `?` in some other forms.
+Also, users can choose to opt out of using this new language feature,
+and the expectation is that most usage of this new language element will be from C# developers.
+
+After a discussion at length, the PowerShell committee agrees to align with the C# syntax given the above considerations.
