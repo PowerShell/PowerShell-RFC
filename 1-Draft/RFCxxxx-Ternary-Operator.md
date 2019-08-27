@@ -79,7 +79,7 @@ public class TernaryExpressionAst : ExpressionAst
 }
 ```
 
-The parsing grammer is as follows:
+The parsing grammar is as follows:
 
 ```none
 <expression>  '?'  new-lines:opt  <expression>  new-lines:opt  ':'  new-lines:opt  <expression>
