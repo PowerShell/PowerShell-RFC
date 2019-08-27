@@ -36,7 +36,7 @@ ${x?}?='new value'
 
 ### Null coalescing operator - `??`
 
-If the left hand side is null then return the right hand side, else return the right hand side.
+Return the left hand side if it is not null, else return the right hand side.
 
 ```powershell
 $x = $null
