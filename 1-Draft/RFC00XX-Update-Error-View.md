@@ -63,13 +63,12 @@ ERROR: Cannot find path ‘C:\blah’ because it does not exist: At line:1 char:
 
     + Display Last Error ($Error[0]) – default behavior
     + Accept Pipeline input – support $error[1] |
-    + Option for the first X errors in the session
-    + Option for the Last X errors in the session
+    + Option for the Newest X errors in the session
 
 - Resolve-ErrorRecord syntax
 
 ```powershell
-Resolve-ErrorRecord  [-InputObject <psobject>] [-Newest <Int32>] [-First <Int32>] [-All] [<CommonParameters>]
+Resolve-ErrorRecord  [-InputObject <psobject>] [-Newest <Int32>] [-All] [<CommonParameters>]
 ```
 
 First parameter set
@@ -78,12 +77,6 @@ First parameter set
 
     + Datatype: int32
     + specifies one or more of last errors to display
-    + Not required
-
-- First
-
-    + Datatype: Int32
-    + Specifies one or more of the first errors that occurred
     + Not required
 
 - All
