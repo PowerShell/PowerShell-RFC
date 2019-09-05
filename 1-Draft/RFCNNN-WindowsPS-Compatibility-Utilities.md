@@ -47,7 +47,7 @@ Overall RFC goal is to have farmiliar 'local module' user experience even though
 
 1. One remote Windows PS process corresponds to one local PS Core process. E.g. if a same user creates 2 local PS Core processes and loads 'WindowsPS-only' module in each one, this will result in creating 2 Windows PS processes and loading the actuall module in each one of them.
 2. Local Load-Module for 'WindowsPS-only' module will have same behaviour/effect in remote Windows PS process as it would have been done locally on an compartible module. In addition, this will create `WindowsPS Compatibility` Windows PS process if one does not already exist.
-2. Local Remove-Module for 'WindowsPS-only' module will have same behaviour/effect in remote Windows PS process as it would have been done locally on an compartible module. In addition, this will remove `WindowsPS Compatibility` Windows PS process if it is no longer needed.
+3. Local Remove-Module for 'WindowsPS-only' module will have same behaviour/effect in remote Windows PS process as it would have been done locally on an compartible module. In addition, this will remove `WindowsPS Compatibility` Windows PS process if it is no longer needed.
 
 ### Objects returned by remote operations
 
@@ -58,8 +58,8 @@ With PS Remoting objects returned from remote side are not actual `live` objects
 ### Windows PowerShell Compatibility module
 
 [Windows PowerShell Compatibility module](https://github.com/PowerShell/WindowsCompatibility) was initial step toward solving the problem of using WindowsPS modules in PS Core. It has following drawbacks:
-1. It uses WinRM-based PS remoting which:
-  i. requires setup
-  ii. not the best transport performance-wise
-1. Introduces additional cmdlets to work with 'WindowsPS-only' modules, i.e. does not have transparent user experience.
+- It uses WinRM-based PS remoting which:
+    + requires setup
+    + not the best transport performance-wise
+- Introduces additional cmdlets to work with 'WindowsPS-only' modules, i.e. does not have transparent user experience.
 
