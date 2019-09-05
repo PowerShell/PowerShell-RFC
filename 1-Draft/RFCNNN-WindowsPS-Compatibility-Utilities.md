@@ -33,7 +33,7 @@ When Import-Module in PS Core detects that user is attempting to load 'WindowsPS
   1. it creates a hidden `WindowsPS Compatibility` Windows PS process (unless one already exists)
   2. creates PS Remoting connection to its IPC pipe
   3. loads the module in remote Windows PS process
-  4. generate local proxy module/commands using IPC remoting connection and Import-PSSession cmdlet
+  4. generates local proxy module/commands using IPC remoting connection and Import-PSSession cmdlet
   5. when 'WindowsPS-only' module unload request is detected - unload module in remote process, close PS remoting channel, close remote process
 
 ### PS Remoting Transport
@@ -49,7 +49,7 @@ Overall RFC goal is to have farmiliar 'local module' user experience even though
 2. Local Load-Module for 'WindowsPS-only' module will have same behaviour/effect in remote Windows PS process as it would have been done locally on an compartible module. In addition, this will create `WindowsPS Compatibility` Windows PS process if one does not already exist.
 2. Local Remove-Module for 'WindowsPS-only' module will have same behaviour/effect in remote Windows PS process as it would have been done locally on an compartible module. In addition, this will remove `WindowsPS Compatibility` Windows PS process if it is no longer needed.
 
-### Objects returned by remote opeartions
+### Objects returned by remote operations
 
 With PS Remoting objects returned from remote side are not actual `live` objects. This will be the same in case of this RFC. Documentation will make sure that users understand that even though the experience will look like they are working with 'WindowsPS-only' modules locally, objects returned by these modules are deserialized copies.
 
@@ -59,7 +59,7 @@ With PS Remoting objects returned from remote side are not actual `live` objects
 
 [Windows PowerShell Compatibility module](https://github.com/PowerShell/WindowsCompatibility) was initial step toward solving the problem of using WindowsPS modules in PS Core. It has following drawbacks:
 1. It uses WinRM-based PS remoting which:
-  1. requires setup
-  1. not the best transport performance-wise
+  i. requires setup
+  ii. not the best transport performance-wise
 1. Introduces additional cmdlets to work with 'WindowsPS-only' modules, i.e. does not have transparent user experience.
 
