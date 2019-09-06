@@ -21,8 +21,25 @@ One of the big factors preventing existing Windows PowerShell users from moving 
 
 ## User Experience
 
+Example that shows using commands from 'WindowsPS-only' module in PS Core:
+```PowerShell
+PS C:\> $PSVersionTable.PSEdition
+Core
+PS C:\> Import-Module DesktopOnlyModule
+PS C:\> (Get-Module DesktopOnlyModule).CompatiblePSEditions
+Desktop
+PS C:\> DesktopOnlyModuleFunction
+Success
+```
 Proof-of-concept test was successfull.
-Examples will be added shortly...
+
+For reference, here is current behaviour that this RFC is targeting to change:
+```PowerShell
+PS C:\> $PSVersionTable.PSEdition
+Core
+PS C:\> Import-Module DesktopOnlyModule
+Import-Module : Module 'C:\windows\system32\WindowsPowerShell\v1.0\Modules\DesktopOnlyModule\DesktopOnlyModule.psd1' does not support current PowerShell edition 'Core'. Its supported editions are 'Desktop'. Use 'Import-Module -SkipEditionCheck' to ignore the compatibility of this module.
+```
 
 ## Specification
 
