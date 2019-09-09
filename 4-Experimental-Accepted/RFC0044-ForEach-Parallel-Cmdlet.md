@@ -1,7 +1,7 @@
 ---
-RFC: RFCnnnn
+RFC: RFC0044
 Author: Paul Higinbotham
-Status: Draft
+Status: Experimental-Accepted
 SupercededBy: N/A
 Version: 1.0
 Area: Engine
