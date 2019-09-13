@@ -21,14 +21,14 @@ One of the big factors preventing existing Windows PowerShell users from moving 
 
 ## User Experience
 
-Example that shows using commands from 'WindowsPS-only' module in PS Core:
+Example that shows using commands from 'WindowsPS-only' module located in `System32` module path in PS Core:
 ```PowerShell
 PS C:\> $PSVersionTable.PSEdition
 Core
-PS C:\> Import-Module DesktopOnlyModule -AsWindowsCompatibility
-PS C:\> (Get-Module DesktopOnlyModule).CompatiblePSEditions
+PS C:\> Import-Module DesktopOnlyModuleOnSystem32ModulePath
+PS C:\> (Get-Module DesktopOnlyModuleOnSystem32ModulePath).CompatiblePSEditions
 Desktop
-PS C:\> DesktopOnlyModuleFunction
+PS C:\> DesktopOnlyModuleOnSystem32ModulePathFunction
 Success
 ```
 Proof-of-concept test was successfull.
@@ -37,18 +37,18 @@ For reference, here is current behaviour that this RFC is targeting to change:
 ```PowerShell
 PS C:\> $PSVersionTable.PSEdition
 Core
-PS C:\> Import-Module DesktopOnlyModule
-Import-Module : Module 'C:\windows\system32\WindowsPowerShell\v1.0\Modules\DesktopOnlyModule\DesktopOnlyModule.psd1' does not support current PowerShell edition 'Core'. Its supported editions are 'Desktop'. Use 'Import-Module -SkipEditionCheck' to ignore the compatibility of this module.
+PS C:\> Import-Module DesktopOnlyModuleOnSystem32ModulePath
+Import-Module : Module 'C:\windows\system32\WindowsPowerShell\v1.0\Modules\DesktopOnlyModuleOnSystem32ModulePath\DesktopOnlyModuleOnSystem32ModulePath.psd1' does not support current PowerShell edition 'Core'. Its supported editions are 'Desktop'. Use 'Import-Module -SkipEditionCheck' to ignore the compatibility of this module.
 ```
 
 ## Specification
 
-Today a module manifest (since Windows PowerShell 5) may contain a `CompatiblePSEditions` property to indicate if it is compatible with PowerShell Core (value of `Core`).
-Initial proposal was that absense of `Core` value in `CompatiblePSEditions` during module import would signal to PS Core that it should process the module as described in this RFC, however PS Core still allows to load non-`Core` modules without any warnings if they are not located under System32 module path. This means that `CompatiblePSEditions` property can not be used for deciding whether to load a module as WinPS module or not.
-Current plan is to add a new `-AsWindowsCompatibility` parameter for `Import-Module`.
-
-When Import-Module in PS Core detects that user is attempting to load a module with `-AsWindowsCompatibility` parameter:
-  1. it creates a hidden `WindowsPS Compatibility` Windows PS process (unless one already exists)
+Today a module manifest (since Windows PowerShell 5) may contain a `CompatiblePSEditions` property to indicate if it is compatible with PowerShell Core (value of `Core`) or Windows PowerShell (value of `Desktop`). If `CompatiblePSEditions` property is missing then the value of `Desktop` is assumed.
+Functionality of this RFC will replace showing of the `PSEditionNotSupported` error message (`Module '{0}' does not support current PowerShell edition '{1}'. Its supported editions are '{2}'. Use 'Import-Module -SkipEditionCheck' to ignore the compatibility of this module.`) in scenarios where it is currently displayed:
+During `Import-Module` a module wil be loaded into a separete Windows PowerShell process instead of current PowerShell Core if:
+(A module is located in `System32` module path) and ((`CompatiblePSEditions` is `Desktop`) or (`CompatiblePSEditions` is missing))
+If this condition is detected PowerShell Core:
+  1. creates a hidden `WindowsPS Compatibility` Windows PS process (unless one already exists)
   2. creates PS Remoting connection to its IPC pipe
   3. loads the module in remote Windows PS process
   4. generates local proxy module/commands using IPC remoting connection and `Import-PSSession` cmdlet
