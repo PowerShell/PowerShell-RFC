@@ -9,9 +9,9 @@ Comments Due: 10/10/2019
 Plan to implement: Yes
 ---
 
-# Windows PowerShell Compatibility Utilities
+# Importing Windows PowerShell modules in PowerShell Core
 
-One of the big factors preventing existing Windows PowerShell users from moving to PowerShell Core has been cmdlet coverage. Specifically being able to use existing Windows PowerShell modules in PowerShell Core. Ease of UX is important here - working with 'WindowsPS-only' modules from PS Core should not be any different than working with 'PS Core - compatible' modules. Also this should not require any setup from the user.
+One of the big factors preventing existing Windows PowerShell users from moving to PowerShell Core has been cmdlet coverage. Specifically being able to use existing Windows PowerShell modules in PowerShell Core. Non-compatibility is due to the different .NET runtimes used between Windows PowerShell and PowerShell Core. Ease of UX is important when addressing this problem - working with 'WindowsPS-only' modules from PS Core should not be any different than working with 'PS Core - compatible' modules. Also this should not require any setup from the user.
 
 ## Motivation
 
@@ -26,6 +26,7 @@ Example that shows using commands from 'WindowsPS-only' module located in `Syste
 PS C:\> $PSVersionTable.PSEdition
 Core
 PS C:\> Import-Module DesktopOnlyModuleOnSystem32ModulePath
+VERBOSE: Please note that module 'DesktopOnlyModuleOnSystem32ModulePath' is imported in a remote Windows PowerShell session, so all objects that are returned by commands from this module are deserialized and are not 'live' objects.
 PS C:\> (Get-Module DesktopOnlyModuleOnSystem32ModulePath).CompatiblePSEditions
 Desktop
 PS C:\> DesktopOnlyModuleOnSystem32ModulePathFunction
@@ -57,15 +58,13 @@ If this condition is detected PowerShell Core:
 ### PS Remoting Transport
 
 IPC / Named Pipe is to be used for connections to remote PowerShell process. Today a named pipe listener is created with each Windows PowerShell process. IPC transport has good performance and secured endpoints, however (unlike, for example, SSH transport) it is not currently supported by New-PSSession.
-So a new IPC-specific parameter set will be added to New-PSSession:  `New-PSSession [-Name <String>] -ProcessId <Int32>`
+So a new IPC-specific parameter set will be added to New-PSSession:  `New-PSSession -ProcessId <Int32> [-Name <String>] [-AppDomainName <String>]`
 Here is the pseudo-code that shows the essence of proposed implementation of a new parameter set in New-PSSession:
 ```csharp
-string WindowsPS_AppDomainName = GetPSHostProcessInfoCommand.GetAppDomainNamesFromProcessId(WindowsPS_ProcessId);
 NamedPipeConnectionInfo connectionInfo = new NamedPipeConnectionInfo(WindowsPS_ProcessId, WindowsPS_AppDomainName);
 TypeTable typeTable = TypeTable.LoadDefaultTypeFiles();
 RemoteRunspace remoteRunspace = RunspaceFactory.CreateRunspace(connectionInfo, this.Host, typeTable) as RemoteRunspace;
 remoteRunspace.Name = NamedPipeRunspaceName;
-remoteRunspace.ShouldCloseOnPop = true
 try
 {
     remoteRunspace.Open();
@@ -77,22 +76,23 @@ catch (RuntimeException e)
 PSSession remotePSSession = new PSSession(remoteRunspace);
 this.RunspaceRepository.Add(remotePSSession);
 WriteObject(remotePSSession);
+// In case of 'Windows PS Compatibility' scenario, Import-PSSession is then run on remotePSSession to generate proxy cmdlets.
 ```
 
-### Lifetime of remote Windows PowerShell process and module
+### Lifetime of 'compatibility' Windows PowerShell process and module
 
-Overall RFC goal is to have familiar 'local module' user experience even though actual operations are working with a module in a remote process. This drives following:
+Overall RFC goal is to have familiar 'local module' user experience even though actual operations are working with a module in a separate 'compatibility' process. This drives following:
 
-1. One remote Windows PS process corresponds to one local PS Core process. E.g. if a same user creates 2 local PS Core processes and loads 'WindowsPS-only' module in each one, this will result in creating 2 Windows PS processes and loading the actuall module in each one of them.
-2. Lifetime of the module on remote side (Windows PS) should be the same as on local side (PS Core). This is important because some modules save their global state in-between command calls.
-   * Local Load-Module for 'WindowsPS-only' module will have same behaviour/effect in remote Windows PS process as it would have been done locally on an compartible module. In addition, this will create `WindowsPS Compatibility` Windows PS process if one does not already exist.
-   * Local Remove-Module for 'WindowsPS-only' module will have same behaviour/effect in remote Windows PS process as it would have been done locally on an compartible module. In addition, this will remove `WindowsPS Compatibility` Windows PS process if it is no longer needed.
-3. When removing a module, there is an `OnRemove` event on the module that will execute. This event allows Compat proxy module to react to being removed and perform cleanup of remote process if necessary.
-4. PS process exit does Not perform graceful cleanup of modules, so it needs to be handled separately. There is an event that allows to react to the closing of the PowerShell process (to do remote Compat process cleanup): `Register-EngineEvent -SourceIdentifier ([System.Management.Automation.PsEngineEvent]::Exiting) -Action $OnRemoveScript`
+1. One 'compatibility' Windows PowerShell process corresponds to one local PowerShell Core process. E.g. if a same user creates 2 local PowerShell Core processes and loads 'WindowsPS-only' module in each one, this will result in creating 2 Windows PS processes and loading the actuall module in each one of them.
+2. Lifetime of the module on 'compatibility' side (Windows PowerShell) should be the same as on local side (PS Core). This is important because some modules save their global state in-between command calls.
+   * Local Load-Module for 'WindowsPS-only' module will have same behaviour/effect in 'compatibility' Windows PS process as it would have been done locally on an compartible module. In addition, this will create `WindowsPS Compatibility` Windows PS process if one does not already exist.
+   * Local Remove-Module for 'WindowsPS-only' module will have same behaviour/effect in 'compatibility' Windows PS process as it would have been done locally on an compartible module. In addition, this will remove `WindowsPS Compatibility` Windows PS process if it is no longer needed.
+3. When removing a module, there is an `OnRemove` event on the module that will execute. This event allows Compat proxy module to react to being removed and perform cleanup of 'compatibility' process if necessary.
+4. PS process exit does Not perform graceful cleanup of modules, so it needs to be handled separately. There is an event that allows to react to the closing of the PowerShell process (to do 'compatibility' process cleanup): `Register-EngineEvent -SourceIdentifier ([System.Management.Automation.PsEngineEvent]::Exiting) -Action $OnRemoveScript`
 
 ### Objects returned by remote operations
 
-With PS Remoting objects returned from remote side are not actual `live` objects. This will be the same in case of this RFC. Documentation will make sure that users understand that even though the experience will look like they are working with 'WindowsPS-only' modules locally, objects returned by these modules are deserialized copies.
+With PS Remoting objects returned from remote 'compatibility' side are not actual `live` objects. This will be the same in case of this RFC. Documentation will make sure that users understand that even though the experience will look like they are working with 'WindowsPS-only' modules locally, objects returned by these modules are deserialized copies.
 
 ## Alternate Proposals and Considerations
 
