@@ -11,7 +11,7 @@ Plan to implement: Yes
 
 # Windows PowerShell Compatibility Utilities
 
-One of the big factors preventing existing Windows PowerShell users from moving to PowerShell Core has been cmdlet coverage. Specifically being able to use existing Windows PowerShell modules in PowerShell Core. Ease of UX is important here - working with 'WindowsPS-only' modules from PS Core should not be any different than working with 'PS Core - compartible' modules. Also this should not require any setup from the user.
+One of the big factors preventing existing Windows PowerShell users from moving to PowerShell Core has been cmdlet coverage. Specifically being able to use existing Windows PowerShell modules in PowerShell Core. Ease of UX is important here - working with 'WindowsPS-only' modules from PS Core should not be any different than working with 'PS Core - compatible' modules. Also this should not require any setup from the user.
 
 ## Motivation
 
