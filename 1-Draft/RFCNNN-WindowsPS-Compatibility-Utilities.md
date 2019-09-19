@@ -88,7 +88,7 @@ Overall RFC goal is to have familiar 'local module' user experience even though 
    * Local Load-Module for 'WindowsPS-only' module will have same behaviour/effect in remote Windows PS process as it would have been done locally on an compartible module. In addition, this will create `WindowsPS Compatibility` Windows PS process if one does not already exist.
    * Local Remove-Module for 'WindowsPS-only' module will have same behaviour/effect in remote Windows PS process as it would have been done locally on an compartible module. In addition, this will remove `WindowsPS Compatibility` Windows PS process if it is no longer needed.
 3. When removing a module, there is an `OnRemove` event on the module that will execute. This event allows Compat proxy module to react to being removed and perform cleanup of remote process if necessary.
-4. PS process exit does Not perform gracefull cleanup of modules, so it needs to be handled separately. There is an event that allows to react to the closing of the PowerShell process (to do remote Compat process cleanup): `Register-EngineEvent -SourceIdentifier ([System.Management.Automation.PsEngineEvent]::Exiting) -Action $OnRemoveScript`
+4. PS process exit does Not perform graceful cleanup of modules, so it needs to be handled separately. There is an event that allows to react to the closing of the PowerShell process (to do remote Compat process cleanup): `Register-EngineEvent -SourceIdentifier ([System.Management.Automation.PsEngineEvent]::Exiting) -Action $OnRemoveScript`
 
 ### Objects returned by remote operations
 
