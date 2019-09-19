@@ -81,7 +81,7 @@ WriteObject(remotePSSession);
 
 ### Lifetime of remote Windows PowerShell process and module
 
-Overall RFC goal is to have farmiliar 'local module' user experience even though actuall operations are working with a module in a remote process. This drives following:
+Overall RFC goal is to have familiar 'local module' user experience even though actual operations are working with a module in a remote process. This drives following:
 
 1. One remote Windows PS process corresponds to one local PS Core process. E.g. if a same user creates 2 local PS Core processes and loads 'WindowsPS-only' module in each one, this will result in creating 2 Windows PS processes and loading the actuall module in each one of them.
 2. Lifetime of the module on remote side (Windows PS) should be the same as on local side (PS Core). This is important because some modules save their global state in-between command calls.
