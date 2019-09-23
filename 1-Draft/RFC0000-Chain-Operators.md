@@ -194,6 +194,7 @@ echo 'Hi' || echo 'Message' && echo '2nd message'
 
 ```output
 Hi
+2nd message
 ```
 
 ---
