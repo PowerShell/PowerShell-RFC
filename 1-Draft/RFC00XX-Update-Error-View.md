@@ -10,50 +10,61 @@ Comments Due:
 # Update $ErrorView with Single String Error Messages
 
 When an error occurs in PowerShell, the customers on-screen error message experience currently
-provides a level of detail that obscures the inner exception message from being read by
+provides a level of detail that obscures the exception message from being recognized and read by
 new or occasional PowerShell users.
-To improve both comprehension and the troubleshooting experience, a single string of text
-containing the error will be displayed.  A cmdlet will provide the full error details when desired.
+To improve both comprehension and the troubleshooting experience,
+a simplified conditional error message will be provided determined by
+Interactive or Script use. A cmdlet will provide the full error details when desired.
 
 ## Motivation
 
 The on-screen experience, when receiving an error message,
 is controlled through the views NormalView (the default) and CategoryView. These are user selectable
 through the preference variable $ErrorView.
-The addition of a “SimpleView” as default that contains only specific error
-information producing a single line on screen and in logs will improve customer success.
-
-Comprehensive error information is available to the customer through
-accessing the error object. For new and occasional customers,
-a cmdlet “Resolve-ErrorRecord” will simplify the process of getting detailed error information,
-improving customers success.
+This RFC describes changing the NormalView to a simplified conditional error message. The
+CategoryView should remain unchanged.
+A comprehensive detailed view of the fully qualified error, including inner exceptions,
+will be provided by the `Resolve-ErrorRecord` cmdlet.
 
 ## Specification
 
-The proposal is to add a new single-line default error message view called SimpleView
-and add a new cmdlet (Resolve-ErrorRecord) to provide detailed error information.
+The proposal is to modify NormalView to a simplified conditional error message
+based on interactive versus script use.
+For in-depth troubleshooting, a new cmdlet `Resolve-ErrorRecord` to provide detailed error information.
 
 __Key Design Considerations__
 
 1. To reduce confusion and improve debugging success,
-error messages should call WriteErrorLine to produce a single line of text, including the word “ERROR:”
-to make consistent with Verbose and Warning messages. This is added to $errorView as view named "SimpleView".
+error messages should call WriteErrorLine to produce a simplified message, including the word “ERROR:”
+to make consistent with Verbose and Warning messages. This is a change to the existing NormalView.
 
-- $ErrorView should contain these views
+- $ErrorView can refer to these views
 
     + NormalView
     + CategoryView
-    + SimpleView
-    + DetailedView
 
-- Error Message syntax for SimpleView
+- Simplified error message syntax from Interactive.
 
 ```powershell
-ERROR: <Exception Message>
-ERROR: Cannot find path ‘C:\blah’ because it does not exist
+PS C:\> Get-Childitem -Path c:\notreal
+ERROR: Cannot find path ‘C:\notreal’ because it does not exist
 ```
 
-2. A new cmdlet “Resolve-ErrorRecord” will produce detailed error information similar to Format-List * -Force.
+- Simplified error message from Script. (note-colorization is not displayed correctly)
+
+```powershell
+PS C:\> .\MyScript.ps1
+ERROR: Cannot find path 'C:\notreal' because it does not exist.
+  ---> C:\GitHub\pri-errorview\RustTest\test.ps1
+    |
+15  | Get-ChildItem -Path c:\notreal
+    |                   ^^^ Cannot find path 'C:\notreal' because it does not exist.
+    |
+    * Help: this is for additonal help information
+```
+
+2. A new cmdlet `Resolve-ErrorRecord` will produce comprehensive detailed
+view of the fully qualified error, including inner exceptions.
 
 - Resolve-ErrorRecord will provide the following:
 
@@ -75,60 +86,45 @@ First parameter set
     + specifies one or more of last errors to display
     + Not required
 
-__Example__
-
-```powershell
-# Displays details of the last error displayed
-Resolve-ErrorRecord
-
-# Displays error details from pipeline error object
-$error[1] | Resolve-ErrorRecord
-
-# Display detailed error information for the most recent 3 errors
-Resolve-ErrorRecord -Newest 3
-```
-
 __Example 1__
-SimpleView of Error message. Resolve-ErrorRecord shows sample DetailedView
+Error occurs in Interactive mode. Cmdlet displays details of the last error displayed
 
 ```powershell
-PS C:\test> Get-item c:\blah
-ERROR: Cannot find path 'C:\blah' because it does not exist.
+PS C:\> Get-Childitem -Path c:\notreal
+ERROR: Cannot find path ‘C:\notreal’ because it does not exist
 
 PS C:\test> Resolve-ErrorRecord
 
-PSMessageDetails      :
-Exception             : System.Management.Automation.ItemNotFoundException: Cannot find path 'C:\blah' because it does
-                        not exist.
-                           at System.Management.Automation.LocationGlobber.ExpandMshGlobPath(String path, Boolean
-                        allowNonexistingPaths, PSDriveInfo drive, ContainerCmdletProvider
-
+**** Detailed message here ****
 ```
 
 __Example 2__
-SimpleView of Error message. Piped error to Resolve-ErrorRecord shows sample DetailedView
+Error occurs in Script. Cmdlet displays error details from pipeline error object
 
 ```powershell
-PS C:\test> slkjdfh
-ERROR: The term 'slkjdfh' is not recognized as the name of a cmdlet, function, script file, or operable program.
-PS C:\test> $error[0] | Resolve-ErrorRecord
+PS C:\> .\MyScript.ps1
+ERROR: Cannot find path 'C:\notreal' because it does not exist.
+  ---> C:\GitHub\pri-errorview\RustTest\test.ps1
+    |
+15  | Get-ChildItem -Path c:\notreal
+    |                   ^^^ Cannot find path 'C:\notreal' because it does not exist.
+    |
+    * Help: this is for additonal help information
 
-PSMessageDetails      :
-Exception             : System.Management.Automation.CommandNotFoundException:
-                        The term 'slkjdfh' is not recognized as
+PS C:\> $error[0] | Resolve-ErrorRecord
+
+**** Detailed message here ****
 ```
 
 __Example 3__
-SimpleView of Inner exception if present. Sample of Resolve-ErrorRecord to provide DetailedView.
+Display detailed error information for the most recent 3 errors.
 
 ```powershell
-PS> [System.Net.DNS]::GetHostByName('NoOnline')
-ERROR: No such host is known.
+PS C:\> Resolve-ErrorRecord -Newest 3
 
-PS>Resolve-ErrorRecord -Newest 1
-Exception calling "GetHostByName" with "1" argument(s):
-"No such host is known."
-At line:1 char:1
+**** Detailed message here ****
+**** Detailed message here ****
+**** Detailed message here ****
 ```
 
 ## Alternate Proposals and Considerations
