@@ -36,7 +36,7 @@ and add a new cmdlet (Resolve-ErrorRecord) to provide detailed error information
 __Key Design Considerations__
 
 1. To reduce confusion and improve debugging success,
-error messages by default should produce a single line of text, including the word “ERROR:”
+error messages should call WriteErrorLine to produce a single line of text, including the word “ERROR:”
 to make consistent with Verbose and Warning messages. This is added to $errorView as view named "SimpleView".
 
 - $ErrorView should contain these views
