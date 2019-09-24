@@ -75,7 +75,7 @@ First parameter set
     + specifies one or more of last errors to display
     + Not required
 
-Examples
+__Example__
 
 ```powershell
 # Displays details of the last error displayed
@@ -86,12 +86,14 @@ $error[1] | Resolve-ErrorRecord
 
 # Display detailed error information for the most recent 3 errors
 Resolve-ErrorRecord -Newest 3
+```
 
 __Example 1__
+SimpleView of Error message. Resolve-ErrorRecord shows sample DetailedView
 
 ```powershell
 PS C:\test> Get-item c:\blah
-Get-item : Cannot find path 'C:\blah' because it does not exist. At line:1 char:1
+ERROR: Cannot find path 'C:\blah' because it does not exist.
 
 PS C:\test> Resolve-ErrorRecord
 
@@ -104,14 +106,29 @@ Exception             : System.Management.Automation.ItemNotFoundException: Cann
 ```
 
 __Example 2__
+SimpleView of Error message. Piped error to Resolve-ErrorRecord shows sample DetailedView
 
 ```powershell
 PS C:\test> slkjdfh
-ERROR: The term 'slkjdfh' is not recognized as the name of a cmdlet, function, script file, or operable program. At line:1 char:1
+ERROR: The term 'slkjdfh' is not recognized as the name of a cmdlet, function, script file, or operable program.
 PS C:\test> $error[0] | Resolve-ErrorRecord
 
 PSMessageDetails      :
-Exception             : System.Management.Automation.CommandNotFoundException: The term 'slkjdfh' is not recognized as
+Exception             : System.Management.Automation.CommandNotFoundException:
+                        The term 'slkjdfh' is not recognized as
+```
+
+__Example 3__
+SimpleView of Inner exception if present. Sample of Resolve-ErrorRecord to provide DetailedView.
+
+```powershell
+PS> [System.Net.DNS]::GetHostByName('NoOnline')
+ERROR: No such host is known.
+
+PS>Resolve-ErrorRecord -Newest 1
+Exception calling "GetHostByName" with "1" argument(s):
+"No such host is known."
+At line:1 char:1
 ```
 
 ## Alternate Proposals and Considerations
