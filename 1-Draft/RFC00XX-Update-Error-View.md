@@ -20,7 +20,11 @@ containing the error will be displayed.  A cmdlet will provide the full error de
 The on-screen experience, when receiving an error message,
 is controlled through the views NormalView (the default) and CategoryView. These are user selectable
 through the preference variable $ErrorView.
+<<<<<<< HEAD
 The addition of a “ConciseView” as default that contains only specific error
+=======
+The addition of a “SimpleView” as default that contains only specific error
+>>>>>>> Error-View
 information producing a single line on screen and in logs will improve customer success.
 
 Comprehensive error information is available to the customer through
@@ -30,23 +34,39 @@ improving customers success.
 
 ## Specification
 
+<<<<<<< HEAD
 The proposal is to add a new single-line default error message view called ConciseView
+=======
+The proposal is to add a new single-line default error message view called SimpleView
+>>>>>>> Error-View
 and add a new cmdlet (Resolve-ErrorRecord) to provide detailed error information.
 
 __Key Design Considerations__
 
 1. To reduce confusion and improve debugging success,
+<<<<<<< HEAD
 error messages by default should produce a single line of text, including the word “ERROR:”
 to make consistent with Verbose and Warning messages. This is added to $errorView as view named "ConciseView".
+=======
+error messages should call WriteErrorLine to produce a single line of text, including the word “ERROR:”
+to make consistent with Verbose and Warning messages. This is added to $errorView as view named "SimpleView".
+>>>>>>> Error-View
 
 - $ErrorView should contain these views
 
     + NormalView
     + CategoryView
+<<<<<<< HEAD
     + ConciseView
     + DetailedView
 
 - Error Message syntax for ConciseView
+=======
+    + SimpleView
+    + DetailedView
+
+- Error Message syntax for SimpleView
+>>>>>>> Error-View
 
 ```powershell
 ERROR: <Exception Message>
@@ -75,7 +95,11 @@ First parameter set
     + specifies one or more of last errors to display
     + Not required
 
+<<<<<<< HEAD
 Examples
+=======
+__Example__
+>>>>>>> Error-View
 
 ```powershell
 # Displays details of the last error displayed
@@ -86,12 +110,23 @@ $error[1] | Resolve-ErrorRecord
 
 # Display detailed error information for the most recent 3 errors
 Resolve-ErrorRecord -Newest 3
+<<<<<<< HEAD
 
 __Example 1__
 
 ```powershell
 PS C:\test> Get-item c:\blah
 Get-item : Cannot find path 'C:\blah' because it does not exist. At line:1 char:1
+=======
+```
+
+__Example 1__
+SimpleView of Error message. Resolve-ErrorRecord shows sample DetailedView
+
+```powershell
+PS C:\test> Get-item c:\blah
+ERROR: Cannot find path 'C:\blah' because it does not exist.
+>>>>>>> Error-View
 
 PS C:\test> Resolve-ErrorRecord
 
@@ -104,6 +139,7 @@ Exception             : System.Management.Automation.ItemNotFoundException: Cann
 ```
 
 __Example 2__
+<<<<<<< HEAD
 
 ```powershell
 PS C:\test> slkjdfh
@@ -112,6 +148,31 @@ PS C:\test> $error[0] | Resolve-ErrorRecord
 
 PSMessageDetails      :
 Exception             : System.Management.Automation.CommandNotFoundException: The term 'slkjdfh' is not recognized as
+=======
+SimpleView of Error message. Piped error to Resolve-ErrorRecord shows sample DetailedView
+
+```powershell
+PS C:\test> slkjdfh
+ERROR: The term 'slkjdfh' is not recognized as the name of a cmdlet, function, script file, or operable program.
+PS C:\test> $error[0] | Resolve-ErrorRecord
+
+PSMessageDetails      :
+Exception             : System.Management.Automation.CommandNotFoundException:
+                        The term 'slkjdfh' is not recognized as
+```
+
+__Example 3__
+SimpleView of Inner exception if present. Sample of Resolve-ErrorRecord to provide DetailedView.
+
+```powershell
+PS> [System.Net.DNS]::GetHostByName('NoOnline')
+ERROR: No such host is known.
+
+PS>Resolve-ErrorRecord -Newest 1
+Exception calling "GetHostByName" with "1" argument(s):
+"No such host is known."
+At line:1 char:1
+>>>>>>> Error-View
 ```
 
 ## Alternate Proposals and Considerations
