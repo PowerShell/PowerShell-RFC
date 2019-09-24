@@ -20,7 +20,7 @@ containing the error will be displayed.  A cmdlet will provide the full error de
 The on-screen experience, when receiving an error message,
 is controlled through the views NormalView (the default) and CategoryView. These are user selectable
 through the preference variable $ErrorView.
-The addition of a “ConciseView” as default that contains only specific error
+The addition of a “SimpleView” as default that contains only specific error
 information producing a single line on screen and in logs will improve customer success.
 
 Comprehensive error information is available to the customer through
@@ -30,23 +30,23 @@ improving customers success.
 
 ## Specification
 
-The proposal is to add a new single-line default error message view called ConciseView
+The proposal is to add a new single-line default error message view called SimpleView
 and add a new cmdlet (Resolve-ErrorRecord) to provide detailed error information.
 
 __Key Design Considerations__
 
 1. To reduce confusion and improve debugging success,
 error messages by default should produce a single line of text, including the word “ERROR:”
-to make consistent with Verbose and Warning messages. This is added to $errorView as view named "ConciseView".
+to make consistent with Verbose and Warning messages. This is added to $errorView as view named "SimpleView".
 
 - $ErrorView should contain these views
 
     + NormalView
     + CategoryView
-    + ConciseView
+    + SimpleView
     + DetailedView
 
-- Error Message syntax for ConciseView
+- Error Message syntax for SimpleView
 
 ```powershell
 ERROR: <Exception Message>
