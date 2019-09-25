@@ -11,24 +11,33 @@ Comments Due:
 
 When an error occurs in PowerShell, the customers on-screen error message experience currently
 provides a level of detail that obscures the exception message from being recognized and read by
-new or occasional PowerShell users.
-To improve both comprehension and the troubleshooting experience,
-a simplified conditional error message will be provided determined by
-Interactive or Script use. A cmdlet will provide the full error details when desired.
+new or occasional PowerShell users. The addition of simplified error views will improve both
+comprehension and troubleshooting experience.
+
+Advanced PowerShell users and scripters will benefit from a newly designed 'AnalyticalView' that
+focuses on the specific location, code reference and error information from the script.
+
+Both user types will benefit from a combined 'DynamicView' that switches between
+'MessageView' and 'AnalyticalView' based on the source of execution;
+Command-line versus script.
+
+In all the above scenarios, regardless of error view selected, A comprehensive
+detailed view of the fully qualified error, including inner exceptions,
+will be provided by the `Resolve-ErrorRecord` cmdlet.
 
 ## Motivation
 
 The on-screen experience, when receiving an error message,
 is controlled through the views NormalView (the default) and CategoryView. These are user selectable
 through the preference variable $ErrorView.
-This RFC describes changing the NormalView to a simplified conditional error message. The
-CategoryView should remain unchanged.
+This RFC describes adding three additional views to improve readability. The
+'MessageView', 'AnalyticalView', and 'DynamicView'.
 A comprehensive detailed view of the fully qualified error, including inner exceptions,
 will be provided by the `Resolve-ErrorRecord` cmdlet.
 
 ## Specification
 
-The proposal is to modify NormalView to a simplified conditional error message
+The proposal is to add three new views to a simplified conditional error message
 based on interactive versus script use.
 For in-depth troubleshooting, a new cmdlet `Resolve-ErrorRecord` to provide detailed error information.
 
@@ -42,6 +51,9 @@ to make consistent with Verbose and Warning messages. This is a change to the ex
 
     + NormalView
     + CategoryView
+    + MessageView
+    + AnalyticalView
+    + DynamicView
 
 - Simplified error message syntax from Interactive and script. (See graphic below)
 
