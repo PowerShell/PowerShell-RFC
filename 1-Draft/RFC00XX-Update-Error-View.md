@@ -43,25 +43,9 @@ to make consistent with Verbose and Warning messages. This is a change to the ex
     + NormalView
     + CategoryView
 
-- Simplified error message syntax from Interactive.
+- Simplified error message syntax from Interactive and script.
 
-```powershell
-PS C:\> Get-Childitem -Path c:\notreal
-ERROR: Cannot find path ‘C:\notreal’ because it does not exist
-```
-
-- Simplified error message from Script. (note-colorization is not displayed correctly)
-
-```powershell
-PS C:\> .\MyScript.ps1
-ERROR: Cannot find path 'C:\notreal' because it does not exist.
-  ---> C:\GitHub\pri-errorview\RustTest\test.ps1
-    |
-15  | Get-ChildItem -Path c:\notreal
-    |                   ^^^ Cannot find path 'C:\notreal' because it does not exist.
-    |
-    * Help: this is for additonal help information
-```
+![test](.\RFC00XX-Update-Error-View.png)
 
 2. A new cmdlet `Resolve-ErrorRecord` will produce comprehensive detailed
 view of the fully qualified error, including inner exceptions.
