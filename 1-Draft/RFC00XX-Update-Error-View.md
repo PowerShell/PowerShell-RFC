@@ -91,9 +91,9 @@ ERROR: Cannot find path 'C:\notreal' because it does not exist.
   ---> C:\GitHub\pri-errorview\RustTest\test.ps1
     |
 15  | Get-ChildItem -Path c:\notreal
-    |                   ^^^ Cannot find path 'C:\notreal' because it does not exist.
+    |                     ^^^ Cannot find path 'C:\notreal' because it does not exist.
     |
-    * Help: this is for additonal help information
+    * Help: this is for additional help information
 
 PS C:\> $error[0] | Resolve-ErrorRecord
 
