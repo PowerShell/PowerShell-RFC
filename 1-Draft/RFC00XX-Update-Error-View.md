@@ -107,7 +107,7 @@ Error occurs in Script. Cmdlet displays error details from pipeline error object
 
 ```powershell
 PS C:\> .\MyScript.ps1
-ERROR: Cannot find path 'C:\notreal' because it does not exist.
+ERROR: ItemNotFoundException
   ---> C:\GitHub\pri-errorview\RustTest\test.ps1
     |
 15  | Get-ChildItem -Path c:\notreal
