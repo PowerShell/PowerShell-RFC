@@ -1,66 +1,66 @@
 ---
-RFC: Update $ErrorView with Single String Error Messages
+RFC: Update $ErrorView with simplified views for Error Messages
 Author: Jason Helmick
 Status: Draft
 Version: 0.0.0
 Area: PowerShell
-Comments Due:
+Comments Due: 10/31/2019
 ---
 
-# Update $ErrorView with Single String Error Messages
+# Update $ErrorView with simplified views for Error Messages
 
 When an error occurs in PowerShell, the customers on-screen error message experience currently
 provides a level of detail that obscures the exception message from being recognized and read by
-new or occasional PowerShell users. The addition of simplified error views will improve both
-comprehension and troubleshooting experience.
-
-Advanced PowerShell users and scripters will benefit from a newly designed 'AnalyticalView' that
-focuses on the specific location, code reference and error information from the script.
-
-Both user types will benefit from a combined 'DynamicView' that switches between
-'MessageView' and 'AnalyticalView' based on the source of execution;
-Command-line versus script.
-
-In all the above scenarios, regardless of error view selected, A comprehensive
-detailed view of the fully qualified error, including inner exceptions,
-will be provided by the `Resolve-ErrorRecord` cmdlet.
+new or occasional PowerShell users. The addition of a simplified error view will improve both
+comprehension and troubleshooting experience. A new cmdlet 'Resolve-ErrorRecord' will provide
+complete detailed view of the fully qualified error when desired.
 
 ## Motivation
 
 The on-screen experience, when receiving an error message,
 is controlled through the views NormalView (the default) and CategoryView. These are user selectable
 through the preference variable $ErrorView.
-This RFC describes adding three additional views to improve readability. The
-'MessageView', 'AnalyticalView', and 'DynamicView'.
+This RFC describes Changing '$ErrorView to an enumeration and adding three additional views
+to improve readability,'Message', 'Analytic', and 'Dynamic'.
+
+- Message - provides a concise error message suitable for new or occasional PowerShell users.
+- Analytic - provides a refactored form of NormalView
+- Dynamic - provides conditional switching between Message and Analytic.
+
 A comprehensive detailed view of the fully qualified error, including inner exceptions,
 will be provided by the `Resolve-ErrorRecord` cmdlet.
 
+'$ErrorView' shall contain the original views for backward compatibility and renamed
+to remove 'view' from the name. The view list is as follows:
+
+- Normal
+- Category
+- Message
+- Analytic
+- Dynamic
+
 ## Specification
 
-The proposal is to add three new views to a simplified conditional error message
-based on interactive versus script use.
-For in-depth troubleshooting, a new cmdlet `Resolve-ErrorRecord` to provide detailed error information.
+The proposal is to add three new views to help improve error message comprehension based on user
+needs. For in-depth troubleshooting, a new cmdlet `Resolve-ErrorRecord`
+to provide detailed error information.
 
 __Key Design Considerations__
 
-1. To reduce confusion and improve debugging success,
-error messages should call WriteErrorLine to produce a simplified message, including the word “ERROR:”
-to make consistent with Verbose and Warning messages. This is a change to the existing NormalView.
+1. To reduce confusion and improve debugging success for new and occasional users,
+error messages should call WriteErrorLine to produce a simplified message using view 'Message'
+and include the preface word “ERROR:”
 
-- $ErrorView can refer to these views
-
-    + NormalView
-    + CategoryView
-    + MessageView
-    + AnalyticalView
-    + DynamicView
-
-- Simplified error message syntax from Interactive and script. (See graphic below)
+- Simplified error message syntax from 'Message'. (See graphic below)
 
 ```powershell
 PS C:\> Get-Childitem -Path c:\notreal
 ERROR: Cannot find path ‘C:\notreal’ because it does not exist
 ```
+
+2. To improve script debugging for advanced PowerShell users and scripters,
+a refactored error view 'Analytic' will be added displaying the error category,
+exception, code line and position, and include additional help for the user.
 
 ```powershell
 PS C:\> .\MyScript.ps1
@@ -70,17 +70,20 @@ ERROR: ItemNotFoundException
 15  | Get-ChildItem -Path c:\notreal
     |                     ^^^ Cannot find path 'C:\notreal' because it does not exist.
     |
-    * Help: this is for additional help information
-
-PS C:\> $error[0] | Resolve-ErrorRecord
-
-**** Detailed message here ****
+    * Help: Additional help information provided here
 ```
 
-![test](.\RFC00XX-Update-Error-View.png)
+3. The 'Dynamic' view is a combination of the views 'message' and 'Analytic' for users working
+in the console that also run scripts. When the user is working Interactively in the CLI,
+they will receive errors in the view of 'Message'.  When the user executes a script,
+errors will use the view 'Analytic'.
 
-2. A new cmdlet `Resolve-ErrorRecord` will produce comprehensive detailed
-view of the fully qualified error, including inner exceptions.
+- An example is in the image below:
+
+![Message and Analytic](.\RFC00XX-Update-Error-View.png)
+
+4. A new cmdlet `Resolve-ErrorRecord` will produce comprehensive detailed
+view of the fully qualified error, including nested inner exceptions.
 
 - Resolve-ErrorRecord will provide the following:
 
@@ -99,7 +102,7 @@ First parameter set
 - Newest
 
     + Datatype: int32
-    + specifies one or more of last errors to display
+    + specifies one or more of the newest errors to display
     + Not required
 
 __Example 1__
@@ -115,7 +118,8 @@ PS C:\test> Resolve-ErrorRecord
 ```
 
 __Example 2__
-Error occurs in Script. Cmdlet displays error details from pipeline error object
+Error occurs in script, shows error from view 'Analytic', and then is piped
+from $error array to 'Resolve-ErrorRecord' to display more details.
 
 ```powershell
 PS C:\> .\MyScript.ps1
