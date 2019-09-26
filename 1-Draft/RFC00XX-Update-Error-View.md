@@ -41,9 +41,9 @@ to remove 'view' from the name. The view list is as follows:
 
 ## Specification
 
-The proposal is to add three new views to help improve error message comprehension based on user
-needs. For in-depth troubleshooting, a new cmdlet `Resolve-ErrorRecord`
-to provide detailed error information.
+The proposal is to add three new views to help improve error message comprehension
+based on user needs. For in-depth troubleshooting, a new cmdlet
+Resolve-ErrorRecord to provide detailed error information.
 
 __Key Design Considerations__
 
@@ -174,12 +174,17 @@ ERROR: get-item: gi: Cannot find path ‘C:\blah’ because it does not exist: A
 __Alternative color for all errors__
 
 1. We could change the default error message color from the current RED foreground and BLACK background to ?.
-2. Differentiating errors based on termination condition: terminating versus non-terminating is currently not intuitive. We are examining differentiating these conditions on the console. Example, adding a new property $host.PrivateData.NonTerminatingErrorForegroundColor ='Red'.
-For occasional customers, all error messages remain as color Red. For advanced customers, they can change non-terminating errors to another color to separate the error termination type in the console.
+2. Differentiating errors based on termination condition: terminating versus non-terminating
+is currently not intuitive. We are examining differentiating these conditions on the console.
+Example, adding a new property $host.PrivateData.NonTerminatingErrorForegroundColor ='Red'.
+For occasional customers, all error messages remain as color Red. For advanced customers,
+they can change non-terminating errors to another color to separate the error
+termination type in the console.
 
 __Alternative For Error, Warning, Verbose__
 
-1. We could be more terse in our messages and increase consistency with verbose and warning messages by using a single letter to identify the message.
+1. We could be more terse in our messages and increase consistency with verbose
+and warning messages by using a single letter to identify the message.
 
 Legend: V = Verbose, W = Warning, E = Error(non-terminating future), F = Fatal
 
