@@ -20,17 +20,8 @@ complete detailed view of the fully qualified error when desired.
 The on-screen experience, when receiving an error message,
 is controlled through the views NormalView (the default) and CategoryView. These are user selectable
 through the preference variable $ErrorView.
-<<<<<<< HEAD
-<<<<<<< HEAD
-The addition of a “ConciseView” as default that contains only specific error
-=======
-The addition of a “SimpleView” as default that contains only specific error
->>>>>>> Error-View
-information producing a single line on screen and in logs will improve customer success.
-=======
 This RFC describes Changing '$ErrorView to an enumeration and adding three additional views
 to improve readability,'Message', 'Analytic', and 'Dynamic'.
->>>>>>> Error-View
 
 - Message - provides a concise error message suitable for new or occasional PowerShell users.
 - Analytic - provides a refactored form of NormalView
@@ -50,25 +41,6 @@ to remove 'view' from the name. The view list is as follows:
 
 ## Specification
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-The proposal is to add a new single-line default error message view called ConciseView
-=======
-The proposal is to add a new single-line default error message view called SimpleView
->>>>>>> Error-View
-and add a new cmdlet (Resolve-ErrorRecord) to provide detailed error information.
-
-__Key Design Considerations__
-
-1. To reduce confusion and improve debugging success,
-<<<<<<< HEAD
-error messages by default should produce a single line of text, including the word “ERROR:”
-to make consistent with Verbose and Warning messages. This is added to $errorView as view named "ConciseView".
-=======
-error messages should call WriteErrorLine to produce a single line of text, including the word “ERROR:”
-to make consistent with Verbose and Warning messages. This is added to $errorView as view named "SimpleView".
->>>>>>> Error-View
-=======
 The proposal is to add three new views to help improve error message comprehension based on user
 needs. For in-depth troubleshooting, a new cmdlet `Resolve-ErrorRecord`
 to provide detailed error information.
@@ -78,25 +50,9 @@ __Key Design Considerations__
 1. To reduce confusion and improve debugging success for new and occasional users,
 error messages should call WriteErrorLine to produce a simplified message using view 'Message'
 and include the preface word “ERROR:”
->>>>>>> Error-View
 
 - Simplified error message syntax from 'Message'. (See graphic below)
 
-<<<<<<< HEAD
-    + NormalView
-    + CategoryView
-<<<<<<< HEAD
-    + ConciseView
-    + DetailedView
-
-- Error Message syntax for ConciseView
-=======
-    + SimpleView
-    + DetailedView
-
-- Error Message syntax for SimpleView
->>>>>>> Error-View
-=======
 ```powershell
 PS C:\> Get-Childitem -Path c:\notreal
 ERROR: Cannot find path ‘C:\notreal’ because it does not exist
@@ -105,7 +61,6 @@ ERROR: Cannot find path ‘C:\notreal’ because it does not exist
 2. To improve script debugging for advanced PowerShell users and scripters,
 a refactored error view 'Analytic' will be added displaying the error category,
 exception, code line and position, and include additional help for the user.
->>>>>>> Error-View
 
 ```powershell
 PS C:\> .\MyScript.ps1
@@ -150,46 +105,12 @@ First parameter set
     + specifies one or more of the newest errors to display
     + Not required
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-Examples
-=======
-__Example__
->>>>>>> Error-View
-
-```powershell
-# Displays details of the last error displayed
-Resolve-ErrorRecord
-
-# Displays error details from pipeline error object
-$error[1] | Resolve-ErrorRecord
-
-# Display detailed error information for the most recent 3 errors
-Resolve-ErrorRecord -Newest 3
-<<<<<<< HEAD
-
-__Example 1__
-
-```powershell
-PS C:\test> Get-item c:\blah
-Get-item : Cannot find path 'C:\blah' because it does not exist. At line:1 char:1
-=======
-```
-
-=======
->>>>>>> Error-View
 __Example 1__
 Error occurs in Interactive mode. Cmdlet displays details of the last error displayed
 
 ```powershell
-<<<<<<< HEAD
-PS C:\test> Get-item c:\blah
-ERROR: Cannot find path 'C:\blah' because it does not exist.
->>>>>>> Error-View
-=======
 PS C:\> Get-Childitem -Path c:\notreal
 ERROR: Cannot find path ‘C:\notreal’ because it does not exist
->>>>>>> Error-View
 
 PS C:\test> Resolve-ErrorRecord
 
@@ -197,22 +118,8 @@ PS C:\test> Resolve-ErrorRecord
 ```
 
 __Example 2__
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-```powershell
-PS C:\test> slkjdfh
-ERROR: The term 'slkjdfh' is not recognized as the name of a cmdlet, function, script file, or operable program. At line:1 char:1
-PS C:\test> $error[0] | Resolve-ErrorRecord
-
-PSMessageDetails      :
-Exception             : System.Management.Automation.CommandNotFoundException: The term 'slkjdfh' is not recognized as
-=======
-SimpleView of Error message. Piped error to Resolve-ErrorRecord shows sample DetailedView
-=======
 Error occurs in script, shows error from view 'Analytic', and then is piped
 from $error array to 'Resolve-ErrorRecord' to display more details.
->>>>>>> Error-View
 
 ```powershell
 PS C:\> .\MyScript.ps1
@@ -235,17 +142,9 @@ Display detailed error information for the most recent 3 errors.
 ```powershell
 PS C:\> Resolve-ErrorRecord -Newest 3
 
-<<<<<<< HEAD
-PS>Resolve-ErrorRecord -Newest 1
-Exception calling "GetHostByName" with "1" argument(s):
-"No such host is known."
-At line:1 char:1
->>>>>>> Error-View
-=======
 **** Detailed message here ****
 **** Detailed message here ****
 **** Detailed message here ****
->>>>>>> Error-View
 ```
 
 ## Alternate Proposals and Considerations
