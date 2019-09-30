@@ -20,69 +20,65 @@ complete detailed view of the fully qualified error when desired.
 The on-screen experience, when receiving an error message,
 is controlled through the views NormalView (the default) and CategoryView. These are user selectable
 through the preference variable $ErrorView.
-This RFC describes Changing '$ErrorView to an enumeration and adding three additional views
-to improve readability,'Message', 'Analytic', and 'Dynamic'.
+This RFC describes Changing '$ErrorView to an enumeration and adding one additional dynamic view
+to improve readability; 'ConciseView'
 
-- Message - provides a concise error message suitable for new or occasional PowerShell users.
-- Analytic - provides a refactored form of NormalView
-- Dynamic - provides conditional switching between Message and Analytic.
+- ConciseView - provides a concise error message suitable for new or occasional PowerShell users
+and a refactored view for advanced module builders. If the error is not from a script or parser
+error, then it's a single line error message. Otherwise, you get a multiline error message that
+contains the error and a pointer and error message showing where the error is in that line.
+If the terminal doesn't support Virtual Terminal, then vt100 color codes are not used.
 
 A comprehensive detailed view of the fully qualified error, including inner exceptions,
 will be provided by the `Resolve-ErrorRecord` cmdlet.
 
-'$ErrorView' shall contain the original views for backward compatibility and renamed
-to remove 'view' from the name. The view list is as follows:
+'$ErrorView' shall contain the original views for backward compatibility and to
+lessen this breaking change. The view list is as follows:
 
-- Normal
-- Category
-- Message
-- Analytic
-- Dynamic
+- ConciseView
+- NormalView
+- CategoryView
 
 ## Specification
 
-The proposal is to add three new views to help improve error message comprehension
+The proposal is to add one new view to help improve error message comprehension
 based on user needs. For in-depth troubleshooting, a new cmdlet
 Resolve-ErrorRecord to provide detailed error information.
 
 __Key Design Considerations__
 
 1. To reduce confusion and improve debugging success for new and occasional users,
-error messages should call WriteErrorLine to produce a simplified message using view 'Message'
-and include the preface word “ERROR:”
+error messages should call WriteErrorLine to produce a simplified message for interactive CLI users.
 
 - Simplified error message syntax from 'Message'. (See graphic below)
 
 ```powershell
 PS C:\> Get-Childitem -Path c:\notreal
-ERROR: Cannot find path ‘C:\notreal’ because it does not exist
+Get-Childitem: Cannot find path ‘C:\notreal’ because it does not exist
 ```
 
-2. To improve script debugging for advanced PowerShell users and scripters,
-a refactored error view 'Analytic' will be added displaying the error category,
-exception, code line and position, and include additional help for the user.
+2. To improve script debugging for advanced module builders and scripters,
+a refactored error view will be displayed. If the error is not from a script or parser
+error, then it's a single line error message. Otherwise, you get a multiline error message that
+contains the error and a pointer and error message showing where the error is in that line.
+
+- A new property ErrorAccentColor is added to support changing the accent color of the error message.
+If the terminal doesn't support Virtual Terminal, then vt100 color codes are not used.
 
 ```powershell
 PS C:\> .\MyScript.ps1
-ERROR: ItemNotFoundException
-  ---> C:\GitHub\pri-errorview\RustTest\test.ps1
-    |
-15  | Get-ChildItem -Path c:\notreal
-    |                     ^^^ Cannot find path 'C:\notreal' because it does not exist.
-    |
+Get-ChildItem: in /Users/Username/GitHub/Errorview/script.test.ps1
+Line |
+15   | Get-ChildItem -Path c:\notreal
+     |                     ^^^ Cannot find path 'C:\notreal' because it does not exist.
     * Help: Additional help information provided here
 ```
-
-3. The 'Dynamic' view is a combination of the views 'message' and 'Analytic' for users working
-in the console that also run scripts. When the user is working Interactively in the CLI,
-they will receive errors in the view of 'Message'.  When the user executes a script,
-errors will use the view 'Analytic'.
 
 - An example is in the image below:
 
 ![Message and Analytic](.\RFC00XX-Update-Error-View.png)
 
-4. A new cmdlet `Resolve-ErrorRecord` will produce comprehensive detailed
+3. A new cmdlet `Resolve-ErrorRecord` will produce comprehensive detailed
 view of the fully qualified error, including nested inner exceptions.
 
 - Resolve-ErrorRecord will provide the following:
@@ -110,7 +106,7 @@ Error occurs in Interactive mode. Cmdlet displays details of the last error disp
 
 ```powershell
 PS C:\> Get-Childitem -Path c:\notreal
-ERROR: Cannot find path ‘C:\notreal’ because it does not exist
+Get-ChildItem: Cannot find path ‘C:\notreal’ because it does not exist
 
 PS C:\test> Resolve-ErrorRecord
 
@@ -123,13 +119,11 @@ from $error array to 'Resolve-ErrorRecord' to display more details.
 
 ```powershell
 PS C:\> .\MyScript.ps1
-ERROR: ItemNotFoundException
-  ---> C:\GitHub\pri-errorview\RustTest\test.ps1
+Get-ChildItem: in /Users/Username/GitHub/Errorview/script.test.ps1
     |
 15  | Get-ChildItem -Path c:\notreal
     |                     ^^^ Cannot find path 'C:\notreal' because it does not exist.
-    |
-    * Help: this is for additional help information
+    * Help: Additional help information provided here
 
 PS C:\> $error[0] | Resolve-ErrorRecord
 
@@ -148,6 +142,11 @@ PS C:\> Resolve-ErrorRecord -Newest 3
 ```
 
 ## Alternate Proposals and Considerations
+
+__Alternative/additional view customization__
+
+It is conceivable in the future to add extensibility for module builders,
+that they could supply their own diagnostic script for specific error customization.
 
 __Alternative single-line display__
 
