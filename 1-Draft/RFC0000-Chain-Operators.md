@@ -732,8 +732,8 @@ statement:
 
 pipeline_chain:
     | pipeline
-    | pipeline_chain [newline] "&&" [newlines] pipeline
-    | pipeline_chain [newline] "||" [newlines] pipeline
+    | pipeline_chain "&&" [newlines] pipeline
+    | pipeline_chain "||" [newlines] pipeline
 ```
 
 #### Optional pipeline chaining
@@ -756,15 +756,6 @@ For example, the following would be a single pipeline chain:
 cmd1 &&
     cmd2 ||
     cmd3
-```
-
-Following on from the recent pipeline pre-continuation addition to PowerShell,
-the following is also proposed:
-
-```powershell
-cmd1
-    && cmd2
-    || cmd3
 ```
 
 If the end of file is reached after a pipeline chain operator,
