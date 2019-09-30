@@ -83,7 +83,7 @@ Policy settings are used by administrators to centrally manage PowerShell.
 | Location     | Policy settings                                           | Regular settings                                           |
 |--------------|-----------------------------------------------------------|------------------------------------------------------------|
 | File section | "PowerShell": { "PolicySettings": {...} }                 | "PowerShell": { "RegularSettings": {...} }                 |
-| Registry key | Software\Policies\PowerShellCore                          | Not Applicable                                             |
+| Registry key | Software\Policies\Microsoft\PowerShellCore                | Not Applicable                                             |
 
 ### Policy settings Setting Fall-Back
 
@@ -95,7 +95,7 @@ Help to transition from Windows PowerShell to PowerShell 7.
 
 For Policy Settings,
 each policy should have a `Use Windows PowerShell Policy` which will indicate that the policy should the read from
-`SOFTWARE\Policies\Microsoft\Windows\PowerShell` instead of `Software\Policies\PowerShellCore`.
+`SOFTWARE\Policies\Microsoft\Windows\PowerShell` instead of `Software\Policies\Microsoft\PowerShellCore`.
 The default in Group Policy is to have no policy, so it would not fall back to Windows PowerShell Policy, or apply PowerShell 7 policy.
 
 ### Precedence of applying settings
@@ -108,8 +108,8 @@ Note, this is listed as `Computer, Then User` in [Registry keys and settings](#r
 
 | Scheme                      | Windows                                              | Unix                                                 |
 |-----------------------------|------------------------------------------------------|------------------------------------------------------|
-| GPO -> Computer Policy      | HKLM\Software\Policies\PowerShellCore                | See [Moving configuration out of PSHome][moving]     |
-| GPO -> User Policy          | HKCU\Software\Policies\PowerShellCore                | %XDG_CONFIG_HOME%/powershell.config.json             |
+| GPO -> Computer Policy      | HKLM\Software\Policies\Microsoft\PowerShellCore      | See [Moving configuration out of PSHome][moving]     |
+| GPO -> User Policy          | HKCU\Software\Policies\Microsoft\PowerShellCore      | %XDG_CONFIG_HOME%/powershell.config.json             |
 | File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
 | File -> Computer-Wide       | See [Moving configuration out of PSHome][moving]     | [Moving configuration out of PSHome][moving]         |
 | File -> User-Wide           | %APPDATA%/powershell.config.json                     | %XDG_CONFIG_HOME%/powershell.config.json             |
@@ -144,8 +144,8 @@ Note, this is listed as `User, then Computer` in [Registry keys and settings](#r
 
 | Scheme                      | Windows                                              | Unix                                                 |
 |-----------------------------|------------------------------------------------------|------------------------------------------------------|
-| GPO -> User Config          | HKCU\Software\PowerShellCore                         | %XDG_CONFIG_HOME%/powershell.config.json             |
-| GPO -> Computer Config      | HKLM\Software\PowerShellCore                         |  See [Moving configuration out of PSHome][moving]                          |
+| GPO -> User Config          | HKCU\Software\Policies\Microsoft\PowerShellCore      | %XDG_CONFIG_HOME%/powershell.config.json             |
+| GPO -> Computer Config      | HKLM\Software\Policies\Microsoft\PowerShellCore      |  See [Moving configuration out of PSHome][moving]    |
 | File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
 | File -> User-Wide           | %APPDATA%\powershell.config.json                     | %XDG_CONFIG_HOME%/powershell.config.json             |
 | File -> Computer-Wide       | See [Moving configuration out of PSHome][moving]     | /opt/Microsoft/powershell/powershell.config.json     |
@@ -156,7 +156,7 @@ Note, this is listed as `Computer` in [Registry keys and settings](#registry-key
 
 | Scheme                      | Windows                                              | Unix                                                 |
 |-----------------------------|------------------------------------------------------|------------------------------------------------------|
-| GPO -> Computer Config      | HKLM\Software\PowerShellCore                         |  See [Moving configuration out of PSHome][moving]                          |
+| GPO -> Computer Config      | HKLM\Software\Policies\Microsoft\PowerShellCore      |  See [Moving configuration out of PSHome][moving]    |
 | File -> Application-Startup | pwsh -settingsfile `somepath/powershell.config.json` | pwsh -settingsfile `somepath/powershell.config.json` |
 | File -> Computer-Wide       | See [Moving configuration out of PSHome][moving]     | /opt/Microsoft/powershell/powershell.config.json     |
 
@@ -168,7 +168,7 @@ A set of configuration settings in GPO scheme and file scheme for policy setting
 
 Notes:
 
-- All policies are in `Software\Policies\PowerShellCore`.
+- All policies are in `Software\Policies\Microsoft\PowerShellCore`.
 - `ExecutionPolicy` is not in any SubKey.
 
 | SubKey                      | Option                             | Type   | Precedence          |
