@@ -96,7 +96,7 @@ providing a convenient way to manipulate control flow around command outcome rat
 
 ## User Experience
 
-Also see: [test cases for implementation](https://github.com/PowerShell/PowerShell/blob/0b700828f22824c29eac70f8db1d2bf504b212d1/test/powershell/Language/Operators/PipelineChainOperator.Tests.ps1).
+Also see: [test cases for implementation](https://github.com/PowerShell/PowerShell/blob/7457d526258988a632e8dada08486ee9785c6c3c/test/powershell/Language/Operators/PipelineChainOperator.Tests.ps1).
 
 
 Pipeline chain operators are intended to behave
