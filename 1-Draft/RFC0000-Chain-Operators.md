@@ -78,8 +78,6 @@ This RFC proposes:
 - That `&&` and `||` may be used between PowerShell pipelines to conditionally sequence them.
 - That `$?` (PowerShell's execution success indicator) be used to determine the sequence from pipeline to pipeline.
 - That such sequences of pipelines using `&&` and `||` be called **pipeline chains**.
-- To also allow control flow statements (`throw`, `break`, `continue`, `return` and `exit`) at the end of such chains
-  when the chain could be used as a statement (not just a pipeline).
 
 ## Motivation
 
@@ -95,7 +93,6 @@ emit some informational output (and/or error output) and return an exit code.
 
 The aim of chain operators is to make the action success as easy to process as the output,
 providing a convenient way to manipulate control flow around command outcome rather than output.
-This is also the motivation behind allowing control flow statements at the end of pipelines.
 
 ## User Experience
 
@@ -124,6 +121,8 @@ In these examples:
 - `echo` is a native command that writes its argument as output and returns an exit code of 0
 - `error` is a native command that writes its argument as output and returns an exit code of 1
 
+#### Simple successful command chain
+
 ```powershell
 echo 'Hello' && echo 'Again'
 ```
@@ -134,6 +133,8 @@ Again
 ```
 
 ---
+
+#### Simple error after successful command
 
 ```powershell
 echo 'Hello' && error 'Bad'
@@ -146,6 +147,8 @@ Bad
 
 ---
 
+#### Error followed by command in success case
+
 ```powershell
 error 'Bad' && echo 'Hello'
 ```
@@ -155,6 +158,8 @@ Bad
 ```
 
 ---
+
+#### Error followed by command in failure case
 
 ```powershell
 error 'Bad' || echo 'Hello'
@@ -167,6 +172,8 @@ Hello
 
 ---
 
+#### Command followed by command in failure case
+
 ```powershell
 echo 'Hello' || echo 'Again'
 ```
@@ -176,6 +183,8 @@ Hello
 ```
 
 ---
+
+#### Error followed by error in failure case
 
 ```powershell
 error 'Bad' || error 'Very bad'
@@ -188,15 +197,20 @@ Very bad
 
 ---
 
+#### Composite chain: 1st succeeds, 2nd is skipped, 3rd is run
+
 ```powershell
 echo 'Hi' || echo 'Message' && echo '2nd message'
 ```
 
 ```output
 Hi
+2nd message
 ```
 
 ---
+
+#### Composite chain: 1st fails, 2nd is run, 3rd is run
 
 ```powershell
 error 'Bad' || echo 'Message' && echo '2nd message'
@@ -210,6 +224,8 @@ Message
 
 ---
 
+#### Composite chain: 1st succeeds, 2nd fails, 3rd is run
+
 ```powershell
 echo 'Hi' && error 'Bad' || echo 'Message'
 ```
@@ -222,7 +238,7 @@ Message
 
 ---
 
-###  Cmdlets and Functions
+### Cmdlets and Functions
 
 Cmdlets and functions work just like native commands,
 except they don't set `$LASTEXITCODE`
@@ -231,6 +247,8 @@ and have other ways of expressing error conditions.
 Here the same principle applies as with native commands;
 the statements proceed as if the next is
 wrapped in `if ($?) { ... }`.
+
+#### Simple cmdlet chain: success then success
 
 ```powershell
 Write-Output "Hello" && Write-Output "Hello again"
@@ -243,6 +261,8 @@ Hello again
 
 ---
 
+#### Simple cmdlet chain: success otherwise success
+
 ```powershell
 Write-Output "Hello" || Write-Output "Hello again"
 ```
@@ -252,6 +272,8 @@ Hello
 ```
 
 ---
+
+#### Simple cmdlet chain: error then success
 
 ```powershell
 Write-Error "Bad" && Write-Output "Hello again"
@@ -268,6 +290,8 @@ and so we proceed to evaluate `$?`.
 
 ---
 
+#### Simple cmdlet chain: error otherwise success
+
 ```powershell
 Write-Error "Bad" || Write-Output "Hello again"
 ```
@@ -280,6 +304,10 @@ Write-Error "Bad" : Bad
 Hello again
 ```
 
+---
+
+#### Simple command chain: native success then cmdlet success
+
 ```powershell
 echo 'Hi' && Write-Output 'Hello'
 ```
@@ -291,15 +319,19 @@ Hello
 
 ---
 
+#### Simple command chain: native error then cmdlet success
+
 ```powershell
 error 'Bad' && Write-Output 'Hello'
 ```
 
-```
+```output
 Bad
 ```
 
 ---
+
+#### Simple command chain: cmdlet error otherwise native success
 
 ```powershell
 Write-Error 'Bad' || echo 'Message'
@@ -322,6 +354,8 @@ The whole pipeline on the left-hand side of an operator
 will be evaluated before evaluating chain condition
 and then right-hand side.
 
+#### Succeeding pipeline on the left hand side of a chain
+
 ```powershell
 1,2,3 | ForEach-Object { $_ + 1 } && Write-Output 'Hello'
 ```
@@ -335,8 +369,41 @@ Hello
 
 ---
 
+#### Non-terminating error in pipeline
+
+When some input fails while processing a pipeline,
+that sets `$?` for that command invocation
+and the pipeline chain proceeds accordingly.
+
 ```powershell
-1,2,3 | ForEach-Object { if ($_ -eq 2) { Write-Error 'Bad' } else { $_ } } && Write-Output 'Hello'
+function Test-NonTerminatingError
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(ValueFromPipeline)]
+        $Input
+    )
+
+    process
+    {
+        if ($Input -ne 2)
+        {
+            return $Input
+        }
+
+        # Write a non-terminating error when $Input is 2
+        # Note that Write-Error will not set $? for the caller here
+
+        $exception = [System.Exception]::new('Bad')
+        $errorId = 'Bad'
+        $errorCategory = 'InvalidData'
+        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $errorId, $errorCategory, $null)
+
+        $PSCmdlet.WriteError($errorRecord)
+    }
+}
+
+1,2,3 | Test-NonTerminatingError && Write-Output 'Hello'
 ```
 
 ```output
@@ -346,56 +413,121 @@ Hello
 + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException
 
 3
-Hello
 ```
 
----
+#### Non-terminating error with `||`
 
 ```powershell
-function FailInProcess
-{
-    [CmdletBinding()]
-    param(
-        [Parameter(ValueFromPipeline)]
-        $Value
-    )
-
-    process
-    {
-        if ($_ -eq 3)
-        {
-            $err = Write-Error 'Bad' 2>&1
-            $PSCmdlet.WriteError($err)
-            return
-        }
-
-        $PSCmdlet.WriteObject($_)
-    }
-}
-
-1,2,3,4 | FailInProcess && Write-Output 'Succeeded'
+1,2,3 | Test-NonTerminatingError || Write-Output 'Problem!'
 ```
 
 ```output
 1
-2
-FailInProcess : Bad
-At line:22 char:11
-+ 1,2,3,4 | FailInProcess && Write-Output 'Succeeded'
-+           ~~~~~~~~~~~~~
+1,2,3 | ForEach-Object { if ($_ -eq 2) { Write-Error 'Bad' } else { $_ } } && Write-Output 'Hello' : Bad
 + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
-+ FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,FailInProcess
++ FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException
 
-4
+3
+Problem!
 ```
-
-(Even though the process block keeps going, `$?` is false)
 
 ---
 
-### Terminating errors and error handling
+#### Pipeline-terminating error in a chain
 
-Terminating errors supercede chain sequencing,
+```powershell
+function Test-PipelineTerminatingError
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(ValueFromPipeline)]
+        $Input
+    )
+
+    process
+    {
+        if ($Input -ne 2)
+        {
+            return $Input
+        }
+
+        # Write a non-terminating error when $Input is 2
+
+        $exception = [System.Exception]::new('Bad')
+        $errorId = 'Bad'
+        $errorCategory = 'InvalidData'
+        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $errorId, $errorCategory, $null)
+
+        # Note the use of ThrowTerminatingError() rather than WriteError()
+        $PSCmdlet.ThrowTerminatingError($errorRecord)
+    }
+}
+
+1,2,3 | Test-PipelineTerminatingError && Write-Output 'Succeeded'
+```
+
+```output
+1
+Test-PipelineTerminatingError : Bad
+At line:1 char:9
++ 1,2,3 | Test-PipelineTerminatingError && Write-Output 'Succeeded'
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++ CategoryInfo          : InvalidData: (:) [Test-PipelineTerminatingError], Exception
++ FullyQualifiedErrorId : Bad,Test-PipelineTerminatingError
+
+```
+
+Note that unlike with the non-terminating error,
+the pipeline does not proceed to process `3`.
+
+#### Pipeline termination is not chain termination
+
+```powershell
+1,2,3 | Test-PipelineTerminatingError || Write-Output 'Failed'
+```
+
+```output
+1
+Test-PipelineTerminatingError : Bad
+At line:1 char:9
++ 1,2,3 | Test-PipelineTerminatingError || Write-Output 'Failed'
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++ CategoryInfo          : InvalidData: (:) [Test-PipelineTerminatingError], Exception
++ FullyQualifiedErrorId : Bad,Test-PipelineTerminatingError
+
+Failed
+```
+
+Here, the pipeline to the left of `||` is terminated,
+but the chain continues since `||` is used and `$?` is false,
+meaning `Write-Output 'Failed'` is executed.
+
+#### Interaction with `try`/`catch`
+
+If an error is caught from within a pipeline chain,
+the chain will be abandoned for the catch block.
+
+```powershell
+try
+{
+    1,2,3 | Test-PipelineTerminatingError || Write-Output 'Failed'
+}
+catch
+{
+    Write-Output "Caught error"
+}
+```
+
+```output
+1
+Caught error
+```
+
+---
+
+### Script-terminating errors and error handling
+
+Script-terminating errors supercede chain sequencing,
 just as they would in a semicolon-separated sequence of statements.
 
 Uncaught errors will terminate the script.
@@ -406,7 +538,7 @@ function ThrowBad
     throw 'Bad'
 }
 
-ThrowBad && Write-Output 'Success'
+ThrowBad || Write-Output 'Failed'
 ```
 
 ```output
@@ -415,32 +547,6 @@ At line:3 char:5
 +     throw 'Bad'                                                                                   +     ~~~~~~~~~~~
 + CategoryInfo          : OperationStopped: (Bad:String) [], RuntimeException
 + FullyQualifiedErrorId : Bad
-```
-
----
-
-This is the same with cmdlet terminating errors.
-
-```powershell
-function ThrowTerminating
-{
-    [CmdletBinding()]
-    param()
-
-    $err = Write-Error 'Bad' 2>&1
-    $PSCmdlet.ThrowTerminatingError($err)
-}
-
-ThrowTerminating && Write-Output 'Success'
-```
-
-```output
-ThrowTerminating : Bad
-At line:1 char:1
-+ ThrowTerminating && Write-Output 'Success'
-+ ~~~~~~~~~~~~~~~~
-+ CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
-+ FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,ThrowTerminating 
 ```
 
 ---
@@ -456,7 +562,7 @@ function ThrowBad
 
 try
 {
-    ThrowBad && Write-Output 'Success'
+    ThrowBad || Write-Output 'Failed'
 }
 catch
 {
@@ -466,56 +572,6 @@ catch
 
 ```output
 Bad
-```
-
----
-
-When the error is suppressed with an error action preference,
-the result is again based on `$?`.
-
-```powershell
-function ThrowTerminating
-{
-    [CmdletBinding()]
-    param()
-
-    Write-Output 'In ThrowTerminating'
-    $ex = [System.Exception]::new('Bad')
-    $errId = 'Bad'
-    $errCat = 'NotSpecified'
-    $err = [System.Management.Automation.ErrorRecord]::new($ex, $errId, $errCat, $null)
-    $PSCmdlet.ThrowTerminatingError($err)
-}
-
-ThrowTerminating -ErrorAction Ignore && Write-Output 'Success'
-```
-
-```output
-In ThrowTerminating
-```
-
----
-
-```powershell
-function ThrowTerminating
-{
-    [CmdletBinding()]
-    param()
-
-    Write-Output 'In ThrowTerminating'
-    $ex = [System.Exception]::new('Bad')
-    $errId = 'Bad'
-    $errCat = 'NotSpecified'
-    $err = [System.Management.Automation.ErrorRecord]::new($ex, $errId, $errCat, $null)
-    $PSCmdlet.ThrowTerminatingError($err)
-}
-
-ThrowTerminating -ErrorAction Ignore || Write-Output 'Success'
-```
-
-```output
-In ThrowTerminating
-Success
 ```
 
 ---
@@ -609,13 +665,13 @@ function ThrowTerminating
     $PSCmdlet.ThrowTerminatingError($err)
 }
 
-ThrowTerminating || Write-Output 'Success'
+ThrowTerminating || Write-Output 'Continued'
 ```
 
 ```output
 In ThrowTerminating
 TRAP
-Success
+Continued
 ```
 
 ---
@@ -636,9 +692,9 @@ Hello
 
 ---
 
-With pipeline chains, if it would be written to the pipeline,
-it's captured by assignment.
-This is true even if something in the chain later throws.
+With pipeline chains, as with any other PowerShell statements,
+assignment either succeeds or does not;
+there is no concept of partial success.
 
 ```powershell
 try
@@ -647,134 +703,17 @@ try
 }
 catch
 {
-    $_.FullyQualifiedErrorId
+    Write-Output "Error: $($_.FullyQualifiedErrorId)"
 }
-$x
+Write-Output "`$x: $x"
 ```
 
 ```output
-Bad
-Hi
+Error: Bad
+$x:
 ```
 
-(Compare this to `$x = . { 1;2; throw 'Bad' }`.)
-
----
-
-### Flow control statements
-
-Finally, pipeline chains can use flow control statements.
-
-Here we assume a native command `exitwith`,
-which requires its first argument to be an integer,
-prints that argument to the console
-and returns it as an exit code:
-
-```
-> exitwith 0
-0
-> $LASTEXITCODE
-0
-```
-
-```
-> exitwith 42
-42
-> $LASTEXITCODE
-42
-```
-
----
-
-Here, `|| break` means the loop will stop early
-when `exitwith` returns a non-zero exit code (`exitwith 1`).
-
-```powershell
-for ($i = 0; $i -lt 10; $i++)
-{
-    exitwith $i || break
-}
-```
-
-```output
-0
-1
-```
-
----
-
-Here the loop continues when `exitwith` succeeds:
-
-```powershell
-$codes = 0,0,1,0
-foreach ($i in $codes)
-{
-    exitwith $i && continue
-    Write-Information 'Cleaning up'
-}
-```
-
-```output
-0
-0
-1
-Cleaning up
-0
-```
-
----
-
-When a native command succeeds,
-that might mean we have a useful value to return.
-
-```powershell
-function Get-Thing
-{
-    exitwith 0 && return 'SUCCESS'
-
-    return 'FAILURE'
-}
-
-Get-Thing
-```
-
-```output
-0
-SUCCESS
-```
-
----
-
-Alternatively, a native command may fail
-but we want to use an exception for that.
-
-```powershell
-exitwith 1 || throw 'ERROR!'
-```
-
-```output
-1
-
-ERROR!
-At line:1 char:14
-+ exitwith 1 || throw 'ERROR!'
-+               ~~~~~~~~~~~~~~
-+ CategoryInfo          : OperationStopped: (ERROR!:String) [], RuntimeException
-+ FullyQualifiedErrorId : ERROR!
-```
-
----
-
-In dire circumstances, you might actually want to exit.
-
-```powershell
-exitwith 1 || exit 1
-```
-
-```output
-1
-# PowerShell exits...
-```
+(Compare this to `$x = . { 'Hi'; throw 'Bad' }`.)
 
 ---
 
@@ -896,55 +835,6 @@ The consequence of this will be that an entire pipeline chain
 can be sent to a background job for evaluation,
 rather than individual pipelines within it.
 
-#### Pipeline chains vs statement chains
-
-Currently, there are circumstances in PowerShell
-where a pipeline can be used as one of any statements,
-such as after assignment or in a subexpression.
-There are also places where a only a pipeline can be used,
-such as in an `if` condition or in a subpipeline.
-
-To accomodate this difference
-and the inclusion of flow control statements on the ends of pipelines,
-there is a proposed distinction between chains that must be pipelines
-and chains that may be used as statements,
-with the former being *pipeline chains*
-and the latter being *statement chains*.
-
-In effect there is no user experience difference other than
-not being able to use `return`/`continue`/`break`/`throw`/`exit`
-at the ends of pipelines used in pipeline-specific scenarios.
-
-For example:
-
-```powershell
-if ('Thing' && throw 'Bad')
-{
-    'Hi'
-}
-```
-
-will not recognise `throw` as a keyword.
-
-To match `if (throw 'Bad') { ... }`, the proposed behaviour is to parse it as a command,
-so that invoking the above gives:
-
-```output
-throw : The term 'throw' is not recognized as the name of a cmdlet, function, script file, or operable program.
-Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
-At line:1 char:10
-+ if (1 && throw 'Bad') { 'Hi' }
-+          ~~~~~
-+ CategoryInfo          : ObjectNotFound: (throw:String) [], CommandNotFoundException
-+ FullyQualifiedErrorId : CommandNotFoundException
-```
-
-These control flow statements would only be allowed *at the end* of chains because:
-
-- Control flow makes any invocation after the statement unreachable
-- `return` and `throw` allow pipelines as subordinate expressions,
-   meaning it would be grammatically impossible to use those statements mid-chain.
-
 ### Semantics
 
 #### Pipeline "success"
@@ -1024,43 +914,27 @@ If `cmd1` fails but emits output, `$x` will hold that value.
 Errors will have the same semantics as the equivalent
 `cmd1; if ($?) { cmd2 }` syntax.
 
-Terminating errors will terminate the entire pipeline chain.
-But output already emitted by earlier pipelines in the chain
-will be output by the chain before terminating:
-
-```powershell
-try
-{
-    $x = cmd1 && throw "Bad"
-}
-catch
-{
-}
-
-$x # Has values from cmd1
-```
-
-Non-terminating errors will cause the immediate pipeline to continue,
+Non-terminating and pipeline-terminating errors will cause the immediate pipeline to continue,
 and the pipeline chain will evaluate as normal based on the value of `$?`.
+
+Script-terminating errors will terminate the entire pipeline chain,
+unless a `trap { continue }` is used.
+
+While output from a chain that later throws a script-terminating error
+will be written to the pipeline,
+it will not be assigned to a variable.
+This is consistent with existing assignment semantics in PowerShell.
 
 ### Other notes
 
 #### New Abstract Syntax Tree (AST) types
 
-Two new AST types are proposed:
+A single new AST leaf type is proposed, `PipelineChainAst`,
+which refers to a pipeline chain
+that can be used anywhere where a pipeline could be currently.
+This inherits from `PipelineBaseAst`.
 
-- `PipelineChainAst`, which refers to a pipeline chain
-  that can be used anywhere where a pipeline could be currently.
-  This inherits from `PipelineBaseAst`.
-- `StatementChainAst`, which refers to a pipeline chain
-  used anywhere a statement could be currently.
-  This inherits from `StatementAst`
-
-The separation of these ASTs means it remains impossible
-to create certain constructions using AST constructors
-that the parser would not allow.
-
-`ICustomAstVisitor2` and `AstVisitor2` would be extended to deal with these ASTs,
+`ICustomAstVisitor2` and `AstVisitor2` would be extended to deal with this new AST type,
 and .NET Core 3's new default interface implementation feature would be
 leveraged to ensure this does not break things
 as previous syntactic introductions have been forced to.
@@ -1207,10 +1081,16 @@ special behaviour would need to be defined for `return $expr &`.
 - Background operators become less useful with respect to chains unless their
   syntax is changed in a significant way.
 
-### Not allowing control flow statements at the end of chains
+### Allowing control flow statements at the end of chains
 
-The main proposal suggests adding control flow
-statements to the end of pipeline chains.
+An original addendum to the pipeline chain proposal
+was to allow adding control flow statements at the end of pipeline chains:
+
+- `cmd1 && return 'Done'`
+- `cmd2 || throw 'Error'`
+- `cmd3 && break`
+- `cmd4 || continue`
+- `cmd5 || exit 1`
 
 This introduces complications:
 
@@ -1226,21 +1106,13 @@ This introduces complications:
     cmd1 && [return [cmd2 && cmd3]]
     ```
 
-- A `throw` can do the same,
-  but the proposal is to explicitly disallow this:
+- A `throw` can do the same:
 
     ```powershell
     cmd1 && throw 'a' && 'b'
     ```
 
-    ```output
-    At line:1 char:19
-    + cmd1 && throw 'a' && 'b'
-    +                   ~~
-    + Pipeline chain operators '&&' and '||' may not be used after 'throw'.
-    ```
-
-    This is proposed since `throw` stringifies its given value,
+    This is especially unhelpful since `throw` stringifies its given value,
     making a construction like the above much less useful than for `return`.
 
 This also complicates the grammar and the AST, since:
@@ -1248,11 +1120,19 @@ This also complicates the grammar and the AST, since:
 - We have to complexify logic about stamtents vs pipelines and control flow logic
 - More AST types may be needed to prevent bad AST constructions
 
-Not including control flow operators in pipelines would mean:
+By keeping control flow statements directly out of pipeline chains:
 
 - The grammar is simplified
 - We only need one AST type
-- There's no confusing embedding of chains over and under a `return`
+- There's no confusing embedding of chains over and under a `return`/`throw`/`exit`
+
+Control flow statements can still be used by embedding them into a subexpression:
+
+- `cmd1 && $(return 'Done')`
+- `cmd2 || $(throw 'Error')`
+- `cmd3 && $(break)`
+- `cmd4 || $(continue)`
+- `cmd5 || $(exit 1)`
 
 #### Reasons against
 
