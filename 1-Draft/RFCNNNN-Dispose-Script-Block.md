@@ -48,14 +48,10 @@ The `dispose{}` block will execute:
 
 ### Behaviour
 
-The `dispose{}` block _does not_ guarantee output, but neither does it prevent it.
+The `dispose{}` block silently **discards** anything submitted to the success output stream from within it.
 
-- If output is received from the `dispose{}` block during normal command operation, it will be sent along the pipeline as per usual.
-- If output is received from the `dispose{}` block during a halting pipeline, it will be **discarded**.
-    - A halting pipeline may occur either due to a normal terminating error being thrown from within the pipeline, or from a Ctrl+C / pipeline stop.
-
-As a result, documentation should advise that `dispose{}` is _not intended_ for any standard output and the limitations of doing so.
-Additionally, all other PowerShell data streams are accessible from `dispose{}`, meaning there is no issue using any of the following streams from within `dispose{}`:
+Documentation should advise that `dispose{}` is _not intended_ for any standard output and will completely ignore it.
+Additionally, all other PowerShell data streams are accessible from `dispose{}`, meaning there is no issue sending data using any of the following streams from within `dispose{}`:
 
 - Error
 - Warning
@@ -194,10 +190,19 @@ It is quite common for functions to be designed to do much of their processing i
 Even if we prevented output from occurring in that instance as we are with `dispose{}`, the processing to produce said output would still be occurring.
 This would significantly slow down intentional or necessary pipeline stops and reduce the utility of `Select-Object -First X` immensely.
 
-#### Completely Suppress Output from `Dispose{}`
+#### Behaviour with Ctrl+C During `Dispose {}`
 
-Rather than permitting output only on the condition that execution completes without errors, we could investigate the possibility of completely suppressing output.
-This is currently complicated by the internal pipeline handling methods, which appear to have a way to suppres _both_ output and error streams as a whole but no capability to permit one while suppressing the other. 
-As the pipeline handling is currently implemented, preventing output would also prevent non-terminating errors from being submitted from the `Dispose{}` block, which is undesirable.
+As PowerShell is primarily an administrative shell, it _typically_ (though not always) respects Ctrl+C. Due to the nature and purpose of the `dispose{}` block, it is likely that it's not suitable to permit `dispose{}` blocks to be cancelled at the user's whim; doing so may lead to memory leaks and other issues that can potentially arise from preventing proper disposal of IDisposable resources.
 
-If a method to prevent standard output while not preventing submission of messages to the error stream is available, this may be revisited, but to date such a method has not been identified.
+However, this means that actions taken within `dispose{}` can potentially be disruptive, at the author's discretion. Given that compiled cmdlets may already implement `IDisposable` without restriction to similar effect, it is unlikely we have a pressing need to deviate from this behaviour. Customer feedback may be necessary to determine if taking action towards this course is necessary.
+
+#### Timeout for `Dispose {}` Operations
+
+Given the above, an alternative may be to implement a hard timeout for command disposal, leaving it up to the runtime garbage collection routines beyond that point. This could potentially be problematic in the same way as permitting `Ctrl+C` to cancel a dispose block, especially in cases where native interop is being performed either directly or by a type being utilised by a given script command.
+
+As above, given that no such restriction is currently present for `IDisposable` cmdlets, it is not likely to be a pressing need. We can reevaluate pending customer feedback.
+
+#### Breaking Change
+
+This is a breaking change, as it prevents users from directly calling a function, alias, or command named `dispose`. However, such commands may still be invoked with `& dispose` syntax.
+
