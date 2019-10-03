@@ -68,6 +68,11 @@ Hence, you should be able to suppress them altogether by setting an environment 
    If new release is detected,
    the subsequent interactive sessions will show a notification about that new release.
 
+3. If a new release is available, `pwsh` is able to automatically upgrade.
+
+   _This is not a goal._
+   A notification message is printed, but `pwsh` will not auto-upgrade.
+
 ### Implementation
 
 This section talks about
@@ -83,7 +88,7 @@ This section talks about
 During the startup, `pwsh` creates a `Task` of the update check work,
 but delays the task run for 3 seconds by using `Task.Delay(3000)`.
 The typical startup time for `pwsh` with a moderate size profile should be less than 1 second.
-Given that, I guess it's reasonable to delay the update check work for 3 seconds,
+Given that, I think it's reasonable to delay the update check work for 3 seconds,
 so that it has close-to-zero impact on the startup performance.
 
 #### How to persist information about a new version
@@ -130,7 +135,7 @@ static void CheckForUpdate()
     // Some pre-validation needs to happen to see if we need to do anything at all.
     // - If the current running `pwsh` is a self-built version, let's bail out early.
     // - Check if a file like `_update_<version>_<publish-date>` already exists.
-    //   If so, check the `LastWriteTime` to see if it's still relatively new, say within a week.
+    //   If so, check the `publish-date` to see if it's still relatively new, say within a week.
     //   If so, let's bail out early.
 
     DateTime today = DateTime.UtcNow;
@@ -155,7 +160,7 @@ static void CheckForUpdate()
     {
         // Use 'sentinelFilePath' as the file lock.
         // The update check tasks started by every 'pwsh' process will compete on holding this file.
-        using (FileStream s = new FileStream(sentinelFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+        using (FileStream s = new FileStream(sentinelFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None, bufferSize: 1, FileOptions.DeleteOnClose))
         {
             if (File.Exists(todayDoneFilePath))
             {
@@ -188,10 +193,13 @@ static void CheckForUpdate()
 }
 ```
 
+> Note: `FileOptions.DeleteOnClose` is used when opening the sentinel file,
+so the sentinel file will be removed after being used as a lock.
+
 With the file lock, only one process can get in the guarded `using` block at a given time.
 So only one process will be creating the file `_update_<version>_<publish-date>`, or renaming an old such file to reflect the new version.
 Yes, other processes could be looking at the old file name (when a `pwsh` session tries to print a notification),
-or working with an outdated `FileInfo` object (another update check tries to do a pre-validation).
+or working with an outdated file name (another update check tries to do a pre-validation).
 But it's fine for that to happen:
 
 - In the former case, that particular `pwsh` session will show a notification about an outdated version,
@@ -240,3 +248,12 @@ the first design I had was to depend on the `Day` of the month.
 So for instance, we can check for updates every 3 days by checking `DateTime.UtcNow.Day % 3 == 0`.
 But that means in the worst case, a user won't be notified of a new release until 3 days after the release.
 That makes this feature somewhat broken from the UX perspective.
+
+Another design is to let all `pwsh`, including different versions, share the same update file,
+whose name contains both the latest stable release tag and latest preview release tag.
+When `pwsh` starts, it parses the file name, compare the latest stable/preview release version with its current version,
+and decides if a notification should be printed.
+This would reduce the number of helper files in the cache folder,
+however, with the cost of additional work at startup time for all versions of `pwsh`.
+Especially, for the latest stable or preview `pwsh` in use, it also needs to spend those extra cycles when it should not.
+Besides, I think having the helper files isolated in a version folder makes it flexible in case we need to make change to the design at a later time.
