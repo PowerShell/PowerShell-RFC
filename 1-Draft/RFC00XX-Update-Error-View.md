@@ -80,6 +80,14 @@ Line |
 
 3. A new cmdlet `Resolve-ErrorRecord` will produce comprehensive detailed
 view of the fully qualified error, including nested inner exceptions.
+- Rendering is recursive for nested objects for Exceptions, InvocationInfo,
+and Arrays otherwise it uses ToString().
+- Members that are empty or null are not shown.
+- There is logic that if the console is less than or equal to 120 columns wide,
+it uses 4 spaces to indent to get more text on screen, otherwise it indents based
+on property name lengths.
+- A new FormatAccentColor is introduced to highlight property names from their values. This can be used later to add accents to tables and list formatting.
+- Removed some commented out unneeded code from ConciseView.
 
 - Resolve-ErrorRecord will provide the following:
 
@@ -138,6 +146,15 @@ PS C:\> Resolve-ErrorRecord -Newest 3
 
 **** Detailed message here ****
 **** Detailed message here ****
+**** Detailed message here ****
+```
+
+__Example 4__
+Maintain the ErrorRecord object for additional pipeline operations
+
+```PowerShell
+PS C:\> Resolve-ErrorRecord -Newest 3 | Select-String -Pattern 'MyFile.txt'
+
 **** Detailed message here ****
 ```
 
