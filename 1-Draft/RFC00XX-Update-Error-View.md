@@ -80,6 +80,7 @@ Line |
 
 3. A new cmdlet `Resolve-ErrorRecord` will produce comprehensive detailed
 view of the fully qualified error, including nested inner exceptions.
+
 - Rendering is recursive for nested objects for Exceptions, InvocationInfo,
 and Arrays otherwise it uses ToString().
 - Members that are empty or null are not shown.
