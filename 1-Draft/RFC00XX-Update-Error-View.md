@@ -50,6 +50,14 @@ __Key Design Considerations__
 1. To reduce confusion and improve debugging success for new and occasional users,
 error messages should call WriteErrorLine to produce a simplified message for interactive CLI users.
 
+- The error message will contain a prefix as described:
+
+    + If the error is an Exception, it prefixes with Exception:.
+    + If the error has InvocationInfo.MyCommand, it prefixes the command.
+    + If the error has InvocationName, CategoryInfo.Category, or CategoryInfo.Reason,
+the message will prefix these.
+    + Only if none of those exist does it actually use Error:.
+
 - Simplified error message syntax from 'Message'. (See graphic below)
 
 ```powershell
