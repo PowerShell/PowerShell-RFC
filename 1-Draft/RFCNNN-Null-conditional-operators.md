@@ -81,6 +81,19 @@ The `??` operator checks the left hand side to be null or undefined and returns 
 
 If the module `Pester` is not installed, then install the module.
 
+### Updates to operator precedence
+
+The operator precedence token flags will be updated to add gaps and place the null coalesce opeator at position 7, above comparison and below add/subtract.
+Currently, the binary operator mask is set at `0x07`, which will be updated to `0x0f`.
+This will ensure that `??` is evaluated before operators like `-eq`, `-and`, `-bor` etc, but after `+` and `-`.
+
+This enables scenarios like:
+```PowerShell
+'x' -eq $null ?? 'x' evaluates to 'x' -eq ($null ?? 'x')
+
+ 2 + $null ?? 3 evaluates to 2 + ($null ?? 3)
+```
+
 ### Additional considerations
 
 The `??=` and `??` operators are binary operators and check for the value of the left hand side to be null or an undefined variable.
