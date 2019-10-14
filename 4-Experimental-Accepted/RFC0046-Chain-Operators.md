@@ -1,7 +1,7 @@
 ---
-RFC:
+RFC: RFC0046
 Author: Robert Holt
-Status: Draft
+Status: Experimental-Accepted
 Area: Pipeline Chain Operators
 Comments Due: 2019-07-12 0000
 Plan to implement: Yes
