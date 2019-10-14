@@ -1,7 +1,7 @@
 ---
-RFC: RFCxxxx
+RFC: RFC0045
 Author: Dongbo Wang
-Status: Draft
+Status: Experimental-Accepted
 SupercededBy: N/A
 Version: 0.1
 Area: Language
