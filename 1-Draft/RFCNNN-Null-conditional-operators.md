@@ -91,7 +91,7 @@ This enables scenarios like:
 ```PowerShell
 'x' -eq $null ?? 'x' evaluates to 'x' -eq ($null ?? 'x')
 
- 2 + $null ?? 3 evaluates to 2 + ($null ?? 3)
+ 2 + $null ?? 3 evaluates to (2 + $null) ?? 3
 ```
 
 ### Additional considerations
