@@ -10,30 +10,29 @@ Comments Due: 10/31/2019
 # Update $ErrorView with simplified views for Error Messages
 
 When an error occurs in PowerShell, the customers on-screen error message experience currently
-provides a level of detail that obscures the exception message from being recognized and read by
-new or occasional PowerShell users. The addition of a simplified error view will improve both
-comprehension and troubleshooting experience. A new cmdlet 'Resolve-ErrorRecord' will provide
+provides a level of detail that obscures the exception message from being recognized and read by new
+or occasional PowerShell users. The addition of a simplified error view will improve both
+comprehension and troubleshooting experience. A new cmdlet `Get-Error` will provide
 complete detailed view of the fully qualified error when desired.
 
 ## Motivation
 
-The on-screen experience, when receiving an error message,
-is controlled through the views NormalView (the default) and CategoryView. These are user selectable
-through the preference variable $ErrorView.
-This RFC describes Changing '$ErrorView to an enumeration and adding one additional dynamic view
-to improve readability; 'ConciseView'
+The on-screen experience, when receiving an error message, is controlled through the views
+NormalView (the default) and CategoryView. These are user selectable through the preference variable
+**$ErrorView**. This RFC describes Changing **$ErrorView** to an enumeration and adding one
+additional dynamic view to improve readability; 'ConciseView'
 
-- ConciseView - provides a concise error message suitable for new or occasional PowerShell users
-and a refactored view for advanced module builders. If the error is not from a script or parser
-error, then it's a single line error message. Otherwise, you get a multiline error message that
-contains the error and a pointer and error message showing where the error is in that line.
-If the terminal doesn't support Virtual Terminal, then vt100 color codes are not used.
+- ConciseView - provides a concise error message suitable for new or occasional PowerShell users and
+  a refactored view for advanced module builders. If the error is not from a script or parser error,
+  then it's a single line error message. Otherwise, you get a multiline error message that contains
+  the error, a pointer and error message showing where the error is in that line. If the terminal
+  doesn't support Virtual Terminal, then vt100 color codes are not used.
 
-A comprehensive detailed view of the fully qualified error, including inner exceptions,
-will be provided by the `Resolve-ErrorRecord` cmdlet.
+A comprehensive detailed view of the fully qualified error, including inner exceptions, will be
+provided by the `Get-Error` cmdlet.
 
-'$ErrorView' shall contain the original views for backward compatibility and to
-lessen this breaking change. The view list is as follows:
+**$ErrorView** shall contain the original views for backward compatibility and to lessen this
+breaking change. The view list is as follows:
 
 - ConciseView
 - NormalView
@@ -41,22 +40,21 @@ lessen this breaking change. The view list is as follows:
 
 ## Specification
 
-The proposal is to add one new view to help improve error message comprehension
-based on user needs. For in-depth troubleshooting, a new cmdlet
-Resolve-ErrorRecord to provide detailed error information.
+The proposal is to add one new view to help improve error message comprehension based on user needs.
+For in-depth troubleshooting, a new cmdlet Get-Error to provide detailed error information.
 
 __Key Design Considerations__
 
-1. To reduce confusion and improve debugging success for new and occasional users,
-error messages should call WriteErrorLine to produce a simplified message for interactive CLI users.
+1. To reduce confusion and improve debugging success for new and occasional users, error messages
+   should call WriteErrorLine to produce a simplified message for interactive CLI users.
 
 - The error message will contain a prefix as described:
 
-    + If the error is an Exception, it prefixes with Exception:.
-    + If the error has InvocationInfo.MyCommand, it prefixes the command.
-    + If the error has InvocationName, CategoryInfo.Category, or CategoryInfo.Reason,
-the message will prefix these.
-    + Only if none of those exist does it actually use Error:.
+    - If the error is an Exception, it prefixes with Exception:.
+    - If the error has InvocationInfo.MyCommand, it prefixes the command.
+    - If the error has InvocationName, CategoryInfo.Category, or CategoryInfo.Reason, the message
+      will prefix these.
+    - Only if none of those exist does it actually use Error:.
 
 - Simplified error message syntax from 'Message'. (See graphic below)
 
@@ -65,13 +63,13 @@ PS C:\> Get-Childitem -Path c:\notreal
 Get-Childitem: Cannot find path ‘C:\notreal’ because it does not exist
 ```
 
-2. To improve script debugging for advanced module builders and scripters,
-a refactored error view will be displayed. If the error is not from a script or parser
-error, then it's a single line error message. Otherwise, you get a multiline error message that
-contains the error and a pointer and error message showing where the error is in that line.
+2. To improve script debugging for advanced module builders and scripters, a refactored error view
+   will be displayed. If the error is not from a script or parser error, then it's a single line
+   error message. Otherwise, you get a multiline error message that contains the error and a pointer
+   and error message showing where the error is in that line.
 
-- A new property ErrorAccentColor is added to support changing the accent color of the error message.
-If the terminal doesn't support Virtual Terminal, then vt100 color codes are not used.
+- A new property **ErrorAccentColor** is added to support changing the accent color of the error
+  message. If the terminal doesn't support Virtual Terminal, then vt100 color codes are not used.
 
 ```powershell
 PS C:\> .\MyScript.ps1
@@ -86,28 +84,27 @@ Line |
 
 ![Message and Analytic](.\RFC00XX-Update-Error-View.png)
 
-3. A new cmdlet `Resolve-ErrorRecord` will produce comprehensive detailed
-view of the fully qualified error, including nested inner exceptions.
+3. A new cmdlet `Get-Error` will produce comprehensive detailed view of the fully qualified error,
+   including nested inner exceptions.
 
-- Rendering is recursive for nested objects for Exceptions, InvocationInfo,
-and Arrays otherwise it uses ToString().
+- Rendering is recursive for nested objects for Exceptions, InvocationInfo, and Arrays otherwise it
+  uses ToString().
 - Members that are empty or null are not shown.
-- There is logic that if the console is less than or equal to 120 columns wide,
-it uses 4 spaces to indent to get more text on screen, otherwise it indents based
-on property name lengths.
-- A new FormatAccentColor is introduced to highlight property names from their values. This can be used later to add accents to tables and list formatting.
+- Indentation uses 4 spaces for nested objects
+- A new FormatAccentColor is introduced to highlight property names from their values. This can be
+  used later to add accents to tables and list formatting.
 - Removed some commented out unneeded code from ConciseView.
 
-- Resolve-ErrorRecord will provide the following:
+- `Get-Error` will provide the following:
 
-    + Display Last Error ($Error[0]) – default behavior
-    + Accept Pipeline input – support $error[1] |
-    + Option for the Newest X errors in the session
+    - Display the newest Error ($Error[0]) – default behavior
+    - Accept Pipeline input – support $error[1] |
+    - Option for the Newest X errors in the session (This will be aliased with Last)
 
-- Resolve-ErrorRecord syntax
+- `Get-Error` syntax
 
 ```powershell
-Resolve-ErrorRecord  [-InputObject <psobject>] [-Newest <Int32>] [-All] [<CommonParameters>]
+Get-Error  [-InputObject <psobject>] [-Newest <Int32>] [-All] [<CommonParameters>]
 ```
 
 First parameter set
@@ -125,14 +122,14 @@ Error occurs in Interactive mode. Cmdlet displays details of the last error disp
 PS C:\> Get-Childitem -Path c:\notreal
 Get-ChildItem: Cannot find path ‘C:\notreal’ because it does not exist
 
-PS C:\test> Resolve-ErrorRecord
+PS C:\test> Get-Error
 
 **** Detailed message here ****
 ```
 
 __Example 2__
 Error occurs in script, shows error from view 'Analytic', and then is piped
-from $error array to 'Resolve-ErrorRecord' to display more details.
+from $error array to 'Get-Error' to display more details.
 
 ```powershell
 PS C:\> .\MyScript.ps1
@@ -142,7 +139,7 @@ Get-ChildItem: in /Users/Username/GitHub/Errorview/script.test.ps1
     |                     ^^^ Cannot find path 'C:\notreal' because it does not exist.
     * Help: Additional help information provided here
 
-PS C:\> $error[0] | Resolve-ErrorRecord
+PS C:\> $error[0] | Get-Error
 
 **** Detailed message here ****
 ```
@@ -151,7 +148,7 @@ __Example 3__
 Display detailed error information for the most recent 3 errors.
 
 ```powershell
-PS C:\> Resolve-ErrorRecord -Newest 3
+PS C:\> Get-Error -Newest 3
 
 **** Detailed message here ****
 **** Detailed message here ****
@@ -162,7 +159,7 @@ __Example 4__
 Maintain the ErrorRecord object for additional pipeline operations
 
 ```PowerShell
-PS C:\> Resolve-ErrorRecord -Newest 3 | Select-String -Pattern 'MyFile.txt'
+PS C:\> Get-Error -Newest 3 | Select-String -Pattern 'MyFile.txt'
 
 **** Detailed message here ****
 ```
