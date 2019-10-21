@@ -40,8 +40,9 @@ breaking change. The view list is as follows:
 
 ## Specification
 
-The proposal is to add one new view to help improve error message comprehension based on user needs.
-For in-depth troubleshooting, a new cmdlet Get-Error to provide detailed error information.
+The proposal is to add one new view, 'ConciseView', to help improve error message comprehension.
+ConciseView will be the default view. For in-depth error object information, a new cmdlet
+'Get-Error' provides detailed error information.
 
 __Key Design Considerations__
 
