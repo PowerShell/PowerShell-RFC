@@ -12,6 +12,8 @@ recurring event on your calendar.
 
 ## Notes
 
+* [October 17, 2019](./notes/20191017_Notes.md) ([YouTube recording](https://youtu.be/yL0FXyZQdmQ) and [transcript](./notes/20191017_ChatTranscript.txt))
+* [September 19, 2019](./notes/20190919_Notes.md) ([YouTube recording](https://youtu.be/T2D8FxvoS1g) and [transcript](./notes/20190919_ChatTranscript.txt))
 * [August 15, 2019](./notes/20190815_Notes.md) ([YouTube recording](https://youtu.be/cK1xenkF9zs) and [transcript](./notes/20190815_ChatTranscript.txt))
 * [July 18, 2019](./notes/20190718_Notes.md) ([YouTube recording](https://youtu.be/qwbbUqimtXA) and [transcript](./notes/20190718_ChatTranscript.txt))
 * [June 20, 2019](./notes/20190620_Notes.md) ([YouTube recording](https://youtu.be/yJF-O9tH89Q) and [transcript](./notes/20190620_ChatTranscript.txt))

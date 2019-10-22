@@ -1,0 +1,230 @@
+Steve Lee (POWERSHELL)
+We are starting
+
+Anonymous
+Hello :) 
+
+JB Lewis
+Hey folks!
+
+JB Lewis
+Hey folks!
+
+Roberth
+Timezones, ey?
+
+Keith Hill
+Do you think && || will still make the cut for PS7?
+
+Anonymous
+Hi @all
+
+Michael B.
+is dispose{} in there?
+
+Roberth
+Timezones, ey?
+
+Keith Hill
+Do you think && || will still make the cut for PS7?
+
+Michael B.
+is dispose{} in there?
+
+Ayan
+Is the PowerShell Conference Asia 2019 being streamed online?
+
+Adam
+When does support for 6.2 end?
+
+Ayan
+Is the PowerShell Conference Asia 2019 being streamed online?
+
+Adam
+When does support for 6.2 end?
+
+Sergey Vasin
+Are we recording?
+
+Christoph Bergmeister
+What about splatting using the @@ syntax for PS7?
+
+Sergey Vasin
+Are we recording?
+
+Joel Sallow
+Dispose isn't in 4. I'm waiting for approval on the RFC so I can finish the code work. It's basically done though.
+
+Christoph Bergmeister
+What about splatting using the @@ syntax for PS7?
+
+Christoph Bergmeister
+I have opened a PR for it
+
+Keith Hill
+Literal splatting?
+
+Joel Sallow
+Dispose isn't in 4. I'm waiting for approval on the RFC so I can finish the code work. It's basically done though.
+
+Christoph Bergmeister
+https://github.com/PowerShell/PowerShell/pull/10073
+
+Christoph Bergmeister
+I have opened a PR for it
+
+Keith Hill
+Literal splatting?
+
+Christoph Bergmeister
+https://github.com/PowerShell/PowerShell/pull/10073
+
+Christoph Bergmeister
+But someone in the community has a concern about whether the RFC design nees to be re-reviewed. I'd like to get feedback and sign off on the implementation in the PR
+
+Missy
+re: live stream for PSConfAsia, possibly here: 
+ https://livestream.com/gaelcolas/events/8824779
+
+Christoph Bergmeister
+https://github.com/PowerShell/PowerShell/pull/10073#issuecomment-526969790
+
+kvprasoon
+PSConfAsia - Mostly livestreamed from tmrw
+https://livestream.com/gaelcolas/events/8824779
+
+Thomas Nieto
+What is the decision on the breaking change to remove support for variable names ending in "?" since analysis found only 70 unique variable names using that convention.
+
+https://github.com/PowerShell/PowerShell/issues/3240
+
+Missy
+re: live stream for PSConfAsia, possibly here: https://livestream.com/gaelcolas/events/8824779
+
+kvprasoon
+PSConfAsia - Mostly livestreamed from tmrw
+https://livestream.com/gaelcolas/events/8824779
+
+Missy
+re: live stream for PSConfAsia, possibly here: https://livestream.com/gaelcolas/events/8824779
+
+Missy
+re: live stream for PSConfAsia, possibly here: 
+ https://livestream.com/gaelcolas/events/8824779
+
+Christoph Bergmeister
+But someone in the community has a concern about whether the RFC design nees to be re-reviewed. I'd like to get feedback and sign off on the implementation in the PR
+
+Christoph Bergmeister
+https://github.com/PowerShell/PowerShell/pull/10073#issuecomment-526969790
+
+Joel Sallow
+I mean I'm pretty sure a fair few folks were saying that the generalized splatting RFC probably needed a rework well before it was accepted, but I don't think there was -- again -- a real consensus on what would be a better way to implement.
+
+Michael B.
+could we get a twitter handle to follow where all RFCs get called linked? or is that too much duplication of effort?
+
+Joel Sallow
+I mean I'm pretty sure a fair few folks were saying that the generalized splatting RFC probably needed a rework well before it was accepted, but I don't think there was -- again -- a real consensus on what would be a better way to implement.
+
+Anonymous
+@Joey, do you want to talk about my blogpost? I am working from home so I can speak.
+
+Sean Wheeler
+@Joey, do you want to talk about my blogpost? I am working from home so I can speak.
+
+Thomas Nieto
+What is the decision on the breaking change to remove support for variable names ending in "?" since analysis found only 70 unique variable names using that convention.
+
+https://github.com/PowerShell/PowerShell/issues/3240
+
+Keith Hill
+Case in point on future behaviors, collection unrolling, while handy, can cause unexpected behavior. In retrospect, probably should have used an explicit operator for collection unrolling e.g. $process.Id.
+
+Keith Hill
+er $processes.*Id
+
+Michael B.
+could we get a twitter handle to follow where all RFCs get called linked? or is that too much duplication of effort?
+
+Sean Wheeler
+@Joey, do you want to talk about my blogpost? I am working from home so I can speak.
+
+Michael B.
+yes when they get posted
+
+Joel Sallow
+Ehhh, people can still name variables whatever they want with ${var?} whether or not we change the default charset available. But yeah, ultimately changing that may not be worth it since it flatly doesn't affect anything if you use any whitespace; $var? ? $ifTrue : $ifFalse is valid regardless, really, so the only truly affected scenarios are probably largely code-golf.
+
+Keith Hill
+Case in point on future behaviors, collection unrolling, while handy, can cause unexpected behavior. In retrospect, probably should have used an explicit operator for collection unrolling e.g. $process.Id.
+
+Keith Hill
+er $processes.*Id
+
+Michael B.
+speaking as an admin scripter, not a dev, github confuses the hell out of me. sorry.
+
+Michael B.
+yes when they get posted
+
+Joel Sallow
+Ehhh, people can still name variables whatever they want with ${var?} whether or not we change the default charset available. But yeah, ultimately changing that may not be worth it since it flatly doesn't affect anything if you use any whitespace; $var? ? $ifTrue : $ifFalse is valid regardless, really, so the only truly affected scenarios are probably largely code-golf.
+
+Michael B.
+speaking as an admin scripter, not a dev, github confuses the hell out of me. sorry.
+
+Anonymous
+The generalized splatting feature was a question if the multi-line continuence RFC with enclosures would work better because it doesn't allow changing parameters into hash tables when switching to multi-line
+
+Joel Sallow
+Right, but if you're looking to be whitespace agnostic you'd be changing the variable name requirements. Currently if a variable is named $Var you cannot use a ternary operator without whitespace?
+
+Joel Sallow
+Not saying it's wrong one way or the other, just clarifying! <3(Joel Sallow asked "Right, but if you're looking to be whitespace agnostic you'd be changing the variable name requirements. Currently if a variable is named $Var you cannot use a ternary operator without whitespace?")
+
+Anonymous
+The generalized splatting feature was a question if the multi-line continuence RFC with enclosures would work better because it doesn't allow changing parameters into hash tables when switching to multi-line
+
+Joel Sallow
+Right, but if you're looking to be whitespace agnostic you'd be changing the variable name requirements. Currently if a variable is named $Var you cannot use a ternary operator without whitespace?
+
+Darwin
+Can we alias get-ciminstance and the relevant params?
+
+Darwin
+Can we alias get-ciminstance and the relevant params?
+
+Christoph Bergmeister
+Something that should be called out as well is that PowerShell 6.1 gets out of supporrt next week (yeah) and therefore PSSA 1.18.3 already dropped support for it
+
+Michael B.
+but they are slow!!! (CIM) so very slow...
+
+Christoph Bergmeister
+Something that should be called out as well is that PowerShell 6.1 gets out of supporrt next week (yeah) and therefore PSSA 1.18.3 already dropped support for it
+
+Michael B.
+but they are slow!!! (CIM) so very slow...
+
+Edward
+With the foreach in parallel function, what is the behavior during an exception?
+
+Edward
+With the foreach in parallel function, what is the behavior during an exception?
+
+Joey Aiello
+Non-terminating PSTask exception, or with -AsJob it's handled in the job object(Edward asked "With the foreach in parallel function, what is the behavior during an exception?")
+
+kvprasoon
+Thank you all
+
+Keith Hill
+thanks!  bye
+
+Jonas Sommer Nielsen
+Awsome stuff. Have a nice day :) 
+
+Joel Sallow
+Thank you all! <3
+
