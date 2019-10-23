@@ -83,7 +83,7 @@ Line |
 
 - An example is in the image below:
 
-![Message and Analytic](.\RFC00XX-Update-Error-View.png)
+![Message and Analytic](RFC00XX-Update-Error-View.png)
 
 3. A new cmdlet `Get-Error` will produce comprehensive detailed view of the fully qualified error,
    including nested inner exceptions.
