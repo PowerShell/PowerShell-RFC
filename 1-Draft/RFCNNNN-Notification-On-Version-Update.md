@@ -82,6 +82,7 @@ This section talks about
 - how to synchronize update checks from different processes of the same version `pwsh` so that at most only one can run to complete during a day
 - how to do the update check
 - how to display the notification
+- how to control the update notification behavior using an environment variable
 
 #### When to do the update check
 
@@ -240,6 +241,19 @@ This is comparatively the easy part.
 - Run `Directory.EnumerateFiles` with the the version directory and the pattern `_update_v*.*.*_????-??-??` to find such a file.
 - If a file path is returned, then get the version information from the file name.
 - Use that version to construct the notification message, including the URL to that GitHub release page.
+
+#### How to control the update notification behavior using an environment variable
+
+The environment variable `POWERSHELL_UPDATECHECK` will be introduced to control the behavior of the update notification feature.
+The environment variable supports 3 values:
+
+- `Default`. This gives you the default behaviors:
+  - `pwsh` of preview versions check for the new preview version as well as the new GA version.
+  - `pwsh` of GA versions check for the new GA version only.
+
+- `Off`. This turns off the update notification feature.
+
+- `LTS`. `pwsh` of both preview and stable versions check for the new LTS GA version only.
 
 ## Alternate Proposals and Considerations
 
