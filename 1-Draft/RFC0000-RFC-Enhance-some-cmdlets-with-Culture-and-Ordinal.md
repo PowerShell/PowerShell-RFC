@@ -44,12 +44,12 @@ It is default parameter set for backward compatibility and default value is `Cur
 ##### Samples
 
 ```powershell
-Select-String -Culture ru-RU -CaseSensetive      # lingustic as expected for Culture term
+Select-String -Culture ru-RU -CaseSensitive      # lingustic as expected for Culture term
 Select-String -Culture ru-RU                     # lingustic
 
-Select-String -Culture Ordinal -CaseSensetive    # non-lingustic - corresponds to C# `Ordinal`
+Select-String -Culture Ordinal -CaseSensitive    # non-lingustic - corresponds to C# `Ordinal`
 Select-String -Culture Ordinal                   # lingustic in .Net Core 3.* - corresponds to C# `OrdinalIgnoreCase`
                                                     # It will be non-lingustic in .Net Core 5.* (Simple Case Folding). See https://github.com/dotnet/corefx/issues/41333 .
-Select-String -Culture Invariant -CaseSensetive  # lingustic
+Select-String -Culture Invariant -CaseSensitive  # lingustic
 Select-String -Culture Invariant                 # lingustic - corresponds to `InvariantCultureIgnoreCase`
 ```
