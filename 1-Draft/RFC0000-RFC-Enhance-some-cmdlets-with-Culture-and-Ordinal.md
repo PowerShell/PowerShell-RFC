@@ -41,15 +41,29 @@ Add `Culture` parameter to all affected cmdlets if absent.
 `Culture` parameter accepts C# `CultureInfo` type, `Ordinal`, `Invariant` and `Current` values.
 It is default parameter set for backward compatibility and default value is `Current` (C# `CurrentCulture`).
 
-##### Samples
+#### Additional considerations
+
+C# Regex implementation works only with current culture so new `Culture` parameter can only work with `SimpleMatch` parameter.
+
+To address the Regex limitation we could consider a custom __simple__ Regex implementation in another RFC.
+
+#### Examples
 
 ```powershell
-Select-String -Culture ru-RU -CaseSensitive      # lingustic as expected for Culture term
-Select-String -Culture ru-RU                     # lingustic
+Select-String -SimpleMatch -Culture ru-RU -CaseSensitive      # lingustic as expected for Culture term
+Select-String -SimpleMatch -Culture ru-RU                     # lingustic
 
-Select-String -Culture Ordinal -CaseSensitive    # non-lingustic - corresponds to C# `Ordinal`
-Select-String -Culture Ordinal                   # lingustic in .Net Core 3.* - corresponds to C# `OrdinalIgnoreCase`
-                                                    # It will be non-lingustic in .Net Core 5.* (Simple Case Folding). See https://github.com/dotnet/corefx/issues/41333 .
-Select-String -Culture Invariant -CaseSensitive  # lingustic
-Select-String -Culture Invariant                 # lingustic - corresponds to `InvariantCultureIgnoreCase`
+Select-String -SimpleMatch -Culture Ordinal -CaseSensitive    # non-lingustic - corresponds to C# `Ordinal`
+Select-String -SimpleMatch -Culture Ordinal                   # lingustic in .Net Core 3.* - corresponds to C# `OrdinalIgnoreCase`
+                                                 # It will be non-lingustic in .Net Core 5.* (Simple Case Folding). See https://github.com/dotnet/corefx/issues/41333 .
+Select-String -SimpleMatch -Culture Invariant -CaseSensitive  # lingustic
+Select-String -SimpleMatch -Culture Invariant                 # lingustic - corresponds to `InvariantCultureIgnoreCase`
+```
+
+##### Pester examples
+
+```powershell
+"file" | Select-String -Pattern "file" -Culture "tr-TR" -SimpleMatch | Should -BeExactly "file"
+"file" | Select-String -Pattern "fIle" -Culture "tr-TR" -SimpleMatch | Should -BeNullOrEmpty
+"file" | Select-String -Pattern "fIle" -Culture "tr-TR" -SimpleMatch -CaseSensitive | Should -BeNullOrEmpty
 ```
