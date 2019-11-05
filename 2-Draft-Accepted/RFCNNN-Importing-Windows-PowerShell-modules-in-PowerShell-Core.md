@@ -53,10 +53,10 @@ During `Import-Module` a module will be loaded into a separate Windows PowerShel
 If this condition is detected PowerShell Core:
   1. creates PS Remoting session `WinPSCompatSession` (unless it already exists) using redirected process streams transport (same one used by PS jobs). Internally this creates hidden `WindowsPS Compatibility` Windows PS process.
   2. generates local proxy module/commands using `WinPSCompatSession` remoting session and code of `Import-Module -PSSession` cmdlet;
-  3. when 'WindowsPS-only' module unload request is detected, if no other module is using `WinPSCompatSession` remoting session - it is closed (this also closes remote Windows PS process).
-Loading a module into `WinPSCompatSession` can be forced regardless of module path or value of `CompatiblePSEditions` manifest property using `-UseWindowsPowerShell` parameter of `Import-Module`.
-New functionality should also be supported during module autoload / command discovery.
-Loading of modules into `WinPSCompat` should be tracked in Telemetry separately from loading other modules so `TelemetryType.WinCompatModuleLoad` needs to be added.
+  3. when 'WindowsPS-only' module unload request is detected, if no other module is using `WinPSCompatSession` remoting session - it is closed (this also closes remote Windows PS process).<br />
+Loading a module into `WinPSCompatSession` can be forced regardless of module path or value of `CompatiblePSEditions` manifest property using `-UseWindowsPowerShell` parameter of `Import-Module`.<br />
+New functionality should also be supported during module autoload / command discovery.<br />
+Loading of modules into `WinPSCompat` should be tracked in telemetry separately from loading other modules so `TelemetryType.WinCompatModuleLoad` needs to be added.
 
 ### PS Remoting Transport
 
@@ -83,7 +83,7 @@ With PS Remoting objects returned from remote 'compatibility' side are not actua
 
 ### Scenarios that need improvement
 
-1. Ideally there should be 1-to-1 runspace afinity between PSCore and WinPS processes; currently this is many-to-1, which in some cases may cause conflicts.
+1. Ideally there should be 1-to-1 runspace afinity between PSCore and WinPS processes; currently this is many(runspaces of a single PSCore process)-to-1(runspace of a single WinPS process), which in some cases may cause conflicts.
 2. PS providers are not supported across remoting boundaries.
 
 ### Windows PowerShell Compatibility module
