@@ -53,7 +53,8 @@ During `Import-Module` a module will be loaded into a separate Windows PowerShel
 If this condition is detected PowerShell Core:
   1. creates PS Remoting session `WinPSCompatSession` (unless it already exists) using redirected process streams transport (same one used by PS jobs). Internally this creates hidden `WindowsPS Compatibility` Windows PS process.
   2. generates local proxy module/commands using `WinPSCompatSession` remoting session and code of `Import-Module -PSSession` cmdlet;
-  3. when 'WindowsPS-only' module unload request is detected, if no other module is using `WinPSCompatSession` remoting session - it is closed (this also closes remote Windows PS process).<br />
+  3. when 'WindowsPS-only' module unload request is detected, if no other module is using `WinPSCompatSession` remoting session - it is closed (this also closes remote Windows PS process).
+
 Loading a module into `WinPSCompatSession` can be forced regardless of module path or value of `CompatiblePSEditions` manifest property using `-UseWindowsPowerShell` parameter of `Import-Module`.<br />
 New functionality should also be supported during module autoload / command discovery.<br />
 Loading of modules into `WinPSCompat` should be tracked in telemetry separately from loading other modules so `TelemetryType.WinCompatModuleLoad` needs to be added.
