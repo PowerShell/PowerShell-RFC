@@ -19,20 +19,22 @@ One of the big factors preventing existing Windows PowerShell users from moving 
     I can use modules written for Windows PowerShell in PowerShell Core,
     so that I could migrate from Windows PowerShell to PowerShell Core.
 
-## User Experience
+## New User Experience
 
 Example that shows using commands from 'WindowsPS-only' module located in `System32` module path in PS Core:
 ```PowerShell
 PS C:\> $PSVersionTable.PSEdition
 Core
 PS C:\> Import-Module DesktopOnlyModuleOnSystem32ModulePath
-VERBOSE: Please note that module 'DesktopOnlyModuleOnSystem32ModulePath' is imported in a remote Windows PowerShell session, so all objects that are returned by commands from this module are deserialized and are not 'live' objects.
+WARNING: Module DesktopOnlyModuleOnSystem32ModulePath is loaded in Windows PowerShell using WinPSCompatSession remoting session; please note that all parameter values and results of commands from this module will be deserialized objects. If you want to load this module into PowerShell Core please use Import-Module -SkipEditionCheck syntax.
 PS C:\> (Get-Module DesktopOnlyModuleOnSystem32ModulePath).CompatiblePSEditions
 Desktop
 PS C:\> DesktopOnlyModuleOnSystem32ModulePathFunction
 Success
 ```
 Proof-of-concept test was successfull.
+
+## Current User Experience
 
 For reference, here is current behaviour that this RFC is targeting to change:
 ```PowerShell
@@ -46,38 +48,21 @@ Import-Module : Module 'C:\windows\system32\WindowsPowerShell\v1.0\Modules\Deskt
 
 Today a module manifest (since Windows PowerShell 5) may contain a `CompatiblePSEditions` property to indicate if it is compatible with PowerShell Core (value of `Core`) or Windows PowerShell (value of `Desktop`). If `CompatiblePSEditions` property is missing then the value of `Desktop` is assumed.<br />
 Functionality of this RFC will replace showing of the `PSEditionNotSupported` error message (`Module '{0}' does not support current PowerShell edition '{1}'. Its supported editions are '{2}'. Use 'Import-Module -SkipEditionCheck' to ignore the compatibility of this module.`) in scenarios where it is currently displayed:<br />
-During `Import-Module` a module wil be loaded into a separete Windows PowerShell process instead of current PowerShell Core if:<br />
+During `Import-Module` a module will be loaded into a separate Windows PowerShell process instead of current PowerShell Core if:<br />
 (A module is located in `System32` module path) and ((`CompatiblePSEditions` is `Desktop`) or (`CompatiblePSEditions` is missing))<br />
 If this condition is detected PowerShell Core:
-  1. creates a hidden `WindowsPS Compatibility` Windows PS process (unless one already exists)
-  2. creates PS Remoting connection to its IPC pipe
-  3. loads the module in remote Windows PS process
-  4. generates local proxy module/commands using IPC remoting connection and `Import-PSSession` cmdlet
-  5. when 'WindowsPS-only' module unload request is detected - unload module in remote process, close PS remoting channel, close remote process
+  1. creates PS Remoting session `WinPSCompatSession` (unless it already exists) using redirected process streams transport (same one used by PS jobs). Internally this creates hidden `WindowsPS Compatibility` Windows PS process.
+  2. generates local proxy module/commands using `WinPSCompatSession` remoting session and code of `Import-Module -PSSession` cmdlet;
+  3. when 'WindowsPS-only' module unload request is detected, if no other module is using `WinPSCompatSession` remoting session - it is closed (this also closes remote Windows PS process).
+Loading a module into `WinPSCompatSession` can be forced regardless of module path or value of `CompatiblePSEditions` manifest property using `-UseWindowsPowerShell` parameter of `Import-Module`.
+New functionality should also be supported during module autoload / command discovery.
+Loading of modules into `WinPSCompat` should be tracked in Telemetry separately from loading other modules so `TelemetryType.WinCompatModuleLoad` needs to be added.
 
 ### PS Remoting Transport
 
-IPC / Named Pipe is to be used for connections to remote PowerShell process. Today a named pipe listener is created with each Windows PowerShell process. IPC transport has good performance and secured endpoints, however (unlike, for example, SSH transport) it is not currently supported by New-PSSession.
-So a new IPC-specific parameter set will be added to New-PSSession:  `New-PSSession -ProcessId <Int32> [-Name <String>] [-AppDomainName <String>]`
-Here is the pseudo-code that shows the essence of proposed implementation of a new parameter set in New-PSSession:
-```csharp
-NamedPipeConnectionInfo connectionInfo = new NamedPipeConnectionInfo(WindowsPS_ProcessId, WindowsPS_AppDomainName);
-TypeTable typeTable = TypeTable.LoadDefaultTypeFiles();
-RemoteRunspace remoteRunspace = RunspaceFactory.CreateRunspace(connectionInfo, this.Host, typeTable) as RemoteRunspace;
-remoteRunspace.Name = NamedPipeRunspaceName;
-try
-{
-    remoteRunspace.Open();
-}
-catch (RuntimeException e)
-{
-    // handle connection errors
-}
-PSSession remotePSSession = new PSSession(remoteRunspace);
-this.RunspaceRepository.Add(remotePSSession);
-WriteObject(remotePSSession);
-// In case of 'Windows PS Compatibility' scenario, Import-PSSession is then run on remotePSSession to generate proxy cmdlets.
-```
+Redirected process streams transport (same one used by PS jobs) is to be used for connections to remote Windows PS process.
+A new WindowsPS-specific parameter set will be added to New-PSSession:  `New-PSSession -UseWindowsPowerShell [-Name <string[]>]`
+Process streams transport automatically manages underlying process, so the lifetime of the `WindowsPS Compatibility` Windows PS process is the same as remoting session that owns it.
 
 ### Lifetime of 'compatibility' Windows PowerShell process and module
 
@@ -92,9 +77,14 @@ Overall RFC goal is to have familiar 'local module' user experience even though 
 
 ### Objects returned by remote operations
 
-With PS Remoting objects returned from remote 'compatibility' side are not actual `live` objects. This will be the same in case of this RFC. Documentation will make sure that users understand that even though the experience will look like they are working with 'WindowsPS-only' modules locally, objects returned by these modules are deserialized copies.
+With PS Remoting objects returned from remote 'compatibility' side are not actual `live` objects. This will be the same in case of this RFC. A warning will be generated every time a module is imported using this new functionality; also documentation will make sure that users understand that even though the experience will look like they are working with 'WindowsPS-only' modules locally, objects returned by these modules are deserialized copies.
 
 ## Alternate Proposals and Considerations
+
+### Scenarios that need improvement
+
+1. Ideally there should be 1-to-1 runspace afinity between PSCore and WinPS processes; currently this is many-to-1, which in some cases may cause conflicts.
+2. PS providers are not supported across remoting boundaries.
 
 ### Windows PowerShell Compatibility module
 
