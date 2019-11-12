@@ -130,6 +130,7 @@ Change would be to use `$env:PSModulePath`, but prefix with `User` modules path 
 `$PSHOME` modules path if any of those paths are not already there.
 
 `Windows` modules path will already be there along with any additional paths added by the user or applications.
+If the `Windows` modules path is not in `$env:PSModulePath`, then it will not be added as the user removed it.
 
 ### Starting Windows PowerShell from PowerShell 7 Implementation
 
