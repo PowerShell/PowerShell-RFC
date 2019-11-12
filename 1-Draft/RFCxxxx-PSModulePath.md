@@ -123,8 +123,8 @@ Otherwise, it is assumed the user removed it if it's not there already.
 
 ### PowerShell 7 startup
 
-Currently, PS7 doesn't use contents of `$env:PSModulePath` and simply overwrites it with `User` modules path +
-`System` modules path + `$PSHOME` modules path + `Windows` modules path.
+Currently, PS7 doesn't use contents of `$env:PSModulePath` if it detects it was started from PowerShell
+and simply overwrites it with `User` modules path + `System` modules path + `$PSHOME` modules path + `Windows` modules path.
 
 Change would be to use `$env:PSModulePath`, but prefix with `User` modules path + `System` modules path +
 `$PSHOME` modules path if any of those paths are not already there.
