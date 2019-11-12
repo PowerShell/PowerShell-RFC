@@ -135,22 +135,12 @@ Change would be to use `$env:PSModulePath`, but prefix with `User` modules path 
 
 Note that Windows PowerShell here means both `powershell.exe` and `powershell_ise.exe`.
 
-Copy process `$env:PSModulePath` as `PS7PSModulePath`:
+Copy process `$env:PSModulePath` as `WinPSModulePath`:
 
 - Remove PS7 `User` module path
 - Remove PS7 `System` module path
 - Remove PS7 `$PSHOME` module path
 
-Get fresh `$env:PSModulePath` from `Machine` scope if exists, otherwise `User` scope
-as `WinPSModulePath`.
-
-If any of the Windows PowerShell path segments was removed in `PS7PSModulePath`, then
-remove it from `WinPSModulePath`.
-
-Any segments in `WinPSModulePath` that exists in `PS7PSModulePath` are removed from
-`PS7PSModulePath`.
-
-Append remainder of `PS7PSModulePath` to end of `WinPSModulePath`.
 Use that `WinPSModulePath` when starting Windows PowerShell.
 
 ### Starting PowerShell 7 from Windows PowerShell
