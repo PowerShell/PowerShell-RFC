@@ -226,6 +226,8 @@ The `-Name` must be unique within a vault.
 The `-Vault` parameter defaults to the local vault.
 A `-NoClobber` parameter will cause this cmdlet to fail if the secret already exists.
 A `-Secret` parameter accepts one of the supported types outlined below.
+When a plain text secret is added it will be stored as a secure string. 
+For all other secret types the secret will be stored as object type of the secret specified. 
 
 ### Retrieving Secrets
 
@@ -233,7 +235,9 @@ The `Get-Secret` cmdlet is used to retrieve secrets as the same type as they
 were originally added.
 The `-Name` parameter retrieves the secret associated with that name.
 The `-Vault` parameter defaults to the local vault.
-The returned object will be the original stored secret type.
+The `-AsPlainText` switch will return a string secret as plain text. 
+By default a string secret will be returned as a secure string.
+For all other secret types the returned object will be the original stored secret type.
 
 `Get-Secret` returns a single secret and will result in an error if passed an empty string.
 
