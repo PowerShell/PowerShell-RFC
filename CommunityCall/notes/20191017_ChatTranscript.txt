@@ -1,0 +1,294 @@
+Michael B.
+I am interested in knowing a "synopsis" of issues with $? - specifically $?.  I know most, if not all, of the error issue saga; but nothing specific about $?.
+
+prasoon
+Anybody checking the chat window ?
+Cant see anything published
+
+Steve Lee (POWERSHELL)
+yes, not getting to Q&A yet(prasoon asked "Anybody checking the chat window ?
+Cant see anything published")
+
+Michael B.
+so, on windows, is this dependent on the new windows shell?
+
+prasoon
+Anybody checking the chat window ?
+Cant see anything published
+
+Anonymous
+Looks really nice ≡ƒæì
+
+Anonymous
+Looks really nice ≡ƒæì
+
+Michael B.
+I am interested in knowing a "synopsis" of issues with $? - specifically $?.  I know most, if not all, of the error issue saga; but nothing specific about $?.
+
+Joel Sallow
+hold on, you call it dollar-hook? O.o
+
+Joel Sallow
+hold on, you call it dollar-hook? O.o
+
+Anonymous
+Speaking of $?, will && || operators make it into the next preview?
+
+Joel Sallow
+The main issue with $? at the moment is that anything you wrap in `()` parentheses leaves `$?` with `$true` in all circumstances immediately after the parentheses
+
+Anonymous
+Speaking of $?, will && || operators make it into the next preview?
+
+Joey Aiello
+Just for reference for others: https://github.com/PowerShell/PowerShell-RFC/blob/master/4-Experimental-Accepted/RFC0046-Chain-Operators.md(Speaking of $?, will && || operators make it into the next preview?)
+
+Joel Sallow
+$PSCmdlet.ThrowTerminatingError($errorRecord)
+
+Joel Sallow
+The main issue with $? at the moment is that anything you wrap in `()` parentheses leaves `$?` with `$true` in all circumstances immediately after the parentheses
+
+Joel Sallow
+$PSCmdlet.ThrowTerminatingError($errorRecord)
+
+Joey Aiello
+Thanks Joel! This is the one I was referring to with assymetric behavior with regards to $?(Joel Sallow asked "$PSCmdlet.ThrowTerminatingError($errorRecord)")
+
+Michael B.
+so, on windows, is this dependent on the new windows shell?
+
+Joey Aiello
+No, just Windows 10 after...RS3? I believe?(Michael B. asked "so, on windows, is this dependent on the new windows shell?")
+
+Ryan 
+How many more Previews before v7 goes GA?
+
+Joel Sallow
+so with (<command>) && <action> -- even if <command> fails, it still executes <action>. It's fine if that's different from `<command> && <action>` but it limits the effectiveness of && or ||
+
+Michael B.
+thanks!
+
+Ryan 
+How many more Previews before v7 goes GA?
+
+Joey Aiello
+Two! Then RC in December to align with .NET Core 3.1 GA, then hopefully GA in January(Ryan  asked "How many more Previews before v7 goes GA?")
+
+Michael B.
+thanks!
+
+Joel Sallow
+so with (<command>) && <action> -- even if <command> fails, it still executes <action>. It's fine if that's different from `<command> && <action>` but it limits the effectiveness of && or ||
+
+Keith Hill
+Does .NET Core 3.1 bring anything new or interesting?
+
+Joel Sallow
+i.e., it also prevents more complex expressions e.g., `(<command> && <command>) || <action>`
+
+Joel Sallow
+just for clarity on the main present issue with $? that I'm aware of :)
+
+Joel Sallow
+just for clarity on the main present issue with $? that I'm aware of :)
+
+Joel Sallow
+i.e., it also prevents more complex expressions e.g., `(<command> && <command>) || <action>`
+
+Bj├╢rn Ulrich @BWorren
+May I ask how @Steve_MSFT create those preview gifs?
+
+Keith Hill
+Does .NET Core 3.1 bring anything new or interesting?
+
+Joel Sallow
+we should *totally* wait for 7.1 as the LTS since it'd line up nicely with 5.1 ;)
+
+Joel Sallow
+we should *totally* wait for 7.1 as the LTS since it'd line up nicely with 5.1 ;)
+
+Keith Hill
+Found that blog post - https://devblogs.microsoft.com/dotnet/announcing-net-core-3-1-preview-1/
+
+Keith Hill
+Found that blog post - https://devblogs.microsoft.com/dotnet/announcing-net-core-3-1-preview-1/
+
+Michael B.
+this is the .NET Core 3.0 porting announcement https://github.com/dotnet/announcements/issues/130
+
+Joel Sallow
+Giphy is also a good tool to use for that kind of thing. THere are a few screencap tools around there that can go direct to gif :) 
+
+Bj├╢rn Ulrich @BWorren
+May I ask how @Steve_MSFT create those preview gifs?
+
+Michael B.
+this is the .NET Core 3.0 porting announcement https://github.com/dotnet/announcements/issues/130
+
+Joel Sallow
+Giphy is also a good tool to use for that kind of thing. THere are a few screencap tools around there that can go direct to gif :) 
+
+prasoon
+Will using named pipes in WinComp module solve the issue which cause due to CVE 2019-0543
+
+Michael B.
+Windows also has built-in recording (if not disabled by GPO) Win-G (Xbox game bar allows recording)
+
+James K
+My bad I ran maintenance XD
+
+prasoon
+Will using named pipes in WinComp module solve the issue which cause due to CVE 2019-0543
+
+Kirk Munro
+Is that usage inclusive of Windows PowerShell, PowerShell Core, and PowerShell 7 preview?
+
+Michael B.
+Windows also has built-in recording (if not disabled by GPO) Win-G (Xbox game bar allows recording)
+
+James K
+My bad I ran maintenance XD
+
+Kirk Munro
+Is that usage inclusive of Windows PowerShell, PowerShell Core, and PowerShell 7 preview?
+
+Anonymous
+Does that include your Azure pipelines for building PowerShell. If not could a change to the telemetry sent be added to see how much of this use is in those ToolSets?
+
+Anonymous
+Does that include your Azure pipelines for building PowerShell. If not could a change to the telemetry sent be added to see how much of this use is in those ToolSets?
+
+Kirk Munro
+Also, is that daily usage tracking launches, or systems?
+
+James K
+They have pwsh in preview in Azure DevOps. I have to use that for New-AzResourceGroupDeployment
+
+Kirk Munro
+Also, is that daily usage tracking launches, or systems?
+
+James K
+They have pwsh in preview in Azure DevOps. I have to use that for New-AzResourceGroupDeployment
+
+James K
+Does starting a job equal a new launch?
+
+James K
+PS Jobs sorry(James K asked "Does starting a job equal a new launch?")
+
+James K
+Does starting a job equal a new launch?
+
+Ryan 
+@Sean - Will this be easily linked to from the main landing page for the PowerShell Docs ? 
+I ask as there are still orgs using 3/4/5 and need to reference those docs easily
+
+prasoon
+I see sean participating in PowerShell.org forums answering questions, Thanks for that :-)
+
+Ryan 
+@Sean - Will this be easily linked to from the main landing page for the PowerShell Docs ? 
+I ask as there are still orgs using 3/4/5 and need to reference those docs easily
+
+Joey Aiello
+Yes, "previous versions" will be easily accessible in the version picker in the upper left(Ryan  asked "@Sean - Will this be easily linked to from the main landing page for the PowerShell Docs ? 
+I ask as there are still orgs using 3/4/5 and need to reference those docs easily")
+
+prasoon
+I see sean participating in PowerShell.org forums answering questions, Thanks for that :-)
+
+Ryan 
+@Steve - you could automate creating that Issue ;-)
+
+Keith Hill
+Nice! Nice to see that additional *nix info.
+
+Keith Hill
+Nice! Nice to see that additional *nix info.
+
+Ryan 
+@Steve - you could automate creating that Issue ;-)
+
+Steve Lee (POWERSHELL)
+I should do that with AzF :)(Ryan  asked "@Steve - you could automate creating that Issue ;-)")
+
+ili
+vscode-powershell PSReadLine rewrite by @TylerLeonhardt. any update on progress?
+
+ili
+vscode-powershell PSReadLine rewrite by @TylerLeonhardt. any update on progress?
+
+Michael B.
+Get-Acl is amazingly expensive. Regardless, I think this makes good sense on Unix-type platforms.
+
+Keith Hill
+Experimental feature then in preview.5?
+
+Joel Sallow
+If the P/invoke is incurred mainly in the formatter and when querying those properties directly, I think it'd be useful to have that available across the board, including on windows
+
+Ryan 
+@Jim - My thoughts on this is have it as a Switch on GCI that we can add as a $PSDefaultParameter 
+
+Keith Hill
+@jtruher - will the *nix stat info be an experimental features in preview.5/6?
+
+Michael B.
+Get-Acl is amazingly expensive. Regardless, I think this makes good sense on Unix-type platforms.
+
+Keith Hill
+Experimental feature then in preview.5?
+
+Ryan 
+@Jim - My thoughts on this is have it as a Switch on GCI that we can add as a $PSDefaultParameter 
+
+Keith Hill
+@jtruher - will the *nix stat info be an experimental features in preview.5/6?
+
+Joel Sallow
+If the P/invoke is incurred mainly in the formatter and when querying those properties directly, I think it'd be useful to have that available across the board, including on windows
+
+Jim Truher
+https://github.com/PowerShell/PowerShell/issues/10462
+
+Eric
+Any ways to add keep alive for O365 PS sessions
+
+James K
+If yall wanted to see a giant workload I would be happy to share
+
+Joey Aiello
+Please email me at Joey.Aiello@microsoft.com(James K asked "If yall wanted to see a giant workload I would be happy to share")
+
+James K
+will do, thanks(James K asked "If yall wanted to see a giant workload I would be happy to share")
+
+Michael B.
+has anyone ever spent time looking at the details of get-sddlstring?
+
+Keith Hill
+Thanks!
+
+Keith Hill
+Thanks!
+
+Eric
+when using MFA
+
+Eric
+Any ways to add keep alive for O365 PS sessions
+
+Joey Aiello
+Not at the moment, we haven't looked into it, but file an issue(Eric asked "Any ways to add keep alive for O365 PS sessions")
+
+Eric
+when using MFA
+
+Michael B.
+has anyone ever spent time looking at the details of get-sddlstring?
+
+Joey Aiello
+Historically, we've looked at it, but we haven't in a long time, but what are you trying to do there? (Michael B. asked "has anyone ever spent time looking at the details of get-sddlstring?")
+
