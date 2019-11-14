@@ -226,7 +226,7 @@ The `-Name` must be unique within a vault.
 The `-Vault` parameter defaults to the local vault.
 A `-NoClobber` parameter will cause this cmdlet to fail if the secret already exists.
 A `-Secret` parameter accepts one of the supported types outlined below.
-When a plain text secret is added it will be stored as a secure string. 
+When a string secret is added it will be stored as a secure string. 
 For all other secret types the secret will be stored as object type of the secret specified. 
 
 ### Retrieving Secrets
