@@ -65,6 +65,15 @@ Redirected process streams transport (same one used by PS jobs) is to be used fo
 A new WindowsPS-specific parameter set will be added to New-PSSession:  `New-PSSession -UseWindowsPowerShell [-Name <string[]>]`
 Process streams transport automatically manages underlying process, so the lifetime of the `WindowsPS Compatibility` Windows PS process is the same as remoting session that owns it.
 
+### Module blacklist
+
+This feature has a significant performance cost - a Windows PS process needs to be started and PS Remoting channel established. This can be a problem in some cases considering this feature also loads modules automatically during command discovery.
+Some modules don't work well with de/serialized objects (e.g. pipeline cmdlet combinations of 'Hyper-V' module);<br />
+Also there are cases when user never intended to load a module using this feature: for example, using any '-Job' cmdlet tries to load (and currently quietly fails) PS-Core-incompatible 'PSScheduledJob' module. With this feature enabled, 'PSScheduledJob' module is getting successfully loaded even though user never wanted it.<br />
+For such cases it is necessary to implement a module blacklist.<br />
+For modules in the blacklist this feature will not engage (and current behavior of generating 'PSEditionNotSupported' error will be maintained).<br />
+Module blacklist defined using a 'WindowsPowerShellCompatibilityModuleBlacklist' setting in 'powershell.config.json' so that user can change it when needed.
+
 ### Lifetime of 'compatibility' Windows PowerShell process and module
 
 Overall RFC goal is to have familiar 'local module' user experience even though actual operations are working with a module in a separate 'compatibility' process. This drives following:
