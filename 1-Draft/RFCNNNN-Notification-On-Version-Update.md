@@ -77,12 +77,49 @@ Hence, you should be able to suppress them altogether by setting an environment 
 
 This section talks about
 
+- how to control the update notification behavior
 - when to do the update check
 - how to persist the detected new release for subsequent `pwsh` sessions to use
 - how to synchronize update checks from different processes of the same version `pwsh` so that at most only one can run to complete during a day
 - how to do the update check
 - how to display the notification
-- how to control the update notification behavior using an environment variable
+
+#### How to control the update notification behavior
+
+The environment variable `POWERSHELL_UPDATECHECK` will be introduced to control the behavior of the update notification feature.
+The environment variable supports 3 values:
+
+- `Off`. This turns off the update notification feature.
+
+- `Default`. This gives you the default behaviors:
+  - `pwsh` of preview versions check for the new preview version as well as the new GA version.
+  - `pwsh` of GA versions check for the new GA version only.
+
+- `LTS`. `pwsh` of both preview and stable versions check for the new LTS GA version only.
+
+The notification behavior is mapped to the following enum:
+
+```c#
+private enum NotificationType
+{
+    /// <summary>
+    /// Turn off the udpate notification.
+    /// </summary>
+    Off = 0,
+
+    /// <summary>
+    /// Give you the default behaviors:
+    ///  - the preview version 'pwsh' checks for the new preview version and the new GA version.
+    ///  - the GA version 'pwsh' checks for the new GA version only.
+    /// </summary>
+    Default = 1,
+
+    /// <summary>
+    /// Both preview and GA version 'pwsh' checks for the new LTS version only.
+    /// </summary>
+    LTS = 2
+}
+```
 
 #### When to do the update check
 
@@ -99,8 +136,16 @@ not as the file content, but instead baked in the file name in the following tem
 so that we can avoid extra file loading at the startup.
 
 ```none
-_update_<version>_<publish-date>
+update<notification-type>_<version>_<publish-date>
 ```
+
+A separate file is used for each supported notification type,
+indicated by the integer value of the corresponding `NotificationType` member.
+For example,
+- when the notification type is `NotificationType.Default`,
+the file name would be like `update1_<version>_<publish-date>`.
+- when the notification type is `NotificationType.LTS`,
+the file name would be like `update2_<version>_<publish-date>`.
 
 The file should be in a folder that is unique to the specific version of `pwsh`.
 For example, for the `v6.2.0 pwsh`, the folder `6.2.0` will be created in the `pwsh` cache folder (shown below),
@@ -113,23 +158,25 @@ In this way, the update information for different versions of `pwsh` doesn't int
 #### How to synchronize update checks
 
 The most challenging part is to properly synchronize the update checks started from different `pwsh` processes,
-so that for a specific version of `pwsh`, only one update check task, at most, will run to complete per a day.
+so that for a specific version of `pwsh` and a specific notification type,
+only one update check task, at most, will run to complete per a day.
 Other tasks should be able to detect "a check is in progress" or "the check has been done for today" and bail out early,
 to avoid any unnecessary network IO or CPU cycles.
 
-We need two more files to achieve the synchronization,
-`"sentinel"` and `"sentinel-{year}-{month}-{day}.done"`.
+For each notification type, we need two more files to achieve the synchronization,
+`"_sentinel<notification-type>_"` and `"sentinel<notification-type>-{year}-{month}-{day}.done"`.
+The `<notification-type>` part will be the integer value of the corresponding `NotificationType` member.
 The `{year}-{month}-{day}` part will be filled with the date of current day when the update check task starts to run,
 and they will be in the version folder too.
 
-The file `"sentinel"` serves as a file lock among `pwsh` processes.
-The file `"sentinel-{year}-{month}-{day}.done"` serves as a flag that indicates a successful update check as been done for the day.
+The file `"_sentinel<notification-type>_"` serves as a file lock among `pwsh` processes.
+The file `"sentinel<notification-type>-{year}-{month}-{day}.done"` serves as a flag that indicates a successful update check as been done for the day.
 Here are the sample code for doing this synchronization:
 
 ```c#
 const string TestDir = @"C:\arena\tmp\updatetest";
-const string SentinelFileName = "sentinel";
-const string DoneFileNameTemplate = "sentinel-{0}-{1}-{2}.done";
+const string SentinelFileName = "_sentinel1_";
+const string DoneFileNameTemplate = "sentinel1-{0}-{1}-{2}.done";
 
 static void CheckForUpdate()
 {
@@ -217,43 +264,21 @@ another update check will happen when the next `pwsh` session starts and finish 
 
 This is comparatively the easy part.
 
-- Determine if we need to check pre-releases.
+- Determine the URL to use depending on the notification type.
+  - For latest preview release-info: `https://<buildinfo-blob>/preview.json`
+  - For latest stable release-info: `https://<buildinfo-blob>/stable.json`
+  - For latest LTS release-info: `https://<buildinfo-blob>/lts.json`
 - Send HTTP query request and parse the response.
-  Some optimization work is needed in this step (see below).
-  It would be much better if we can have the latest release/pre-release information stored in a well-known URL,
-  to make the query easier and take less time.
-  - GitHub API doesn't support querying for the latest pre-release,
-    so we need to hit the 'get-all-releases' API `https://api.github.com/repos/PowerShell/PowerShell/releases`.
-    By default that will return 30 records per page and result in very expensive payload.
-    As an optimization, we should add `?per_page=4` to make it only return the most recent 4 records.
-    Most likely, they will include the latest release or pre-release.
-  - The JSON payload for 4 release records is still a lot,
-    and thus the deserialization is expensive, taking about 650 ms on my dev machine.
-    We only care about the `tag_name` and `published_at` attributes,
-    so it would be desirable to optimize the deserialization to skip the unneeded.
-- If there is a new update, create the file `_update_<version>_<publish-date>` if one doesn't exists yet;
+- If there is a new update, create the file `update<notification-type>_<version>_<publish-date>` if one doesn't exists yet;
   or rename the existing file with the new version.
 
 #### How to display the notification
 
-`pwsh` checks to see if notification should be printed only if it's allowed to print the banner message.
+`pwsh` checks to see if notification should be printed only if it's allowed to print the banner message and feature is not turned off.
 
-- Run `Directory.EnumerateFiles` with the the version directory and the pattern `_update_v*.*.*_????-??-??` to find such a file.
+- Run `Directory.EnumerateFiles` with the the version directory and the pattern `update<notification-type>_v*.*.*_????-??-??` to find such a file.
 - If a file path is returned, then get the version information from the file name.
 - Use that version to construct the notification message, including the URL to that GitHub release page.
-
-#### How to control the update notification behavior using an environment variable
-
-The environment variable `POWERSHELL_UPDATECHECK` will be introduced to control the behavior of the update notification feature.
-The environment variable supports 3 values:
-
-- `Default`. This gives you the default behaviors:
-  - `pwsh` of preview versions check for the new preview version as well as the new GA version.
-  - `pwsh` of GA versions check for the new GA version only.
-
-- `Off`. This turns off the update notification feature.
-
-- `LTS`. `pwsh` of both preview and stable versions check for the new LTS GA version only.
 
 ## Alternate Proposals and Considerations
 
