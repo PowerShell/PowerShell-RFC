@@ -158,8 +158,8 @@ In this way, the update information for different versions of `pwsh` doesn't int
 #### How to synchronize update checks
 
 The most challenging part is to properly synchronize the update checks started from different `pwsh` processes,
-so that for a specific version of `pwsh` and a specific notification type,
-only one update check task, at most, will run to complete per a day.
+**so that for a specific version of `pwsh` and a specific notification type,
+only one update check task, at most, will run to complete per a day.**
 Other tasks should be able to detect "a check is in progress" or "the check has been done for today" and bail out early,
 to avoid any unnecessary network IO or CPU cycles.
 
