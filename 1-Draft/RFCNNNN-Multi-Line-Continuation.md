@@ -21,12 +21,12 @@ By itself it's not too much to handle, but in a script commands with many
 parameters like this can be difficult to manage.
 
 To wrap this command across multiple lines, users can either use backticks or
-they can use splatting. The former is a syntactical nuisance which should
-really only be used in situations when no other option is available. The latter
-is helpful, but it puts the parameters before the command, making it more
-difficult for less experienced users to learn/use, and all scripters lose the
-benefits of tab completion and Intellisense for parameters when they use
-splatting.
+they can use splatting. The former is something many members of the community
+consider to be a syntactical nuisance which should really only be used in
+situations when no other option is available. The latter is helpful, but it
+puts the parameters before the command, making it more difficult for less
+experienced users to learn/use, and all scripters lose the benefits of tab
+completion and Intellisense for parameters when they use splatting.
 
 As a workaround, they can work out the parameters they want to use for the
 command first, and then convert it into a splatted command, but that's onerous.
@@ -274,8 +274,10 @@ hashtable of named parameter/value pairs or an array of positional values, but
 you can't mix the two (the example shown just above is also used earlier in
 this RFC with positional parameters and switch parameters used without values,
 matching the way it is often used as a single-line command).
-1. There's no way to include unparsed arguments after the stop-parsing sigil in
-splatting. You can add it afterwards, but not include it within.
+1. Inline splatting does not provide any support for wrapping unparsed
+arguments after the stop-parsing sigil. In contrast, with this proposal it
+would be possible to span commands that use the stop-parsing sigil across
+multiple lines.
 1. Splatting requires a different syntax than typical parameter/argument input,
 which is more to learn. In contrast, the proposal above only requires learning
 about the `@` sigil (borrowed from splatting, but without specifying hashtables
