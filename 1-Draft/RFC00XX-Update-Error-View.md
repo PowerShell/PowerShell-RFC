@@ -74,16 +74,11 @@ Get-Childitem: Cannot find path ‘C:\notreal’ because it does not exist
 
 ```powershell
 PS C:\> .\MyScript.ps1
-Get-ChildItem: in /Users/Username/GitHub/Errorview/script.test.ps1
+Get-ChildItem: C:\GitHub\MyScript.ps1
 Line |
 15   | Get-ChildItem -Path c:\notreal
-     |                     ^^^ Cannot find path 'C:\notreal' because it does not exist.
-    * Help: Additional help information provided here
+     | ^ Cannot find path 'C:\notreal' because it does not exist.
 ```
-
-- An example is in the image below:
-
-![Message and Analytic](RFC00XX-Update-Error-View.png)
 
 3. A new cmdlet `Get-Error` will produce comprehensive detailed view of the fully qualified error,
    including nested inner exceptions.
