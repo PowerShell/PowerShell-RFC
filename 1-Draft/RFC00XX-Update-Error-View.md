@@ -51,13 +51,13 @@ __Key Design Considerations__
 
 - The error message will contain a prefix as described:
 
-    - If the error is an Exception, it prefixes with Exception:.
-    - If the error has InvocationInfo.MyCommand, it prefixes the command.
-    - If the error has InvocationName, CategoryInfo.Category, or CategoryInfo.Reason, the message
+  - If the error is an Exception, it prefixes with Exception:.
+  - If the error has InvocationInfo.MyCommand, it prefixes the command.
+  - If the error has InvocationName, CategoryInfo.Category, or CategoryInfo.Reason, the message
       will prefix these.
-    - Only if none of those exist does it actually use Error:.
+  - Only if none of those exist does it actually use Error:.
 
-- Simplified error message syntax from 'Message'. (See graphic below)
+- Simplified error message syntax from 'Message'. (See below)
 
 ```powershell
 PS C:\> Get-Childitem -Path c:\notreal
@@ -76,8 +76,20 @@ Get-Childitem: Cannot find path ‘C:\notreal’ because it does not exist
 PS C:\> .\MyScript.ps1
 Get-ChildItem: C:\GitHub\MyScript.ps1
 Line |
-15   | Get-ChildItem -Path c:\notreal
-     | ^ Cannot find path 'C:\notreal' because it does not exist.
+  15 | Get-ChildItem -Path c:\NotReal
+     | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'C:\NotReal' because it does not exist.
+```
+
+- The error message is truncated and displayed using the **MessagePosition** property of <what> for line wrapping
+
+```powershell
+PS C:\> .\MyScript.ps1
+Selct-object: C:\GitHub\MyScript.ps1
+Line |
+  25 | Get-Process | Selct-object -property NotReal
+     |               ~~~~~~~~~~~~
+     | The term 'Selct-object' is not recognized as the name of a cmdlet, function, script file, or | operable program. Check the spelling of the name, or if a path was included, verify that the | path is correct and try again.
 ```
 
 3. A new cmdlet `Get-Error` will produce comprehensive detailed view of the fully qualified error,
@@ -129,11 +141,11 @@ from $error array to 'Get-Error' to display more details.
 
 ```powershell
 PS C:\> .\MyScript.ps1
-Get-ChildItem: in /Users/Username/GitHub/Errorview/script.test.ps1
-    |
-15  | Get-ChildItem -Path c:\notreal
-    |                     ^^^ Cannot find path 'C:\notreal' because it does not exist.
-    * Help: Additional help information provided here
+Selct-object: C:\GitHub\MyScript.ps1
+Line |
+  25 | Get-Process | Selct-object -property NotReal
+     |               ~~~~~~~~~~~~
+     | The term 'Selct-object' is not recognized as the name of a cmdlet, function, script file, or | operable program. Check the spelling of the name, or if a path was included, verify that the | path is correct and try again.
 
 PS C:\> $error[0] | Get-Error
 
