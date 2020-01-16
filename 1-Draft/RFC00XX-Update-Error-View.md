@@ -89,7 +89,9 @@ Selct-object: C:\GitHub\MyScript.ps1
 Line |
   25 | Get-Process | Selct-object -property NotReal
      |               ~~~~~~~~~~~~
-     | The term 'Selct-object' is not recognized as the name of a cmdlet, function, script file, or | operable program. Check the spelling of the name, or if a path was included, verify that the | path is correct and try again.
+     | The term 'Selct-object' is not recognized as the name of a cmdlet, function, script file,
+     | or operable program. Check the spelling of the name, or if a path was included,
+     | verify that the | path is correct and try again.
 ```
 
 3. A new cmdlet `Get-Error` will produce comprehensive detailed view of the fully qualified error,
@@ -145,7 +147,9 @@ Selct-object: C:\GitHub\MyScript.ps1
 Line |
   25 | Get-Process | Selct-object -property NotReal
      |               ~~~~~~~~~~~~
-     | The term 'Selct-object' is not recognized as the name of a cmdlet, function, script file, or | operable program. Check the spelling of the name, or if a path was included, verify that the | path is correct and try again.
+     | The term 'Selct-object' is not recognized as the name of a cmdlet, function, script file,
+     | or operable program. Check the spelling of the name, or if a path was included,
+     | verify that the | path is correct and try again.
 
 PS C:\> $error[0] | Get-Error
 
