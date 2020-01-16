@@ -81,7 +81,7 @@ Line |
      | Cannot find path 'C:\NotReal' because it does not exist.
 ```
 
-- The error message is truncated and displayed using the **MessagePosition** property of <what> for line wrapping
+- The error message is truncated and displayed by reusing the **MessagePosition** property of InvocationInfo
 
 ```powershell
 PS C:\> .\MyScript.ps1
