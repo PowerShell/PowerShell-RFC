@@ -1,4 +1,4 @@
-﻿---
+---
 RFC: RFCxxxx
 Author: Sydney Smith
 Status: Draft
@@ -20,6 +20,7 @@ This RFC proposes some significant changes to address this.
 > [!NOTE]
 > There are no intentions to break existing PSGet v2 users so existing
 > users can stay on PSGet v2 and that will continue to work.
+
 ## Motivation
 
     As a PowerShell user,
@@ -60,7 +61,7 @@ nuget.exe.
 This module will depend on https://www.nuget.org/packages/NuGet.Client.
 This module would be shipped in the PSGallery supporting older
 versions of PowerShell.
-This module will ship in PowerShell 7.1.
+This module will ship in PowerShell 7.1 alongside PowerShellGet 2.x.
 
 ### Side-by-side with PowerShellGet
 
@@ -68,6 +69,10 @@ Since the current PowerShellGet 2.x version is a script module and this new one
 is a C# based module, they can coexist side-by-side.
 
 Script and module metadata will retain the same format as it exists with v2.
+
+We will introduce an `Enable-PowerShellGetAlias` cmdlet that will allow users to use known cmdlets like Install-Module
+from the PowerShellGet 3.0 implementation.
+This additional cmdlet may not ship in PowerShellGet 3.0 but is planned as a part of the transition effort.
 
 ### Local cache
 
@@ -113,11 +118,14 @@ The cache would have both latest stable and latest prerelease versions of resour
 >or a different cache per repository for size and perf reasons.
 >Perf tests will determine if the cache needs to be in binary form.
 
-### Automatic updating of the cache
+### Updating of the cache
 
-On any operation that reaches out to a repository, a REST API will be called to
-see if the hash of the cache matches the current cache and if not, a new one
-is downloaded.
+In the initial implementation of the module we will use introduce a cmdlet `Update-PSCache`
+in order to update the cache.
+
+We will continue to explore automatic updating of the cache in which on any operation that reaches out to a repository,
+a REST API will be called to see if the hash of the cache matches the current cache and if not, a new one
+is downloaded. This system may also take into consideration how recently the cache has been updated to avoid constant updates.
 
 >[!NOTE]
 >In the implementation we'll need to handle the case where the module attempts
@@ -131,7 +139,7 @@ always connect to that repository.
 
 `Register-PSResourceRepository` will allow for registering additional repositories.
 A `-PSGallery` switch enables registering PSGallery should it be accidentally removed.
-This would be in a different parameter set from `-URL` and `-Repositories`.
+This would be in a different parameter set from `-URL` and `-Repository`.
 
 The `-URL` will accept the HTTP address without the need to specify `/api/v3` as
 that will be assumed and discovered at runtime (trying v3 first, then falling
@@ -143,7 +151,7 @@ Trusted repositories automatically have a priority of 0.
 `-Trusted` is a different parameter set from `-Priority`.
 
 By default, if this switch is not specified, the repository is untrusted.
-A `-Repositories` parameter will accept an array of hashtables equivalent to
+A `-Repository` parameter will accept an array of hashtables equivalent to
 the parameter names (like splatting).
 
 ```powershell
@@ -209,12 +217,13 @@ A `-Credential` paramter will accept a PSCredential.
 An `-IncludeDependencies` switch will include dependent resources in the returned results.
 
 `Find-Module` will be retained to provide compatibility with v2.
+If the prerelease switch is not used, and only a prerelease version of the module is found a warning will be emitted.
 
 ### Installing resources
 
-`Install-PSResource` will only work for modules unless `-DestinationPath` is
+`Install-PSResource` will mirror the parameter set for `Find-PSResource`.
+The cmd will only work for modules unless `-DestinationPath` is
 specified which works for all resource types.
-A `-Prerelease` switch allows installing prerelease versions.
 Other types will use `Save-PSResource` (see below).
 A `-Repository` parameter accepts a specific repository name or URL to the repository:
 
@@ -244,7 +253,9 @@ A `-DestinationPath` parameter allows specifying the target directory instead
 of the default one.
 This will be in a different parameter set than `-Scope`.
 
-A `-Version` paramter will accept a string of a [Nuget version range syntax](https://docs.microsoft.com/en-us/nuget/reference/package-versioning#version-ranges-and-wildcards).
+A `-Type` parameter will accept an array of types to allow filtering.
+
+A `-Version` parameter will accept a string of a [Nuget version range syntax](https://docs.microsoft.com/en-us/nuget/reference/package-versioning#version-ranges-and-wildcards).
 
 A `-Tags` parameter will accept a string array and will filter based on PSResource tags.
 
@@ -266,7 +277,7 @@ A `-Quiet` switch will suppress progress information.
 `-Scope` with `AllUsers` and `CurrentUser` will work the same as it does in v2.
 Default is `CurrentUser`.
 
-`Install-Module` cmdlet will be retained for compatibility with v2.
+If aliases are enabled `Install-Module` will call to `Install-PSResource -Type Module`.
 
 v3 will continue to use the versioning folder format as v2 in that it will be
 Major.Minor.Patch and not contain the semver prerelease label.
@@ -398,6 +409,14 @@ Version  Name       Type    Repository  Description
 >[!NOTE]
 >Uninstalling dependencies automatically will be something to consider in the future.
 
+If a package is unable to be uninstalled because it is currently loaded, the cmdlet will emit a warning
+which enumerates the packages that were unable to be installed.
+We will explore a dependency clean parameter in a future version of PowerShellGet.
+
+When uninstalling the dependency check will be performed not only on the RequiredModules.Name,
+but also on RequiredModules.Version, which should be less-than-or-equal to the version of the module being
+uninstalled in order to be considered a dependency.
+
 ### Proxy support
 
 Each cmdlet will have `-Proxy` and `-ProxyCredential` parameters.
@@ -406,6 +425,11 @@ Each cmdlet will have `-Proxy` and `-ProxyCredential` parameters.
 
 Upon failure to connect to PSGallery, the cmdlets should retrieve status from
 a well known REST API and return a more descriptive error message to the user.
+
+### Open Sourcing the module
+
+In order to open source PowerShellGet 3.0 we will fork the current PowerShellGet repo, rename it as PowerShellGet2,
+and use the existing PowerShellGet repo as the primary support and development contact for PowerShellGet 3+.
 
 ## Alternate Proposals and Considerations
 
@@ -416,7 +440,7 @@ introducing a breaking change:
 - This RFC does not cover the module authoring experience on publishing a cross-platform
   module with multiple dependencies and supporting multiple runtimes.
 
-- If there is a desire to explicitly update the local cache (like `apt`), we can introduce a
+- [Should be the opposite] If there is a desire to explicitly update the local cache (like `apt`), we can introduce a
   `Update-PSResourceCache` cmdlet in the future and a property on PSRepository registrations
   indicating whether it auto-updates or not.
 
@@ -433,7 +457,7 @@ introducing a breaking change:
 
 - A way to filter resources to those allowed to be installed on the system
 
-- Enterprise management of local cache
+- Enterprise management of local cache/the ability to configure a PSRepository on a system-wide level
 
 - Full semver support won't happen until there is a semver type in .NET
 
