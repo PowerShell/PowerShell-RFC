@@ -284,14 +284,14 @@ Major.Minor.Patch and not contain the semver prerelease label.
 
 ### Dependencies and version management
 
-`Install-PSResource` can accept a path to a psd1 or json file (using `-RequiredResourcesFile`),
-or a hashtable or json (using `-RequiredResources`) where the key is the module name and the
+`Install-PSResource` can accept a path to a psd1 or json file (using `-RequiredResourceFile`),
+or a hashtable or json (using `-RequiredResource`) where the key is the module name and the
 value is either the required version specified using Nuget version range syntax or
 a hash table where `repository` is set to the URL of the repository and
 `version` contains the [Nuget version range syntax](https://docs.microsoft.com/en-us/nuget/reference/package-versioning#version-ranges-and-wildcards).
 
 ```powershell
-Install-PSResource -RequiredResources @{
+Install-PSResource -RequiredResource @{
   "Configuration" = "[1.3.1,2.0)"
   "Pester"        = @{
     version = "[4.4.2,4.7.0]"
