@@ -1,8 +1,8 @@
 ---
 RFC: Update $ErrorView with simplified views for Error Messages
 Author: Jason Helmick
-Status: Draft
-Version: 0.0.0
+Status: Final
+Version: 1.0.0
 Area: PowerShell
 Comments Due: 10/31/2019
 ---
