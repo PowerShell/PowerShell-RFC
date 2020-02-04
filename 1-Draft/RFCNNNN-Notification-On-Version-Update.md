@@ -279,6 +279,7 @@ This is comparatively the easy part.
 - Run `Directory.EnumerateFiles` with the the version directory and the pattern `update<notification-type>_v*.*.*_????-??-??` to find such a file.
 - If a file path is returned, then get the version information from the file name.
 - Use that version to construct the notification message, including the URL to that GitHub release page.
+- The notification message is printed with the foreground and background colors inverted.
 
 ## Alternate Proposals and Considerations
 
