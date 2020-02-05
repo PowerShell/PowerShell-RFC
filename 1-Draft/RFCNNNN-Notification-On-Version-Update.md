@@ -22,6 +22,8 @@ It would be convenient if `pwsh` itself can notify the user of a new update on s
 
 ## Specification
 
+This feature is in the PowerShell console host, not in the PowerShell engine.
+
 ### Target Goals
 
 1. No notification or update check when the running `pwsh` is a self-built version.
@@ -297,3 +299,6 @@ This would reduce the number of helper files in the cache folder,
 however, with the cost of additional work at startup time for all versions of `pwsh`.
 Especially, for the latest stable or preview `pwsh` in use, it also needs to spend those extra cycles when it should not.
 Besides, I think having the helper files isolated in a version folder makes it flexible in case we need to make change to the design at a later time.
+
+We may consider to add an API in PowerShell engine to check for updates in future,
+so that other hosts can offer similar features using the API.
