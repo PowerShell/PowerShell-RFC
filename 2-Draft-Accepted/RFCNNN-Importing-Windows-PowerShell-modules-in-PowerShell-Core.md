@@ -74,6 +74,8 @@ For such cases it is necessary to implement a module deny list.<br />
 For modules in the deny list this feature will not engage (and current behavior of generating 'PSEditionNotSupported' error will be maintained).<br />
 Module deny list defined using a 'WindowsPowerShellCompatibilityModuleDenyList' setting in 'powershell.config.json' so that user can change it when needed.
 
+Going forward, we will continue to update this list if any modules are discovered to have problems operating in this compatibility layer.
+
 ### Lifetime of 'compatibility' Windows PowerShell process and module
 
 Overall RFC goal is to have familiar 'local module' user experience even though actual operations are working with a module in a separate 'compatibility' process. This drives following:
@@ -103,4 +105,3 @@ With PS Remoting objects returned from remote 'compatibility' side are not actua
     + requires setup
     + not the best transport performance-wise
 - Introduces additional cmdlets to work with 'WindowsPS-only' modules, i.e. does not have transparent user experience.
-
