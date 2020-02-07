@@ -81,43 +81,6 @@ The `??` operator checks the left hand side to be null or undefined and returns 
 
 If the module `Pester` is not installed, then install the module.
 
-### Updates to operator precedence
-
-The operator precedence token flags will be updated to add gaps and place the null coalesce opeator at position 7, above comparison and below add/subtract.
-Currently, the binary operator mask is set at `0x07`, which will be updated to `0x0f`.
-This will ensure that `??` is evaluated before operators like `-eq`, `-and`, `-bor` etc, but after `+` and `-`.
-
-This enables scenarios like:
-```PowerShell
-'x' -eq $null ?? 'x' evaluates to 'x' -eq ($null ?? 'x')
-
- 2 + $null ?? 3 evaluates to (2 + $null) ?? 3
-```
-
-### Additional considerations
-
-The `??=` and `??` operators are binary operators and check for the value of the left hand side to be null or an undefined variable.
-They can be used with a space between the variable name and the to operator.
-If the left hand side is null, then `??=` assigns the right hand side to the variable while, the `??` operator returns the right hand side.
-When they are used without a space between variable name and the operator, a `{}` must be used around the variable name.
-
-## Alternate Proposals and Considerations
-
-### Disallow `?` in variable names
-
-It was considered to disallow `?` in variable names, to avoid confusion whether the operator is a null conditional operator or the variable name has `?` in it.
-This proposal was rejected to maintain backward compatibility.
-
-### Prefer new operators when tokenizing variable names
-
-It was considered to look ahead when tokenizing the variable names and check for `??=`, `??`, `?.` or `?[]`.
-If the token is found the assume that it is a null conditional check and not a member access of a variable name ending in `?`.
-To maintain backward compatibility and this proposal was rejected.
-
-### Use a different sigil for null-conditional operators
-
-It was determined that the familiarity of `?.` and `??` operators to `C#` programmers will make usage of the new operators easier to understand than introducing new sigils.
-
 ### Null conditional member access operators - `?.` and `?[]`
 
 Null member access operators can used on scalar types and array types.
@@ -153,3 +116,40 @@ The `?.` and `?[]` operators are member access operators and do not allow a spac
 PowerShell allows `?` as part of the variable name.
 Hence disambiguation is required when the operators are used without a space between the variable name and the operator.
 To disambiguate, the variables must use `{}` around the variable name like: `${x?}?.propertyName` or `${y}?[0]`.
+
+### Updates to operator precedence
+
+The operator precedence token flags will be updated to add gaps and place the null coalesce opeator at position 7, above comparison and below add/subtract.
+Currently, the binary operator mask is set at `0x07`, which will be updated to `0x0f`.
+This will ensure that `??` is evaluated before operators like `-eq`, `-and`, `-bor` etc, but after `+` and `-`.
+
+This enables scenarios like:
+```PowerShell
+'x' -eq $null ?? 'x' evaluates to 'x' -eq ($null ?? 'x')
+
+ 2 + $null ?? 3 evaluates to (2 + $null) ?? 3
+```
+
+### Additional considerations
+
+The `??=` and `??` operators are binary operators and check for the value of the left hand side to be null or an undefined variable.
+They can be used with a space between the variable name and the to operator.
+If the left hand side is null, then `??=` assigns the right hand side to the variable while, the `??` operator returns the right hand side.
+When they are used without a space between variable name and the operator, a `{}` must be used around the variable name.
+
+## Alternate Proposals and Considerations
+
+### Disallow `?` in variable names
+
+It was considered to disallow `?` in variable names, to avoid confusion whether the operator is a null conditional operator or the variable name has `?` in it.
+This proposal was rejected to maintain backward compatibility.
+
+### Prefer new operators when tokenizing variable names
+
+It was considered to look ahead when tokenizing the variable names and check for `??=`, `??`, `?.` or `?[]`.
+If the token is found the assume that it is a null conditional check and not a member access of a variable name ending in `?`.
+To maintain backward compatibility and this proposal was rejected.
+
+### Use a different sigil for null-conditional operators
+
+It was determined that the familiarity of `?.` and `??` operators to `C#` programmers will make usage of the new operators easier to understand than introducing new sigils
