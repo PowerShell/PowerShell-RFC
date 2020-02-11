@@ -301,7 +301,7 @@ Install-PSResource -RequiredResource @{
   }
 }
 ```
-
+In this case the modules named "Configuration", and "Pester" will be installed. 
 The json format will be the same as if this hashtable is passed to `ConvertTo-Json`:
 
 ```json
@@ -341,6 +341,9 @@ as described for `Install-PSResource` above.
 >can be quite large, this would be equivalent to `ConfirmImpact=High` which
 >would prompt by default.
 >Dependency installation works with `-DestinationPath` parameter.
+
+We will also introduce a `New-RequiredResourceFile` cmdlet which will create a template file.
+If the switch `-AsPSD1` is used it will create a psd1 file, otherwise it will default to json. 
 
 ### Saving resources
 
