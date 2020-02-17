@@ -5,7 +5,7 @@ Status: Draft
 SupercededBy: N/A
 Version: 1.0
 Area: Formatting and Type Extension
-Comments Due: 2019-03-30
+Comments Due: 2020-03-30
 Plan to implement: Yes
 ---
 
