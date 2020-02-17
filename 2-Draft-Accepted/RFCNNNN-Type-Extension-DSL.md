@@ -455,7 +455,7 @@ SerializationMethod [-Property] <string> [-Depth <uint>] [<CommonParameters>]
 
 SerializationMethod [-Properties] <string[]> [-InheritPropertySerializationSet <bool>] [-Depth <uint>] [<CommonParameters>]
 
-SerializationMethod [-AllPublicProperties <bool>] [-Depth <uint>] [<CommonParameters>]
+SerializationMethod [-AllPublicProperties] [-Depth <uint>] [<CommonParameters>]
 
 TargetTypeForDeserialization [-TypeName] <string> [<CommonParameters>]
 ```
