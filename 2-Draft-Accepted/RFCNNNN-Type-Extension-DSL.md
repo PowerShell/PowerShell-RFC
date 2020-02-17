@@ -383,7 +383,7 @@ Can be used any number of times in a `CustomControl` or `Entry` keywords.
 Frame [-Definition] <scriptblock> [-LeftIndent <uint>] [-RightIndent <uint>] [-FirstLineHanging <uint>] [-FirstLineIndent <uint>] [<CommonParameters>]
 ```
 
-* `-Definition` specifies `TableItem` and any conditions based on type names using the `Entry` and `EntrySelectedBy` keywords.
+* `-Definition` specifies `CustomItem` and any conditions based on type names using the `Entry` and `EntrySelectedBy` keywords.
 * `-LeftIndent` the number of characters to shift to the right.
 * `-RightIndent` the number of characters to shift to the left.
 * `-FirstLineHanging` the number of characters to shift the first line to the left.
@@ -411,7 +411,7 @@ Property [-Name] <string> -Alias <string> [-Hidden] [<CommonParameters>]
 * `-CodeReference` defines a code property.
 * `-Value` defines the value for a note property.
 * `-Accessor` if the script block or code reference is a getter or setter.
-* `-Accessors` defines a script or method property in a hashtable containing Get and Set keys.
+* `-Accessors` defines a script or code property in a hashtable containing Get and Set keys.
 * `-Alias` defines a reference to alias property.
 * `-Hidden` specifies that the property is hidden.
 
