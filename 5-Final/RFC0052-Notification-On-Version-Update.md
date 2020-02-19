@@ -1,7 +1,7 @@
 ---
-RFC: RFCXXXX
+RFC: 0052
 Author: Dongbo Wang
-Status: Draft
+Status: Final
 SupercededBy: N/A
 Version: 1.0
 Area: Console
