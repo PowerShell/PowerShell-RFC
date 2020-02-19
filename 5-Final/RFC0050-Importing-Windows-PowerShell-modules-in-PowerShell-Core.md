@@ -1,7 +1,7 @@
 ---
-RFC:
+RFC: 0050
 Author: Andrew Menagarishvili
-Status: Draft
+Status: Final
 SupercededBy:
 Version: 0.1
 Area: Language
