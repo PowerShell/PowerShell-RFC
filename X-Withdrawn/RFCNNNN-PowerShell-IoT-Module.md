@@ -1,7 +1,7 @@
 ---
-RFC: RFC
+RFC: 0053
 Author: Andrew Menagarishvili
-Status: Draft
+Status: Withdrawn
 SupercededBy: N/A
 Version: 1.0
 Area: External PowerShell Module / PowerShell IoT
