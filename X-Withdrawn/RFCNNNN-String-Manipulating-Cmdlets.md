@@ -1,7 +1,7 @@
 ---
 RFC: RFCNNNN
 Author: Friedrich Weinmann
-Status: Draft
+Status: Withdrawn
 SupercededBy: n/a
 Version: 1.0
 Area: cmdlets/data manipulation
