@@ -1,5 +1,5 @@
 ---
-RFC: RFCNNNN
+RFC: '0054'
 Author: Friedrich Weinmann
 Status: Withdrawn
 SupercededBy: n/a
