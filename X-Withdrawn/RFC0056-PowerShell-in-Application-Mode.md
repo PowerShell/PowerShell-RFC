@@ -1,7 +1,7 @@
 ﻿---
-RFC: RFCXXXX
+RFC: '0056'
 Author: Bruce Payette
-Status: Draft
+Status: Withdrawn
 SupercededBy: 
 Version: 6.?
 Area: Hosting
