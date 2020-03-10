@@ -1,7 +1,7 @@
 ---
-RFC: 
+RFC: '0057'
 Author: John Zeiders
-Status: Draft
+Status: Withdrawn
 SupercededBy:
 Version: 0.1
 Area: Commands
