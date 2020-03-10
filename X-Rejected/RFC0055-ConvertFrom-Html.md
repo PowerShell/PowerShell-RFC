@@ -1,7 +1,7 @@
 ---
-RFC: RFC
+RFC: '0055'
 Author: Josh Rickard
-Status: Draft
+Status: Rejected
 SupercededBy: 
 Version: 1.0
 Area: PowerShell Core Web CmdLets
