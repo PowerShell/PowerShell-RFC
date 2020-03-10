@@ -1,7 +1,7 @@
 ---
-RFC: RFCnnnn
+RFC: '0058'
 Author: Kirk Munro
-Status: Draft
+Status: Rejected
 SupercededBy: 
 Version: 0.1
 Area: Engine
