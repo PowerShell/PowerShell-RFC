@@ -29,7 +29,7 @@ As a developer,<br />
 I want to be able to ensure I am not leaving resources or connections open when a user utilizes a function I have written.
 
 As an administrator,<br />
-I want to be able to ensure that any necessary logging or other necessary administrative tasks cannot be skipped accidentally or deliberately by a user invoking a function in a pipeline and using `Select-Object -First X` to bypass logging which would normally take place in the `end` block.
+I want to be able to ensure that any necessary logging or other necessary administrative tasks cannot be skipped accidentally or deliberately by a user invoking a function in a pipeline and using `Select-Object -First X` to bypass logging which would otherwise take place in the `end` block.
 
 ## Specification
 
@@ -177,7 +177,55 @@ function Write-File {
 "Text" | Write-File -Path "C:\tmp.txt"
 ```
 
-### Alternate Proposals and Considerations
+### Considerations
+
+#### Breaking Change
+
+This proposal is a breaking change, as it prevents users from directly calling a function, alias, or command named `dispose`.
+However, such commands may still be invoked with the call operator (`& dispose`).
+
+#### Behaviour with Ctrl+C During `Dispose {}`
+
+As PowerShell is primarily an administrative shell, it _typically_ (though not always) respects Ctrl+C.
+Due to the nature and purpose of the `dispose{}` block, it's not suitable to permit `dispose{}` blocks to be cancelled during their run.
+Allowing `dispose{}` blocks to be cancelled may lead to memory leaks and other issues that can potentially arise from preventing proper disposal of IDisposable resources.
+
+However, this means that actions taken within `dispose{}` can potentially be disruptive, and it is the author's responsibility to ensure their `dispose{}` actions do not indefinitely hang.
+Given that compiled cmdlets may already implement `IDisposable` without restriction to similar effect, it is unlikely we have a pressing need to deviate from this behaviour.
+Customer feedback may be necessary to determine if taking action towards this course is necessary.
+
+To give a user appropriate feedback, we can emit a warning message that is displayed immediately when a pipeline starts to be disposed, before any command starts its dispose routines:
+
+> ```
+> WARNING: Ctrl+C was pressed. Attempting to stop processing.
+> ```
+
+This message would be emitted as the first action in a pipeline's StopProcessing handler.
+
+### Possible Alternate Proposals
+
+#### Forcibly Cancel Processing on Multiple Presses of `Ctrl+C`
+
+It was [suggested](https://github.com/PowerShell/PowerShell-RFC/pull/207#discussion_r393927153) that multiple presses of `Ctrl+C` could be used to forcibly exit disposal routines.
+
+However, cmdlets can already choose to not ignore cancellation requests by:
+
+1. Failing to implement `StopProcessing()` when needed, or
+1. Simply call blocking methods during any part of their pipeline operation which inhibit or ignore `StopProcessing()` or `Dispose()` calls from the pipeline handler.
+
+Script functions can also impede `StopProcessing()` calls simply by calling a blocking CLR method.
+Given that inhibiting cancellation is not a new issue, it is not critical for the `dispose{}` implementation to address this specific potential problem.
+If it becomes an issue in future, it can be addressed separately.
+
+#### Timeout for `Dispose {}` Operations
+
+In a similar vein to the above, an alternative may be to implement a hard timeout for command disposal, leaving it up to the runtime garbage collection routines beyond that point.
+This could potentially be problematic in the same way as permitting `Ctrl+C` to cancel a dispose block, especially in cases where native interop is being performed either directly or by a type being utilised by a given script command.
+
+As above, given that no such restriction is currently present for `IDisposable` cmdlets, it is not likely to be a pressing need.
+We can reevaluate pending customer feedback.
+
+If we later determine this is needed, a `$PSStopProcessingTimeout` preference variable could be created to allow the user to adjust their own timeout preferences in specific time-sensitive scenarios.
 
 #### Reuse the `End{}` Block
 
@@ -189,20 +237,3 @@ If the `end{}` block were unskippable for logging purposes, pipeline and command
 It is quite common for functions to be designed to do much of their processing in the `end{}` block.
 Even if we prevented output from occurring in that instance as we are with `dispose{}`, the processing to produce said output would still be occurring.
 This would significantly slow down intentional or necessary pipeline stops and reduce the utility of `Select-Object -First X` immensely.
-
-#### Behaviour with Ctrl+C During `Dispose {}`
-
-As PowerShell is primarily an administrative shell, it _typically_ (though not always) respects Ctrl+C. Due to the nature and purpose of the `dispose{}` block, it is likely that it's not suitable to permit `dispose{}` blocks to be cancelled at the user's whim; doing so may lead to memory leaks and other issues that can potentially arise from preventing proper disposal of IDisposable resources.
-
-However, this means that actions taken within `dispose{}` can potentially be disruptive, at the author's discretion. Given that compiled cmdlets may already implement `IDisposable` without restriction to similar effect, it is unlikely we have a pressing need to deviate from this behaviour. Customer feedback may be necessary to determine if taking action towards this course is necessary.
-
-#### Timeout for `Dispose {}` Operations
-
-Given the above, an alternative may be to implement a hard timeout for command disposal, leaving it up to the runtime garbage collection routines beyond that point. This could potentially be problematic in the same way as permitting `Ctrl+C` to cancel a dispose block, especially in cases where native interop is being performed either directly or by a type being utilised by a given script command.
-
-As above, given that no such restriction is currently present for `IDisposable` cmdlets, it is not likely to be a pressing need. We can reevaluate pending customer feedback.
-
-#### Breaking Change
-
-This is a breaking change, as it prevents users from directly calling a function, alias, or command named `dispose`. However, such commands may still be invoked with `& dispose` syntax.
-
