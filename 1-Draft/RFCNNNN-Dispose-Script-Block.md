@@ -33,10 +33,13 @@ I want to be able to ensure that any necessary logging or other necessary admini
 
 ## Specification
 
-A `dispose{}` block is required for these use cases.
+A `dispose{}` function block is required for these use cases.
+It is intended to mirror the `Dispose()` member that can be implemented when creating a `PSCmdlet` class in a compiled library that implements `IDisposable`.
 
 `IDisposable` can be implemented by PowerShell classes, but at the time of writing utilizing a PS-based class for a cmdlet is not feasible.
 There are outstanding issues with PowerShell classes that complicate the possibility of creating a cmdlet with them, especially when working with modules.
+
+In terms of documentation and recommendations for its use, `dispose{]` should be reserved for minimal and absolutely necessary operations, such as critical logging operations and disposal of `IDisposable` and resources unmanaged by the CLR.
 
 ### Execution
 
