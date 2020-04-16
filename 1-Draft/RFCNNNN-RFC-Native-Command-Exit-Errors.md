@@ -195,7 +195,7 @@ management using a cmdlet.
 One of the approaches above would be enabled with
 `Set-StrictMode -version 6`, instead of a boolean preference variable.
 For example,
-- An error would be eported for native commands with a non-zero exit
+- An error would be reported for native commands with a non-zero exit
 code.
 - An exception would be thrown for "untested" native commands with a
 non-zero exit code.
