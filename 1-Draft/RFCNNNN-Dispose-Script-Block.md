@@ -62,10 +62,6 @@ Additionally, all other PowerShell data streams are accessible from `dispose{}`,
 - Debug
 - Information
 
-#### Error States
-
-Terminating errors can also be thrown from a `dispose{}` block, which will skip the invocation of the rest of that `dispose{}` block, without preventing other `dispose{}` blocks from being executed.
-
 ### Implementation Details
 
 - A new `dispose` keyword, indicating a `NamedBlockAst` similarly to `begin`, `process`, and `end`, which is valid in the same contexts as the existing named block keywords.
@@ -73,9 +69,31 @@ Terminating errors can also be thrown from a `dispose{}` block, which will skip 
 - Additional members and constructors for `ScriptBlockAst` to enable it to be recognised by the parser.
 - Additional methods in `DlrScriptCommandProcessor` and `CompiledScriptBlock` to enable the block to be executed at the correct time.
   - Both types implement or inherit from a type that implements `IDisposable`, and as such the existing `Dispose()` methods can generally be utilised to run this block.
+- Implementing `IDisposable` for `PSScriptCmdlet` to handle the invocation for the `dispose{}` block.
 - Changes to the behaviour of command execution in `CommandProcessorBase` to recognise when a function or script cmdlet is being executed, and appropriately call their `Dispose()` methods to invoke the dispose block.
-  - This can include changes to the existing command disposal behaviour, to enable commands to dispose their resources as soon as their tasks in the pipeline are completed, instead of waiting for the entire pipeline to complete.
+  - This includes changes to the existing command disposal behaviour, to enable commands to dispose their resources as soon as their tasks in the pipeline are completed, instead of waiting for the entire pipeline to complete.
   - Also required with this is an additional layer of `try/finally` during `Dispose()` events as we are opening up the possibility for users to throw terminating errors _during_ a command's disposal, and as such we must ensure that disposal still completes appropriately.
+- Changes would be required for `.ForEach{}` and `.Where{}` magic methods, which currently allow named blocks to be used in their scriptblocks, but do not have a complete command processor backing them. (The alternative would be a breaking change to enforce simple scriptblocks to be used for these methods; this should probably be avoided, though it's unlikely a significant portion of users make use of that functionality).
+
+#### Error States
+
+Terminating errors can also be thrown from a `dispose{}` block, which will skip the invocation of the rest of that `dispose{}` block, without preventing other `dispose{}` blocks from being executed.
+
+#### Ctrl+C Behaviour
+
+While scripts usually terminate automatically after the StopProcessing signal is received, an exception will be made during the `dispose{}` sequences, and the `ExecutionContext.Stopping` flag will be temporarily cleared to permit script execution once again.
+This should allow us to ensure the block executes correctly during the pipeline stopping sequence.
+
+Additionally, `dispose{}` code should run regardless of `Ctrl+C` being pressed, whether before or during its operation, so that authors can ensure critical code can be run even when the user cancels normal processing.
+Some investigation and testing may be required in order to determine whether additional changes are necessary to handle Ctrl+C directly within the `dispose{]` execution itself.
+
+#### Finalizer
+
+As was raised during discussion with the committee, we may need to handle the edge case that a script cmdlet is not properly disposed by the time the finalizer is called.
+This _should_ be an impossible state to reach, but since the implementation proposed includes having `PSScriptCmdlet` implement `IDisposable` directly, it's possible its `dispose{}` block would be invoked on the finalizer thread and subsequently throw an error as there would not be a PowerShell runspace available to execute the code.
+
+It would be best to verify that there is an available runspace on the current thread before executing the `dispose{]` block in that instance.
+If there is no available runspace, it will most likely be safer to skip executing the block, as executing it on a different thread to the rest of the command is likely to have additional problems.
 
 #### `Cmdlet` / `PSCmdlet`
 
@@ -83,16 +101,10 @@ Commands inheriting from `Cmdlet` or `PSCmdlet` can already implement a version 
 To do so, such commands need also implement `IDisposable` and the `Dispose()` method.
 This RFC would simply change when the dispose method is called.
 Currently, the method is called during pipeline disposal.
-This RFC would ensure it is called immediately after `EndProcessing()` completes during normal pipeline operation.
+As part of the changes proposed in this RFC, we would ensure it is called immediately after `EndProcessing()` completes during normal pipeline operation.
 It will continue to be called in the case of a terminating error as it is currently.
 
-#### `ForEach-Object` Additions
-
-- `ForEachObjectCommand` should implement `IDisposable` to enable similar behaviour for the cmdlet.
-- A `-DisposeBlock` parameter can be exposed to allow it to be called from scripts.
-  - The slightly different parameter name is necessary as C# does not permit a property name to collide with a method name, and `IDisposable` mandates a method named `Dispose()`.
-  - To improve consistency, the parameter can be explicitly aliased to `-Dispose`.
-  - The parameter _must_ be assigned explicitly by name, and never be assumed based on number of provided scriptblock parameters as the command currently does with `begin`/`process`/`end`.
+If this results in multiple calls to the `Dispose()` methods, the script will not be invoked the second time.
 
 ### Examples
 
@@ -187,6 +199,8 @@ function Write-File {
 This proposal is a breaking change, as it prevents users from directly calling a function, alias, or command named `dispose`.
 However, such commands may still be invoked with the call operator (`& dispose`).
 
+It also prevents users from defining their own `dispose` dynamic keyword, though use of dynamic keywords is uncommon, so this is unlikely to become a concern.
+
 #### Behaviour with Ctrl+C During `Dispose {}`
 
 As PowerShell is primarily an administrative shell, it _typically_ (though not always) respects Ctrl+C.
@@ -205,7 +219,29 @@ To give a user appropriate feedback, we can emit a warning message that is displ
 
 This message would be emitted as the first action in a pipeline's StopProcessing handler.
 
+#### `ForEach-Object` Additions
+
+`ForEachObjectCommand` could implement `IDisposable` to enable a `-Dispose` / `-DisposeScript` parameter to be used with `ForEach-Object`.
+
+- The slightly different parameter name would be necessary as C# does not permit a property name to collide with a method name, and `IDisposable` mandates a method named `Dispose()`, so a property cannot use that name.
+- To improve consistency, the parameter can be explicitly aliased to `-Dispose`.
+- The parameter _must_ be assigned explicitly by name, and never be assumed based on number of provided scriptblock parameters as the command currently does with `begin`/`process`/`end`.
+
+This is not critical to the main `dispose{}` implementation.
+During discussion with the committee, it was raised that it may not be strictly necessary / could be complex to implement correctly from the cmdlet itself.
+As such, unless there is a need for it, it may be better to relegate `dispose{}` functionality to functions and script cmdlets.
+If a user wishes to implement a `dispose{}` functionality, it's likely that the complexity of the function is sufficient to warrant a full function being defined rather than leveraging `ForEach-Object`.
+
 ### Possible Alternate Proposals
+
+#### Naming Alternatives
+
+Several different possible names for the block have been discussed; the two that keep coming back are `dispose` and `cleanup`.
+`cleanup` is more desirable in some ways from a scripting perspective, as it does not come with any assumed knowledge about the `IDisposable` pattern in .NET.
+However, given that the proposed behaviour is intended to be as close to a true `Dispose()` as is possible within the constraints of the PowerShell engine, it appears `dispose` is a little more appropriate. `cleanup` is also a slightly more nebulous and less strictly-defined term at present, although that could be remediated somewhat with documentation.
+
+Additionally, while scripters unfamiliar with `IDisposable` objects would have to learn the new feature regardless of the name, programmers more familiar with the .NET ecosystem and the `IDisposable` pattern would be able to recognise the name and make reasonable assumptions about how it operates and should be used.
+Of course, that in turn means that the operation of `dispose{}` would need to be as close to the "real" `IDisposable` behaviour as possible, and equally as reliable.
 
 #### Forcibly Cancel Processing on Multiple Presses of `Ctrl+C`
 
