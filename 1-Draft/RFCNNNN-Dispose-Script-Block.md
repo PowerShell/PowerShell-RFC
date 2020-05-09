@@ -46,8 +46,9 @@ In terms of documentation and recommendations for its use, `dispose{]` should be
 The `dispose{}` block will execute:
 
 1. After `end{}` during normal command operation, and
-2. During command disposal that occurs when a terminating exception is thrown during pipeline operations.
+1. During command disposal that occurs when a terminating exception is thrown during pipeline operations
     - If the dispose block has already been called (as it is after the `end{}` step), it will simply return immediately.
+    - This includes being executed after `StopProcessing()` is called, and not being interrupted/cancelled by `StopProcessing()` calls; if the command is being disposed, it has already completed processing.
 
 ### Behaviour
 
