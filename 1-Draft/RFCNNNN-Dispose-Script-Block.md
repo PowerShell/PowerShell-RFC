@@ -71,10 +71,12 @@ Additionally, all other PowerShell data streams are accessible from `dispose{}`,
 - Additional methods in `DlrScriptCommandProcessor` and `CompiledScriptBlock` to enable the block to be executed at the correct time.
   - Both types implement or inherit from a type that implements `IDisposable`, and as such the existing `Dispose()` methods can generally be utilised to run this block.
 - Implementing `IDisposable` for `PSScriptCmdlet` to handle the invocation for the `dispose{}` block.
-- Changes to the behaviour of command execution in `CommandProcessorBase` to recognise when a function or script cmdlet is being executed, and appropriately call their `Dispose()` methods to invoke the dispose block.
-  - This includes changes to the existing command disposal behaviour, to enable commands to dispose their resources as soon as their tasks in the pipeline are completed, instead of waiting for the entire pipeline to complete.
+- Changes to the behaviour of command execution in `CommandProcessorBase` to recognise when a function or script cmdlet is being disposed, and dispose of these appropriately via a new `DisposeScriptCommands()` method.
   - Also required with this is an additional layer of `try/finally` during `Dispose()` events as we are opening up the possibility for users to throw terminating errors _during_ a command's disposal, and as such we must ensure that disposal still completes appropriately.
+- `PipelineProcessor` could `Dispose()` commands immediately after their `EndProcessing()` segments complete or throw to ensure resources are disposed as soon as they're no longer needed.
 - Changes would be required for `.ForEach{}` and `.Where{}` magic methods, which currently allow named blocks to be used in their scriptblocks, but do not have a complete command processor backing them. (The alternative would be a breaking change to enforce simple scriptblocks to be used for these methods; this should probably be avoided, though it's unlikely a significant portion of users make use of that functionality).
+- Improvements to `PipelineStopper` to be able to properly recognise critical regions of code (like `dispose{}`) and prevent pipeline stops from being registered until that region of code is exited.
+  - Ctrl+C will still be registered, but the pipeline stop will not begin until that critical code region is exited.
 
 #### Error States
 
