@@ -95,8 +95,7 @@ Some investigation and testing may be required in order to determine whether add
 As was raised during discussion with the committee, we may need to handle the edge case that a script cmdlet is not properly disposed by the time the finalizer is called.
 This _should_ be an impossible state to reach, but since the implementation proposed includes having `PSScriptCmdlet` implement `IDisposable` directly, it's possible its `dispose{}` block would be invoked on the finalizer thread and subsequently throw an error as there would not be a PowerShell runspace available to execute the code.
 
-It would be best to verify that there is an available runspace on the current thread before executing the `dispose{]` block in that instance.
-If there is no available runspace, it will most likely be safer to skip executing the block, as executing it on a different thread to the rest of the command is likely to have additional problems.
+Similar to `InvokeWithPipe()` overloads, we can check if the current thread context matches the original context of the command, and raise an event in the original context to have it executed there instead if the `Dispose()` methods are being called from the wrong thread.
 
 #### `Cmdlet` / `PSCmdlet`
 
