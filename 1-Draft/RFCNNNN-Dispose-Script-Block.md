@@ -40,7 +40,7 @@ It is intended to mirror the `Dispose()` member that can be implemented when cre
 `IDisposable` can be implemented by PowerShell classes, but at the time of writing utilizing a PS-based class for a cmdlet is not feasible.
 There are outstanding issues with PowerShell classes that complicate the possibility of creating a cmdlet with them, especially when working with modules.
 
-In terms of documentation and recommendations for its use, `Cleanup {]` should be reserved for minimal and absolutely necessary operations, such as critical logging operations and disposal of `IDisposable` resources utilized by the script.
+In terms of documentation and recommendations for its use, `Cleanup {}` should be reserved for minimal and absolutely necessary operations, such as critical logging operations and disposal of `IDisposable` resources utilized by the script.
 
 ### Execution
 
