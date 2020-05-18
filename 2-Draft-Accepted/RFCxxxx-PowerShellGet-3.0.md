@@ -38,15 +38,6 @@ This RFC proposes some significant changes to address this.
 ## User Experience
 
 ```powershell
-PS> Get-Satisfaction
-Get-Satisfaction : The term 'Get-Satisfaction' is not recognized as the name of a cmdlet, function, script file, or operable program.
-Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
-At line:1 char:1
-+ Get-Satisfaction
-+ ~~~
-+ CategoryInfo          : ObjectNotFound: (Get-Satisfaction:String) [], CommandNotFoundException
-+ FullyQualifiedErrorId : CommandNotFoundException
-Suggestion: You can obtain `Get-Satisfaction` by running `Install-PSResource HappyDays`.
 PS> Install-PSResource HappyDays
 ```
 
@@ -58,17 +49,16 @@ PowerShellGet is currently written as PowerShell script with a dependency on Pac
 Proposal is to write PSResource in C# to reduce complexity and make easier to maintain.
 In addition, remove dependency on PackageManagement completely as well as dependency on
 nuget.exe.
-This module will depend on https://www.nuget.org/packages/NuGet.Client.
-This module would be shipped in the PSGallery supporting older
-versions of PowerShell.
-This module will ship in PowerShell 7.1 alongside PowerShellGet 2.x.
+This module will depend on Nuget Server and Client packages including https://www.nuget.org/packages/NuGet.Client.
+This module would be shipped in the PSGallery supporting PowerShell 5.1+.
+This module will likely ship in PowerShell 7.1 alongside PowerShellGet 2.x.
 
 ### Side-by-side with PowerShellGet
 
 Since the current PowerShellGet 2.x version is a script module and this new one
 is a C# based module, they can coexist side-by-side.
 
-Script and module metadata will retain the same format as it exists with v2.
+Script and module metadata will retain compatible formatting as it exists with v2.
 
 We will introduce an `Enable-PowerShellGetAlias` cmdlet that will allow users to use known cmdlets like Install-Module
 from the PowerShellGet 3.0 implementation.
@@ -141,9 +131,7 @@ always connect to that repository.
 A `-PSGallery` switch enables registering PSGallery should it be accidentally removed.
 This would be in a different parameter set from `-URL` and `-Repository`.
 
-The `-URL` will accept the HTTP address without the need to specify `/api/v3` as
-that will be assumed and discovered at runtime (trying v3 first, then falling
-back to v2, then the literal URL).
+The `-URL` will accept the HTTP address with support for v2 and v3 protocols.
 Support for local filesystem repositories must be maintained.
 A `-Trusted` switch indicates whether to prompt the user when installing resources
 from that repository.
@@ -155,7 +143,7 @@ A `-Repository` parameter will accept an array of hashtables equivalent to
 the parameter names (like splatting).
 
 ```powershell
-Register-PSResourceRepository -Repositories @(
+Register-PSResourceRepository -Repository @(
   @{ URL = "https://one.com"; Name = "One"; Trusted = $true; Credential = $cred }
   @{ URL = "https://powershellgallery.com"; Name = "PSGallery"; Trusted = $true; Default = $true }
   @{ URL = "\\server\share\myrepository"; Name="Enterprise"; Trusted = $true }
@@ -217,7 +205,6 @@ A `-Credential` paramter will accept a PSCredential.
 An `-IncludeDependencies` switch will include dependent resources in the returned results.
 
 `Find-Module` will be retained to provide compatibility with v2.
-If the prerelease switch is not used, and only a prerelease version of the module is found a warning will be emitted.
 
 ### Installing resources
 
@@ -242,7 +229,7 @@ If there are no trusted repositories matching the query, then the newest version
 fulfilling the query will be prompted to be installed from the highest priority
 repositories.
 If there are multiple repositories with the same priority level containing the same
-version, the first one is used and will be prompted to install.
+version, the first one registered is used and will be prompted to install.
 
 `-TrustRepository` can be used to suppress being prompted for untrusted sources.
 `-IgnoreDifferentPublisher` can be used to suppress being prompted if the publisher
@@ -292,10 +279,10 @@ a hash table where `repository` is set to the URL of the repository and
 
 ```powershell
 Install-PSResource -RequiredResource @{
-  "Configuration" = "[1.3.1,2.0)"
-  "Pester"        = @{
-    version = "[4.4.2,4.7.0]"
-    repository = "https://www.powershellgallery.com"
+  'Configuration' = '[1.3.1,2.0)'
+  'Pester'        = @{
+    version = '[4.4.2,4.7.0]'
+    repository = 'https://www.powershellgallery.com'
     credential = $cred
     allowPrerelease = $true
   }
@@ -306,12 +293,12 @@ The json format will be the same as if this hashtable is passed to `ConvertTo-Js
 
 ```json
 {
-  "Configuration": "[1.3.1,2.0)",
-  "Pester": {
-    "version": "[4.4.2,4.7.0]",
-    "credential": null,
-    "repository": "https://www.powershellgallery.com",
-    "allowPrerelease": true
+  'Configuration': '[1.3.1,2.0)',
+  'Pester': {
+    'version': '[4.4.2,4.7.0]',
+    'credential': null,
+    'repository': 'https://www.powershellgallery.com',
+    'prerelease': true
   }
 }
 ```
@@ -380,7 +367,7 @@ latest prerelease or stable version (if available).
 
 ### Publishing resources
 
-`Publish-PSResource` will supporting publishing modules and scripts.
+`Publish-PSResource` will supporting publishing modules, scripts and nupkgs.
 It will follow the same model as `Publish-Module` in v2.
 
 A `-DestinationPath` can be used to publish the resulting nupkg locally.
@@ -431,7 +418,7 @@ a well known REST API and return a more descriptive error message to the user.
 
 ### Open Sourcing the module
 
-In order to open source PowerShellGet 3.0 we will fork the current PowerShellGet repo, rename it as PowerShellGet2,
+In order to open source PowerShellGet 3.0 we will fork the current PowerShellGet repo, rename it as PowerShellGetv2,
 and use the existing PowerShellGet repo as the primary support and development contact for PowerShellGet 3+.
 
 ## Alternate Proposals and Considerations
@@ -464,7 +451,23 @@ introducing a breaking change:
 
 - Full semver support won't happen until there is a semver type in .NET
 
+- Consider if the prerelease switch is not used, and only a prerelease version of the module is found a warning will be emitted.
+
 - Consider using a merkle tree to validate modules
+
+- Consider adding support for automatic searches from Find-PSResource -Type Command when a command in not found in module discovery
+```powershell
+PS> Get-Satisfaction
+Get-Satisfaction : The term 'Get-Satisfaction' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ Get-Satisfaction
++ ~~~
++ CategoryInfo          : ObjectNotFound: (Get-Satisfaction:String) [], CommandNotFoundException
++ FullyQualifiedErrorId : CommandNotFoundException
+Suggestion: You can obtain `Get-Satisfaction` by running `Install-PSResource HappyDays`.
+PS> Install-PSResource HappyDays
+```
 
 PowerShell module loading needs to be updated to [understand semver](https://github.com/PowerShell/PowerShell/issues/2983).
 
