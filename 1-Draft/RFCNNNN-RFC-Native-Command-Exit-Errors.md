@@ -15,7 +15,7 @@ Exception-based error handling makes it easier to write robust code
 as less boilerplate code is needed to check and handle errors.
 
 Powershell scripts using native commands would benefit from being able
-to error handling features like those used by cmdlets.
+to use error handling features like those used by cmdlets.
 
 ## Motivation
 
@@ -30,207 +30,177 @@ calling a native command, using boilerplate like the following:
  }
 ```
 
-Bourne type shells provide a `set -e` error handling mode that acts as 
-if this boilerplate were included in certain contexts. Like exception
-based error handling, this can exit a stack of functions, scripts and
-shells. This allows robust scripts to be written with a minimal amount
-of boilerplate.
+The Bourne again shell provides a `set -eo pipefail` exit code handling mode
+that acts as though this boilerplate were included in certain contexts. 
+Like exception-based error handling, this can exit a stack of functions, 
+scripts and shells. This allows robust scripts to be written with a minimal
+amount of boilerplate.
 
 To support a similar style of error handling with native commands, this
-RFC proposes including native command errors in Powershell's exception
-handling framework in a similar way.
+RFC proposes converting native command errors into PowerShell errors.
+The Bourne shell compatible `set -e` mode (without `set -o pipefail`) is 
+_not_ supported.
 
 The specification and alternative proposals are based on the
 [Equivalent of bash `set -e` #3415](https://github.com/PowerShell/PowerShell/issues/3415)
-and committee review of the associated
-[pull request](https://github.com/PowerShell/PowerShell/pull/3523).
-
+committee review of the associated
+[pull request](https://github.com/PowerShell/PowerShell/pull/3523), and 
+[implementation plan](https://github.com/PowerShell/PowerShell-RFC/pull/88#issuecomment-613653678)
 
 ## Specification
 
 This RFC proposes including native commands in the error handling
-framework, by allowing an error to be reported to the error stream
-when a native command exits with a non-zero exit code, similar to 
-the `set -e` option in bourne type shells.
+framework when the feature is enabled by adding an error to the error
+stream if the exit status of a native command is false. 
 
-The `$PSIncludeNativeCommandInErrorActionPreference` preference
-variable should govern treatment of non-zero exit codes on native
-commands. Possible values are:
-- `$false`: (the default) ignore non-zero exit codes. 
-The effect is the same as existing Powershell treatment of this case.
-- `$true`: report an error for non-zero exit codes on a native command.
+The `$PSNativeCommandErrorAction` preference variable will implement a version
+of the `$ErrorActionPreference` variable for native commands. The value will 
+default to `Ignore` for compatibility with existing behaviour. 
+- For all values except `Ignore`, an `ErrorRecord` will be added to `$Error` that wraps
+the exit code and the command executed that returned the exit code. 
+- Initially, only the existing values of `$ErrorActionPreference` will be supported. 
+- The set of values may be extended later to include `MatchErrorActionPreference`, 
+which should apply the `$ErrorActionPreference` setting to native commands also.
+- An enum converter will convert between `$PSNativeCommandError` and 
+`$ErrorActionPreference` values, where `MatchErrorActionPreference` is converted to the 
+current value of `$ErrorActionPreference`
 
 The reported error record should be created with the following details:
-- exception: `ExitException`, with the exit code of the failed command.
-- error id: `"Program {0} failed with exit code {1}"`, with the command
+- exception: `ExitCode`, with the exit code of the failed command.
+- error id: `"Program {0} failed with unhandled exit code {1}"`, with the command
 name and the exit code, from resource string `ProgramFailedToComplete`.
 - error category: `ErrorCategory.NotSpecified`.
 - object: the (boxed) exit code.
 
-The existing `$ErrorActionPreference` variable should govern how native
-command errors are handled. The `$ErrorActionPreference` value `"stop"`
-will treat such errors as terminating errors, allowing the error to
-terminate the session, or be caught as an exception.
+This does not provide the actual semantics of bash `set -eo pipefail` as Bourne shell 
+style integration with existing existing status handling syntax is not implemented. 
+As a result, PowerShell script logic for handling native command exit codes would need 
+to use either `try`..`catch` or existing exit status handling language constructs, 
+according to the setting of this preference variable.
 
-Alternative approaches outlined below try to address limitations in the
-approach taken with this base specification.
+One way of overriding`$ErrorActionPreference` for a single native command and handling
+its exit status explicitly would be to put this logic into a script block and call it 
+with the invocation operator (`&`).
 
-## Alternate Approaches and Considerations
+## Alternative Approaches and Considerations
 
-### Control native command error management with ActionPreference value
+A number of tweaks to existing behaviours could be combined to give equivalent
+functionality to bash `set -eo pipefail`
 
-Another preference option could be added to `$ErrorActionPreference`.
+### Add "strict" native command option.
 
-With this approach, an `$ErrorActionPreference` value of
-`"StopIncludingNativeCommand"` would cause an exception to be thrown
-for non-zero exit codes on native commands, as well as any error in
-cmdlets.
+The `$PSStrictNativeCommand` preference should treat creation of an `ErrorRecord` 
+for native commands in the same way as this is treated elsewhere.
+Possible values are:
+- `$false`: (the default) ignore non-zero exit codes. 
+This is the same as existing Powershell treatment of this case.
+- `$true`: Populate the error stream of the native command with an `ErrorRecord` 
+associated with an `ExitException` exception. 
 
-This approach is limited to managing errors in native commands when
-this option is set, so integrates less well with overall Powershell 
-error handling features. For example, where the preference is "Inquire",
-a non-zero exit code on a native command would not generate an inquiry.
+### Modifying existing semantics to consider exit code and exit status 
 
-### Treat non-zero exit codes as errors only on untested native commands
+The error will throw an exception, potentially terminating the session, in the same 
+situation as other non-terminating errors will do this, i.e. where 
+`$ErrorActionPreference` is set to `"stop"`. This would not be the desired behaviour on
+commands where the script already handles a non-zero exit code, which would require
+the addition of extra boilerplate to use multiple native commands in combination.
+There are a number of ways that this could be made more flexible by integrating exit 
+code and exit status handling into the language syntax.
 
-A similar approach that ignores the exit code in native commands where
-the output is tested should give useful results.
+#### Convert non-terminating errors to terminating where the command output is used.
 
-The `$PSManageNativeCommandErrors` preference variable would govern
-treatment of non-zero exit codes for "untested" native commands.
+This approach implements semantics equivalent to bash `set -eo pipefail`
+in the runtime layer.
+
+The `$PSStrictPipeLine` preference variable would govern promotion of a non-terminating
+error to a terminating error on getting an object from the pipeline output stream.
 Possible values would be:
-- `$false`: (the default) value would ignore any non-zero exit codes.
-- `$true`: would report and error for non-zero exit codes on an
-untested native command.
-Commands would be considered "tested" if used in the lexical scope of
-an `if` or loop condition, the operand of a logical operator
-(`!`,`||` or `&&`).
+- `$false`: (the default) an object can be collected from the pipeline output stream 
+regardless of the command exit value.
+This is the same as existing PowerShell treatment of this case.
+- `$true`: where the exit status of a native command is `$false`, trying to get an
+object from its output stream will create a terminating error from the non-terminating 
+errors in its error stream. 
+Conversion to boolean would be structured to ensure that this returns `$false` if the 
+output pipeline does not contain anything without trying to get an actual value from it.
 
-This should improve on the basic specification by allowing the idiom to
-be combined with normal control flow statement usage.
+This would allow syntax like `if`, `while` and pipeline chain operators to be usefully 
+combined with native commands.
 
-A common idiom with native commands is to return success or failure in
-the exit code rather than the output stream. Constructs such as if and
-while test the exit code rather than the command output in Bourne type
-shells, so treating non-zero exit code as an exception in such contexts
-would not make sense. Thus `set -e` is applied to "untested" commands
-only, where a "tested" command is any command in the scope of an `if`
-or `while` condition, a logical operator (`!`,`||` or `&&`) or any
-command before the last in a pipeline (see output of pipeline below).
+#### Sanitise semantics of treating a native command as a conditional value.
 
-Although PowerShell `if` and loop conditions check the output of the
-command rather than checking the exit code, a native command may be
-able to accept arguments that produce suitable output only on success,
-but still indicate the failure reason using the exit code. Where the
-native command does not provide such an option, it is probably not
-useful to test it's output in an `if` or loop condition.
+This option in combination with the above enables functionality analogous to
+bash `set -eo pipefail`
 
-Note: with bourne type shells, "tested" commands are those in the
-dynamic scope of a tested context rather than the lexical scope of the
-context. This limits the usefulness of `set -e`, but is needed for
-[historic compatibility](http://austingroupbugs.net/view.php?id=52)
-reasons.
-
-### Treat errors as exceptions only on untested commands
-
-This approach varies the basic specification so that errors in all
-commands can be treated exceptions where the command result is not
-tested.
-
-As well as the new boolean preference to enable reporting errors for
-non-zero native command exit codes, a new preference value option would
-be added for `$ErrorActionPreference`.
-
-A `"StopOnDiscarded"` value for `$ErrorActionPreference` would have the
-effect of ignoring non-terminating command errors in a context where
-the result is tested, and throwing an exception in other contexts.
-
-This should improve on the basic specification by allowing the idiom to
-be combined with normal control flow statement usage and applied to
-cmdlets also.
-
-Treating non-zero exit codes on native commands as errors only in
-untested contexts as with earlier listed approaches gives inconsitent
-error handling between native commands and cmdlets. The parameter
-`-ErrorAction SilentlyContinue` would need to be given to a cmdlet to
-prevent an exception being thrown where `$ErrorActionPreference` is
-`"stop"` and a non-terminating error should not cause an exception
-because the output is being tested.
-
-### Allow output of pipeline to be treated as tested
-
-This approach varies the above approaches to "untested" commands so
-that the output of a pipeline can be treated as tested. 
-
-A `$PSIncludeNativeCommandInErrorActionPreference` variable with three
-possible values would be used instead of a boolean variable. 
+PowerShell converts the output stream to a boolean value where a native command is used 
+as a "condition", i.e. the `-not` operator, or an `if`, `elseif` or `while` statement. 
+This is not particularly useful with native commands, which would tend to produce no 
+output on success, at least when executed in batch as opposed to interactive mode.
+ 
+The `$PSUseNativeExitStatus` variable would govern whether exit status is used 
+in determining the boolean value of a native command  for a conditional context.
 Possible values would be:
-`"none"`:(default) do not report an error on a non-zero exit code
-`"command"`: report an error on a non-zero exit code after a
-native command in an untested pipeline.
-`"pipeline"`: report an error on a non-zero exit code after an
-native command which is the last command in an untested pipeline.
+- `$false`: (the default) the boolean value of native command is defined as whether
+ or not the length of the output stream is non-zero.
+This is the same as existing PowerShell treatment of this case.
+- `$true`: the boolean value of a native command is it's exit status (`$?`), and 
 
-This should add some flexibility for handling errors in multiple
-command pipelines to deal with different expectations.
+This would allow syntax like `if` and `while` to be usefully combined with
+native commands.
 
-In Powershell, the status of a pipeline is false if any command in the
-pipeline fails. Thus treating a command that outputs to a pipeline as
-"untested" is arguably be closer to this existing Powershell idiom.
-Korn compatible shells like bash provide similar behaviour with 
-`set -o pipefail`. This makes the exit code of the pipeline zero where
-all exit codes were zero, or otherwise the exit code of the last
-command with a non-zero exit code.
+#### Add strict pipeline chain failure semantics.
 
-However this might not be the expected behaviour in all circumstances,
-as `set -o pipefail` is not enabled on bourne type shells, and commands
-that output into a pipe might sometimes be considered to have their 
-success or failure "tested" for error handling purposes.
+Treat only ignored exit statuses as exceptions.
+
+The `$PSStrictPipeLineChain` preference variable would govern the exit 
+status in the last command of a pipeline.
+Possible values would be:
+- `$false`: (the default) would ignore `$false` exit status on the last command.
+This is the same as existing PowerShell treatment of this case.
+- `$true`: for a pipeline that is being used in a conditional context (see above), 
+and where the exist status of the last command in the pipeline is `$false`, 
+would create a terminating error from the non-terminating errors in the command error 
+stream.
+
+This should improve on the basic specification by allowing the idiom to be usefully 
+combined with pipeline chaining.
 
 ### Use dynamic scope/Set-StrictMode
 
-This approach implements dynamic scoping for native command error
-management using a cmdlet. 
+This approach implements dynamic scoping for native command error management using a 
+cmdlet. 
 
-One of the approaches above would be enabled with
-`Set-StrictMode -version 6`, instead of a boolean preference variable.
-For example,
-- An error would be reported for native commands with a non-zero exit
-code.
-- An exception would be thrown for "untested" native commands with a
-non-zero exit code.
+Some of the above would be enabled with `Set-StrictMode -version 6`
+instead of with boolean preference variables.
 
 The dynamic scoping approach would improve on earlier listed approaches
 by limiting the scope of error handling configuration so that script
 functions could not have an effect on the error handling mode in the
 calling scope.
 
-There might be difficulties using `Set-StrictMode` for this. Other 
-strict mode checks tend to identify coding errors based on the internal
-Powershell context, not than the wider OS native environment. Use of 
-the latest strict mode with existing scripts that already implement
-robust error handling on native commands would be more difficult, as 
-normal control flow statements involving native commands would have to
-be restuctured into `try`/`catch` statements.
+If `Set-StrictMode` is used for this, it would need to enable some combination
+of enhancements that will not raise errors on scripts that have already implemented 
+strong native command error handling.
 
-The dynamic scoping approach would have side-effects on called scripts.
 
 ### Use lexical scope/Exception handling extensions
 
-With the lexical scoping approach, native command error handling mode
-would be used through language syntax instead of preference variables
-or cmdlets. A possible syntax might be to add parameters to the try
-statement.
-
-For example:
-- `WithNativeCommandExitError` parameter, to report an error where a
-native command exits with a non-zero exit code
-- `WithIgnoredErrorException` parameter, to throw an exception for
-reported command errors where the result of the command is not tested.
+Dynamic scoping approach would have side-effects on called scripts. 
+This is analogous to the behaviour of Bourne type shells, which maintain 
+this behaviour for [historic compatibility](http://austingroupbugs.net/view.php?id=52)
+reasons.
 
 Lexical scoping of native command error handling would improve on
-earlier listed approaches in a number of ways. Native command error
-handling would sit alongside overall exception handling. There would be
-no side-effects in calling or in called scripts. It could also minimize
-runtime overhead as the facility should be mostly handled by the parser
-and compiler. 
+earlier options by integrating native command error handling fully into
+the existing exception handling without out any side-effects in calling 
+or called scripts. 
+
+With this approach, native command error handling mode would be used through 
+language syntax instead of preference variables or cmdlets. A possible syntax might be
+to add a strictness option to the try statement which applies to the lexical scope of
+the try statement.
+
+Implementing this functionality only as a lexically scoped extension could 
+be the preferred option because it becomes a kind of syntactic sugar which is 
+implemented by the parser and compiler, improving testability, and keeping complexity 
+out of the runtime layer. 
