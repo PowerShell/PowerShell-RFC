@@ -1,7 +1,7 @@
 ---
-RFC: RFCnnnn
+RFC: RFC0060
 Author: Kirk Munro
-Status: Draft
+Status: Rejected
 SupercededBy: N/A
 Version: 0.3
 Area: Parser/Tokenizer
