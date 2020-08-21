@@ -12,6 +12,7 @@ recurring event on your calendar.
 
 ## Notes
 
+* [August 20, 2020](./notes/20200820_Notes.md) ([YouTube recording](https://youtu.be/emNWmUcGVq8) and [transcript](./notes/20200820_ChatTranscript.txt))
 * [April 16, 2020](./notes/20200416_Notes.md) ([YouTube recording](https://youtu.be/q3Wx7MCpXnk) and [transcript](./notes/20200416_ChatTranscript.txt))
 * March 19, 2020 - Cancelled due to conflict with MVP Summit
 * [October 17, 2019](./notes/20191017_Notes.md) ([YouTube recording](https://youtu.be/yL0FXyZQdmQ) and [transcript](./notes/20191017_ChatTranscript.txt))

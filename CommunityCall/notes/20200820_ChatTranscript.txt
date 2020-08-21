@@ -1,0 +1,128 @@
+Steve Lee (POWERSHELL) (slee@ntdev.microsoft.com)
+8/20/2020 4:31:46 PM
+Happy Thursday!
+
+JoshCorr
+8/20/2020 4:32:05 PM
+Dozens... :)
+
+Joel Sallow
+8/20/2020 4:32:15 PM
+mornin' everyone! 💖
+
+Joel Sallow
+8/20/2020 4:32:45 PM
+mornin' everyone! 💖
+
+JoshCorr
+8/20/2020 4:32:53 PM
+Dozens... :)
+
+Steve Lee (POWERSHELL) (slee@ntdev.microsoft.com)
+8/20/2020 4:33:00 PM
+There's dozens of us!
+
+Michael B
+8/20/2020 4:46:26 PM
+What is the speed impact of semantic highlighting?
+
+Michael B
+8/20/2020 4:46:37 PM
+What is the speed impact of semantic highlighting?
+
+Tyler Leonhardt (POWERSHELL) (tyleonha@microsoft.com)
+8/20/2020 4:48:54 PM
+It's barely noticable. The PowerShell extension already parses the file you're looking at so there's really no extra logic beyond a simple map method :)(Michael B asked "What is the speed impact of semantic highlighting?")
+
+Anonymous
+8/20/2020 4:46:50 PM
+GoateePFE (Ashley McGlone)
+
+Anonymous
+8/20/2020 4:47:15 PM
+Like the syntax highlighting! What was the poppup showing the tokenization in VSCode?
+
+Anonymous
+8/20/2020 4:47:21 PM
+Like the syntax highlighting! What was the poppup showing the tokenization in VSCode?
+
+Tyler Leonhardt (POWERSHELL) (tyleonha@microsoft.com)
+8/20/2020 4:50:24 PM
+Open the command pallet.
+type "tokens"
+click "inspect editor tokens and scopes"(Like the syntax highlighting! What was the poppup showing the tokenization in VSCode?)
+
+Tyler Leonhardt (POWERSHELL) (tyleonha@microsoft.com)
+8/20/2020 4:51:20 PM
+then you can click around the file to see the tokens (both TextMate and Semantic). This is _very_ useful for writing your own themes!(Like the syntax highlighting! What was the poppup showing the tokenization in VSCode?)
+
+Anonymous
+8/20/2020 4:53:41 PM
+it's a bout $0.30 a month to maintain the storage for cloud shell. (pay as you go)
+
+Anonymous
+8/20/2020 4:54:20 PM
+it's a bout $0.30 a month to maintain the storage for cloud shell. (pay as you go)
+
+Jon J.
+8/20/2020 4:59:32 PM
+Would there be a way to set a file to default into Notebook mode for sharing?
+
+Jon J.
+8/20/2020 4:59:52 PM
+Would there be a way to set a file to default into Notebook mode for sharing?
+
+Tyler Leonhardt (POWERSHELL) (tyleonha@microsoft.com)
+8/20/2020 5:00:55 PM
+Not at the moment but someone did open an issue!
+
+https://github.com/PowerShell/vscode-powershell/issues/2866(Jon J. asked "Would there be a way to set a file to default into Notebook mode for sharing?")
+
+Tyler Leonhardt (POWERSHELL) (tyleonha@microsoft.com)
+8/20/2020 5:00:01 PM
+Notebook Mode will get more stable as the vscode APIs become more stable :) 
+
+Anonymous
+8/20/2020 5:00:49 PM
+PSKoans + PS Notebooks
+
+Anonymous
+8/20/2020 5:01:03 PM
+PSKoans + PS Notebooks
+
+JB (AspenForester) Lewis
+8/20/2020 5:02:48 PM
+I think notebook mode will provide a much lower barrier to entry for those interested in the notebook concept.
+
+JB (AspenForester) Lewis
+8/20/2020 5:04:28 PM
+I think notebook mode will provide a much lower barrier to entry for those interested in the notebook concept.
+
+Mick Pletcher
+8/20/2020 5:16:44 PM
+One thing that would be REALLY nice is if cleanmgr.exe could be successfully controlled via PowerShell
+
+Mick Pletcher
+8/20/2020 5:18:30 PM
+One thing that would be REALLY nice is if cleanmgr.exe could be successfully controlled via PowerShell
+
+Rob Holt (roholt@microsoft.com)
+8/20/2020 5:20:56 PM
+I can't find an issue for that one, so please open an issue in the PowerShell repo: https://github.com/PowerShell/PowerShell/issues/new/choose(Mick Pletcher asked "One thing that would be REALLY nice is if cleanmgr.exe could be successfully controlled via PowerShell")
+
+Tyler Leonhardt (POWERSHELL) (tyleonha@microsoft.com)
+8/20/2020 5:20:38 PM
+👋
+
+Joel Sallow
+8/20/2020 5:20:39 PM
+Thank you all! 💖
+
+JB (AspenForester) Lewis
+8/20/2020 5:21:01 PM
+thanks!
+
+brima
+8/20/2020 5:37:54 PM
+Any news about the WindowsUpdateprovidder modul?
+
