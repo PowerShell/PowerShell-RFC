@@ -24,10 +24,6 @@ This RFC proposes some significant changes to address this.
 ## Motivation
 
     As a PowerShell user,
-    I can discover how to install missing cmdlets,
-    so that I can be more productive.
-
-    As a PowerShell user,
     I can easily install modules without specifying lots of switches,
     so that I can be more productive.
 
@@ -51,7 +47,7 @@ In addition, remove dependency on PackageManagement completely as well as depend
 nuget.exe.
 This module will depend on Nuget Server and Client packages including https://www.nuget.org/packages/NuGet.Client.
 This module would be shipped in the PSGallery supporting PowerShell 5.1+.
-This module will likely ship in PowerShell 7.1 alongside PowerShellGet 2.x.
+This module will likely ship in PowerShell 7.2 alongside PowerShellGet compatibility module.
 
 ### Side-by-side with PowerShellGet
 
@@ -60,70 +56,9 @@ is a C# based module, they can coexist side-by-side.
 
 Script and module metadata will retain compatible formatting as it exists with v2.
 
-We will introduce an `Enable-PowerShellGetAlias` cmdlet that will allow users to use known cmdlets like Install-Module
+We will introduce a compatibility module that will allow users to use known cmdlets like Install-Module
 from the PowerShellGet 3.0 implementation.
-This additional cmdlet may not ship in PowerShellGet 3.0 but is planned as a part of the transition effort.
-
-### Local cache
-
-Instead of always connecting to a repository to perform an online search,
-`Find-PSResource` (see below) works against a local cache.
-This will also enable changes in PowerShell to use `Find-PSResource -Type Command` to look
-in this cache when it can't find a command and suggest to the user the module to install to
-get that command.
-This will be a local json file (one per repository) containing sufficient metadata
-for searching for resources and their dependencies.
-The cache will be stored in the user path.
-There is no system cache that is shared.
-A system wide cache would require elevation or sudo to create and update preventing
-it from being useful.
-
-Example cache entry:
-
-```json
-{
-  "name": "This is my module",
-  "exportedFunctions": [
-    "Get-One",
-    "Set-Two"
-  ],
-  "version": "1.0.0.0",
-  "type": "module",
-  "tags": [
-    "Linux",
-    "PSEdition_Core",
-    "PSEdition_Desktop",
-    "AzureAutomation"
-  ]
-}
-```
-
-An example cache with 5000 resources (approximately the number of unique packages
-currently published to PowerShellGallery.com) is ~700KB in compressed json form.
-
-The cache would have both latest stable and latest prerelease versions of resources.
-
->[!NOTE]
->Need to experiment if it makes sense to have a single cache file for all repositories
->or a different cache per repository for size and perf reasons.
->Perf tests will determine if the cache needs to be in binary form.
-
-### Updating of the cache
-
-In the initial implementation of the module we will use introduce a cmdlet `Update-PSCache`
-in order to update the cache.
-
-We will continue to explore automatic updating of the cache in which on any operation that reaches out to a repository,
-a REST API will be called to see if the hash of the cache matches the current cache and if not, a new one
-is downloaded. This system may also take into consideration how recently the cache has been updated to avoid constant updates.
-
->[!NOTE]
->In the implementation we'll need to handle the case where the module attempts
->to update the cache while it is being read.
-If the repository doesn't support this new API, it falls back to current behavior
-in PSGet v2.
-This means that there is no local cache of that repository and operations will
-always connect to that repository.
+This module will ship separately from PowerShellGet 3.0 but is planned as a part of the transition effort.
 
 ### Repository management
 
@@ -194,8 +129,6 @@ A `-ModuleName` paramter will accept a string, and will return commands, DSC res
 
 A `-Tags` parameter will accept a string array and will filter results based on PSResource tags.
 
-A `-Filter` parameter will accept a string array and will filter results based on all PSResource metadata (including resource descriptions).
-
 A `-Proxy` parameter will accept a uri.
 
 A `-ProxyCredential` parameter will accept a PSCredential
@@ -246,15 +179,11 @@ A `-Version` parameter will accept a string of a [Nuget version range syntax](ht
 
 A `-Tags` parameter will accept a string array and will filter based on PSResource tags.
 
-A `-Filter` parameter will accept a string array and will filter based on all PSResource metadata (including resource descriptions).
-
 A `-Proxy` parameter will accept a uri.
 
 A `-ProxyCredential` parameter will accept a PSCredential
 
 A `-Credential` parameter will accept a PSCredential.
-
-An `-IncludeDependencies` switch will include dependent resources in the returned results.
 
 A `-NoClobber` switch will prevent installing modules that have the same cmdlets
 as a differently named module already on the system.
@@ -303,34 +232,11 @@ The json format will be the same as if this hashtable is passed to `ConvertTo-Js
 }
 ```
 
->[!NOTE]
->Credentials management will be using [Secrets Management RFC](https://github.com/PowerShell/PowerShell-RFC/pull/208)
-> for generalized credential management.
-The `repository` property can be the name of the registered repository or the URL
-to a repository.
-If no `repository` is specified, it will use the `default` repository.
-
 The older `System.Version` four part version type will be supported to retain
 compatibility with existing published modules using that format.
 
-If the resource requires dependencies that are not already installed, then
-a prompt will appear _before anything is installed_, listing all the resources
-including module name, version, size, and repository to be installed unless
-`-IncludeDependencies` is specified which will install without prompting.
-Rejecting the prompt will result in nothing being installed.
-
 Declared dependencies are searched and installed using the same trust algorithm
 as described for `Install-PSResource` above.
-
->[!NOTE]
->Installing dependencies is following the `apt` experience in that it prompts
->by default instead of automatically installing dependencies.  Since dependencies
->can be quite large, this would be equivalent to `ConfirmImpact=High` which
->would prompt by default.
->Dependency installation works with `-DestinationPath` parameter.
-
-We will also introduce a `New-RequiredResourceFile` cmdlet which will create a template file.
-If the switch `-AsPSD1` is used it will create a psd1 file, otherwise it will default to json. 
 
 ### Saving resources
 
@@ -339,28 +245,12 @@ This cmdlet uses `Install-PSResource -DestinationPath`.
 With the removal of PackageManagement, there is still a need to support saving
 arbitrary nupkgs (assemblies) used for scripts.
 
-`Save-PSResource -Type Library` will download nupkgs that have a `lib` folder.
-The dependent native library in `runtimes` matching the current system runtime
-will be copied to the root of the destination specified.
-A `-IncludeAllRuntimes` can be used to explicitly retain the `runtimes` directory
-hierarchy within the nupkg to the root of the destination.
-
->[!NOTE]
->Library support may not be available in 3.0.
-A `-Prerelease` switch allows saving prerelease versions.
-If the `-Version` includes a prerelease label like `2.0.0-beta4`, then this
-switch is not necessary and the prerelease version will be installed.
-
 A `-AsNupkg` switch will save the resource as a nupkg (if it was originally a
 nupkg) instead of expanding it into a folder.
 
 ### Updating resources
 
-`Update-PSResource` will update all resources to most recent minor version by default.
-
-A `-UpdateTo` parameter has values `MinorVersion` (as default), `MajorVersion`, `PatchVersion`.
-`MajorVersion` allows updating to latest major version.
-`PatchVersion` allows updating to latest patch version (e.g. 6.2.1 to 6.2.4).
+`Update-PSResource` will update all resources to most recent version by default.
 
 If the installed resource is a pre-release, it will automatically update to
 latest prerelease or stable version (if available).
@@ -411,11 +301,6 @@ uninstalled in order to be considered a dependency.
 
 Each cmdlet will have `-Proxy` and `-ProxyCredential` parameters.
 
-### PowerShellGallery status
-
-Upon failure to connect to PSGallery, the cmdlets should retrieve status from
-a well known REST API and return a more descriptive error message to the user.
-
 ### Open Sourcing the module
 
 In order to open source PowerShellGet 3.0 we will fork the current PowerShellGet repo, rename it as PowerShellGetv2,
@@ -424,6 +309,8 @@ and use the existing PowerShellGet repo as the primary support and development c
 ## Alternate Proposals and Considerations
 
 These are items are outside the scope of this RFC and version 3.0.
+This list includes a number of features that were included in the inital versions 
+of the RFC but did not meet the final scope of PowerShellGet 3.0.
 Many of these items can be addressed in a future version of PowerShellGet 3.x without
 introducing a breaking change:
 
@@ -451,11 +338,11 @@ introducing a breaking change:
 
 - Full semver support won't happen until there is a semver type in .NET
 
-- Consider if the prerelease switch is not used, and only a prerelease version of the module is found a warning will be emitted.
+- If the prerelease switch is not used, and only a prerelease version of the module is found a warning will be emitted.
 
-- Consider using a merkle tree to validate modules
+- Using a merkle tree to validate modules
 
-- Consider adding support for automatic searches from Find-PSResource -Type Command when a command in not found in module discovery
+- Support for automatic searches from Find-PSResource -Type Command when a command in not found in module discovery
 ```powershell
 PS> Get-Satisfaction
 Get-Satisfaction : The term 'Get-Satisfaction' is not recognized as the name of a cmdlet, function, script file, or operable program.
@@ -469,8 +356,57 @@ Suggestion: You can obtain `Get-Satisfaction` by running `Install-PSResource Hap
 PS> Install-PSResource HappyDays
 ```
 
-PowerShell module loading needs to be updated to [understand semver](https://github.com/PowerShell/PowerShell/issues/2983).
+- PowerShell module loading needs to be updated to [understand semver](https://github.com/PowerShell/PowerShell/issues/2983).
 
-Instead of `Find-PSResource`, call it `Find-Resource`.
-Context may be understandable since the cmdlet comes from PowerShellGet, but
-`Resource` as a noun is pretty general.
+- Local cacheing,instead of always connecting to a repository to perform an online search,
+`Find-PSResource` (see below) works against a local cache.
+This will also enable changes in PowerShell to use `Find-PSResource -Type Command` to look
+in this cache when it can't find a command and suggest to the user the module to install to
+get that command.
+This will be a local json file (one per repository) containing sufficient metadata
+for searching for resources and their dependencies.
+The cache will be stored in the user path.
+There is no system cache that is shared.
+A system wide cache would require elevation or sudo to create and update preventing
+it from being useful.
+
+Example cache entry:
+
+```json
+{
+  "name": "This is my module",
+  "exportedFunctions": [
+    "Get-One",
+    "Set-Two"
+  ],
+  "version": "1.0.0.0",
+  "type": "module",
+  "tags": [
+    "Linux",
+    "PSEdition_Core",
+    "PSEdition_Desktop",
+    "AzureAutomation"
+  ]
+}
+```
+
+An example cache with 5000 resources (approximately the number of unique packages
+currently published to PowerShellGallery.com) is ~700KB in compressed json form.
+
+The cache would have both latest stable and latest prerelease versions of resources.
+
+- Updating of the local cache
+
+- Credentials management using [Secrets Management RFC](https://github.com/PowerShell/PowerShell-RFC/pull/208) for generalized credential management.
+The `repository` property can be the name of the registered repository or the URL
+to a repository.
+If no `repository` is specified, it will use the `default` repository.
+
+- `Save-PSResource -Type Library` will download nupkgs that have a `lib` folder.
+The dependent native library in `runtimes` matching the current system runtime
+will be copied to the root of the destination specified.
+A `-IncludeAllRuntimes` can be used to explicitly retain the `runtimes` directory
+hierarchy within the nupkg to the root of the destination.
+
+- Upon failure to connect to PSGallery, the cmdlets should retrieve status from
+a well known REST API and return a more descriptive error message to the user.
