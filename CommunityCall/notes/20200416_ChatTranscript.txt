@@ -1,0 +1,278 @@
+Joel Sallow
+4/16/2020 4:22:54 PM
+*waves*
+
+Steve Lee (POWERSHELL)
+4/16/2020 4:28:37 PM
+We'll be starting soon
+
+Joel Sallow
+4/16/2020 4:28:43 PM
+*waves*
+
+Sydney Smith
+4/16/2020 4:29:06 PM
+Link to the questions thread on GitHub: https://github.com/PowerShell/PowerShell-RFC/issues/248
+
+Jonas Sommer Nielsen
+4/16/2020 4:30:55 PM
+Video + audio ok :) 
+
+Jonas Sommer Nielsen
+4/16/2020 4:31:02 PM
+Video + audio ok :) 
+
+Constantin
+4/16/2020 4:31:08 PM
+we only see white...
+
+Jeremiah Strong
+4/16/2020 4:31:21 PM
+You sound fine. Video coming in good
+
+John G Hohengarten
+4/16/2020 4:31:29 PM
+Hear and see fine :)
+
+John G Hohengarten
+4/16/2020 4:31:47 PM
+Hear and see fine :)
+
+Jeremiah Strong
+4/16/2020 4:31:48 PM
+You sound fine. Video coming in good
+
+Constantin
+4/16/2020 4:31:51 PM
+we only see white...
+
+Monty
+4/16/2020 4:32:14 PM
+looks ok to me
+
+Monty
+4/16/2020 4:32:17 PM
+looks ok to me
+
+David
+4/16/2020 4:32:41 PM
+any idea when Azure Functions will support PS7
+
+David
+4/16/2020 4:32:47 PM
+any idea when Azure Functions will support PS7
+
+Tyler Leonhardt (POWERSHELL)
+4/16/2020 4:54:55 PM
+Take a look at this issue comment:
+
+https://github.com/Azure/azure-functions-powershell-worker/issues/371#issuecomment-598853009
+
+(David asked "any idea when Azure Functions will support PS7")
+
+GoateePFE
+4/16/2020 4:33:11 PM
+waving from Ohio
+
+GoateePFE
+4/16/2020 4:33:42 PM
+waving from Ohio
+
+Monty
+4/16/2020 4:43:52 PM
+lost sound..??
+
+Monty
+4/16/2020 4:44:03 PM
+nevermind
+
+Jake
+4/16/2020 4:45:10 PM
+platyPS vNext <-- good to see this on the blog post. awesome.
+
+Jake
+4/16/2020 4:45:43 PM
+platyPS vNext <-- good to see this on the blog post. awesome.
+
+Keith Hill
+4/16/2020 4:48:42 PM
+Yay on improving the shell - particulary invoking native commands!  The shell experience really is the "on-ramp" to PowerShell IMO.
+
+Christoph Bergmeister
+4/16/2020 4:48:48 PM
+The new PSReadline preview is really good, I've used it for the past weeks and it made things much more productive
+
+Christoph Bergmeister
+4/16/2020 4:49:36 PM
+The new PSReadline preview is really good, I've used it for the past weeks and it made things much more productive
+
+Keith Hill
+4/16/2020 4:49:41 PM
+Yay on improving the shell - particulary invoking native commands!  The shell experience really is the "on-ramp" to PowerShell IMO.
+
+Jonas Sommer Nielsen
+4/16/2020 4:53:40 PM
+what was the name of the intelliSence module?
+
+Dennis in Denver
+4/16/2020 4:58:17 PM
+Where will the video recording of this community call be posted afterward? .. in the call's github?
+
+Keith Hill
+4/16/2020 4:58:17 PM
+I finally hooked my dev co-workers on PowerShell with posh-git, NPMTabCompletions and recently with the preview of the fish-like completions in PSRL.   :-)
+
+Jonas Sommer Nielsen
+4/16/2020 4:58:23 PM
+what was the name of the intelliSence module?
+
+Sean Wheeler
+4/16/2020 4:58:27 PM
+https://www.powershellgallery.com/packages/PSReadLine/2.1.0-beta1(Jonas Sommer Nielsen asked "what was the name of the intelliSence module?")
+
+Rob Holt
+4/16/2020 4:58:25 PM
+In case you want to ping me about PSSA v2, I'm @rjmholt on GitHub and Twitter
+
+Keith Hill
+4/16/2020 4:59:12 PM
+I finally hooked my dev co-workers on PowerShell with posh-git, NPMTabCompletions and recently with the preview of the fish-like completions in PSRL.   :-)
+
+Dennis in Denver
+4/16/2020 4:59:17 PM
+Where will the video recording of this community call be posted afterward? .. in the call's github?
+
+Sean Wheeler
+4/16/2020 5:19:46 PM
+aka.ms/PSCommunityCall(Dennis in Denver asked "Where will the video recording of this community call be posted afterward? .. in the call's github?")
+
+Anonymous
+4/16/2020 5:03:49 PM
+Is there any plans to improve the intellisense speeds when using the script editor pane of VSCode with the PowerShell extension? I feel very often that i'm typing away a cmd expecting to hit - and tab through the options available but actually just end up with an actual tab spacer on screen.
+
+Colin Cogle
+4/16/2020 5:04:03 PM
+PlatyPS looks like just the tool I was looking for.  Thank you!
+
+Dennis in Denver
+4/16/2020 5:04:12 PM
+Any updates on the VSCode PowerShell extensions?
+Which extension should we be using now?
+(PowerShell Preview?)
+
+Ben Gelens
+4/16/2020 5:06:11 PM
+platyPS: will the dependency on YamlDotNet persist in v2? It's been a pain for us in our module build pipes where we generate md from comment based help
+
+Ben Gelens
+4/16/2020 5:21:54 PM
+It's a pain as other modules also have this dependency but different version(Ben Gelens asked "platyPS: will the dependency on YamlDotNet persist in v2? It's been a pain for us in our module build pipes where we generate md from comment based help")
+
+Ben Gelens
+4/16/2020 5:23:00 PM
+able to use different load context would help :)(Ben Gelens asked "platyPS: will the dependency on YamlDotNet persist in v2? It's been a pain for us in our module build pipes where we generate md from comment based help")
+
+Colin Cogle
+4/16/2020 5:07:02 PM
+PlatyPS looks like just the tool I was looking for.  Thank you!
+
+Anonymous
+4/16/2020 5:07:18 PM
+Based on the clock, I think our video is frozen.
+
+Anonymous
+4/16/2020 5:07:27 PM
+Is there any plans to improve the intellisense speeds when using the script editor pane of VSCode with the PowerShell extension? I feel very often that i'm typing away a cmd expecting to hit - and tab through the options available but actually just end up with an actual tab spacer on screen.
+
+Dennis in Denver
+4/16/2020 5:07:31 PM
+Any updates on the VSCode PowerShell extensions?
+Which extension should we be using now?
+(PowerShell Preview?)
+
+Ben Gelens
+4/16/2020 5:07:41 PM
+platyPS: will the dependency on YamlDotNet persist in v2? It's been a pain for us in our module build pipes where we generate md from comment based help
+
+Sean Wheeler
+4/16/2020 5:22:48 PM
+Please file an issue with more details. We do need to handle Yaml front matter and generate Yaml content for the parameters.(Ben Gelens asked "platyPS: will the dependency on YamlDotNet persist in v2? It's been a pain for us in our module build pipes where we generate md from comment based help")
+
+Keith Hill
+4/16/2020 5:08:28 PM
+As part of working better with "native commands", could we get support for dot sourcing bat/cmd files and have the env var changes pulled into the PS session?  This is really important for C++ devs who need to configure their PS session with VC env vars (typically need to run vcvarsall.bat).
+
+Anonymous
+4/16/2020 5:08:57 PM
+Excahnge Online
+
+Ryan Yates
+4/16/2020 5:09:44 PM
+What about SharePoint On Prem ?
+
+AspenForester
+4/16/2020 5:11:37 PM
+Thank you (sorry for the confusion)
+
+Anonymous
+4/16/2020 5:17:00 PM
+Based on the clock, I think our video is frozen.
+
+Keith Hill
+4/16/2020 5:17:02 PM
+As part of working better with "native commands", could we get support for dot sourcing bat/cmd files and have the env var changes pulled into the PS session?  This is really important for C++ devs who need to configure their PS session with VC env vars (typically need to run vcvarsall.bat).
+
+Rob Holt
+4/16/2020 5:24:17 PM
+I think we've (me and Jim) contemplated dot-sourcing env vars upwards out of processes, but it's not straightforward. 
+
+Other shells can do it because dot-sourcing just runs the script in-process, but running a script in a different language gets trickier.
+
+We'd need to do some investigation.(Keith Hill asked "As part of working better with "native commands", could we get support for dot sourcing bat/cmd files and have the env var changes pulled into the PS session?  This is really important for C++ devs who need to configure their PS session with VC env vars (typically need to run vcvarsall.bat).")
+
+Anonymous
+4/16/2020 5:17:04 PM
+Excahnge Online
+
+Ryan Yates
+4/16/2020 5:17:05 PM
+What about SharePoint On Prem ?
+
+AspenForester
+4/16/2020 5:17:06 PM
+Thank you (sorry for the confusion)
+
+Keith Hill
+4/16/2020 5:23:48 PM
+We have community solutions for this like `Invoke-BatchFile` dating back to a demo Lee wrote years ago.
+
+Jamie Brandwood
+4/16/2020 5:24:21 PM
+Great news on the IntelliSense performance, should have checked my Release History before asking the question earlier :-)
+
+Thursday, April 15, 2020
+⚡️🧠 Better performance of overall but especially IntelliSense.
+
+Keith Hill
+4/16/2020 5:24:31 PM
+We have community solutions for this like `Invoke-BatchFile` dating back to a demo Lee wrote years ago.
+
+Jamie Brandwood
+4/16/2020 5:24:32 PM
+Great news on the IntelliSense performance, should have checked my Release History before asking the question earlier :-)
+
+Thursday, April 15, 2020
+⚡️🧠 Better performance of overall but especially IntelliSense.
+
+Keith Hill
+4/16/2020 5:30:24 PM
+Here's an example (credit's Lee's script) - https://github.com/nightroman/PowerShelf/blob/master/Invoke-Environment.ps1
+
+Keith Hill
+4/16/2020 5:30:28 PM
+Here's an example (credit's Lee's script) - https://github.com/nightroman/PowerShelf/blob/master/Invoke-Environment.ps1
+
+Rob Holt
+4/16/2020 5:45:26 PM
+Yeah that's basically what I imagined an implementation would look like. I think we also thought about reading the process table of a process (that way, we don't care what shell/exe it was)(Keith Hill asked "Here's an example (credit's Lee's script) - https://github.com/nightroman/PowerShelf/blob/master/Invoke-Environment.ps1")
+

@@ -1,0 +1,326 @@
+
+Anonymous
+$Hello_All
+
+Ayan
+Is there a way to tell how many people have joined in Teams?
+
+JB Lewis (@AspenForester)
+Hey! My teams thick client joined the Teams presentation this time.  Yay!
+
+Ayan
+Is there a way to tell how many people have joined in Teams?
+
+Joey Aiello
+30 right now(Ayan asked "Is there a way to tell how many people have joined in Teams?")
+
+JB Lewis (@AspenForester)
+Hey! My teams thick client joined the Teams presentation this time.  Yay!
+
+Bj├╢rn
+Hi @all
+
+Bj├╢rn
+Hi @all
+
+Anonymous
+ack
+
+JB Lewis (@AspenForester)
+Can see and hear!
+
+JB Lewis (@AspenForester)
+Can see and hear!
+
+Anonymous
+Looks good
+
+Anonymous
+yes
+
+Anonymous
+Thanks for tackling error view!
+
+Joel Sallow
+DO we have any available examples of what we're looking at changing error view(s) to at the moment?
+
+Joel Sallow
+thanks!(Joel Sallow asked "DO we have any available examples of what we're looking at changing error view(s) to at the moment?")
+
+Joel Sallow
+DO we have any available examples of what we're looking at changing error view(s) to at the moment?
+
+Anonymous
+Thanks for tackling error view!
+
+Jeremiah
+Hey, I was just asked - Is there a way to call like the previous S4B meetings? I don't believe so
+
+Jeremiah
+Hey, I was just asked - Is there a way to call like the previous S4B meetings? I don't believe so
+
+Joey Aiello
+Unfortunately not(Jeremiah asked "Hey, I was just asked - Is there a way to call like the previous S4B meetings? I don't believe so")
+
+Bj├╢rn
+great ! will it be included in pwsh 7 than or stay as a standalone module
+
+Aaron Nelson
+I know that double-WHERE is valid, but isn't that more expensive than doing WHERE with -and?
+
+Bj├╢rn
+great ! will it be included in pwsh 7 than or stay as a standalone module
+
+Steve Lee (POWERSHELL)
+Plan is for it to be standaloneon PSGallery(Bj├╢rn asked "great ! will it be included in pwsh 7 than or stay as a standalone module")
+
+Aaron Nelson
+I know that double-WHERE is valid, but isn't that more expensive than doing WHERE with -and?
+
+Steve Lee (POWERSHELL)
+Yes, someone submit a PR to help optimize :)(Aaron Nelson asked "I know that double-WHERE is valid, but isn't that more expensive than doing WHERE with -and?")
+
+Kirk
+Are there parameters to control what text that button shows, whether or not there is a Cancel button, etc.?
+
+Kirk
+"that button" = the Export button(Kirk asked "Are there parameters to control what text that button shows, whether or not there is a Cancel button, etc.?")
+
+prasoon
+better if the shown code uses named parameters,
+missing -FilterScript here  :-)
+
+James Maxson
+Maybe get-help -showwindow?
+
+James Maxson
+show-help would work(James Maxson asked "Maybe get-help -showwindow?")
+
+James Maxson
+Maybe get-help -showwindow?
+
+prasoon
+better if the shown code uses named parameters,
+missing -FilterScript here  :-)
+
+Kirk
+Are there parameters to control what text that button shows, whether or not there is a Cancel button, etc.?
+
+Kirk
+Notes/transcript (and the recording? there is no link at least) for the July community call was never posted. Was that call skipped?
+
+Kirk
+Notes/transcript (and the recording? there is no link at least) for the July community call was never posted. Was that call skipped?
+
+Joey Aiello
+Just an oversight on my part, will try and get both posted ASAP(Kirk asked "Notes/transcript (and the recording? there is no link at least) for the July community call was never posted. Was that call skipped?")
+
+Ayan
+Is there an update on putting the SQL module on Github?
+
+Anonymous
+Is there any plans with working with .net Core team to move WPF over to other platforms? 
+
+Ayan
+Is there an update on putting the SQL module on Github?
+
+Joey Aiello
+Ping Matteo Taviggia (sp?) on Twitter(Ayan asked "Is there an update on putting the SQL module on Github?")
+
+Anonymous
+Is there any plans with working with .net Core team to move WPF over to other platforms? 
+
+Aaron Nelson
+Who is it that owns the PowerShell Gallery now?  
+Does that person own the PS Gallery website capabilities as well?
+
+Aaron Nelson
+Who is it that owns the PowerShell Gallery now?  
+Does that person own the PS Gallery website capabilities as well?
+
+Tyler Leonhardt (POWERSHELL)
+Steve's team (aka our team)(Aaron Nelson asked "Who is it that owns the PowerShell Gallery now?  
+Does that person own the PS Gallery website capabilities as well?")
+
+Aaron Nelson
+I have nothing to announce at this time.  It is a very highly requested item.
+
+Ayan
+Would one need the compatipility module, in PowerShell 7 too, to run basic cmdlets like Restart-Computer on linux\Mac?
+
+Aaron Nelson
+Ping @VickyHarp & @SQLToolsGuy on twitter about putting the SqlServer module up on GitHub.  They are very well aware of this need, and I need to let them handle messaging on this topic, at this time.
+
+Aaron Nelson
+I have nothing to announce at this time.  It is a very highly requested item.
+
+Aaron Nelson
+Ping @VickyHarp & @SQLToolsGuy on twitter about putting the SqlServer module up on GitHub.  They are very well aware of this need, and I need to let them handle messaging on this topic, at this time.
+
+Ayan
+Would one need the compatipility module, in PowerShell 7 too, to run basic cmdlets like Restart-Computer on linux\Mac?
+
+Joey Aiello
+No, the compatibility module works through Windows PowerShell / .NET in order to run those Windows PS cmdlets. 
+
+We may invest in native binary wrappers for macOS/Linux in the future, but nothing we're committing to now(Ayan asked "Would one need the compatipility module, in PowerShell 7 too, to run basic cmdlets like Restart-Computer on linux\Mac?")
+
+prasoon
+like how it became an optional feature in v2 !
+
+prasoon
+like how it became an optional feature in v2 !
+
+Steve Lee (POWERSHELL)
+Sort of(prasoon asked "like how it became an optional feature in v2 !")
+
+Ayan
+yes. Thanks for clarifying
+
+Ayan
+yes. Thanks for clarifying
+
+Ayan
+Is there a Slack-like PowerShell help channel on Teams? 
+
+Ayan
+Is there a Slack-like PowerShell help channel on Teams? 
+
+Tyler Leonhardt (POWERSHELL)
+not for teams but checkout the Community slack and discord:
+
+aka.ms/psdiscord
+aka.ms/psslack(Ayan asked "Is there a Slack-like PowerShell help channel on Teams? ")
+
+Aaron Nelson
+Could the PowerShell team find a room where they sit further away from the camera?  ≡ƒÿï
+
+Aaron Nelson
+Could the PowerShell team find a room where they sit further away from the camera?  ≡ƒÿï
+
+Steve Lee (POWERSHELL)
+Had to find an available room this morning and this long one was it.  I'll ask folks to sit on the camera side next time!(Aaron Nelson asked "Could the PowerShell team find a room where they sit further away from the camera?  ≡ƒÿï")
+
+Robin Dadswell
+Do you know if the Active Directory module is being reworked to support PowerShell core? If so is there a rough release date for it? 
+
+Robin Dadswell
+that's great but there are things about using it on other OS as well that it seems to be missing(Robin Dadswell asked "Do you know if the Active Directory module is being reworked to support PowerShell core? If so is there a rough release date for it? ")
+
+Robin Dadswell
+Do you know if the Active Directory module is being reworked to support PowerShell core? If so is there a rough release date for it? 
+
+Joel Sallow
+It does work with a caveat that isn't resolved until .NET Core 3 iirc -- there's a broken property if you do Get-ADUser -Properties * that breaks it completely. There's an issue in the PSModuleCompatibility repo detailing it.
+
+Joel Sallow
+It does work with a caveat that isn't resolved until .NET Core 3 iirc -- there's a broken property if you do Get-ADUser -Properties * that breaks it completely. There's an issue in the PSModuleCompatibility repo detailing it.
+
+Steve Lee (POWERSHELL)
+This is true(Joel Sallow asked "It does work with a caveat that isn't resolved until .NET Core 3 iirc -- there's a broken property if you do Get-ADUser -Properties * that breaks it completely. There's an issue in the PSModuleCompatibility repo detailing it.")
+
+Mike F Robbins
+Use PowerShell to Install the Remote Server Administration Tools (RSAT) on Windows 10 version 1809 https://mikefrobbins.com/2018/10/03/use-powershell-to-install-the-remote-server-administration-tools-rsat-on-windows-10-version-1809/
+
+Mike F Robbins
+Use PowerShell to Install the Remote Server Administration Tools (RSAT) on Windows 10 version 1809 https://mikefrobbins.com/2018/10/03/use-powershell-to-install-the-remote-server-administration-tools-rsat-on-windows-10-version-1809/
+
+Joel Sallow
+Kevin B from the PS Discord asks: When will the Exchange Online module work in 6+?
+
+Anonymous
+Get-ADUser -Properties * doesn't work on preview 2
+
+Christoph Bergmeister
+Thanks for answering the questions around the release time line and PS 7 shipping with Windows btw
+
+Joel Sallow
+*waves at Tyler*
+
+Joel Sallow
+Kevin B from the PS Discord asks: When will the Exchange Online module work in 6+?
+
+Anonymous
+Get-ADUser -Properties * doesn't work on preview 2
+
+Christoph Bergmeister
+Thanks for answering the questions around the release time line and PS 7 shipping with Windows btw
+
+Joel Sallow
+*waves at Tyler*
+
+Christoph Bergmeister
+The Get-AdUser will be fixed in preview3 due to it being fixed in an update of .Net Core
+
+Christoph Bergmeister
+The Get-AdUser will be fixed in preview3 due to it being fixed in an update of .Net Core
+
+Oisin G.
+Someone should had a VT renderer to out-gridview ;) That would probably shed 275MB of that 280MB and still be xplat :P
+
+Oisin G.
+s/had/add
+
+Christoph Bergmeister
+See here for more details on the fix: https://github.com/PowerShell/PowerShell/issues/9998#issuecomment-515438552
+
+Oisin G.
+Someone should had a VT renderer to out-gridview ;) That would probably shed 275MB of that 280MB and still be xplat :P
+
+Oisin G.
+s/had/add
+
+Christoph Bergmeister
+See here for more details on the fix: https://github.com/PowerShell/PowerShell/issues/9998#issuecomment-515438552
+
+Christoph Bergmeister
+By the way, the issue/PR notifications in GitHub were useful to see which fixes shipped as part of the 6.2.2 and 7.0.0-preview.2 releases
+
+Christoph Bergmeister
+By the way, the issue/PR notifications in GitHub were useful to see which fixes shipped as part of the 6.2.2 and 7.0.0-preview.2 releases
+
+Anonymous
+I"m an EXO Tier 3 SEE; I'd be happy to test and provide feedback on Exchange Online.
+
+Anonymous
+I"m an EXO Tier 3 SEE; I'd be happy to test and provide feedback on Exchange Online.
+
+Joey Aiello
+Try it out shell.azure.com/powershell(I"m an EXO Tier 3 SEE; I'd be happy to test and provide feedback on Exchange Online.)
+
+Joey Aiello
+Still need to run Connect-ExoPSSession from within Cloud Shell(I"m an EXO Tier 3 SEE; I'd be happy to test and provide feedback on Exchange Online.)
+
+Oisin G.
+There's a bug in the filesystem provider that breaks mounting of Azure Files shares inside Windows containers
+
+Joey Aiello
+https://twitch.tv/tylerleonhardt
+
+Joey Aiello
+Or tylerleonhardt.live(Joey Aiello asked "https://twitch.tv/tylerleonhardt")
+
+prasoon
+[Wish]::ThankYou('all')
+
+Oisin G.
+Wanted to ask about it, but next time or twitter
+
+Oisin G.
+It manifests in cloud shell with powershell
+
+Oisin G.
+There's a bug in the filesystem provider that breaks mounting of Azure Files shares inside Windows containers
+
+prasoon
+[Wish]::ThankYou('all')
+
+Oisin G.
+Wanted to ask about it, but next time or twitter
+
+Oisin G.
+It manifests in cloud shell with powershell
+
+Bj├╢rn
+thx bye
+
