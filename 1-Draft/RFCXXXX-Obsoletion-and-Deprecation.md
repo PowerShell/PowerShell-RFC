@@ -1,20 +1,34 @@
 # Deprecation Behavior in PowerShell
 
-PowerShell has a long history of ensuring that when some behavior is available it will be available in future releases.
+PowerShell has a long history of ensuring that when behavior is available in an earlier release it will be available in future releases.
 However, this may be difficult to do from a practical perspective;
 
-- .NET has an attribute `[Obsolete]` which indicates that a type or member should no longer be used, and may be removed in the future.
 - Producers of modules may not want to support historical behavior forever
 - Sometimes, serious security issues are discovered in the functionality, and should no longer be used.
+- .NET has an attribute `[Obsolete]` which indicates that a type or member should no longer be used, and may be removed in the future.
 
 With regard to the C# attribute, there are two optional parameters; the first is the reason behind the obsoletion, the second to indicate that use is now an error.
 Because c# is compiled, these warnings/errors are generated during the authoring/compilation process.
 Since PowerShell provides a number of ways to "directly" use C# types, the user is not provided the opportunity to determine whether a type has the obsolete attribue.
-It seems reasonable that the users would like to know when they are using a deprecated API or type.
+While developers are sometimes painfully aware that types or members are obsolete,
+it seems reasonable that script users would like to know when they are using a deprecated API or type.
+With PowerShell there are two prongs to this problem:
 
-Current behavior for Cmdlets, Functions, and Parameters is as follows:
+- Cmdlets or Parameters may be designated obsolete
+- Types and members of types may be designated as obsolete
 
-If the cmdlet has the obsolete attribute applied, the behavior when run is:
+It would be a better experience if the user notificaton was consistent between these two types of uses.
+
+## Current behaviors
+
+The following shows the inconsistency between using obsolete cmdlets and types.
+
+### Cmdlets/Functions
+
+The following provides examples of the current behaviors for cmdlets.
+It includes examples for both obsolete cmdlet and parameters.
+
+Ex.1 Obsolete cmdlet
 
 ```powershell
 PS> function Invoke-Obsolete1 {
@@ -23,7 +37,11 @@ PS> function Invoke-Obsolete1 {
 >> }
 PS> Invoke-Obsolete1
 WARNING: The command 'Invoke-Obsolete1' is obsolete. Invoke-Obsolete1 is no longer supported
+```
 
+Ex.2 Obsolete parameter when the parameter isused
+
+```powershell
 PS> function Invoke-Obsolete2 {
 >> param (
 >> [ObsoleteAttribute("Use parameter2")]
@@ -33,7 +51,11 @@ PS> function Invoke-Obsolete2 {
 >> }
 PS> Invoke-Obsolete2 -parameter1 value1
 WARNING: Parameter 'parameter1' is obsolete. Use parameter2
+```
 
+Ex.3 Obsolete cmdlet and parameter are both used
+
+```powershell
 PS> function Invoke-Obsolete3 {
 >> [ObsoleteAttribute("Use a different cmdlet")]
 >> param (
@@ -47,7 +69,26 @@ WARNING: The command 'Invoke-Obsolete3' is obsolete. Use a different cmdlet
 WARNING: Parameter 'parameter1' is obsolete. Use parameter2
 ```
 
-This behavior is not available for types
+Ex.4 obsolete parameter is not used
+
+```powershell
+
+PS> function Invoke-Obsolete4 {
+>> param (
+>> [ObsoleteAttribute("Use parameter2")]
+>> [string]$parameter1,
+>> [string]$parameter2
+>> )
+>> }
+PS> Invoke-Obsolete3 -parameter2 value2
+```
+
+Note that the warning is only emitted when the obsolete parameter _is used_.
+If you use a parameter which is not marked obsolete, no warning will be issued.
+
+### Types
+
+This behavior is not available for types, as the following example shows:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -99,26 +140,128 @@ However, I can use this type without any errors from PowerShell without warning 
 7
 ```
 
-Because PowerShell does not provide the obsolete information about the type it is possible to perpetuate obsolete types in script where this would not be possible if the code were compiled.
+Because PowerShell does not provide the obsolete information about the type it is possible to perpetuate the use of obsolete types in script where this would not be possible if the code were compiled.
 
-## Commands
+## Desired Behavior
 
-There is currently no way to override the warning messages which occur when an obsolete cmdlet or parameter is used.
-There is currently no way to provide warning messages when creating an instance of a type which has been marked obsolete.
-There is currently no way to provide warning messages when reference a member of a type which has been marked obsolete.
-There is currently no easy way to retrieve the cmdlets, parameters, types, and type members which have been marked obsolete.
+### Cmdlets
 
-### Discovering deprecated or obsolete cmdlets, functions, and types
+The current behavior of cmdlets (script or compiled c#) is that when the cmdlet is _executed_ a warning will be emitted.
+If the cmdlet uses a parameter which has been marked obsolete, another warning is emitted.
+If the cmdlet is not marked obsolete, but an obsolete parameter is used, a warning is emitted only for the obsolete parameter.
+This behavior has informed the behavior surrounding the use of obsolete types/members.
+It is not easily to determine that a cmdlet has been marked obsolete via `Get-Command`
 
-It is possible to discover whether a cmdlet or function has been marked obsolete
+### Proposed behavior for types
+
+PowerShell will warn when you are using an obsolete type or member when the script is _parsed_.
+It will not warn on every reference at run-time as that might result in 1000s of warnings if you're using an obsolete type/member in a loop.
+This is to attempt to mimic the behavior of the compliation experience.
+Remember that in compiled usage a warning is delivered each time a obsolete type/member is used at compilation, but not at run time.
+Our analogous compilation is when the script is parsed, or when a module is loaded, or a function is created.
+This becomes _slightly_ complicated when obsolete types/members are used in an interactive environment.
+PSReadline pre-fetches collections of types, even though they are not used.
+We must not produce a warning _until_ the type/member is actively used in a pipeline.
+
+The following is an example for the suggested behaviors:
+
+```powershell
+PS> [obsoleteattribute("Use class2.")]
+>> class class1 {
+>> [obsoleteattribute("Use property2")]
+>> [string]$property1
+>> [string]$property2
+>> }
+PS> $i = [class1]::new()
+WARNING: class1 is deprecated. Use class2.
+PS> $i.property1 = "new value"
+WARNING: property1 is deprecated. Use property2.
+
+```
+
+## Overriding Behaviors
+
+There are a number of things which would be useful from the PowerShell environment:
+
+- Override the warning messages which occur when an obsolete type, member, cmdlet, or parameter is used.
+- Provide warning messages when creating an instance of a type which has been marked obsolete.
+- Provide warning messages when reference a member of a type which has been marked obsolete.
+- An easy way to retrieve the cmdlets, parameters, types, and type members which have been marked obsolete.
+
+Providing for these behaviors would improve the current experience when interacting with obsolete or deprecated elements.
 
 ### Displaying deprecation behavior
 
+Currently, all warnings are displayed based on the global preference variable `WarningPreference`.
+Additional levels of granularity would be useful so different warnings may be controlled, much the same way that trap/catch works in PowerShell today.
+While it is the case that you can use `-WarningAction SilentlyContinue` with cmdlets today, it will affect _all_ warnings.
+In some cases, you may not want to suppress obsolete warnings while suppressing operational warnings (and vice-versa).
+
+With regard to types, when an obsolete type or member is used, we will emit a warning:
+
+- when a script is _parsed_
+  - This means that when a script is executed or dot-sourced a warning may be emitted
+- when a module is imported (a special case of parsing)
+- when an obsolete type is _used_ in an interactive session
+
+There is some asymmetry with behavior here, as Cmdlet obsolescence warnings occur when the cmdlet it _used_.
+However, most PowerShell users do not notice the difference between our parsing phase and execution phase.
+Further, we don't want to emit on type use as it could result in 1000s of warnings
+
+---
+**NOTE:**
+We should also consider altering our current behavior for cmdlets to emit a warning only at parse time rather than run-time.
+
+---
+
+#### ObsoleteWarningPreference
+
+This is a new ubiquitous variable will dictate the global behavior of PowerShell when an item has been deprecated.
+This has four possible values:
+
+- SilentlyContinue
+  - Warning messages will not be shown
+- Continue
+  - Warning messages will be shown
+- Stop
+  - Warning messages will be converted to terminating error messages
+- NotAvailable
+  - Any deprecated item will be not found.
+    Cmdlets, parameters, Types, and members will produce an appropriate "NotFound" error.
+
+A ubiquitous parameter could be added, but this seems less interesting as the user must have _a priori_ knowledge about the obsolete cmdlet, thus diluting its usefulness.
+Additionally, it would not be applicable to the use of obsolete types, further reducing its usefulness.
+
+##### Customized Behaviors
+
+It may be desired to override the global behaviors for specific warnings.
+In order to support this scenario an additional cmdlet `Set-ObsoleteWarning` shall be provided.
+This allows the user to specify for a specific warning what behavior is to be provided.
+
+`Set-ObsoleteWarning -Id _WarningId_ -Behavior _PreferenceValue_`
+
+The _WarningId_ may be retrieved with the `Get-ObsoleteItem` cmdlets.
+
+`Get-ObsoleteWarning` will return the current overrides 
+
+Enables individual tuning for a specific obsolete warning.
+
+### Discovery
+
+Being able to discover and explore the environment is one of PowerShells' great strengths.
+We should provide tools which enable users to discover obsolete cmdlets and types in their environment.
+
+### Discovering deprecated or obsolete cmdlets, functions, and types
+
+A new cmdlet `Get-ObsoleteItem` will produce 
+
 ### Setting deprecation behavior
 
-## Multiple areas for marking behavior deprecated
+PowerShell currently supports the attribute `ObsoleteAttribute` which should be sufficient.
 
-Beause deprecated code may be desired in both .NET and scripting, the attribute should have consistent behavior across all of the potential uses
+### Multiple areas for marking behavior deprecated
+
+Because deprecated code may be desired in both .NET and scripting, the attribute should have consistent behavior across all of the potential uses.
 
 Three types of behavior shall be supported.
 
@@ -137,31 +280,192 @@ Three types of behavior shall be supported.
 
 ## Additions to the module manifest
 
+In order to quickly report on whether a module has some element which is obsolete, the module manifest will be extended to support providing a hint to obsolescence.
 A new field in the `PrivateData` block shall be available.
-The field name shall be "DeprecatedElements" is a hashtable of
-@{
-    Commands = @()
-    Types = @()
-}
+The name `ObsoleteHints` is a hashtable of obsolete items in the module and is used when discovering obsolete items in unloaded modules.
 
-If there are no deprecated types, then `Types` may be emitted
-If there are no deprecated commands (cmdlets, functions, or scripts), then `Commands` may be omitted
-The actual `obsoleteattribute` must still be present in the command or type.
+```powershell
+ObsoleteHints = @{ # Optional
+    Commands = @( # Optional
+        @{
+          CommandName = _ObsoleteCommandName_ # Required - If omitted, an error shall be produced at module import time.
+          IsObsolete = _bool_ # Optional - default to $true, may be set to false if the command is not obsolete but has obsolete parameters.
+          Message = _string_ # Optional - In the case of a command which only has obsolete parameters, this may be omitted. If omitted the value shall be ""
+          Parameters = @(
+            @{
+              ParameterName= _ObsoleteParameterName_ # Required - The parameter which will be reported as obsolete. If Parameters is used, at least one parameter entry must be found. If omitted, it will produce an error.
+              Message = _string_ # Optional - The message to provide when importing the module.
+            }
+          )
+        }
+    )
+    Types = @( # Optional
+        @{
+          TypeName = _ObsoleteTypeName_
+          IsObsolete = _bool_ # Optional - default to $true, may be set to false if the type is not obsolete but has obsolete members.
+          Message = _string_ # Optional - In the case of a command which only has obsolete members, this may be omitted. If omitted the value shall be ""
+          Members = @( # Optional - this is only allowed when there are obsolete members.
+            @{
+              MemberName = _ObsoleteMemberName_ # Optional - If omitted the MemberSignature will be used. If both MemberName and MemberSignature are omitted, this entry will produce an error.
+              Message = _string_ # Optional - The message to omit when the module is loaded.
+              MemberSignature = _string_ # Optional - used only to disambiguate multiple member names. If omitted, all members of this name will be assumed obsolete.
+              MemberType = _string_ # Property|Field|Method|Constructor - Optional - used only disambiguate multiple members. If omitted, all members with the name will be assumed obsolete.
+            }
+          )
+        }
+    )
+}
+```
+
+The following is an example from the Microsoft.PowerShell.Utility module:
+
+```powershell
+...
+PrivateData = @{
+  PSData = @{
+    ExperimentalFeatures = @(
+      @{
+        Name        = 'Microsoft.PowerShell.Utility.PSManageBreakpointsInRunspace'
+        Description = 'Enables -BreakAll parameter on Debug-Runspace and Debug-Job cmdlets to allow users to decide if they want PowerShell to break immediately in the current location when they attach a debugger.'
+      }
+    )
+    ObsoleteHints = @{
+      Commands = @{
+        CommandName = "Format-Hex"
+        IsObsolete = $false
+        Parameters = @{ ParameterName = "Raw"; Message = "Raw parameter is deprecated." }
+      },
+      @{
+        CommandName = "Send-MailMessage"
+        Message = "This cmdlet does not guarantee secure connections to SMTP servers. While there is no immediate replacement available in PowerShell, we recommend you do not use Send-MailMessage at this time. See https://aka.ms/SendMailMessage for more information."
+      }
+    }
+  }
+}
+...
+```
+
+- the MemberSignature is for disambiguation of obsolescence for the member of a type which may have overloaded signatures.
+- If there are no obsolete types, then `Types` may be omitted.
+- If there are no obsolete commands (cmdlets, functions, or scripts), then `Commands` may be omitted.
+- If there are no obsolete parameters, then `Parameters` may be omitted.
+- If there are no obsolete members, then `Members` may be omitted.
+
+The actual `ObsoleteAttribute` must still be present in the command or type.
+The source of truth once the module is imported is the presence of the `ObsoleteAttribute` in the source of the cmdlet, parameter, type, or member.
 
 ## Configuration Tools
 
 There are a number of elements that require configuration for managing the behavior when an element is marked for deprecation.
 Because of this, we shall provide cmdlets to aid with the creation of the configuration.
-Three cmdlets, `Get-DeprecatedItem`, `Enable-DeprecatedItem`, and `Disable-DeprecatedItem` shall be provided.
+Three cmdlets, `Get-ObsoleteItem`, `Enable-DeprecatedItem`, and `Disable-DeprecatedItem` shall be provided.
 
-- `Get-DeprecatedItem`
+- `Get-ObsoleteItem`
+
   This cmdlet retrieves those items which have been attributed as deprecated and their current configuration.
-  By default this will return only cmdlets whose items which are currently in loaded modules
+  By default this will return only cmdlets whose items which are currently in loaded modules.
   `-All` shall check all available modules and inspect the PrivateData element for obsolete items and report them, if found.
   `-Force` shall inspect all loaded types and members in PowerShell assemblies for the obsolete attribute and report them, if found. Note that this may take some time and should be used rarely.
+  `-ItemType` allows you to retrieve a partial list based on the ItemType.
+  Allowed values are `Type`, `Command`, `ExternalScript`
 
-- `Set-DeprecationBehavior`
-  This cmdlet enables an item which
+  The output of the `Get-ObsoleteItem` has at least the following properties:
+
+```cs
+enum ItemType {
+    Type
+    Command
+    ExternalScript
+}
+
+enum MemberType {
+    Parameter
+    Property
+    Field
+    Method
+    Type
+    Event
+    Constructor
+}
+
+class ObsoleteMember {
+    [string]$Name
+    [string]$Signature
+    [string]$Message
+    [bool]$IsError
+    [string]$WarningId
+    [MemberType]$MemberType
+}
+
+class ObsoleteItem {
+    [string]$FullyQualifiedName
+    [string]$Message
+    [bool]$IsError
+    [string]$Module
+    [ItemType]$ItemType
+    [bool]$IsObsolete
+    [string]$WarningId
+    [bool]$HasObsoleteMembers
+    [List[ObsoleteMember]]$ObsoleteMembers
+}
+```
+
+the following is an example of the output from the `Get-ObsoleteItem` cmdlet:
+
+```powershell
+PS> Get-ObsoleteItem
+
+   ItemType: Type
+
+FullyQualifiedName                       ObsoleteMembers           Message
+------------------                       ---------------           -------
+System.Management.Automation.PowerShell… none                      This enum type was used only in PowerShell Workflow and is now obsolete.
+Microsoft.PowerShell.Commands.TextEncod… none                      This class is included in this SDK for completeness only. The members of this cla…
+Microsoft.PowerShell.Commands.UtilityRe… none                      This class is obsolete
+System.Management.Automation.Runspaces.… ImportPSSnapIn            Custom PSSnapIn is deprecated. Please use a module instead.
+Microsoft.PowerShell.Commands.ByteColle… .ctor, .ctor, Offset      The constructor is deprecated.The constructor is deprecated.The property is depre...
+
+   ItemType: Command
+
+FullyQualifiedName                       ObsoleteMembers           Message
+------------------                       ---------------           -------
+Microsoft.PowerShell.Utility\Format-Hex  Raw                       Raw parameter is deprecated.
+Microsoft.PowerShell.Utility\Send-MailM… none                      This cmdlet does not guarantee secure connections to SMTP servers. While there is…
+
+   ItemType: ExternalScript
+
+FullyQualifiedName                       ObsoleteMembers           Message
+------------------                       ---------------           -------
+/Users/james/bin/invoke-obsolete.ps1     foo                       This is an obsolete script. foo is an obsolete attribute, use foo2 instead
+
+PS> Get-ObsoleteItem -ItemType Type
+
+   ItemType: Type
+
+FullyQualifiedName                       ObsoleteMembers           Message
+------------------                       ---------------           -------
+System.Management.Automation.PowerShell… none                      This enum type was used only in PowerShell Workflow and is now obsolete.
+Microsoft.PowerShell.Commands.TextEncod… none                      This class is included in this SDK for completeness only. The members of this clas…
+Microsoft.PowerShell.Commands.UtilityRe… none                      This class is obsolete
+System.Management.Automation.Runspaces.… ImportPSSnapIn            Custom PSSnapIn is deprecated. Please use a module instead.
+Microsoft.PowerShell.Commands.ByteColle… .ctor, .ctor, Offset      The constructor is deprecated. The constructor is deprecated. The property is depr…
+
+PS> Get-ObsoleteItem -ItemType Command
+
+   ItemType: Command
+
+FullyQualifiedName                       ObsoleteMembers           Message
+------------------                       ---------------           -------
+Microsoft.PowerShell.Utility\Format-Hex  Raw                       Raw parameter is deprecated.
+Microsoft.PowerShell.Utility\Send-MailM… none                      This cmdlet does not guarantee secure connections to SMTP servers. While there is …
+
+```
+
+- `Set-ObsoleteBehavior`
+
+  This cmdlet enables an item which specific override behavior for a specific WarningId
+
+- `Get-ObsoleteBehavior`  
 
 ## DeprecationActionPreference
 
@@ -199,18 +503,20 @@ from an implementation, different mechanisms must be used to determine whether
 
 ## Open Questions
 
-deprecation vs obsoletion (I've sort of settled on deprecated/deprecation)
+## Implementation Considerations
 
-- cmdlets
-  - get-deprecateditem returns
-    - types marked with obsolete
-    - types which have members which are marked obsolete
-    - cmdlet/function marked as obsolete
-    - cmdlet/function which have parameters marked as obsolete
+- WarningId does not generally ever have a value in the current WarningRecord.
+This would need to be used consistently in order for suppression as defined above to work.
 
-output:
+- With regard to interactive sessions, PSReadLine does a large number of pre-fetches when the user is reference types.
+Currently, PSReadLine behavior puts types into the type cache even if they're are not actually used.
+This will have implications for reporting obsolete types and members in an interactive session.
 
-```powershell
-PS> Get-DeprecatedItem
+## Follow on work
 
-```
+### Extendability
+
+It should be possible to extend what produces the deprecation warning.
+Currently, we recognize only `ObsoleteAttribute`, but it seems reasonable that developers/authors will want to create their own attributes for deprecation and obsolescence.
+It is not possible to extend `ObsoleteAttribute` as it is a sealed class.
+We should consider a registration mechanism for obsolescence which allows expansion to other attributes.
