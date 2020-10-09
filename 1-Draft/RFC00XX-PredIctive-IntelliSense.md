@@ -6,13 +6,22 @@ Area: Shell
 Comments Due: 10/31/2020
 ---
 
-# Predictive IntelliSense
+# Motivation
 
-Predictive IntelliSense is an addition to the interactive (shell) experience to assist in command
-discovery and accelerate full command execution. The prediction suggestion appears as colored text
-following the user’s cursor. This enables new and experienced users of PowerShell to discover, edit,
-and execute full commands based on matching predictions from the user’s history or additional
-providers.
+Tab completion has accelerated the success of both new and experienced PowerShell users. New users
+get the benefit of discovery; seeing available cmdlets and parameters as options while interactively
+typing. Experienced users receive the benefit of acceleration; typing less while using the **<tab>** key
+to quickly complete a command.
+
+The increasing amount of technology translates to an increase in cmdlets and full command
+complexity. Predictive IntelliSense is an addition to the concept of Tab Completion to assist the
+user in successfully completing full commands.
+
+## Predictive IntelliSense
+
+The prediction suggestion appears as colored text following the user’s cursor. This enables new and
+experienced users of PowerShell to discover, edit, and execute full commands based on matching
+predictions from the user’s history or additional providers.
 
 Additional providers enhance historic predictions by providing domain specific commands and task
 completions. Predictive IntelliSense includes an extension model to support the registration of
@@ -27,27 +36,36 @@ Below, predictions are displayed with a dropdown in ListView.
 
 ![image](./media/pred-listview.png)
 
-## Motivation
-
-Tab completion has accelerated the success of both new and experienced PowerShell users. New users
-get the benefit of discovery; seeing available cmdlets and parameters as options while interactively
-typing. Experienced users receive the benefit of acceleration; typing less while using the **<tab>** key
-to quickly complete a command.
-
-The increasing amount of technology translates to an increase in cmdlets and full command
-complexity. Predictive IntelliSense is an addition to the concept of Tab Completion; helping the
-user discover, build and edit full commands based on the user’s history or additional plugins.
-
 ## Release plan
 
-- Proposed 7.1 GA
-  - Currently in PowerShell 7.1 Preview 7
-  - History based prediction in the **InlineView**
-  - Extension Framework
-- Future PSReadLine previews
-  - Prediction source: `History` and `Plugin` using extension framework
-  - Prediction view: `InlineView` and `ListView`
-  - Previews begin in October with PSReadLine 2.2.0-beta1
+Predictive IntelliSense is implemented in both the PowerShell engine and presented through the
+PSReadLine module. In an effort to support the most PowerShell users, the presentation of
+history-based predictions will be available to the following versions:
+
+- Windows Powershell 5.1
+- PowerShell 7.0+
+
+Additional plugins require the the extension framework implemented in the PowerShell engine. Support
+for additional plugins is available in the following versions:
+
+- PowerShell 7.1+
+
+History-based predictions preview and ship plan:
+
+- PSReadLine 2.1.0-beta2 currently available for download from PSGallery
+- PSReadLine 2.1.0-GA will ship with PowerShell 7.1
+- PSReadLine 2.1.0-GA will be available for download from PSGallery
+- History based prediction in the **InlineView**
+
+Extension/Plugin support preview and ship plan:
+
+- PSReadLine 2.2.0-beta1 planned availability in October
+- PSReadLine 2.2.0-GA will ship with PowerShell 7.2
+- PSReadLine 2.2.0-GA will be available for download from PSGallery
+- Includes support for **InlineView** and **ListView**
+- Includes support for additional prediction source **Plugin** and **HistoryAndPlugin**
+- Note: Windows PowerShell 5.1 and PowerShell 7.0 will only support prediction source **History**.
+  PowerShell 7.1+ will support prediction sources **History**, **Plugin**, and **HistoryAndPlugin**
 
 ## Goals/Non-Goals
 
@@ -59,12 +77,13 @@ user discover, build and edit full commands based on the user’s history or add
 - The user will have keyboard shortcuts to navigate and edit a prediction
 - The user will be able to register additional providers when desired
 - The user may customize the color of a prediction to support accessibility needs
-- The user will be able to search history for similar predictions
 
 Non-goals:
 
 - Due to the relatively short length of a session compared to your PSReadline history,
   PowerShell session history is not part of the historical suggestion
+- The extension framework doesn't allow a plugin implementation to call into the Runspace where
+  PSReadLine is running when providing predictive suggestions.
 - VSCode implementation. We agree this is important for a consistent experience and are working to
   bring this feature in a future release, but the user experience for VS Code is outside the scope of this RFC.
 
@@ -74,7 +93,7 @@ The proposal is to add Predictive IntelliSense and an extension model to improve
 
 ### Key Design Considerations Predictive IntelliSense
 
-Predictive IntelliSense displays a best match command completion from command history. The
+Predictive IntelliSense displays the most recent match command completion from command history. The
 prediction may change if a better match is found as the user types additional information. The
 predicted command may be accepted, edited, or ignored.
 
@@ -82,8 +101,9 @@ predicted command may be accepted, edited, or ignored.
 
 ### Install and Remove Predictive IntelliSense
 
-Predictive IntelliSense is a part of the PSReadLine module. Updating or installing the current beta
-release from PSGallery will provide the Predictive IntelliSense feature.
+Predictive IntelliSense is implemented in both the PowerShell engine and presented through the
+PSReadLine module. To receive the benefits of Predictive IntelliSense based on your PowerShell
+version, download and install the PSReadLine module from PSGallery
 
 The current release is PSReadLine 2.1.0 Beta 2:
 
@@ -103,12 +123,19 @@ default may cause new and existing users to become confused at the shell prompt.
 enabled and disabled with a PSReadLine command Set-PSReadLineOption that is executed at the shell
 prompt or in the user’s Profile.
 
-Predictive IntelliSense currently supports four arguments for a prediction source;
+Predictive IntelliSense in PSReadLine 2.1.0-beta2 currently supports the following arguments for
+prediction source;
 
-* None - This option disables Predictive IntelliSense
-* History - This option uses only the PSReadLine history for predictions
-* Plugin – This option uses only registered plugin modules for predictions
-* HistoryAndPlugin – This option uses both for predictions
+- None - This option disables Predictive IntelliSense
+- History - This option uses only the PSReadLine history for predictions
+
+Starting with PSReadLine 2.2.0-beta1, Predictive IntelliSense will support the following arguments
+for prediction source;
+
+- None - This option disables Predictive IntelliSense
+- History - This option uses only the PSReadLine history for predictions
+- Plugin – This option uses only registered plugin modules for predictions
+- HistoryAndPlugin – This option uses both for predictions
 
 To enable Predictive IntelliSense, enter the following command in the shell or in the users Profile:
 
