@@ -8,11 +8,11 @@ Comments Due: 10/31/2020
 
 # Predictive IntelliSense
 
-Predictive IntelliSense is an addition to the interactive (Shell) experience to assist in command
+Predictive IntelliSense is an addition to the interactive (shell) experience to assist in command
 discovery and accelerate full command execution. The prediction suggestion appears as colored text
 following the user’s cursor. This enables new and experienced users of PowerShell to discover, edit,
 and execute full commands based on matching predictions from the user’s history or additional
-provider.
+providers.
 
 Additional providers enhance historic predictions by providing domain specific commands and task
 completions. Predictive IntelliSense includes an extension model to support the registration of
@@ -29,7 +29,7 @@ Below, predictions are displayed with a dropdown in ListView.
 
 ## Motivation
 
-Tab Completion has accelerated the success of both new and experienced PowerShell users. New users
+Tab completion has accelerated the success of both new and experienced PowerShell users. New users
 get the benefit of discovery; seeing available cmdlets and parameters as options while interactively
 typing. Experienced users receive the benefit of acceleration; typing less while using the **<tab>** key
 to quickly complete a command.
@@ -356,4 +356,3 @@ and
 In the above example, the predictor implementation is elsewhere in the module code with the type
 name **MyPredictor**. An object of **MyPredictor** is created in **OnImport** and **OnRemove**. To
 remove (unregister) your implementation instance, you need the **GUID** id of your implementation.
-
