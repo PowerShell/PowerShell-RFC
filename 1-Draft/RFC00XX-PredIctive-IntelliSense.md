@@ -41,13 +41,12 @@ user discover, build and edit full commands based on the user’s history or add
 ## Release plan
 
 - Proposed 7.1 GA
-  - Currently in PowerShell 7.1 PReview 7
-  - Predictive IntelliSense Whole Line Completion
-  - Historical Predictions
+  - Currently in PowerShell 7.1 Preview 7
+  - History based prediction in the **InlineView**
   - Extension Framework
 - Future PSReadLine previews
-  - Predictive IntelliSense Whole Line Completion + ListView
-  - Support for additional providers using extension framework
+  - Prediction source: `History` and `Plugin` using extension framework
+  - Prediction view: `InlineView` and `ListView`
   - Previews begin in October with PSReadLine 2.2.0-beta1
 
 ## Goals/Non-Goals
@@ -58,19 +57,20 @@ user discover, build and edit full commands based on the user’s history or add
 - The user will be able to enable and disable Predictive IntelliSense
 - The user will be able to change between InlineView and ListView
 - The user will have keyboard shortcuts to navigate and edit a prediction
-- The user will register additional providers when desired
+- The user will be able to register additional providers when desired
 - The user may customize the color of a prediction to support accessibility needs
 - The user will be able to search history for similar predictions
 
 Non-goals:
 
-- Due to limit use, PowerShell Session history is not part of the historical suggestion
+- Due to the relatively short length of a session compared to your PSReadline history,
+  PowerShell session history is not part of the historical suggestion
 - VSCode implementation. We agree this is important for a consistent experience and are working to
-  bring this feature in a future release
+  bring this feature in a future release, but the user experience for VS Code is outside the scope of this RFC.
 
 ## Specification
 
-The proposal is to add Predictive IntelliSense and Extension model to improve the user interactive experience.
+The proposal is to add Predictive IntelliSense and an extension model to improve the user interactive experience.
 
 ### Key Design Considerations Predictive IntelliSense
 
@@ -91,7 +91,7 @@ The current release is PSReadLine 2.1.0 Beta 2:
 Install-Module PSReadLine -RequiredVersion 2.1.0-beta2 -AllowPrerelease
 ```
 
-It is possible to remove, delete, the PSReadLine module to disable Predictive IntelliSense. This
+It is possible to unload or uninstall the PSReadLine module to disable Predictive IntelliSense. This
 creates a negative impact to customers as it would remove all features of PSReadLine. For this
 reason, Predictive IntelliSense has its own PSReadLine configuration to enable and disable
 predictions.
@@ -124,7 +124,7 @@ Set-PSReadLineOption -PredictionSource None
 
 ### Changing the Prediction View
 
-Predictions are displayed in one of two view depending on the user preference. The default view is InlineView.
+Predictions are displayed in one of two views depending on the user preference. The default view is InlineView.
 
 * InlineView – This is the default view and displays the prediction inline with the user’s typing.
   This view is similar to other shells Fish and ZSH.
@@ -139,9 +139,9 @@ Set-PSReadLineOption -PredictionViewStyle InlineView
 
 ### Change the Prediction Color for Accessibility
 
-By default, Predictions appear on the same line the user is typing in a different customizable
-color. To support Accessibility needs, the prediction color is settable in the shell or users
-Profile.
+By default, predictions appear on the same line the user is typing in a different customizable
+color. To support accessibility needs, the prediction color is settable in the shell or user's
+profile.
 
 ![pi-color](./media/pi-color.png)
 ![pi-color](./media/pi-color2.png)
@@ -172,8 +172,8 @@ Set-PSReadLineOption -Colors @{ Prediction = "#8181f7"}
 ### Key Bindings for Predictions
 
 Key bindings control cursor movement and additional features within the prediction. To support users
-running Predictive IntelliSense on multiple platforms, key bindings are user-settable in the Shell
-and user’s PowerShell profile.
+running Predictive IntelliSense on multiple platforms, key bindings are user-settable in the shell
+and a user’s PowerShell profile.
 
 Example of setting a key binding in the shell or user’s profile:
 
@@ -262,7 +262,7 @@ Non-goals:
 
 ## Extension Model Specification
 
-### Predictive Suggestion Contract to Support Addition Providers
+### Predictive Suggestion Contract to Support Additional Providers
 
 Below is an abbreviated code listing of the API contract to support suggestions from additional
 providers.
@@ -354,5 +354,5 @@ and
 ```
 
 In the above example, the predictor implementation is elsewhere in the module code with the type
-name **MyPredictor**. An object of **MyPredictor** is created in **OnImport** and **OnRemove**. To
+name **MyPredictor**. An object of **MyPredictor** is created in **OnImport**. To
 remove (unregister) your implementation instance, you need the **GUID** id of your implementation.
