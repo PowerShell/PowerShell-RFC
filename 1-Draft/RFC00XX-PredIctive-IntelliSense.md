@@ -151,17 +151,19 @@ Set-PSReadLineOption -PredictionSource None
 
 ### Changing the Prediction View
 
-Predictions are displayed in one of two views depending on the user preference. The default view is InlineView.
+Beginning with 2.2.0-beta1, Predictions are displayed in one of two views depending on the user
+preference. The default view is InlineView.
 
-* InlineView – This is the default view and displays the prediction inline with the user’s typing.
+- InlineView – This is the default view and displays the prediction inline with the user’s typing.
   This view is similar to other shells Fish and ZSH.
-* ListView – ListView provides a dropdown list of predictions below the line the user is typing.
+- ListView – ListView provides a dropdown list of predictions below the line the user is typing.
   Users may quickly scan the list, highlight and select the desired prediction.
 
-Users may change the view at the command line, or in the user’s PowerShell profile.
+Users may change the view at the command line using the keybinding F2 or `Set-PSReadLineOption. The
+Set-PSReadLineOption may be stored in the user's profile.
 
 ```powershell
-Set-PSReadLineOption -PredictionViewStyle InlineView
+Set-PSReadLineOption -PredictionViewStyle ListView
 ```
 
 ### Change the Prediction Color for Accessibility
@@ -170,12 +172,28 @@ By default, predictions appear on the same line the user is typing in a differen
 color. To support accessibility needs, the prediction color is settable in the shell or user's
 profile.
 
+The default light-grey prediction text color;
+
+```powershell
+Set-PSReadLineOption -Colors @{ InLinePrediction = "$([char]0x1b)[38;5;238m"}
+```
+
+Starting with PSReadLine 2.1.0-RC1, `Set-PSReadLineOption -Colors` array will include
+**InLinePrediction** to set the color of predictive text for **InLineView**.
+
+Beginning with PSReadLine 2.2.0-beta1, `Set-PSReadLineOption -Colors` array will include;
+
+- **ListPrediction** to set color for '>' and source names in **ListView**
+- **ListPredictionSelection** to set color for the highlighted selection in **ListView**
+
+Examples of user changing prediction color:
+
 ![pi-color](./media/pi-color.png)
 ![pi-color](./media/pi-color2.png)
 
 ```powershell
-Set-PSReadLineOption -Colors @{ Prediction = '#8A0303'}
-Set-PSReadLineOption -Colors @{ Prediction = '#2F7004'}
+Set-PSReadLineOption -Colors @{ InLinePrediction = '#8A0303'}
+Set-PSReadLineOption -Colors @{ InLinePrediction = '#2F7004'}
 ```
 
 Multiple types of color code values are supported in PSReadLine. For more information see
@@ -186,14 +204,14 @@ Examples of different color code values:
 
 ```powershell
  # Use a ConsoleColor enum
-Set-PSReadLineOption -Colors @{ Prediction = 'DarkRed'}
-Set-PSReadLineOption -Colors @{ Prediction = [ConsoleColor]::DarkRed}
+Set-PSReadLineOption -Colors @{ InLinePrediction = 'DarkRed'}
+Set-PSReadLineOption -Colors @{ InLinePrediction = [ConsoleColor]::DarkRed}
 
  # 24 bit color escape sequence
-Set-PSReadLineOption -Colors @{ Prediction = "$([char]0x1b)[38;5;100m"}
+Set-PSReadLineOption -Colors @{ InLinePrediction = "$([char]0x1b)[38;5;100m"}
 
  # RGB value
-Set-PSReadLineOption -Colors @{ Prediction = "#8181f7"}
+Set-PSReadLineOption -Colors @{ InLinePrediction = "#8181f7"}
 ```
 
 ### Key Bindings for Predictions
