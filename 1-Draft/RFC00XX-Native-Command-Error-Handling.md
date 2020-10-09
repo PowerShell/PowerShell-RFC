@@ -28,7 +28,7 @@ $ErrorActionPreference = 'Stop'
 
 Native commands return an exit code to the calling application which will be zero for success or
 non-zero for failure. However, native commands currently do not participate in the PowerShell error
-stream. Customers working with native commands in their scripts will need to check the execution
+stream. Users working with native commands in their scripts will need to check the execution
 status after each call using a helper function similar to below:
 
 ```Powershell
@@ -61,7 +61,7 @@ The `$PSNativeCommandErrorAction` preference variable will implement a version o
 `$ErrorActionPreference` variable for native commands.
 
 - The value will default to `Ignore` for compatibility with existing behavior.
-- For non-zero exit codes and except for the value 'Ignore', an `ErrorRecord` will be added to
+- For non-zero exit codes and except for the value `Ignore`, an `ErrorRecord` will be added to
   `$Error` that wraps the exit code and the command executed that returned the exit code.
 - Initially, only the existing values of `$ErrorActionPreference` will be supported.
 - The set of values may be extended later to include `MatchErrorActionPreference`, which should
@@ -106,7 +106,7 @@ The reported error record should be created with the following details:
  handling language constructs, according to the setting of this preference variable.
 
  One way of overriding `$ErrorActionPreference` for a single native command and handling
- it's exit status explicitly would be to put this logic into a script block and call it
+ its exit status explicitly would be to put this logic into a script block and call it
  with the invocation operator (`&`).
 
 ## Alternative Approaches and Considerations
@@ -135,7 +135,7 @@ considered as an enum to allow for future expansion. Possible values are:
 
 ### Modifying existing semantics to consider exit code and exit status
 
-The error will throw an exception, potentially terminating the session, in the same situation as
+The error will throw an exception, potentially terminating the execution, in the same situation as
 other non-terminating errors will do this, i.e. where `$ErrorActionPreference` is set to `"stop"`.
 This would not be the desired behavior on commands where the script already handles a non-zero exit
 code, which would require the addition of extra boilerplate to use multiple native commands in
@@ -226,4 +226,3 @@ Lexical scope requires more runtime overhead; a mapping must be maintained at ru
 runtime scope and its corresponding lexical scope that existed at parse-time. In addition, lexical
 scope may not apply well to errors. Errors produce stack traces at runtime and should be handled in
 a runtime-facing way. For these reasons, this alternative is not under consideration.
-
