@@ -89,7 +89,8 @@ Non-goals:
 
 ## Specification
 
-The proposal is to add Predictive IntelliSense and an extension model to improve the user interactive experience.
+The proposal is to add Predictive IntelliSense and an extension model to improve the user
+interactive experience.
 
 ### Key Design Considerations Predictive IntelliSense
 
@@ -312,11 +313,20 @@ Non-goals:
 Providers are registered automatically to the PowerShell engine when the user installs a provider
 module. Removal of registration occurs when the module is removed.
 
+Starting with PowerShell 7.1 Preview 7, and as an experimental feature of PowerShell 7.1-RC.1, the
+`Get-Subsystem` cmdlet is an experimental feature of the `PSSubsystemPluginModel. To enable the
+experimental feature:
+
+```powershell
+Enable-ExperimentalFeature -Name PSSubsystemPluginModel
+```
+
 To list the currently installed providers and their respective metadata such as version information:
 
 ```powershell
 Get-SubSystem -Kind CommandPredictor
 ```
+
 Example output with no additional providers registered;
 
 ```output
