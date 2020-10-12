@@ -314,7 +314,7 @@ Providers are registered automatically to the PowerShell engine when the user in
 module. Removal of registration occurs when the module is removed.
 
 Starting with PowerShell 7.1 Preview 7, and as an experimental feature of PowerShell 7.1-RC.1, the
-`Get-Subsystem` cmdlet is an experimental feature of the `PSSubsystemPluginModel. To enable the
+`Get-Subsystem` cmdlet is an experimental feature of the `PSSubsystemPluginModel`. To enable the
 experimental feature:
 
 ```powershell
