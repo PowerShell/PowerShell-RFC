@@ -349,9 +349,9 @@ Predictive IntelliSense is an extensible model offering module authors the oppor
 their own predictor plugins. Customers using Predictive IntelliSense will benefit from increased
 coverage of domain specific technologies and other helpful predictors.
 
-Module authors writing new predictors will need to register their predictor with the extension
-model. Predictor registration is accomplished with the **OnImport** and **OnRemove** methods
-executed on module startup and removal. Additional documentation is available for
+Module authors writing new predictors will register their predictor with the extension model by
+calling the subsystem registration API. **OnImport** and **OnRemove** are the locations to call the
+registration API for a binary module. Additional documentation is available for
 [IModuleAssemblyInitializer
 (OnImport)](https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.imoduleassemblyinitializer?view=powershellsdk-7.0.0)
 and
