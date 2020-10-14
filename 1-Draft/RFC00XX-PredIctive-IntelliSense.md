@@ -191,10 +191,12 @@ Examples of user changing prediction color:
 
 ![pi-color](./media/pi-color.png)
 ![pi-color](./media/pi-color2.png)
+![pi-color](./media/pi-color3-background.png)
 
 ```powershell
 Set-PSReadLineOption -Colors @{ InLinePrediction = '#8A0303'}
 Set-PSReadLineOption -Colors @{ InLinePrediction = '#2F7004'}
+Set-PSReadLineOption -Colors @{ InLinePrediction = "$([char]0x1b)[36;7;238m"}
 ```
 
 Multiple types of color code values are supported in PSReadLine. For more information see
