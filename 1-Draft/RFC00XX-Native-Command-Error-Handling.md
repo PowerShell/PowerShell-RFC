@@ -26,15 +26,15 @@ the preference variable in the script.
 $ErrorActionPreference = 'Stop'
 ```
 
-Native commands return an exit code to the calling application which will be zero for success or
+Native commands usually return an exit code to the calling application which will be zero for success or
 non-zero for failure. However, native commands currently do not participate in the PowerShell error
 stream. Users working with native commands in their scripts will need to check the execution
 status after each call using a helper function similar to below:
 
 ```Powershell
-if( ! $? )
+if ($LASTEXITCODE -ne 0)
 {
-    exit $lastexitcode;
+    throw "Command failed. See above errors for details"
 }
  ```
 
