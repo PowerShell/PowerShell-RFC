@@ -18,18 +18,20 @@ benefit when expecting non-terminating errors in normal execution such as non-re
 a list. This default behavior is controlled with the preference variable
 `$ErrorActionPreference` default of `Continue`.
 
-During development and debugging, often customers prefer that script execution stops when a
-non-terminating error occurs. PowerShell currently supports customers with this ability by setting
-the preference variable in the script.
+In production, often customers prefer that script execution stops when a non-terminating error
+occurs. This is particularly true in CI where the preference is to fail fast. PowerShell currently
+supports customers with this ability by setting the preference variable in the script.
 
 ```Powershell
 $ErrorActionPreference = 'Stop'
 ```
 
-Native commands usually return an exit code to the calling application which will be zero for success or
-non-zero for failure. However, native commands currently do not participate in the PowerShell error
-stream. Users working with native commands in their scripts will need to check the execution
-status after each call using a helper function similar to below:
+Native commands usually return an exit code to the calling application which will be zero for
+success or non-zero for failure. However, native commands currently do not participate in the
+PowerShell error stream. Redirected `stderr` output is not interpreted the same as the PowerShell
+error stream and many native commands use `stderr` as information/verbose stream and thus only the
+exit code matters. Users working with native commands in their scripts will need to check the
+execution status after each call using a helper function similar to below:
 
 ```Powershell
 if ($LASTEXITCODE -ne 0)
@@ -42,9 +44,19 @@ Simply relaying the errors through the error stream isn't the solution. The exam
 support all cases as `$?` can be false from a cmdlet or function error, making `$LASTEXITCODE`
 stale.
 
-To support a similar style of error handling with native commands, this specification proposes
-converting native command errors into PowerShell errors similar to the `sh`-compatible
-`set -e` mode.
+In POSIX shells, this need to terminate on command error is addressed by the `set -e` configuration,
+which causes the shell to exit when a command fails.
+
+This specification proposes a similar idea, but adapted to the PowerShell conventions of preference
+variables and catchable, self-describing, terminating error objects. This proposal further adds the
+functionality of `set -e` with `set -o pipefail` to return an error if any command in a pipeline
+fails.
+
+- `set -e` - terminates on command error
+- `set -u`, a reference to any variable not previously defined results in an error. Similar to
+  Set-StrictMode in PowerShell and not needed to be addressed in this RFC.
+- `set -o pipefail`, by default, pipeline success is determined by the last command executed. `Set
+  -o pipefail` returns an error if any command in the pipeline fails.
 
  The specification and alternative proposals are based on the
  [Equivalent of bash `set -e` #3415](https://github.com/PowerShell/PowerShell/issues/3415)
@@ -54,8 +66,10 @@ converting native command errors into PowerShell errors similar to the `sh`-comp
 
 ## Specification
 
-This RFC proposes including native commands in the error handling framework when the feature is
-enabled by adding an error to the error stream if the exit code of a native command is non-zero.
+This RFC proposes a preference variable to configure the elevation of errors produced by native
+commands to first-class PowerShell errors, so that native command failures will produce error
+objects that are added to the error stream and may terminate execution of the script without added
+boilerplate.
 
 The `$PSNativeCommandErrorAction` preference variable will implement a version of the
 `$ErrorActionPreference` variable for native commands.
@@ -70,63 +84,40 @@ The `$PSNativeCommandErrorAction` preference variable will implement a version o
   values, where `MatchErrorActionPreference` is converted to the current value of
   `$ErrorActionPreference`
 
-Valid values for `$ErrorActionPreference`
+Valid values for `$PSNativeCommandErrorAction`
 
 | Value           | Definition
 ----------------  | -------------------
 | Break           | Enter the debugger when an error occurs or when an exception is raised.
 | Continue        | (Default) - Displays the error message and continues executing.
-| Ignore          | Suppresses the error message and continues to execute the command. The Ignore value is intended for per-command use, not for use as saved preference. Ignore isn't a valid value for the $ErrorActionPreference variable.
+| Ignore          | Suppresses the error message and continues to execute the command.
 | Inquire         | Displays the error message and asks you whether you want to continue.
 | SilentlyContinue| No effect. The error message isn't displayed and execution continues without interruption.
 | Stop            | Displays the error message and stops executing. In addition to the error generated, the Stop value generates an ActionPreferenceStopException object to the error stream. stream
 | Suspend         | Automatically suspends a workflow job to allow for further investigation.
 
-The reported error record should be created with the following details:
+The reported error record object should be type: `NativeCommandException` with the following details:
 
 | Property        | Definition
 ----------------  | -------------------
-| exception:      | `ExitCode`, with the exit code of the failed command.
-| error id:       | `"Program {0} failed with unhandled exit code {1}"`, with the command name and the exit code, from resource string `ProgramFailedToComplete`.
-| error category: | `ErrorCategory.NotSpecified`.
+| ExitCode:      |  The exit code of the failed command.
+| ErrorID:       | `"Program {0} ended with non-zero exit code {1}"`, with the command name and the exit code, from resource string `ProgramFailedToComplete`.
+| ErrorCategory: | `ErrorCategory.NotSpecified`.
 | object:         | exit code
-
- This does not provide the actual semantics of bash `set -eo pipefail` as Bourne shell-style
- integration with existing status handling syntax is not implemented.
-
-`Set -eo pipefail` is a combination of `Set -u` and `Set -o pipefail`:
-
-- `Set -u`, a reference to any variable not previously defined results in an error. Similar to
-  Set-StrictMode in PowerShell.
-- `Set -o pipefail`, by default, pipeline success is determined by the last command executed. `Set
-  -o pipefail` returns an error if any command in the pipeline fails.
-
- As a result of not including the semantics of `Set -eo pipefail`, PowerShell script logic for
- handling native command exit codes would need to use either `try`..`catch` or existing exit status
- handling language constructs, according to the setting of this preference variable.
-
- One way of overriding `$ErrorActionPreference` for a single native command and handling
- its exit status explicitly would be to put this logic into a script block and call it
- with the invocation operator (`&`).
+| Source:        | The full path to the application
+| ProcessInfo    | details of failed command including path, exit code, and PID
 
 ## Alternative Approaches and Considerations
 
-We could extend this existing behavior to give equivalent functionality to bash `Set -eo pipefail`.
-This includes:
-
-- `Set -u`, a reference to any variable not previously defined results in an error. Similar to
-  `Set-StrictMode` in PowerShell.
-- `Set -o pipefail`, by default, pipeline success is determined by the last command executed. `Set
-  -o pipefail` returns an error if any command in the pipeline fails.
-
-Today there exists a workaround for handling native command exit codes using a `try`..`catch` block.
-This alternative may be considered in the future.
+One way of overriding `$PSStrictNativeCommand` for a single native command and handling its exit
+status explicitly would be to put this logic into a script block and call it with the invocation
+operator (`&`).
 
 ### Add "strict" native command option
 
-The `$PSStrictNativeCommand` preference should treat creation of an `ErrorRecord` for native
-commands in the same way as this is treated elsewhere. Described here as a Boolean, could be
-considered as an enum to allow for future expansion. Possible values are:
+An additional value to the `$PSStrictNativeCommand` preference enum could treat creation of an
+`ErrorRecord` for native commands in the same way as this is treated elsewhere. Described here as a
+Boolean, could be considered as an enum to allow for future expansion. Possible values are:
 
 - `$false`: (the default) ignore non-zero exit codes. This is the same as existing PowerShell
   treatment of this case.
