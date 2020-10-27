@@ -1,7 +1,7 @@
 ---
-RFC: nnnn
+RFC: '0061'
 Author: Ilya Sazonov
-Status: Draft
+Status: Rejected
 Area:
 Comments Due: 6/30/2018
 ---
