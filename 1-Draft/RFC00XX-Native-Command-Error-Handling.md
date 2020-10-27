@@ -48,9 +48,9 @@ In POSIX shells, this need to terminate on command error is addressed by the `se
 which causes the shell to exit when a command fails.
 
 This specification proposes a similar idea, but adapted to the PowerShell conventions of preference
-variables and catchable, self-describing, terminating error objects. This proposal further adds the
-functionality of `set -e` with `set -o pipefail` to return an error if any command in a pipeline
-fails.
+variables and catchable, self-describing, terminating error objects. This proposal further adds to
+the functionality of `set -e` with `set -o pipefail` to return an error if any command in a pipeline
+fails. This is planned to be equivalent to `set -eo pipefail`.
 
 - `set -e` - terminates on command error
 - `set -u`, a reference to any variable not previously defined results in an error. Similar to
