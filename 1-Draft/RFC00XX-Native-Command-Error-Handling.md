@@ -20,7 +20,7 @@ a list. This default behavior is controlled with the preference variable
 
 In production, often customers prefer that script execution stops when a non-terminating error
 occurs. This is particularly true in CI where the preference is to fail fast. PowerShell currently
-supports customers with this ability by setting the preference variable in the script.
+supports customers with this ability by setting the `ErrorActionPreference` variable in the script.
 
 ```Powershell
 $ErrorActionPreference = 'Stop'
@@ -29,7 +29,7 @@ $ErrorActionPreference = 'Stop'
 Native commands usually return an exit code to the calling application which will be zero for
 success or non-zero for failure. However, native commands currently do not participate in the
 PowerShell error stream. Redirected `stderr` output is not interpreted the same as the PowerShell
-error stream and many native commands use `stderr` as information/verbose stream and thus only the
+error stream as many native commands use `stderr` as information/verbose stream and thus only the
 exit code matters. Users working with native commands in their scripts will need to check the
 execution status after each call using a helper function similar to below:
 
@@ -96,7 +96,7 @@ Valid values for `$PSNativeCommandErrorAction`
 | Stop            | Displays the error message and stops executing. In addition to the error generated, the Stop value generates an ActionPreferenceStopException object to the error stream. stream
 | Suspend         | Automatically suspends a workflow job to allow for further investigation.
 
-The reported error record object should be type: `NativeCommandException` with the following details:
+The reported error record object will be the new type: `NativeCommandException` with the following details:
 
 | Property        | Definition
 ----------------  | -------------------
@@ -179,7 +179,7 @@ a pipeline. Possible values would be:
 - `$false`: (the default) would ignore `$false` exit status on the last command. This is the same as
   existing PowerShell treatment of this case.
 - `$true`: for a pipeline that is being used in a conditional context (see above), and where the
-  exist status of the last command in the pipeline is `$false`, would create a terminating error
+  exit status of the last command in the pipeline is `$false`, would create a terminating error
   from the non-terminating errors in the command error stream.
 
 This should improve on the basic specification by allowing the idiom to be usefully combined with
