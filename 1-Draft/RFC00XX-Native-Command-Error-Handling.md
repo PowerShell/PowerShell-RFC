@@ -45,18 +45,14 @@ support all cases as `$?` can be false from a cmdlet or function error, making `
 stale.
 
 In POSIX shells, this need to terminate on command error is addressed by the `set -e` configuration,
-which causes the shell to exit when a command fails.
+which causes the shell to exit when a command fails. In addition, to ensure that an error is
+returned if any command in a pipeline fails, POSIX shells address this need with `set -o pipefail`
+configuration.
 
 This specification proposes a similar idea, but adapted to the PowerShell conventions of preference
 variables and catchable, self-describing, terminating error objects. This proposal further adds to
 the functionality of `set -e` with `set -o pipefail` to return an error if any command in a pipeline
 fails. This is planned to be equivalent to `set -eo pipefail`.
-
-- `set -e` - terminates on command error
-- `set -u`, a reference to any variable not previously defined results in an error. Similar to
-  Set-StrictMode in PowerShell and not needed to be addressed in this RFC.
-- `set -o pipefail`, by default, pipeline success is determined by the last command executed. `Set
-  -o pipefail` returns an error if any command in the pipeline fails.
 
  The specification and alternative proposals are based on the
  [Equivalent of bash `set -e` #3415](https://github.com/PowerShell/PowerShell/issues/3415)
@@ -70,6 +66,15 @@ This RFC proposes a preference variable to configure the elevation of errors pro
 commands to first-class PowerShell errors, so that native command failures will produce error
 objects that are added to the error stream and may terminate execution of the script without added
 boilerplate.
+
+The specification proposes similar functionality to the common POSIX shell configuration `set -eo pipefail`.
+
+- `set -e` - terminates on command error
+- `set -o pipefail` - returns an error if any command in the pipeline fails.
+
+> [!NOTE] A common configuration command for POSIX shells `set -euo pipefail` includes the `set -u`
+> configuration which returns an error if any variable has not been previously defined. This is
+> equivalent to the existing PowerShell `Set-StrictMode` and is not addressed in this RFC.
 
 The `$PSNativeCommandErrorAction` preference variable will implement a version of the
 `$ErrorActionPreference` variable for native commands.
