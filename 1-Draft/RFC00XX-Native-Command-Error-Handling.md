@@ -118,17 +118,6 @@ One way of overriding `$PSStrictNativeCommand` for a single native command and h
 status explicitly would be to put this logic into a script block and call it with the invocation
 operator (`&`).
 
-### Add "strict" native command option
-
-An additional value to the `$PSStrictNativeCommand` preference enum could treat creation of an
-`ErrorRecord` for native commands in the same way as this is treated elsewhere. Described here as a
-Boolean, could be considered as an enum to allow for future expansion. Possible values are:
-
-- `$false`: (the default) ignore non-zero exit codes. This is the same as existing PowerShell
-  treatment of this case.
-- `$true`: Populate the error stream of the native command with an `ErrorRecord` associated with an
-  `ExitException` exception.
-
 ### Modifying existing semantics to consider exit code and exit status
 
 The error will throw an exception, potentially terminating the execution, in the same situation as
@@ -154,6 +143,17 @@ terminating error on getting an object from the pipeline output stream. Possible
 
 This would allow syntax like `if`, `while` and pipeline chain operators to be usefully combined with
 native commands.
+
+### Add "strict" native command option
+
+An additional value to the `$PSStrictNativeCommand` preference enum could treat creation of an
+`ErrorRecord` for native commands in the same way as this is treated elsewhere. Described here as a
+Boolean, could be considered as an enum to allow for future expansion. Possible values are:
+
+- `$false`: (the default) ignore non-zero exit codes. This is the same as existing PowerShell
+  treatment of this case.
+- `$true`: Populate the error stream of the native command with an `ErrorRecord` associated with an
+  `ExitException` exception.
 
 #### Sanitize semantics of treating a native command as a conditional value
 
