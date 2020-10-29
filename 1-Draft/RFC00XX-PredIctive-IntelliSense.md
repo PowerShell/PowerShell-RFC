@@ -184,8 +184,6 @@ Starting with PSReadLine 2.1.0-RC1, `Set-PSReadLineOption -Colors` array will in
 
 Beginning with PSReadLine 2.2.0-beta1, `Set-PSReadLineOption -Colors` array will include;
 
-- **InLinePredictionColor** to set the color of predictive text for **InLineView**. Note, this is a
-  change from 2.1.0.
 - **ListPredictionColor** to set color for '>' and source names in **ListView**
 - **ListPredictionSelectionColor** to set color for the highlighted selection in **ListView**
 
