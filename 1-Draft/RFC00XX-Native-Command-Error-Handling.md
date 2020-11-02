@@ -131,3 +131,10 @@ if ($LASTEXITCODE -ne 0)
 A common configuration command for POSIX shells `set -euo pipefail` includes the `set -u`
 configuration which returns an error if any variable has not been previously defined. This is
 equivalent to the existing PowerShell `Set-StrictMode` and is not needed to be addressed in this RFC.
+
+### Preference variable resolves error handling conflicts
+
+In cases where an existing script already handles non-zero native command errors, the preference
+variable `$PSNativeCommandErrorAction` may be set to `Ignore`. Error handling behavior of the
+PowerShell cmdlets is handled separately with `$ErrorActionPreference`.
+
