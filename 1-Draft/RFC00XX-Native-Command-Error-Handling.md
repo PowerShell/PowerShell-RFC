@@ -14,13 +14,14 @@ features like those used by cmdlets.
 ## Motivation
 
 In PowerShell by default, script processing continues when non-terminating errors occur. This is a
-benefit when expecting non-terminating errors in normal execution such as non-responsive computers from
-a list. This default behavior is controlled with the preference variable
+benefit when expecting non-terminating errors in normal execution such as non-responsive computers
+from a list. This default behavior is controlled with the preference variable
 `$ErrorActionPreference` default of `Continue`.
 
 In production, often customers prefer that script execution stops when a non-terminating error
 occurs. This is particularly true in CI where the preference is to fail fast. PowerShell currently
-supports customers with this ability by setting the `ErrorActionPreference` variable in the script.
+supports customers with this ability by setting the `$ErrorActionPreference` variable in the script
+to `Stop`.
 
 ```Powershell
 $ErrorActionPreference = 'Stop'
@@ -114,111 +115,19 @@ The reported error record object will be the new type: `NativeCommandException` 
 
 ## Alternative Approaches and Considerations
 
-One way of overriding `$PSStrictNativeCommand` for a single native command and handling its exit
+One way of checking for a single native command and handling its exit
 status explicitly would be to put this logic into a script block and call it with the invocation
 operator (`&`).
 
-### Modifying existing semantics to consider exit code and exit status
+```Powershell
+if ($LASTEXITCODE -ne 0)
+{
+    throw "Command failed. See above errors for details"
+}
+ ```
 
-The error will throw an exception, potentially terminating the execution, in the same situation as
-other non-terminating errors will do this, i.e. where `$ErrorActionPreference` is set to `"stop"`.
-This would not be the desired behavior on commands where the script already handles a non-zero exit
-code, which would require the addition of extra boilerplate to use multiple native commands in
-combination. There are a number of ways that this could be made more flexible by integrating exit
-code and exit status handling into the language syntax.
+### Set-StrictMode
 
-#### Convert non-terminating errors to terminating where the command output is used
-
-This approach implements semantics equivalent to bash `set -eo pipefail` in the runtime layer.
-
-The `$PSStrictPipeLine` preference variable would govern promotion of a non-terminating error to a
-terminating error on getting an object from the pipeline output stream. Possible values would be:
-
-- `$false`: (the default) an object can be collected from the pipeline output stream regardless of
-  the command exit value. This is the same as existing PowerShell treatment of this case.
-- `$true`: where the exit status of a native command is `$false`, trying to get an object from its
-  output stream will create a terminating error from the non-terminating errors in its error stream.
-  Conversion to boolean would be structured to ensure that this returns `$false` if the output
-  pipeline does not contain anything without trying to get an actual value from it.
-
-This would allow syntax like `if`, `while` and pipeline chain operators to be usefully combined with
-native commands.
-
-### Add "strict" native command option
-
-An additional value to the `$PSStrictNativeCommand` preference enum could treat creation of an
-`ErrorRecord` for native commands in the same way as this is treated elsewhere. Described here as a
-Boolean, could be considered as an enum to allow for future expansion. Possible values are:
-
-- `$false`: (the default) ignore non-zero exit codes. This is the same as existing PowerShell
-  treatment of this case.
-- `$true`: Populate the error stream of the native command with an `ErrorRecord` associated with an
-  `ExitException` exception.
-
-#### Sanitize semantics of treating a native command as a conditional value
-
-This option in combination with the above enables functionality analogous to bash `set -eo pipefail`
-
-PowerShell converts the output stream to a boolean value where a native command is used as a
-"condition", i.e. the `-not` operator, or an `if`, `elseif` or `while` statement. This is not
-particularly useful with native commands, which would tend to produce no output on success, at least
-when executed in batch as opposed to interactive mode.
-
-The `$PSUseNativeExitStatus` variable would govern whether exit status is used in determining the
-boolean value of a native command for a conditional context. Possible values would be:
-
-- `$false`: (the default) the boolean value of native command is defined as whether or not the
-  length of the output stream is non-zero. This is the same as existing PowerShell treatment of this
-  case.
-- `$true`: the boolean value of a native command is it's exit status (`$?`), and
-
-This would allow syntax like `if` and `while` to be usefully combined with native commands.
-
-#### Add strict pipeline chain failure semantics.
-
-Treat only ignored exit statuses as exceptions.
-
-The `$PSStrictPipeLineChain` preference variable would govern the exit status in the last command of
-a pipeline. Possible values would be:
-
-- `$false`: (the default) would ignore `$false` exit status on the last command. This is the same as
-  existing PowerShell treatment of this case.
-- `$true`: for a pipeline that is being used in a conditional context (see above), and where the
-  exit status of the last command in the pipeline is `$false`, would create a terminating error
-  from the non-terminating errors in the command error stream.
-
-This should improve on the basic specification by allowing the idiom to be usefully combined with
-pipeline chaining.
-
-### Use dynamic scope/Set-StrictMode
-
-This approach implements dynamic scoping for native command error management using a cmdlet.
-
-Some of the above would be enabled with `Set-StrictMode -version 6` instead of with boolean
-preference variables.
-
-The dynamic scoping approach would improve on earlier listed approaches by limiting the scope of
-error handling configuration so that script functions could not have an effect on the error handling
-mode in the calling scope.
-
-If `Set-StrictMode` is used for this, it would need to enable some combination of enhancements that
-will not raise errors on scripts that have already implemented strong native command error handling.
-
-### Use lexical scope/Exception handling extensions
-
-Dynamic scoping approach would have side-effects on called scripts. This is analogous to the
-behavior of Bourne type shells, which maintain this behavior for
-[historic compatibility](http://austingroupbugs.net/view.php?id=52) reasons.
-
-Lexical scoping of native command error handling would improve on earlier options by integrating
-native command error handling fully into the existing exception handling without any
-side-effects in calling or called scripts.
-
-With this approach, native command error handling mode would be used through language syntax instead
-of preference variables or cmdlets. A possible syntax might be to add a strictness option to the try
-statement which applies to the lexical scope of the try statement.
-
-Lexical scope requires more runtime overhead; a mapping must be maintained at runtime between each
-runtime scope and its corresponding lexical scope that existed at parse-time. In addition, lexical
-scope may not apply well to errors. Errors produce stack traces at runtime and should be handled in
-a runtime-facing way. For these reasons, this alternative is not under consideration.
+A common configuration command for POSIX shells `set -euo pipefail` includes the `set -u`
+configuration which returns an error if any variable has not been previously defined. This is
+equivalent to the existing PowerShell `Set-StrictMode` and is not needed to be addressed in this RFC.
