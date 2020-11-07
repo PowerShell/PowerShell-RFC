@@ -1,8 +1,7 @@
 ---
-RFC: RFC<four digit unique incrementing number assigned by Committee, this shall be left blank by the author>
+RFC: '0062'
 Author: Aditya Patwardhan
-Status: Draft
-SupercededBy: <link to another RFC>
+Status: Withdrawn
 Version: 0.2
 Area: Help System
 Comments Due: 03/30/2018
