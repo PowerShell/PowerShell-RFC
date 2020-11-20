@@ -1,0 +1,219 @@
+Steve Lee (POWERSHELL)
+hello everyone, sorry for the slow start
+
+kvprasoon
+Hello all...:-)
+
+kvprasoon
+Hello all...:-)
+
+Jeff Hicks
+Can you use a light theme for the call? This is hard to read.
+
+Jeff Hicks
+Can you use a light theme for the call? This is hard to read.
+
+Jeff Hicks
+Take  pity on an old man.
+
+Jeff Hicks
+Take  pity on an old man.
+
+Michael B
+YAY on the light theme!!!!
+
+JB "AspenForester" Lewis
+The first time I tried to join this morning, I got put into *last month's* meeting
+
+Michael B
+YAY on the light theme!!!!
+
+JB "AspenForester" Lewis
+The first time I tried to join this morning, I got put into *last month's* meeting
+
+Joey Aiello
+Yup, that was my bad(JB "AspenForester" Lewis asked "The first time I tried to join this morning, I got put into *last month's* meeting")
+
+Jaykul
+"AHHH, my eyes" on the light theme ≡ƒÿ¢
+
+Keith Hill
+Is there any audio? Not hearing anything.
+
+Keith Hill
+Is there any audio? Not hearing anything.
+
+Steve Lee (POWERSHELL)
+are other people able to hear?(Keith Hill asked "Is there any audio? Not hearing anything.")
+
+Steve Lee (POWERSHELL)
+Maybe try rejoiing?(Keith Hill asked "Is there any audio? Not hearing anything.")
+
+Jaykul
+"AHHH, my eyes" on the light theme ≡ƒÿ¢
+
+JB "AspenForester" Lewis
+audio is good here
+
+JB "AspenForester" Lewis
+audio is good here
+
+Paul Wojtysiak
+Audio good here
+
+Paul Wojtysiak
+Audio good here
+
+Shawn Melton
+Is this work directly with the extension or within the PowerShellEditorServices?
+
+Shawn Melton
+Or bit of both?(Shawn Melton asked "Is this work directly with the extension or within the PowerShellEditorServices?")
+
+Shawn Melton
+Is this work directly with the extension or within the PowerShellEditorServices?
+
+kvprasoon
+Thanks Joey for the detailed update on WGs :-)
+
+Michael Lombardi
+Latest version of powershellget v3 on the gallery broke the DSC implementation fwiw
+
+Michael Lombardi
+I haven't had a chance to file issues yet(Michael Lombardi asked "Latest version of powershellget v3 on the gallery broke the DSC implementation fwiw")
+
+Michael Lombardi
+Mismatch between mof schema and parameters in Set-TargetResource - I'll file the bug or just submit a PR later today(Michael Lombardi asked "Latest version of powershellget v3 on the gallery broke the DSC implementation fwiw")
+
+Robin
+Is someone going to tweet the link to the Community Call minutes? I don't think enough people know about this and it would be something that would probably be featured on the powershell.org ICYMI post
+
+Keith Hill
+Then maybe the ?. should not be added to the language because folks that don't use ? in variable names will get tripped up on this as it won't be a syntax error.  It just won't behave as they expect at runtime $foo?.length -  here $foo? would be null and $null.length just return 0.  This has potential to introduce lots of bugs because every other language does not require {},
+
+Michael Lombardi
+Do you have defined criteria for how you assess compat breaks as risks?
+
+Michael Lombardi
+I'm deeply sympathetic to the need to handle breaking changes ofc as a language/tool vendor maintainer myself, just seeking clarity ≡ƒÆ£(Michael Lombardi asked "Do you have defined criteria for how you assess compat breaks as risks?")
+
+Rob Holt
+Absolutely and it's a really great question. In fact there was a Q&A session earlier in the week with Guido van Rossum and he spoke about this problem and the inevitable turn toward being conservative as a language evolves(Michael Lombardi asked "Do you have defined criteria for how you assess compat breaks as risks?")
+
+Michael Lombardi
+Yeah, it's also tough if you can't get the culture of your users on board with treating major versions with care - I've had customers auto-update / pin to master and then yell when it hurts, but it's a slow education process etc ime(Michael Lombardi asked "Do you have defined criteria for how you assess compat breaks as risks?")
+
+kvprasoon
+Thanks Joey for the detailed update on WGs :-)
+
+Michael Lombardi
+Latest version of powershellget v3 on the gallery broke the DSC implementation fwiw
+
+Joey Aiello
+Could you provide more details or a link to an issue? (Michael Lombardi asked "Latest version of powershellget v3 on the gallery broke the DSC implementation fwiw")
+
+Robin
+Is someone going to tweet the link to the Community Call minutes? I don't think enough people know about this and it would be something that would probably be featured on the powershell.org ICYMI post
+
+Keith Hill
+Then maybe the ?. should not be added to the language because folks that don't use ? in variable names will get tripped up on this as it won't be a syntax error.  It just won't behave as they expect at runtime $foo?.length -  here $foo? would be null and $null.length just return 0.  This has potential to introduce lots of bugs because every other language does not require {},
+
+Michael Lombardi
+Do you have defined criteria for how you assess compat breaks as risks?
+
+Fred
+Any ETA on PowerShellGet v3 handling authenticated repositories in a user friendly manner or supporting v3 repositories?
+
+Why is Update-Help in 7x updates help in 5.1?
+Why is Update-Help in 7x updates help in 5.1?
+
+kvprasoon
+@Robin, Thanks for the suggestion, thats a good idea.
+
+Jeff Hicks
+Joey needs an intern
+
+Fred
+Any ETA on PowerShellGet v3 handling authenticated repositories in a user friendly manner or supporting v3 repositories?
+
+Why is Update-Help in 7x updates help in 5.1?
+Why is Update-Help in 7x updates help in 5.1?
+
+kvprasoon
+@Robin, Thanks for the suggestion, thats a good idea.
+
+Michael Lombardi
+Latest version of powershellget v3 on the gallery broke the DSC implementation fwiw
+
+Jeff Hicks
+Joey needs an intern
+
+Anonymous
+Staged approach? Warn on usage of ? in variables in one release and disable later
+
+Anonymous
+I just did some PHP work and the code was broken on almost every minor revision. I feel like you are the extreme to the other side and the best balance is somewhere in the middle
+
+Keith Hill
+FWIW I super appreciate the level of backwards compatibility that has been maintained (and we've enjoyed) since v1!
+
+ili
+I just did some PHP work and the code was broken on almost every minor revision. I feel like you are the extreme to the other side and the best balance is somewhere in the middle
+
+Michael Lombardi
+RE powershellget v3 and dsc: Mismatch between mof schema and parameters in Set-TargetResource - I'll file the bug or just submit a PR later today
+
+Why is Update-Help in 7x updates help in 5.1?
+Update-Help shouldn't update help in 5.1
+
+Why is Update-Help in 7x updates help in 5.1?
+then you wouldn't have that PSReadLine issue
+
+Anonymous
+Staged approach? Warn on usage of ? in variables in one release and disable later
+
+Anonymous
+I just did some PHP work and the code was broken on almost every minor revision. I feel like you are the extreme to the other side and the best balance is somewhere in the middle
+
+Keith Hill
+FWIW I super appreciate the level of backwards compatibility that has been maintained (and we've enjoyed) since v1!
+
+ili
+I just did some PHP work and the code was broken on almost every minor revision. I feel like you are the extreme to the other side and the best balance is somewhere in the middle
+
+Michael Lombardi
+RE powershellget v3 and dsc: Mismatch between mof schema and parameters in Set-TargetResource - I'll file the bug or just submit a PR later today
+
+Why is Update-Help in 7x updates help in 5.1?
+Update-Help shouldn't update help in 5.1
+
+Why is Update-Help in 7x updates help in 5.1?
+then you wouldn't have that PSReadLine issue
+
+kvprasoon
+example for can't have latest help for a cmdlet in both Win PS and PS core, Get-Serice do have a ComputerName parameter in win PS but not in PS core
+
+Justin Grote
+Definitely the PM presence has been felt, great job to the team.
+
+Why is Update-Help in 7x updates help in 5.1?
+If you say PS7 can run side-by-side PS5.1 without interference, and then you update help in 5.1 from PS7, that's not really true 
+
+Chris Warwick
+Thanks for the call :-)
+
+Justin Grote
+Definitely the PM presence has been felt, great job to the team.
+
+kvprasoon
+example for can't have latest help for a cmdlet in both Win PS and PS core, Get-Serice do have a ComputerName parameter in win PS but not in PS core
+
+Why is Update-Help in 7x updates help in 5.1?
+If you say PS7 can run side-by-side PS5.1 without interference, and then you update help in 5.1 from PS7, that's not really true 
+
+Chris Warwick
+Thanks for the call :-)
+
+JB "AspenForester" Lewis
+Thanks!
+
