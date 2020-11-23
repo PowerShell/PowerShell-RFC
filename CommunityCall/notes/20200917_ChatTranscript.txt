@@ -37,7 +37,7 @@ Everyone's all about Scott Hanselman's ASMR voice but I think Joey has him beat.
 Justin Grote [MVP]
 Everyone's all about Scott Hanselman's ASMR voice but I think Joey has him beat.
 
-Tyler Leonhardt (POWERSHELL) (tyleonha@microsoft.com)
+Tyler Leonhardt (POWERSHELL)
 lolol(Justin Grote [MVP]  asked "Everyone's all about Scott Hanselman's ASMR voice but I think Joey has him beat.")
 
 Anonymous
@@ -127,7 +127,7 @@ Of course, it's a regular bindable function like others in PSReadLine(Thomas Ray
 MaxT
 Jason ... That looks Awesome!
 
-Jason Helmick (jahelmic@microsoft.com)
+Jason Helmick
 Link to Predictive IntelliSense profile sample: https://www.powershellgallery.com/packages/PSReadLine/2.1.0-beta2/Content/SamplePSReadLineProfile.ps1
 
 Thomas Rayner

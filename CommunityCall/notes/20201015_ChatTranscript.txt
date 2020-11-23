@@ -49,10 +49,10 @@ Steve - what version of macOS are you running? I've been playing on Mojave & had
 Don Hunt
 Steve - what version of macOS are you running? I've been playing on Mojave & had to make mods for syntax 2>&1 and exit code testing.
 
-Tyler Leonhardt (POWERSHELL) (tyleonha@microsoft.com)
+Tyler Leonhardt (POWERSHELL)
 pretty sure he's on Catalina (Don Hunt  asked "Steve - what version of macOS are you running? I've been playing on Mojave & had to make mods for syntax 2>&1 and exit code testing.")
 
-Tyler Leonhardt (POWERSHELL) (tyleonha@microsoft.com)
+Tyler Leonhardt (POWERSHELL)
 can you open an issue on what you're seeing? That sounds unusual (Don Hunt  asked "Steve - what version of macOS are you running? I've been playing on Mojave & had to make mods for syntax 2>&1 and exit code testing.")
 
 Anonymous
@@ -79,12 +79,12 @@ There was a hashicorp vault extension out there in a previous preview, not sure 
 Jason Helmick
 Predictive IntelliSense RFC: https://github.com/PowerShell/PowerShell-RFC/pull/262
 
-Rob Holt (roholt@microsoft.com)
+Rob Holt
 Hacktoberfest site:
 
 https://hacktoberfest.digitalocean.com/
 
-Rob Holt (roholt@microsoft.com)
+Rob Holt
 Example of hacktoberfest issue filter on GitHub:
 
 https://github.com/PowerShell/PowerShell/issues?q=is%3Aopen+is%3Aissue+label%3AHacktoberfest(Rob Holt asked "Hacktoberfest site:
