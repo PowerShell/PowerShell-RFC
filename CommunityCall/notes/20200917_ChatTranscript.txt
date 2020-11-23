@@ -1,0 +1,272 @@
+Joel Sallow
+hi joey <3
+
+JB "AspenForester" Lewis
+hello!  Good audio
+
+Sydney Smith
+https://github.com/PowerShell/PowerShell-RFC/issues/260
+
+Joel Sallow
+hi joey <3
+
+JB "AspenForester" Lewis
+hello!  Good audio
+
+Jon J.
+Morning Folks
+
+Jon J.
+Morning Folks
+
+kvprasoon
+Hioo all...
+
+Thomas Rayner
+The soothing, sultry tones of Joey.
+
+kvprasoon
+Hioo all...
+
+Thomas Rayner
+The soothing, sultry tones of Joey.
+
+Justin Grote [MVP]
+Everyone's all about Scott Hanselman's ASMR voice but I think Joey has him beat.
+
+Justin Grote [MVP]
+Everyone's all about Scott Hanselman's ASMR voice but I think Joey has him beat.
+
+Tyler Leonhardt (POWERSHELL)
+lolol(Justin Grote [MVP]  asked "Everyone's all about Scott Hanselman's ASMR voice but I think Joey has him beat.")
+
+Anonymous
+I'm here! :)
+
+kvprasoon
+is it similar to this ?https://github.com/ansible/community/wiki
+
+Ansible has working groups
+
+Jon J.
+How will these working groups be coordinated?
+
+Jon J.
+How will these working groups be coordinated?
+
+Steve Lee (POWERSHELL)
+Members of the WGs will self coordinate taking into consideration different timezones, etc...(Jon J.  asked "How will these working groups be coordinated?")
+
+kvprasoon
+is it similar to this ?https://github.com/ansible/community/wiki
+
+Ansible has working groups
+
+Steve Lee (POWERSHELL)
+WGs are not a new thing and we're leveraging existing concepts from different orgs as a best practice(kvprasoon  asked "is it similar to this ?https://github.com/ansible/community/wiki
+
+Ansible has working groups")
+
+Anonymous
+I'm here! :)
+
+MaxT
+Hi guys!
+
+Anonymous
+Can these work group and committe meetings be recorded and published for increase visibility in how the decision was reached? Right now when the committe sends their decision there is not a lot of information on the background and alternate ideas.
+
+Anonymous
+Can these work group and committe meetings be recorded and published for increase visibility in how the decision was reached? Right now when the committe sends their decision there is not a lot of information on the background and alternate ideas.
+
+Steve Lee (POWERSHELL)
+We've discussed recording or a transcript of Committee meetings, but decided at this time not to pursue this as it limits the openness of our current conversations.  We may revisit in the future.  WGs will decide for themselves if they want a public record of their discussions.(Can these work group and committe meetings be recorded and published for increase visibility in how the decision was reached? Right now when the committe sends their decision there is not a lot of information on the background and alternate ideas.)
+
+MaxT
+Hi guys!
+
+Justin Grote [MVP]
+This is still just history right? Any further development based on the Predictive Intellisense issue you opened? I want vscode style property predictions if I don't already have a matching history.
+
+Justin Grote [MVP]
+NM answered here(Justin Grote [MVP]  asked "This is still just history right? Any further development based on the Predictive Intellisense issue you opened? I want vscode style property predictions if I don't already have a matching history.")
+
+JoshCorr
+So is Predictive Readline essentially like hitting ctrl+r <typing>, but automatic?
+
+JoshCorr
+So is Predictive Readline essentially like hitting ctrl+r <typing>, but automatic?
+
+Steve Lee (POWERSHELL)
+ctrl+r is doing a search, the history prediction will rely on other algorithms for the prediction.  So similar, but not the same.  You can still use ctrl+r for reverse history search if that is your preference(JoshCorr  asked "So is Predictive Readline essentially like hitting ctrl+r <typing>, but automatic? ")
+
+Justin Grote [MVP]
+This is still just history right? Any further development based on the Predictive Intellisense issue you opened? I want vscode style property predictions if I don't already have a matching history.
+
+Steve Lee (POWERSHELL)
+We're working with other teams on the actual ML aspect.  Outside of AzPS, nothing to announce at this time.(Justin Grote [MVP]  asked "This is still just history right? Any further development based on the Predictive Intellisense issue you opened? I want vscode style property predictions if I don't already have a matching history.")
+
+Joel Sallow
+I like the idea, but I do think F2 is not a great default key for it tbh
+
+Dongbo Wang
+Any suggestion for the default key? :)(Joel Sallow  asked "I like the idea, but I do think F2 is not a great default key for it tbh")
+
+Joel Sallow
+Ctrl+Space as Justin suggested or perhaps Ctrl+Alt+Space if it needs to be a different key at all. :)(Joel Sallow  asked "I like the idea, but I do think F2 is not a great default key for it tbh")
+
+Keith Hill
+Multiple predictors / list - very nice!
+
+Thomas Rayner
+I can bind it to something other than F2, right?
+
+Dongbo Wang
+Of course, it's a regular bindable function like others in PSReadLine(Thomas Rayner  asked "I can bind it to something other than F2, right? ")
+
+MaxT
+Jason ... That looks Awesome!
+
+Jason Helmick
+Link to Predictive IntelliSense profile sample: https://www.powershellgallery.com/packages/PSReadLine/2.1.0-beta2/Content/SamplePSReadLineProfile.ps1
+
+Thomas Rayner
+I can bind it to something other than F2, right?
+
+Dongbo Wang
+my reply was lost after the question is moved here :)
+Yes, it's a regular bindable function just like others in PSReadLine(Thomas Rayner  asked "I can bind it to something other than F2, right? ")
+
+MaxT
+Jason ... That looks Awesome!
+
+Keith Hill
+Multiple predictors / list - very nice!
+
+Joel Sallow
+I like the idea, but I do think F2 is not a great default key for it tbh
+
+Dongbo Wang
+Any suggestion for a better default key? :)(Joel Sallow  asked "I like the idea, but I do think F2 is not a great default key for it tbh")
+
+JB "AspenForester" Lewis
+The On-Demand sessions Joey mentioned don't seem to be currently listed in the Ignite catalog (yet).
+
+kvprasoon
+Ctrl + F
+
+JB "AspenForester" Lewis
+The On-Demand sessions Joey mentioned don't seem to be currently listed in the Ignite catalog (yet).
+
+kvprasoon
+Ctrl + F
+
+Ben Gelens
+Are psget v2 Issues still tracked? Or is it frozen?
+
+Joel Bennett
+I want to strongly second the request to have PSGet3 in the base Windows install.
+
+Especially as new functionality shows up in PSGet3 (like assembly dependencies), modules won't be installable by PSGet2, and we will (in Azure and other automated machine deployments) forever be using PSGet2 to install PSGet3 before we can install anything else!
+
+Ben Gelens
+Are psget v2 Issues still tracked? Or is it frozen?
+
+Steve Lee (POWERSHELL)
+Only critical issues in v2 are being looked at(Ben Gelens   asked "Are psget v2 Issues still tracked? Or is it frozen?")
+
+Joel Bennett
+I want to strongly second the request to have PSGet3 in the base Windows install.
+
+Especially as new functionality shows up in PSGet3 (like assembly dependencies), modules won't be installable by PSGet2, and we will (in Azure and other automated machine deployments) forever be using PSGet2 to install PSGet3 before we can install anything else!
+
+Justin Grote [MVP]
+On the F2 question: I think it should replace ctrl-Space *if and only if* the prediction is enabled. This puts it in parity with vscode etc where I want to see my available completions
+
+Justin Grote [MVP]
+On the F2 question: I think it should replace ctrl-Space *if and only if* the prediction is enabled. This puts it in parity with vscode etc where I want to see my available completions
+
+Steve Lee (POWERSHELL)
+Please open an issue(Justin Grote [MVP]  asked "On the F2 question: I think it should replace ctrl-Space *if and only if* the prediction is enabled. This puts it in parity with vscode etc where I want to see my available completions")
+
+Dongbo Wang
+As of today, predictive intellisense and tab completion are 2 separate code paths. Ctrl-Space is for tab completion, and should keep it that way.(Justin Grote [MVP]  asked "On the F2 question: I think it should replace ctrl-Space *if and only if* the prediction is enabled. This puts it in parity with vscode etc where I want to see my available completions")
+
+Dongbo Wang
+We are thinking about how to converge the tab completion and preditive intellisense in PSReadLine, the problem today is tab completion is comparatively too slow to have a smooth intellisense experience in the console environment.(Justin Grote [MVP]  asked "On the F2 question: I think it should replace ctrl-Space *if and only if* the prediction is enabled. This puts it in parity with vscode etc where I want to see my available completions")
+
+Dongbo Wang
+Just to clarify the functionality bound with F2 in the demo: it swtich the prediction view between the inline view and list view.(Justin Grote [MVP]  asked "On the F2 question: I think it should replace ctrl-Space *if and only if* the prediction is enabled. This puts it in parity with vscode etc where I want to see my available completions")
+
+Dongbo Wang
+You will be able to set the PredictionView via `Set-PSReadLineOption` as well.(Justin Grote [MVP]  asked "On the F2 question: I think it should replace ctrl-Space *if and only if* the prediction is enabled. This puts it in parity with vscode etc where I want to see my available completions")
+
+Sean Wheeler
+F7 - Displays the command history in the old console experience. Using F7 would provide a similar experience.(Justin Grote [MVP]  asked "On the F2 question: I think it should replace ctrl-Space *if and only if* the prediction is enabled. This puts it in parity with vscode etc where I want to see my available completions")
+
+Justin Grote [MVP]
+I currently zip-bootstrap in PSGetV3 in testing because PSGetV2 is so slow and inefficient
+
+Justin Grote [MVP]
+I currently zip-bootstrap in PSGetV3 in testing because PSGetV2 is so slow and inefficient
+
+Justin Grote [MVP]
+Q: Trevor, you said the predictive intellisense works in PS7.1 with PSReadline 2.1.0-beta2, I can't get "F2" to work and 2.1.0-beta2 has been out a while, did i mishear you?
+
+Dongbo Wang
+Sorry if it was not clear, the list view and the feature that hooks up with the Prediction APIs shipped in 7.1.0-preview.7 are not in 2.1.0-beta2(Justin Grote [MVP]  asked "Q: Trevor, you said the predictive intellisense works in PS7.1 with PSReadline 2.1.0-beta2, I can't get "F2" to work and 2.1.0-beta2 has been out a while, did i mishear you?")
+
+Dongbo Wang
+Jason mentioned 2.1.0-beta2 for the history based inline view feature only(Justin Grote [MVP]  asked "Q: Trevor, you said the predictive intellisense works in PS7.1 with PSReadline 2.1.0-beta2, I can't get "F2" to work and 2.1.0-beta2 has been out a while, did i mishear you?")
+
+Dongbo Wang
+The new features will be in 2.2.0-beta1. We are going to GA 2.1 with the history based inline view only. This is because the prediction APIs shipped in 7.1 will remain experiemtal, and thus features built on top should not be in GA.(Justin Grote [MVP]  asked "Q: Trevor, you said the predictive intellisense works in PS7.1 with PSReadline 2.1.0-beta2, I can't get "F2" to work and 2.1.0-beta2 has been out a while, did i mishear you?")
+
+Justin Grote [MVP]
+THanks, I don't think these replies are in the "featured" section, just replying to me.(Justin Grote [MVP]  asked "Q: Trevor, you said the predictive intellisense works in PS7.1 with PSReadline 2.1.0-beta2, I can't get "F2" to work and 2.1.0-beta2 has been out a while, did i mishear you?")
+
+Dongbo Wang
+Oh, I will copy the replies there(Justin Grote [MVP]  asked "Q: Trevor, you said the predictive intellisense works in PS7.1 with PSReadline 2.1.0-beta2, I can't get "F2" to work and 2.1.0-beta2 has been out a while, did i mishear you?")
+
+Justin Grote [MVP]
+Specifically the "new" intellisense and list view
+
+Justin Grote [MVP]
+Comment: I mean, [HashTable] and [Array] are still used as basic language constructs, I wouldn't expect system.text.json to happen anytime soon as native.
+
+Justin Grote [MVP]
+Q: Trevor, you said the predictive intellisense works in PS7.1 with PSReadline 2.1.0-beta2, I can't get "F2" to work and 2.1.0-beta2 has been out a while, did i mishear you?
+
+Dongbo Wang
+Justin, can you please copy my replies here? I cannot see them now(Justin Grote [MVP]  asked "Q: Trevor, you said the predictive intellisense works in PS7.1 with PSReadline 2.1.0-beta2, I can't get "F2" to work and 2.1.0-beta2 has been out a while, did i mishear you?")
+
+Joel Sallow
+braced variables have their uses, but requiring them for an operator is a bit silly in my opinion ;)
+
+Joel Sallow
+braced variables have their uses, but requiring them for an operator is a bit silly in my opinion ;)
+
+Justin Grote [MVP]
+Answer to New List View PSReadline: The new features will be in 2.2.0-beta1. We are going to GA 2.1 with the history based inline view only. This is because the prediction APIs shipped in 7.1 will remain experiemtal, and thus features built on top should not be in GA.
+
+Justin Grote [MVP]
+Answer to New List View PSReadline: The new features will be in 2.2.0-beta1. We are going to GA 2.1 with the history based inline view only. This is because the prediction APIs shipped in 7.1 will remain experiemtal, and thus features built on top should not be in GA.
+
+Justin Grote [MVP]
+dotnet restore already builds a local package repository, it should just place the additional packages there and reference them. It's what I do today to handle my Powerhsell Module net assembly dependencies.
+
+Justin Grote [MVP]
+dotnet restore already builds a local package repository, it should just place the additional packages there and reference them. It's what I do today to handle my Powerhsell Module net assembly dependencies.
+
+Joel Sallow
+@justin grote -- they mentioned you'll need to enable a PSReadline option to turn them on (set in your profile to turn it on persistently)
+
+Joel Sallow
+@justin grote -- they mentioned you'll need to enable a PSReadline option to turn them on (set in your profile to turn it on persistently)
+
+Justin Grote [MVP]
+Specifically the "new" intellisense and list view
+
+Justin Grote [MVP]
+Comment: I mean, [HashTable] and [Array] are still used as basic language constructs, I wouldn't expect system.text.json to happen anytime soon as native.
+
