@@ -1,0 +1,153 @@
+Steve Lee (POWERSHELL)
+Good morning!
+
+Sydney Smith
+https://github.com/PowerShell/PowerShell-RFC/issues/263
+
+Ashley McGlone
+howdy
+
+Ashley McGlone
+howdy
+
+Jason Helmick
+Cool preso bro! WAtched earlier(Ashley McGlone  asked "howdy")
+
+Anonymous
+we just pointed people across to here
+
+Anonymous
+we just pointed people across to here
+
+Don Hunt
+Just came from #PWSH24
+
+Anonymous
+People were tolk to come and join this call instead of casting it through Twitch.
+
+Anonymous
+People were tolk to come and join this call instead of casting it through Twitch.
+
+Don Hunt
+Just came from #PWSH24
+
+kvprasoon
+Hello everyone...
+
+kvprasoon
+Hello everyone...
+
+kvprasoon
+Hello everyone...
+
+Anonymous
+Is PSGallery putting in place performance best practices (config) from nuget.org?
+
+Don Hunt
+Steve - what version of macOS are you running? I've been playing on Mojave & had to make mods for syntax 2>&1 and exit code testing.
+
+Don Hunt
+Steve - what version of macOS are you running? I've been playing on Mojave & had to make mods for syntax 2>&1 and exit code testing.
+
+Tyler Leonhardt (POWERSHELL) (tyleonha@microsoft.com)
+pretty sure he's on Catalina (Don Hunt  asked "Steve - what version of macOS are you running? I've been playing on Mojave & had to make mods for syntax 2>&1 and exit code testing.")
+
+Tyler Leonhardt (POWERSHELL) (tyleonha@microsoft.com)
+can you open an issue on what you're seeing? That sounds unusual (Don Hunt  asked "Steve - what version of macOS are you running? I've been playing on Mojave & had to make mods for syntax 2>&1 and exit code testing.")
+
+Anonymous
+Is PSGallery putting in place performance best practices (config) from nuget.org?
+
+Sydney Smith
+We are working closely with the nuget gallery team to align our backends (Is PSGallery putting in place performance best practices (config) from nuget.org?)
+
+Joshcorr
+Has there been any testing against a HashiCorp Vault backend?
+
+Joshcorr
+Has there been any testing against a HashiCorp Vault backend?
+
+Sydney Smith
+We havent done this internally but would be super excited to see a HashiCorp Vault come from the community (maybe someone has already taken a look?) (Joshcorr  asked "Has there been any testing against a HashiCorp Vault backend?")
+
+Ashley McGlone
+Nice!
+
+Justin Grote [MVP]
+There was a hashicorp vault extension out there in a previous preview, not sure if its been updated for the new format yet tho
+
+Jason Helmick
+Predictive IntelliSense RFC: https://github.com/PowerShell/PowerShell-RFC/pull/262
+
+Rob Holt (roholt@microsoft.com)
+Hacktoberfest site:
+
+https://hacktoberfest.digitalocean.com/
+
+Rob Holt (roholt@microsoft.com)
+Example of hacktoberfest issue filter on GitHub:
+
+https://github.com/PowerShell/PowerShell/issues?q=is%3Aopen+is%3Aissue+label%3AHacktoberfest(Rob Holt asked "Hacktoberfest site:
+
+https://hacktoberfest.digitalocean.com/")
+
+Justin Grote [MVP]
+There was a hashicorp vault extension out there in a previous preview, not sure if its been updated for the new format yet tho
+
+Ashley McGlone
+Nice!
+
+Joshcorr
+Awesome! I will need to work on something.
+
+Anonymous
+https://hacktoberfest.digitalocean.com/
+
+Joshcorr
+Awesome! I will need to work on something.
+
+Anonymous
+https://hacktoberfest.digitalocean.com/
+
+Ashley McGlone
+Out-ConsoleGridView    NICE!
+
+Ashley McGlone
+Out-ConsoleGridView    NICE!
+
+Keith Hill
+It seems that most of the work for making native apps work better in PS did not make it into 7.1. Will 7.2 attempt to complete this work?
+
+Keith Hill
+It seems that most of the work for making native apps work better in PS did not make it into 7.1. Will 7.2 attempt to complete this work?
+
+Steve Lee (POWERSHELL)
+yes(Keith Hill  asked "It seems that most of the work for making native apps work better in PS did not make it into 7.1. Will 7.2 attempt to complete this work?")
+
+Ryan
+Thanks for the #pwsh24 call out :-)
+
+Keith Hill
+The other wasPSNativeErrorActionPref
+
+Ryan
+Thanks for the #pwsh24 call out :-)
+
+Keith Hill
+The other wasPSNativeErrorActionPref
+
+Steve Lee (POWERSHELL)
+Yes, this is what Jaon refers to as `set -e` which comes from bash(Keith Hill  asked "The other wasPSNativeErrorActionPref")
+
+kvprasoon
+Hello All...:-)
+
+Anonymous
+It would be super helpful if you could temporarily switch to a light theme.
+
+Ben Gelens
+Doing ok :)
+
+JB "AspenForester" Lewis
+Hello!
+
