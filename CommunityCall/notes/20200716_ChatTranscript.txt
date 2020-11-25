@@ -1,0 +1,120 @@
+Steve Lee (POWERSHELL)
+Good morning!
+
+Joel Sallow
+*waves* Hullo everyone :D
+
+Joel Sallow
+*waves* Hullo everyone :D
+
+Jon J.
+Mornin'
+
+Darwin
+I'm here
+
+Darwin
+I'm here
+
+Jon J.
+Mornin'
+
+Michael B
+I'm here too
+
+Michael B
+I'm here too
+
+Matthewjdegarmo
+I'm here!
+
+Matthewjdegarmo
+I'm here!
+
+Jeremiah Strong
+I'm watching!
+
+Jeremiah Strong
+I'm watching!
+
+JB "AspenForester" Lewis
+here!
+
+Jeff Hick
+Long time supporter, first time meeting.
+
+JB "AspenForester" Lewis
+here!
+
+Jeff Hick
+Long time supporter, first time meeting.
+
+Hello!!
+Where's the link to post todays questions
+
+*waves* Hello, folks
+Community Call, this Gus Spier. Comm check?
+
+Hello!!
+Thanks
+
+*waves* Hello, folks
+Community Call, this Gus Spier. Comm check?
+
+Hello!!
+Thanks
+
+Hello!!
+Where's the link to post todays questions
+
+Steve Lee (POWERSHELL)
+https://github.com/PowerShell/PowerShell-RFC/issues/257(Hello!!  asked "Where's the link to post todays questions")
+
+kvprasoon
+Great to see Jeff Hicks in call :-)
+
+Anonymous
+please install windows update :)
+
+kvprasoon
+Great to see Jeff Hicks in call :-)
+
+Anonymous
+please install windows update :)
+
+Hello!!
+Maybe honor the order if it's a mandatory positional parameter!
+
+Joel Sallow
+yeah. Hashtables get reused all the time. The one-time specified parameter should win, it has a more narrow "scope"
+
+Michael B
+thanks for the docs update!
+
+Jeff Hick
+I can't teach without access to good help files.
+
+Hello!!
+Maybe honor the order if it's a mandatory positional parameter!
+
+Joel Sallow
+yeah. Hashtables get reused all the time. The one-time specified parameter should win, it has a more narrow "scope"
+
+Michael B
+thanks for the docs update!
+
+Jeff Hick
+I can't teach without access to good help files.
+
+Jason Helmick
+:) me too(Jeff Hick  asked "I can't teach without access to good help files.")
+
+kvprasoon
+Steve said it w/o saying ;-) it
+
+kvprasoon
+Steve said it w/o saying ;-) it
+
+JB "AspenForester" Lewis
+Thanks everyone!  helpful and insghtful as always!
+
