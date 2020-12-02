@@ -16,6 +16,7 @@ recurring event on your calendar.
 * [October 15, 2020](./notes/20201015_Notes.md) ([YouTube recording](https://youtu.be/_gP3HH0Ir0g) and [transcript](./notes/20201015_ChatTranscript.txt))
 * [September 17, 2020](./notes/20200917_Notes.md) ([YouTube recording](https://youtu.be/nW4OxHNSng0) and [transcript](./notes/20200917_ChatTranscript.txt))
 * [August 20, 2020](./notes/20200820_Notes.md) ([YouTube recording](https://youtu.be/emNWmUcGVq8) and [transcript](./notes/20200820_ChatTranscript.txt))
+* [July 16, 2020](./notes/20200716_Notes.md) ([YouTube recording](https://youtu.be/oWokPwQxfJo) and [transcript](./notes/20200716_ChatTranscript.txt))
 * [April 16, 2020](./notes/20200416_Notes.md) ([YouTube recording](https://youtu.be/q3Wx7MCpXnk) and [transcript](./notes/20200416_ChatTranscript.txt))
 * March 19, 2020 - Cancelled due to conflict with MVP Summit
 * [October 17, 2019](./notes/20191017_Notes.md) ([YouTube recording](https://youtu.be/yL0FXyZQdmQ) and [transcript](./notes/20191017_ChatTranscript.txt))
