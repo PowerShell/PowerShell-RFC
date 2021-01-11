@@ -12,6 +12,7 @@ recurring event on your calendar.
 
 ## Notes
 
+* [December 17, 2020](./notes/20201217_Notes.md) ([YouTube recording](https://youtu.be/jKiA0255sIA) and [transcript](./notes/20201217_ChatTranscript.txt))
 * [November 19, 2020](./notes/20201119_Notes.md) ([YouTube recording](https://youtu.be/IHMgWobHzrI) and [transcript](./notes/20201119_ChatTranscript.txt))
 * [October 15, 2020](./notes/20201015_Notes.md) ([YouTube recording](https://youtu.be/_gP3HH0Ir0g) and [transcript](./notes/20201015_ChatTranscript.txt))
 * [September 17, 2020](./notes/20200917_Notes.md) ([YouTube recording](https://youtu.be/nW4OxHNSng0) and [transcript](./notes/20200917_ChatTranscript.txt))

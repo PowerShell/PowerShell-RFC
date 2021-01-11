@@ -1,0 +1,259 @@
+Kvprasoon
+Hello everyone😀
+
+Joey Aiello
+Ask your question ahead-of-time in this issue: https://github.com/PowerShell/PowerShell-RFC/issues/272
+
+Marc-Andre Moreau
+Hello everyone! this is my first time attending
+
+Kvprasoon
+Oops,Sry, that's due to a network glitch
+
+Justin Grote [MVP]
+@Marc welcome!
+
+Marc-Andre Moreau
+Will PSRemoting custom transports be discussed today?
+
+Aleksandar
+Could you increase a font size a little?
+
+JoshCorr
+Is 7.2 slated to be the next LTS version? And if so is there a way of suppressing the "New Version avalible" message for LTS versions?
+
+Adil
+Plans for Christmas, Joey?
+
+Justin Grote [MVP]
+@Marc it's on the Community Call question list so yes as long as there's time which there usually is.
+
+Thomas Rayner
+Merry Christmas, y'all! Can you share any updates regarding the PS VS Code extension, and Tyler's new role on the Code team?
+
+brima
+Is there any news about the Module WindowsUpdateProvider? Doesn't work now for more than 1 year! Error: Provider cannot be loaded.
+
+Justin Grote [MVP]
+@Thomas it's #1 on the github list both in order and likes so I imagine that will be addressed :)
+
+Justin Grote [MVP]
+@brima PSWindowsUpdate module isn't owned by the powershell team. It's owned by Michal Gajda, you'd have to ask him.
+
+JB "AspenForester" Lewis
+That looks reasonable
+
+Justin Grote [MVP]
+Disregard this comment, I searched wrong :)(Justin Grote [MVP]  asked "@brima PSWindowsUpdate module isn't owned by the powershell team. It's owned by Michal Gajda, you'd have to ask him.")
+
+Joey Aiello
+Yes it is going to be an LTS. As for the
+"New version available" feature, I *thought* we had setup the logic such that LTS would only show updates within the LTS branch (e.g. 7.0.1 should show updates for 7.0.2 and not 7.1), but that logic may not be what we actually shipped.
+
+Are you in 7.0.x and being bugged about 7.1.x updates? (JoshCorr  asked "Is 7.2 slated to be the next LTS version? And if so is there a way of suppressing the "New Version avalible" message for LTS versions?")
+
+Ewerton Jordão
+Updates about Notebooks and PowerShell ?
+
+Justin Grote [MVP]
+@Ewerton Tyler was mostly owning that and he moved to the VSCode team so I wouldn't expect much :)
+
+Jeff Hicks
+Is there a quick "remove all formatting" command?
+
+Aleksandar
+For defaults, the accessibility team could provide an input
+
+Jeff Hicks
+If you copy a colored property to the clipboard does it include the ANSI code or just the property value?
+
+Anonymous
+Currently stuck as an attendee, trying to rejoin
+
+Marc-Andre Moreau
+Got a link to the issue regarding the new progress bars for comments?
+
+Anonymous
+Darwin: A hopefully helpful blog post today:
+
+Lightning Fast and Easy Provisioning of Git with SSH Key Authentication on Windows
+
+https://missionimpossiblecode.io/post/lightning-fast-and-easy-provisioning-of-git-with-ssh-key-authentication-on-windows/
+
+Steve Lee (POWERSHELL)
+Progress bar one is here: https://github.com/PowerShell/PowerShell/issues/14426(Marc-Andre Moreau  asked "Got a link to the issue regarding the new progress bars for comments?")
+
+Steve Lee (POWERSHELL)
+FileInfo coloring is here: https://github.com/PowerShell/PowerShell/issues/9270(Marc-Andre Moreau  asked "Got a link to the issue regarding the new progress bars for comments?")
+
+Steve Lee (POWERSHELL)
+Coloring Table/List labels is here: https://github.com/PowerShell/PowerShell/issues/14429(Marc-Andre Moreau  asked "Got a link to the issue regarding the new progress bars for comments?")
+
+brima
+@Justin Grote [MVP] I ask for the module WindowsUpdateProvider, not for the module PSWindowsUpdate.
+WindowsUpdateProvider is a inbox module!
+
+RobinDadswell
+Has this just be accidentally ended?
+
+Keith Hill
+The event ended for me just now
+
+Steve Lee (POWERSHELL)
+Sorry, accidental end of live event, we're trying to figure this out
+
+Steve Lee (POWERSHELL)
+Joey is creating a new event, the old aka.ms/joinpscall will be updated to it(Steve Lee (POWERSHELL) asked "Sorry, accidental end of live event, we're trying to figure this out")
+
+Steve Lee (POWERSHELL)
+Should be updated, please join again(Steve Lee (POWERSHELL) asked "Sorry, accidental end of live event, we're trying to figure this out")
+
+Joey Aiello
+Apologies, folks, new link has been created, please re-join at aka.ms/joinpscall(Steve Lee (POWERSHELL) asked "Sorry, accidental end of live event, we're trying to figure this out")
+
+Anonymous
+Every time I join through https://aka.ms/JoinPSCall it just joins the old event
+
+Jon J.
+Welcome Back :)
+
+Marc-Andre Moreau
+I'm back - it works now
+
+matthewjdegarmo
+THERE WE GO. I couldn't use your link, I needed to manually type in aka.ms/joinpscall
+
+JB "AspenForester" Lewis
+I'm back!
+
+Keith Hill
+What, no confirmation dialog on ending event?  😜
+
+Jeff Hicks
+There are no accidents. ;-)
+
+Keith Hill
+Confirm impact should be high on that operation. :-)
+
+Joey Aiello
+There is.... :-p(Keith Hill  asked "What, no confirmation dialog on ending event?  😜")
+
+Joey Aiello
+We were just trying to go fast to show you Cresnedo :) (Keith Hill  asked "What, no confirmation dialog on ending event?  😜")
+
+Anonymous
+@Justin Grote [MVP] I talk about the module WindowsUpdateProvider, not for the module PSWindowsUpdate. WindowsUpdateProvider is a inbox module!
+
+JoshCorr
+Will PowerShell 7.2 eventually be LTS? And is there a way to supress the "Newer Version" message for the LTS versions (until there is a new LTS version)?
+
+Joey Aiello
+FYI, I still have questions open from the Take 1 call that got ended abruptly, so I'll be dragging those forward
+
+Steve Lee (POWERSHELL)
+7.2 is expected to be LTS(JoshCorr  asked "Will PowerShell 7.2 eventually be LTS? And is there a way to supress the "Newer Version" message for the LTS versions (until there is a new LTS version)? ")
+
+Joey Aiello
+I relplied in the last call to this one(JoshCorr  asked "Will PowerShell 7.2 eventually be LTS? And is there a way to supress the "Newer Version" message for the LTS versions (until there is a new LTS version)? ")
+
+Joey Aiello
+Yes it is going to be an LTS. As for the "New version available" feature, I *thought* we had setup the logic such that LTS would only show updates within the LTS branch (e.g. 7.0.1 should show updates for 7.0.2 and not 7.1), but that logic may not be what we actually shipped. Are you in 7.0.x and being bugged about 7.1.x updates?
+(JoshCorr  asked "Will PowerShell 7.2 eventually be LTS? And is there a way to supress the "Newer Version" message for the LTS versions (until there is a new LTS version)? ")
+
+Marc-Andre Moreau
+Can you clarify what is the original demand that triggered the Crescendo project? It looks like it is meant for people who wouldn't be comfortable trying to wrap native commands, even if you currently already do that in PowerShell "manually" quite well
+
+JoshCorr
+I am getting spammed about 7.1 in 7.0.3 version. Can't post a screen shot here, but will look at posting an issue to Github.(JoshCorr  asked "Will PowerShell 7.2 eventually be LTS? And is there a way to supress the "Newer Version" message for the LTS versions (until there is a new LTS version)? ")
+
+JoshCorr
+And Sorry I missed your response. Thanks for answering again. :) (JoshCorr  asked "Will PowerShell 7.2 eventually be LTS? And is there a way to supress the "Newer Version" message for the LTS versions (until there is a new LTS version)? ")
+
+Jason Milczek
+Does anyone know when the AzureAD module will be available for PowerShell Core?
+
+Joey Aiello
+No worries, thanks for the info. We'll have to look into that(JoshCorr  asked "Will PowerShell 7.2 eventually be LTS? And is there a way to supress the "Newer Version" message for the LTS versions (until there is a new LTS version)? ")
+
+Anonymous
+Any ETA on AzureAD module for PowerShell Core?
+
+Jason Helmick
+Crescendo Blog: https://devblogs.microsoft.com/powershell/announcing-powershell-crescendo-preview-1/
+
+Crescendo Github Discussion: https://github.com/PowerShell/Crescendo/discussions
+
+Kvprasoon
+Crescendo --> MaC, Module as Code ♥
+
+Justin Grote [MVP]
+Powershell Code to test for the new meeting link for the next time Jason screws up:
+try {iwr http://aka.ms/joinpscall -MaximumRedirection 0 -ea stop} catch {$PSItem.exception.response.headers.location.absoluteuri -notmatch 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_ODkzZDYxYTQtODAyOC00N2FkLTk0YTgtMTkzZmJiZmVkYTAx%40thread.v2/0?context=%7b%22Tid%22%3a%2272f988bf-86f1-41af-91ab-2d7cd011db47%22%2c%22Oid%22%3a%2221cd2cc4-f1fc-4a3b-b13d-788dc099c644%22%2c%22IsBroadcastMeeting%22%3atruffe%7d'}
+
+Ben
+Any news on psunixcompleters? Is is still moving forward?
+
+Marc-Andre Moreau
+Is there documentation on how to produce similar, professional-looking PowerShell module documentations when using DocFX for third-party modules? I've adopted DocFX for my product docs, but so far it's just manual markdown, nothing directly integrated with the modules I document.
+
+Marc-Andre Moreau
+the sudo command support got unblocked recently - Jordan did an almost completed proof-of-concept that really works
+
+Marc-Andre Moreau
+it just needs some further push from the team and it could definitely happen
+
+Sean Wheeler
+You can create markdown help for your modules using PlatyPS. See https://docs.microsoft.com/en-us/powershell/scripting/dev-cross-plat/create-help-using-platyps?view=powershell-7.1(Marc-Andre Moreau  asked "Is there documentation on how to produce similar, professional-looking PowerShell module documentations when using DocFX for third-party modules? I've adopted DocFX for my product docs, but so far it's just manual markdown, nothing directly integrated with the modules I document.")
+
+JoshCorr
+https://github.com/PowerShell/PowerShell/issues/14452 went ahead and put something in. Don't mind helping out on this one as well. (JoshCorr  asked "Will PowerShell 7.2 eventually be LTS? And is there a way to supress the "Newer Version" message for the LTS versions (until there is a new LTS version)? ")
+
+Marc-Andre Moreau
+What would be the best for community contributors to help fast track alternative PSRemoting transports? it doesn't have to be very complicated with a whole plugin system
+
+Justin Grote [MVP]
+Can we just do a small PR to just un-hardcode the 'ssh.exe' and make it a default but configurable? This is a small nonbreaking fix. Waiting on all the subsystem stuff is gonna take at least half a year.
+
+Anonymous
+The official support is not main issue. Will there be new beta releases?(OpenSSH needs to be supported out-of-band of Windows. How are we supposed to get v8.1, 8.2 or v8.3 on Windows Server 2012 R2 and above?)
+
+b
+The module WindowsUpdateProvider  work not with Windows PowerShell 5.1and work not with PowerShell 7.x
+
+Steve Lee (POWERSHELL)
+Is https://github.com/PowerShell/PowerShell/pull/12802 sufficient for what you need?(Justin Grote [MVP]  asked "Can we just do a small PR to just un-hardcode the 'ssh.exe' and make it a default but configurable? This is a small nonbreaking fix. Waiting on all the subsystem stuff is gonna take at least half a year.")
+
+Anonymous
+OpenSSH needs to be supported out-of-band of Windows. How are we supposed to get v8.1, 8.2 or v8.3 on Windows Server 2012 R2 and above?
+
+Anonymous
+Chocolately package is not being updated though(OpenSSH needs to be supported out-of-band of Windows. How are we supposed to get v8.1, 8.2 or v8.3 on Windows Server 2012 R2 and above?)
+
+Marc-Andre Moreau
+Has it every been planned to support SSH remoting without OpenSSH, like libssh, or even putty?
+
+Anonymous
+Sorry, no published build from GitHub. I manually have to compile it(OpenSSH needs to be supported out-of-band of Windows. How are we supposed to get v8.1, 8.2 or v8.3 on Windows Server 2012 R2 and above?)
+
+Justin Grote [MVP]
+@Marc if they unhook the ssh.exe hardcode then anyone can write their own using those libraries and make a stdin/out
+
+b
+i do taht x-times in feedback hub :-(
+
+Marc-Andre Moreau
+To clarify: not officially by Microsoft, but supported by third-parties or by the community, it's just that PowerShell remoting for SSH is currently hardcoded specifically for the OpenSSH client. I got PowerShell remoting over SSH without SSH done by making a fake "ssh.exe" replacement, so in theory it's not that hard to make it possible
+
+Marc-Andre Moreau
+True, that is exactly how I managed to replace it - I prepend my replacement in the PATH before the real one
+
+JB "AspenForester" Lewis
+Thanks, everyone!  Happy Holidays to you all!
+
+b
+here a link
+https://aka.ms/AA982vm
+
+Jon J.
+Thanks Pwsh Team for a great year, enjoy the holidays!
+
