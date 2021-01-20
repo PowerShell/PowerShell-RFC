@@ -46,8 +46,9 @@ RFCs go through the following stages:
 
 This is the initial draft of an RFC posted for comments and considered a work-in-progress.
 
-* New drafts should not be submitted until the appropriate Working Group has decided that an RFC is
-  required in order for an experimental implementation to be accepted.
+* New drafts should not be submitted until the appropriate Working Group has decided in
+  a PowerShell/PowerShell repository issue that an RFC is required in order for an experimental
+  implementation to be accepted.
 * Drafts should be submitted as a draft Pull Request from the Author's fork into the
   `Draft-Accepted` folder.
 * The Author shall ensure that the `Allow edits from maintainers` box is checked so that a Committee
