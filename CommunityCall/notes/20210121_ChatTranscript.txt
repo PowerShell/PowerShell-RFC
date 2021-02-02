@@ -1,0 +1,96 @@
+Steve Lee (POWERSHELL) 
+Good morning!
+
+kvprasoon 
+hello everyone...
+
+Marc-André Moreau 
+Hi everyone
+
+Ashley McGlone 
+howdy from Goatee
+
+Marc-André Moreau 
+You should get the Apple M1 ;) Apparently it compiles twice as fast!
+
+Steve Lee (POWERSHELL)
+Ordered, just waiting for it to arrive!  The reviews have been very positive.(Marc-André Moreau  asked "You should get the Apple M1 ;) Apparently it compiles twice as fast!")
+
+Marc-André Moreau 
+Parallels / QEMU already support fully accelerated Windows 10 ARM VMs on the Apple M1, with better performance than the Surface Pro X (breaks my heart, but yes)
+
+Sydney Smith (SHE/HER) 
+https://github.com/PowerShell/SecretManagement/issues/46
+
+Ryan Y 
+Looks great on Kv integration for Secrets management 👍
+
+Thomas Rayner 
+Did you guys give Tyler a deserving sendoff? :)
+
+Steve Lee (POWERSHELL) 
+Would have liked to have done something in person but given covid that was off the table.  Tyler is still indirectly contributing to PowerShell with his current focus on VSCode improvements that help out PowerShell :)(Thomas Rayner  asked "Did you guys give Tyler a deserving sendoff? :)")
+
+Ryan Y 
+great to see him Andy back!!!
+
+Marc-André Moreau 
+Welcome Andy! Since you're working on Linux support, there's an issue with zombie processes in PowerShell remoting that would deserve attention: https://github.com/PowerShell/PowerShell/issues/13356
+
+Ryan Y 
+The implementation of Working groups is a great to see in the process in evolution of PowerShell as language 
+
+Marc-André Moreau 
+Are working groups a proper way for community members to collaborate on some core modifications, like the extensibility for custom transports? In this case, a design has been discussed and decided on by the PowerShell team, and it isn't clear how community members can become a bigger part of those changes
+
+Marc-André Moreau 
+I don't mind about using GitHub releases, but Steve said he'd rather publish the PowerShell releases in Azure CDN first. I don't mind where pwshup would fetch the releases, so I could get started with GitHub releases in a first time, and then migrate to the Azure CDN later
+
+Marc-André Moreau 
+I'm 99% done, but the .NET team won't make changes to fix the last part, but it could be fixed on the PowerShell side
+
+Marc-André Moreau 
+I can be unmuted if needed (is that possible?)
+
+Marc-André Moreau 
+I am mostly concerned about not getting something ready before the 7.2 feature freeze, we have a very simple way to do it now, but I worry the longer design would not be done in time
+
+Justin Grote [MVP] 
+And it's not a hack, it's a "fix" for a terrible hardcoded initial implementation. But I get your point Joey :)(Justin Grote [MVP]  asked "It's not "tricking" powershell, powershell just sends stdin/out there anyways.")
+
+Justin Grote [MVP] 
+It wouldn't be removing it, that would still be supported parallel to your subsystem change.(Justin Grote [MVP]  asked "It's not "tricking" powershell, powershell just sends stdin/out there anyways.")
+
+Justin Grote [MVP] 
+It's not "tricking" powershell, powershell just sends stdin/out there anyways.
+
+Marc-André Moreau 
+That PR was made by Justin Grote to make a cleaner version of the hack, and it got denied
+
+Marc-André Moreau 
+That "hack" is actually what I now use in production in my product ;)
+
+Justin Grote [MVP] 
+I still argue it's a reasonable non-breaking change that has a minimal support surface over what already exists, and it's far better than shimming the community into having to "fake" SSH.exe for custom transports which is the *real* hack being used now.(Justin Grote [MVP]  asked "It's not "tricking" powershell, powershell just sends stdin/out there anyways.")
+
+Justin Grote [MVP] 
+Steve/Joey the honest status update on Editor Services is understood and appreciated, thank you.
+
+Marc-André Moreau 
+From your answers regarding OpenSSH integration in PowerShell from last time, there is literally no way you can rip out this hack out of PowerShell. It always relies on ssh.exe and non-OpenSSH is unlikely to be every integrated
+
+Andy Schwartzmeyer 
+I obviously can't make any promises or even estimates, but I can say I'm very excited to work on PowerShell Editor Services! I have appreciated and used many LSP servers and clients since it solved the support matrix problem (especially language support in Emacs 😉), so getting to work on PowerShell's LSP server is an awesome opportunity for me.(Justin Grote [MVP]  asked "Steve/Joey the honest status update on Editor Services is understood and appreciated, thank you.")
+
+Steve Lee (POWERSHELL) 
+Realistically, we have no plans to change that, just an example.(Marc-André Moreau  asked "From your answers regarding OpenSSH integration in PowerShell from last time, there is literally no way you can rip out this hack out of PowerShell. It always relies on ssh.exe and non-OpenSSH is unlikely to be every integrated")
+
+Jeremiah Strong 
+Dropping off phone call but want to say enjoy the phone calls and sharing all the work being done! 
+
+Ryan Y 
+Any sidline projects we should be interested in?
+
+Keith Hill 
+Do you think improvements to calling native apps will make it into 7.2?  E.g. quoting improvements, throwing on non-zero $LASTEXITCODE, invoke-nativeshell, etc.  There's been a ton of discussions on these features and they're sorely needed but they keep getting punted to the next version.
+
