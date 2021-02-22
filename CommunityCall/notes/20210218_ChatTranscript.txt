@@ -1,0 +1,174 @@
+Jamie Brandwood
+Happy 3rd Thursday of The Month Folks !
+
+JB "AspenForester" Lewis
+Hello everyone
+
+Adil
+Greetings Mortals.
+
+Jon J.
+Mornin'
+
+Adil
+whoa hold up your browser setup is rad
+
+Adil
+for systems that weve set to install and update via Microsoft Store.... would the MS store also handle the Net 6 installation as dependancy?
+
+Mike Kanakos
+we added the community details to the powershell.org community calendar
+
+Ryan Yates
+How does this end up showing in transcripts?
+
+Keith Hill
+In Windows Terminal, while the progress bar is rendering, I see a flashing cursor at the beginning of the line which is distracting.   Any chance of perhaps hiding it until progress is complete?
+
+Anonymous
+Is there a dynamic width so it only takes up as much width as the message?
+
+Anonymous
+Is there a way to get the progress back back to the top of the page?
+
+Don Hunt
+Progress bar changes look good.
+
+ili101
+I was hoping this fixed https://github.com/PowerShell/PowerShell/issues/13005 but this is still happening with this new progress
+
+Sean Kearney
+So the new Write-Progress has additional parameters but retains old parameters?
+
+Jon J.
+Do modules have to be re-written to take advantage of the new progress bar format?
+
+Steve Lee (POWERSHELL)
+No, this is purely a visualization change and no changes to cmdlets/scripts writing progress(Jon J.  asked "Do modules have to be re-written to take advantage of the new progress bar format?")
+
+Steve Lee (POWERSHELL)
+No new parameters, this is purely a visualization change(Sean Kearney  asked "So the new Write-Progress has additional parameters but retains old parameters?")
+
+Steve Lee (POWERSHELL)
+That issue is independnet of changing how progress is visualized.  The problem there is to optimize wrting progress it's on a timer to not write that often so if it's too fast, it'll miss the timer.  Would love to see a community fix for this.(ili101  asked "I was hoping this fixed https://github.com/PowerShell/PowerShell/issues/13005 but this is still happening with this new progress")
+
+Adil
+Data parsing and creating PSCustomObject for creating Python Pandas like use cases are becoming moer and more
+
+Is there a comparison of something like Performance of PS 5x vs PS 7x in parsing and creating PSCustomObjects (arrays of PSCustomObjects)?
+
+And is there a resource that helps us write far more performant parsing code?
+
+Jason Helmick
+New PowerShell Community Blog - aka.ms/PSCommunityBlog
+
+Jason Helmick
+New twitter handle!: @PSCommunity
+
+JB "AspenForester" Lewis
+Looks like it's @PSCommunityBlog
+
+Justin Grote
+I see you
+
+Ryan Yates
+I can see his screen
+
+Anonymous
+https://twitter.com/PSCommunity shows as Pink Shell Community btw
+
+Sean Kearney
+https://www.facebook.com/groups/pscommunityblog
+
+Mike Kanakos
+are there guidelines on content that is relevant for the new blog? preferred topics , etc.
+
+Sean Kearney
+Facebook group has been updated as well
+
+Anonymous
+In this new blog format is there a way to have executable code blocks and a lite editor like VS Code Notebooks? This would let blog readers get real time feedback and experimentation.
+
+Sean Wheeler
+The new twitter handle is https://twitter.com/pscommunityblog
+
+Jason Helmick
+Yes, it needs to be powershell related example - we are avoiding product announcements (marketing). We will have clearer guidelines posted soon, but basically powershell solutions are welcome(Mike Kanakos  asked "are there guidelines on content that is relevant for the new blog? preferred topics , etc.")
+
+Jason Helmick
+Thanks Sean!!(Sean Kearney  asked "Facebook group has been updated as well")
+
+Jason Helmick
+it is! (sorry) @PSCommunityBlog(JB "AspenForester" Lewis  asked "Looks like it's @PSCommunityBlog")
+
+Jason Helmick
+Not at this time, but we will be taking community suggetions as Issues and will look into it.  Please file an issue! ;)(In this new blog format is there a way to have executable code blocks and a lite editor like VS Code Notebooks? This would let blog readers get real time feedback and experimentation.)
+
+Aaron Nelson
+PowerShellNotebook module on the Gallery https://www.powershellgallery.com/packages/PowerShellNotebook/2.6.16
+
+Aaron Nelson
+Recording of my presentation on PowerShell & SQL Notebooks: https://youtu.be/AR1ZAJWlT10
+
+All the notebooks/scripts I demoed in that video: https://github.com/SQLvariant/Demos/tree/master/Presentations/Intro-to-Jupyter-Notebooks
+
+Jeremiah Strong
+Why not move to a normal Teams Meeting? Like the old way with S4B meeting? Just curious
+
+Joshcorr
+Love the community demo idea durring this call. There are a lot of great modules out there.
+
+Greg Wojan
+Joey, I can hardly hear you all of the sudden.
+
+Justin Grote [MVP]
+I yield my time to Adam so he can do more detail if he wants :)
+
+Corbob
+Back in the day where Windowing systems were to allow you to load more terminals 😂
+
+Ryan Yates
+Not true anymore @Joey
+
+Anonymous
+You can open up to guests but you are limited to 250
+
+Ryan Yates
+They just need the link to the meeting(Ryan Yates  asked "Not true anymore @Joey")
+
+Dongbo Wang
+Calling a .NET method directly is faster than running a cmdlet.(Totally random off topic question (but trying my luck), is it generally more performant to use .Net ways of doing things in PowerShell? i.e. [Guid]::NewGuid() is quicker vs New-Guid etc.)
+
+Dongbo Wang
+But you usually don't need to worry about the perf difference between them(Totally random off topic question (but trying my luck), is it generally more performant to use .Net ways of doing things in PowerShell? i.e. [Guid]::NewGuid() is quicker vs New-Guid etc.)
+
+Anonymous
+Any update on PSGetv3?
+
+Justin Grote [MVP]
+Joey the RTPSUG does a pretty large normal teams meeting (50+) I would get with them to find how they manage it.
+
+Adil
+OH SHIT Powershell in WebAssembly
+
+Anonymous
+Great stuff ! Appreciate the feedback.(Totally random off topic question (but trying my luck), is it generally more performant to use .Net ways of doing things in PowerShell? i.e. [Guid]::NewGuid() is quicker vs New-Guid etc.)
+
+Anonymous
+How about the next rc release on Secretmanagement?
+
+Anonymous
+Would like to see PS Get v3 have support for NuGet (nuget.org) package dependencies at GA or as a first feature release
+
+Mike Kanakos
+love the secretmanagement module!
+
+Anonymous
+Totally random off topic question (but trying my luck), is it generally more performant to use .Net ways of doing things in PowerShell? i.e. [Guid]::NewGuid() is quicker vs New-Guid etc.
+
+JB "AspenForester" Lewis
+thanks!
+
+kvprasoon
+thanks
+
