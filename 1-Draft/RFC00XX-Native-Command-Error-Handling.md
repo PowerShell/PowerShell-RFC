@@ -46,13 +46,13 @@ support all cases as `$?` can be false from a cmdlet or function error, making `
 stale.
 
 In POSIX shells, this need to terminate on command error is addressed by the `set -e` configuration,
-which causes the shell to exit when a command fails. In addition, to ensure that an error is
+which causes the script to exit when a command fails. In addition, to ensure that an error is
 returned if any command in a pipeline fails, POSIX shells address this need with `set -o pipefail`
 configuration.
 
 This specification proposes a similar idea, but adapted to the PowerShell conventions of preference
 variables and catchable, self-describing, terminating error objects. This proposal adds the
-equivalent functionality of `set -eo pipefail` to return an error if any command in a pipeline
+equivalent functionality of `set -eo pipefail` to stop execution and return an error if any command in a pipeline
 fails.
 
  The specification and alternative proposals are based on the
@@ -70,40 +70,197 @@ boilerplate.
 
 The specification proposes similar functionality to the common POSIX shell configuration `set -eo pipefail`.
 
+- `set -u` - returns an error if any variable has not been previously defined.
 - `set -e` - instructs to immediately exit if any command has a non-zero exit status.
 - `set -o pipefail` - prevents errors in the pipeline from being masked. The return code for the
   non-zero error is returned for the entire pipeline.
 
+### set -u/ Set-StrictMode
+
+In the example below, `set -u` is equivalent to `Set-StrictMode -Version 2.0`.
+
+```bash
+#!/bin/bash
+
+/bin/echo "Without set -u : No output - No error is produced"
+/bin/echo "$firstname"
+
+/bin/echo ""
+
+/bin/echo "With set -u : Equivalent to Set-StrictMode -Version 2.0"
+set -u
+/bin/echo "$firstname"
+```
+
+```output
+Without set -u : No output - No error is produced
+
+
+With set -u : Equivalent to Set-StrictMode -Version 2.0
+/Users/jasonhelmick/natcmdbash/strict: line 10: firstname: unbound variable
+```
+
 ```powershell
+# In PowerShell
 
-Cat ./Nofile | head -n 1
-Cat: ./Nofile: No such file or directory
-echo $?
-<result = 0>
+/bin/echo "Without Set-StrictMode -version 2.0 : No output - No error is produced"
+/bin/echo "$firstname"
 
-$ErrorActionPreference = 'Stop' # This is equivalent to Set -e
+/bin/echo ""
 
-Cat ./Nofile | head -n 1
-Cat: ./Nofile: No such file or directory
-echo $?
-<result = 0>
+/bin/echo "With Set-StrictMode -version 2.0 : Equivalent to set -u"
+Set-StrictMode -version 2.0
+/bin/echo "$firstname"
+```
 
-$PSNativeCommandErrorAction ='Stop' # Equivalent to Set -o pipefail
-cat ./nofile | head -n 1
-Cat: ./Nofile: No such file or directory
-echo $?
-<result = 1>
+```output
+Without set -u : No output - No error is produced
 
+
+With Set-StrictMode -version 2.0 : Equivalent to set -u
+InvalidOperation: /Users/jasonhelmick/natcmdbash/psstrict.ps1:9
+Line |
+   9 |  /bin/echo "$firstname"
+     |             ~~~~~~~~~~
+     | The variable '$firstname' cannot be retrieved because it has not been set.
+```
+
+### set -e/ $ErrorActionPreference
+
+In the example below, `set -e` is not equivalent to `$ErrorActionPReference` for native commands.
+
+```bash
+#!/bin/bash
+
+/bin/echo "Without set -e : Will receive message after failure"
+/bin/cat ./nofile
+/bin/echo "Message After failure"
+
+/bin/echo ""
+
+/bin/echo "With set -e : Will NOT receive message after failure"
+set -e
+/bin/cat ./nofile
+/bin/echo "Message After failure"
+```
+
+```output
+Without set -e : Will receive message after failure
+cat: ./nofile: No such file or directory
+Message After failure
+
+With set -e : Will NOT receive message after failure
+cat: ./nofile: No such file or directory
+```
+
+```powershell
+# In Powershell
+
+/bin/echo "Without $ErrorActionPreference : Will receive message after failure"
+/bin/cat ./nofile
+/bin/echo "Message After failure"
+
+/bin/echo ""
+
+/bin/echo "With `$ErrorActionPreference = 'Stop' : SHOULD NOT receive message after failure - but does"
+$ErrorActionPreference = "Stop"
+/bin/cat ./nofile
+/bin/echo "Message After failure"
+
+/bin/echo ""
+
+Write-Host "With cmdlet's - `$ErrorActionPreference = 'Stop' : Will NOT receive message after failure"
+$ErrorActionPreference = 'Stop'
+Get-Content ./nofile
+Write-Host "Message After failure"
+```
+
+```output
+Without $ErrorActionPreference : Will receive message after failure
+cat: ./nofile: No such file or directory
+Message After failure
+
+With $ErrorActionPreference = 'Stop' : SHOULD NOT receive message after failure - but does
+cat: ./nofile: No such file or directory
+Message After failure
+
+With cmdlet's - $ErrorActionPreference = 'Stop' : Will NOT receive message after failure
+Get-Content: /Users/jasonhelmick/natcmdbash/psstop.ps1:17
+Line |
+  17 |  Get-Content ./nofile
+     |  ~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path '/Users/jasonhelmick/natcmdbash/nofile' because it does not exist.
+```
+
+### set -o pipefail/ PSNativeCommandErrorAction
+
+In the example below, PowerShell has no equivalent to `set -o pipefail` for native commands.
+
+```bash
+#!/bin/bash
+
+/bin/echo "Without set -o pipefail : returns 0"
+/bin/cat ./nofile | /bin/echo "pipe statement after failure"
+/bin/echo "returns $?"
+
+/bin/echo ""
+
+/bin/echo "With set -o pipefail : returns non-zero"
+set -o pipefail
+/bin/cat ./nofile | /bin/echo "pipe statement after failure"
+/bin/echo "returns $?"
+```
+
+```output
+Without set -o pipefail : returns 0
+pipe statement after failure
+cat: ./nofile: No such file or directory
+returns 0
+
+With set -o pipefail : returns non-zero
+cat: ./nofile: No such file or directory
+pipe statement after failure
+returns 1
+```
+
+```powershell
+# In PowerShell
+
+/bin/echo "Without `$PSNativeCommandErrorAction = 'Stop' : should return 0 (true)"
+/bin/cat ./nofile | /bin/echo "pipe statement after failure"
+/bin/echo "returns $?"
+
+/bin/echo ""
+
+/bin/echo "With set -o equiv. `$PSNativeCommandErrorAction = 'Stop' : should return non-zero (false)"
+$PSNativeCommandErrorAction = 'Stop'
+/bin/cat ./nofile | /bin/echo "pipe statement after failure"
+/bin/echo "returns $?"
+```
+
+```output
+Without `$PSNativeCommandErrorAction = 'Stop' : should return 0 (true)
+cat: ./nofile: No such file or directory
+pipe statement after failure
+returns False
+
+With set -o equiv.  = 'Stop' : should return non-zero (false)
+cat: ./nofile: No such file or directory
+pipe statement after failure
+returns False
 ```
 
 > [!NOTE] A common configuration command for POSIX shells `set -euo pipefail` includes the `set -u`
 > configuration which returns an error if any variable has not been previously defined. This is
-> equivalent to the existing PowerShell `Set-StrictMode` and is not addressed in this RFC.
+> equivalent to the existing PowerShell `Set-StrictMode` and does not need to be addressed in this
+> RFC.
+
+### $PSNativeCommandErrorAction
 
 The `$PSNativeCommandErrorAction` preference variable will implement a version of the
 `$ErrorActionPreference` variable for native commands.
 
-- The value will default to `Ignore` for compatibility with existing behavior.
+- The value will default to `Continue` for compatibility with existing behavior.
 - For non-zero exit codes and except for the value `Ignore`, an `ErrorRecord` will be added to
   `$Error` that wraps the exit code and the command executed that returned the exit code.
 - Initially, only the existing values of `$ErrorActionPreference` will be supported in
@@ -114,7 +271,7 @@ The `$PSNativeCommandErrorAction` preference variable will implement a version o
 | Value           | Definition
 ----------------  | -------------------
 | Break           | Enter the debugger when an error occurs or when an exception is raised.
-| Continue        | (Default) - Displays the error message and continues executing.
+| Continue        | Displays the error message and continues executing.
 | Ignore          | Suppresses the error message and continues to execute the command.
 | Inquire         | Displays the error message and asks you whether you want to continue.
 | SilentlyContinue| No effect. The error message isn't displayed and execution continues without interruption.
@@ -124,7 +281,7 @@ The `$PSNativeCommandErrorAction` preference variable will implement a version o
 ### Preference variable resolves error handling conflicts
 
 In cases where an existing script already handles non-zero native command errors, the preference
-variable `$PSNativeCommandErrorAction` may be set to `Ignore`. Error handling behavior of the
+variable `$PSNativeCommandErrorAction` may be set to `Continue`. Error handling behavior of the
 PowerShell cmdlets is handled separately with `$ErrorActionPreference`.
 
 ### Error object
@@ -170,38 +327,8 @@ if ($LASTEXITCODE -ne 0)
 }
  ```
 
-#### Convert non-terminating errors to terminating where the command output is used
-
-This implements semantics equivalent to bash `set -eo pipefail` in the runtime layer.
-
-The `$PSStrictPipeLine` preference variable would govern promotion of a non-terminating error to a
-terminating error on getting an object from the pipeline output stream. Possible values would be:
-
-- `$false`: (the default) an object can be collected from the pipeline output stream regardless of
-  the command exit value. This is the same as existing PowerShell treatment of this case.
-- `$true`: where the exit status of a native command is `$false`, trying to get an object from its
-  output stream will create a terminating error from the non-terminating errors in its error stream.
-  Conversion to boolean would be structured to ensure that this returns `$false` if the output
-  pipeline does not contain anything without trying to get an actual value from it.
-
-This would allow syntax like `if`, `while` and pipeline chain operators to be usefully combined with
-native commands.
-
-This approach is less desirable because it's based on the command output instead of the return code.
-
 ### Set-StrictMode
 
 A common configuration command for POSIX scripts `set -euo pipefail` includes the `set -u`
 configuration which returns an error if any variable has not been previously defined. This is
 equivalent to the existing PowerShell `Set-StrictMode` and is not needed to be addressed in this RFC.
-
-### Add "strict" native command option
-
-The `$PSStrictNativeCommand` preference should treat creation of an `ErrorRecord` for native
-commands in the same way as this is treated elsewhere. Described here as a Boolean, could be
-considered as an enum to allow for future expansion. Possible values are:
-
-- `$false`: (the default) ignore non-zero exit codes. This is the same as existing PowerShell
-  treatment of this case.
-- `$true`: Populate the error stream of the native command with an `ErrorRecord` associated with an
-  `ExitException` exception.
