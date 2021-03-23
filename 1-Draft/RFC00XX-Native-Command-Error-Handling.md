@@ -47,7 +47,7 @@ stale.
 
 In POSIX shells, terminating execution when a command has an error is enabled via executing `set -e` in the session.
 In addition, to ensure that an error is
-returned if any command in a pipeline fails, POSIX shells address this need with `set -o pipefail`
+returned if any command in a pipeline fails, POSIX shells address this via executing `set -o pipefail`
 configuration.
 
 This specification proposes a similar idea, but adapted to the PowerShell conventions of preference
