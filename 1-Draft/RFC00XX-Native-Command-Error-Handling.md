@@ -301,7 +301,7 @@ The reported error record object will be the new type: `NativeCommandException` 
 
 ### Native commands should respect $ErrorActionPreference
 
-Native commands should respect $ErrorActionPreference and not need $PSNativeCommandErrorAction. This
+Native commands should use the $ErrorActionPreference setting and not need $PSNativeCommandErrorAction. This
 could be released as an experimental feature.
 
 ### Extending $PSNativeCommandErrorAction
