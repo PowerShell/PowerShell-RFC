@@ -62,12 +62,12 @@ execution and return an error if any command in a pipeline fails.
 
 ## Specification
 
-This RFC proposes a preference variable to enable errors produced by native
-commands to be PowerShell errors, so that failures will produce error
-objects that are added to the error stream and may terminate execution of the script without added
-boilerplate.
+This RFC proposes a preference variable to enable errors produced by native commands to be
+PowerShell errors, so that failures will produce error objects that are added to the error stream
+and may terminate execution of the script without added boilerplate.
 
-The specification proposes similar functionality to the common POSIX shell configuration `set -eo pipefail`.
+The specification proposes similar functionality to the common POSIX shell configuration
+`set -eo pipefail`.
 
 - `set -u` - returns an error if any variable has not been previously defined.
 - `set -e` - instructs to immediately exit if any command has a non-zero exit status.
@@ -76,16 +76,14 @@ The specification proposes similar functionality to the common POSIX shell confi
 
 ### set -u/ Set-StrictMode
 
-In the example below, `set -u` behavior of `bash` is shown followed by the proposed behavior for PowerShell.
+In the example below, `set -u` behavior of `bash` is shown followed by the proposed behavior for
+PowerShell. This is not part of this proposal, but added for clarity.
 
 ```bash
 #!/bin/bash
-
 /bin/echo "Without set -u : No output - No error is produced"
 /bin/echo "$firstname"
-
 /bin/echo ""
-
 /bin/echo "With set -u : Equivalent to Set-StrictMode -Version 2.0"
 set -u
 /bin/echo "$firstname"
@@ -94,19 +92,15 @@ set -u
 ```output
 Without set -u : No output - No error is produced
 
-
 With set -u : Equivalent to Set-StrictMode -Version 2.0
 /Users/jasonhelmick/natcmdbash/strict: line 10: firstname: unbound variable
 ```
 
 ```powershell
 # In PowerShell
-
 /bin/echo "Without Set-StrictMode -version 2.0 : No output - No error is produced"
 /bin/echo "$firstname"
-
 /bin/echo ""
-
 /bin/echo "With Set-StrictMode -version 2.0 : Equivalent to set -u"
 Set-StrictMode -version 2.0
 /bin/echo "$firstname"
@@ -114,7 +108,6 @@ Set-StrictMode -version 2.0
 
 ```output
 Without set -u : No output - No error is produced
-
 
 With Set-StrictMode -version 2.0 : Equivalent to set -u
 InvalidOperation: /Users/jasonhelmick/natcmdbash/psstrict.ps1:9
@@ -130,13 +123,10 @@ In the example below, `set -e` is not equivalent to `$ErrorActionPReference` for
 
 ```bash
 #!/bin/bash
-
 /bin/echo "Without set -e : Will receive message after failure"
 /bin/cat ./nofile
 /bin/echo "Message After failure"
-
 /bin/echo ""
-
 /bin/echo "With set -e : Will NOT receive message after failure"
 set -e
 /bin/cat ./nofile
@@ -154,20 +144,15 @@ cat: ./nofile: No such file or directory
 
 ```powershell
 # In Powershell
-
 /bin/echo "Without $ErrorActionPreference : Will receive message after failure"
 /bin/cat ./nofile
 /bin/echo "Message After failure"
-
 /bin/echo ""
-
 /bin/echo "With `$ErrorActionPreference = 'Stop' : SHOULD NOT receive message after failure - but does"
 $ErrorActionPreference = "Stop"
 /bin/cat ./nofile
 /bin/echo "Message After failure"
-
 /bin/echo ""
-
 Write-Host "With cmdlet's - `$ErrorActionPreference = 'Stop' : Will NOT receive message after failure"
 $ErrorActionPreference = 'Stop'
 Get-Content ./nofile
@@ -197,13 +182,10 @@ In the example below, PowerShell has no equivalent to `set -o pipefail` for nati
 
 ```bash
 #!/bin/bash
-
 /bin/echo "Without set -o pipefail : returns 0"
 /bin/cat ./nofile | /bin/echo "pipe statement after failure"
 /bin/echo "returns $?"
-
 /bin/echo ""
-
 /bin/echo "With set -o pipefail : returns non-zero"
 set -o pipefail
 /bin/cat ./nofile | /bin/echo "pipe statement after failure"
@@ -224,13 +206,10 @@ returns 1
 
 ```powershell
 # In PowerShell
-
 /bin/echo "Without `$PSNativeCommandErrorAction = 'Stop' : should return 0 (true)"
 /bin/cat ./nofile | /bin/echo "pipe statement after failure"
 /bin/echo "returns $?"
-
 /bin/echo ""
-
 /bin/echo "With set -o equiv. `$PSNativeCommandErrorAction = 'Stop' : should return non-zero (false)"
 $PSNativeCommandErrorAction = 'Stop'
 /bin/cat ./nofile | /bin/echo "pipe statement after failure"
