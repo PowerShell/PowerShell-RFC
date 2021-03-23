@@ -45,15 +45,14 @@ Simply relaying the errors through the error stream isn't the solution. The exam
 support all cases as `$?` can be false from a cmdlet or function error, making `$LASTEXITCODE`
 stale.
 
-In POSIX shells, terminating execution when a command has an error is enabled via executing `set -e` in the session.
-In addition, to ensure that an error is
-returned if any command in a pipeline fails, POSIX shells address this via executing `set -o pipefail`
-in the session.
+In POSIX shells, terminating execution when a command has an error is enabled via executing `set -e`
+in the session. In addition, to ensure that an error is returned if any command in a pipeline fails,
+POSIX shells address this via executing `set -o pipefail` in the session.
 
 This specification proposes a similar idea, but adapted to the PowerShell conventions of preference
 variables and catchable, self-describing, terminating error objects. This proposal adds the
-equivalent functionality of `set -e -o pipefail` (abbreviated to `set -eo pipefail`) to stop execution and return an error if any command in a pipeline
-fails.
+equivalent functionality of `set -e -o pipefail` (abbreviated to `set -eo pipefail`) to stop
+execution and return an error if any command in a pipeline fails.
 
  The specification and alternative proposals are based on the
  [Equivalent of bash `set -e` #3415](https://github.com/PowerShell/PowerShell/issues/3415)
@@ -276,7 +275,7 @@ The `$PSNativeCommandErrorAction` preference variable will implement a version o
 | Inquire         | Displays the error message and asks you whether you want to continue.
 | SilentlyContinue| The error message isn't displayed and execution continues without interruption.
 | Stop            | Displays the error message and stops executing. In addition to the error generated, the Stop value generates an ActionPreferenceStopException object to the error stream. stream
-| Suspend         | Automatically suspends a workflow job to allow for further investigation.
+| Suspend         | Automatically suspends a job to allow for further investigation.
 
 ### Preference variable resolves error handling conflicts
 
@@ -293,16 +292,17 @@ The reported error record object will be the new type: `NativeCommandException` 
 | ExitCode:      |  The exit code of the failed command.
 | ErrorID:       | `"Program {0} ended with non-zero exit code {1}"`, with the command name and the exit code, from resource string `ProgramFailedToComplete`.
 | ErrorCategory: | `ErrorCategory.NotSpecified`.
-| object:         | exit code
+| object:         | Exit code
 | Source:        | The full path to the application
-| ProcessInfo    | details of failed command including path, exit code, and PID
+| ProcessInfo    | Details of failed command including path, exit code, and PID
+| TargetObject   | Specifies the object that was being processed when the error occurred.
 
 ## Alternative Approaches and Considerations
 
 ### Native commands should respect $ErrorActionPreference
 
-Native commands should use the $ErrorActionPreference setting and not need $PSNativeCommandErrorAction. This
-could be released as an experimental feature.
+Native commands should use the $ErrorActionPreference setting and not need
+$PSNativeCommandErrorAction. This could be released as an experimental feature.
 
 ### Extending $PSNativeCommandErrorAction
 
@@ -311,8 +311,8 @@ commands, The values of `$PSNativeCommandErrorAction` may be extended to include
 `MatchErrorActionPreference`, which should apply the `$ErrorActionPreference` setting to native
 commands.
 
-- A conversion will occur between `$PSNativeCommandErrorAction` and `$ErrorActionPreference` values,
-  where `MatchErrorActionPreference` is converted to the current value of `$ErrorActionPreference`
+- If `$PSNativeCommandErrorAction` is set to `MatchErrorActionPreference` then the value of
+  `$ErrorActionPreference` will define the behavior for native command errors.
 
 ### Explicit invocation logic
 
