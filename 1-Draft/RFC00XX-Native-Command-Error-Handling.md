@@ -62,8 +62,8 @@ execution and return an error if any command in a pipeline fails.
 
 ## Specification
 
-This RFC proposes a preference variable to configure the elevation of errors produced by native
-commands to first-class PowerShell errors, so that native command failures will produce error
+This RFC proposes a preference variable to enable errors produced by native
+commands to be PowerShell errors, so that failures will produce error
 objects that are added to the error stream and may terminate execution of the script without added
 boilerplate.
 
@@ -76,7 +76,7 @@ The specification proposes similar functionality to the common POSIX shell confi
 
 ### set -u/ Set-StrictMode
 
-In the example below, `set -u` is equivalent to `Set-StrictMode -Version 2.0`.
+In the example below, `set -u` behavior of `bash` is shown followed by the proposed behavior for PowerShell.
 
 ```bash
 #!/bin/bash
