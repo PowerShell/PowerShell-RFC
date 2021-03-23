@@ -274,7 +274,7 @@ The `$PSNativeCommandErrorAction` preference variable will implement a version o
 | Continue        | Displays the error message and continues executing.
 | Ignore          | Suppresses the error message and continues to execute the command.
 | Inquire         | Displays the error message and asks you whether you want to continue.
-| SilentlyContinue| No effect. The error message isn't displayed and execution continues without interruption.
+| SilentlyContinue| The error message isn't displayed and execution continues without interruption.
 | Stop            | Displays the error message and stops executing. In addition to the error generated, the Stop value generates an ActionPreferenceStopException object to the error stream. stream
 | Suspend         | Automatically suspends a workflow job to allow for further investigation.
 
