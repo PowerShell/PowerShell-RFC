@@ -45,7 +45,7 @@ Simply relaying the errors through the error stream isn't the solution. The exam
 support all cases as `$?` can be false from a cmdlet or function error, making `$LASTEXITCODE`
 stale.
 
-In POSIX shells, this need to terminate on command error is addressed by the `set -e` configuration,
+In POSIX shells, terminating execution when a command has an error is enabled via executing `set -e` in the session.
 which causes the script to exit when a command fails. In addition, to ensure that an error is
 returned if any command in a pipeline fails, POSIX shells address this need with `set -o pipefail`
 configuration.
