@@ -80,6 +80,7 @@ In the example below, `set -u` behavior of `bash` is shown followed by the propo
 PowerShell. This is not part of this proposal, but added for clarity.
 
 ```bash
+bash-3.2$ cat file
 #!/bin/bash
 /bin/echo "Without set -u : No output - No error is produced"
 /bin/echo "$firstname"
@@ -90,6 +91,7 @@ set -u
 ```
 
 ```output
+bash-3.2$ file
 Without set -u : No output - No error is produced
 
 With set -u : Equivalent to Set-StrictMode -Version 2.0
@@ -97,7 +99,7 @@ With set -u : Equivalent to Set-StrictMode -Version 2.0
 ```
 
 ```powershell
-# In PowerShell
+PS> cat ./file.ps1
 /bin/echo "Without Set-StrictMode -version 2.0 : No output - No error is produced"
 /bin/echo "$firstname"
 /bin/echo ""
@@ -107,6 +109,7 @@ Set-StrictMode -version 2.0
 ```
 
 ```output
+PS> ./file.ps1
 Without set -u : No output - No error is produced
 
 With Set-StrictMode -version 2.0 : Equivalent to set -u
@@ -122,6 +125,7 @@ Line |
 In the example below, `set -e` is not equivalent to `$ErrorActionPReference` for native commands.
 
 ```bash
+bash-3.2$ cat file
 #!/bin/bash
 /bin/echo "Without set -e : Will receive message after failure"
 /bin/cat ./nofile
@@ -134,6 +138,7 @@ set -e
 ```
 
 ```output
+bash-3.2$ file
 Without set -e : Will receive message after failure
 cat: ./nofile: No such file or directory
 Message After failure
@@ -143,7 +148,7 @@ cat: ./nofile: No such file or directory
 ```
 
 ```powershell
-# In Powershell
+PS> cat ./file.ps1
 /bin/echo "Without $ErrorActionPreference : Will receive message after failure"
 /bin/cat ./nofile
 /bin/echo "Message After failure"
@@ -160,6 +165,7 @@ Write-Host "Message After failure"
 ```
 
 ```output
+PS> ./file.ps1
 Without $ErrorActionPreference : Will receive message after failure
 cat: ./nofile: No such file or directory
 Message After failure
@@ -181,6 +187,7 @@ Line |
 In the example below, PowerShell has no equivalent to `set -o pipefail` for native commands.
 
 ```bash
+bash-3.2$ cat file
 #!/bin/bash
 /bin/echo "Without set -o pipefail : returns 0"
 /bin/cat ./nofile | /bin/echo "pipe statement after failure"
@@ -193,6 +200,7 @@ set -o pipefail
 ```
 
 ```output
+bash-3.2$ file
 Without set -o pipefail : returns 0
 pipe statement after failure
 cat: ./nofile: No such file or directory
@@ -205,7 +213,7 @@ returns 1
 ```
 
 ```powershell
-# In PowerShell
+PS> cat ./file.ps1
 /bin/echo "Without `$PSNativeCommandErrorAction = 'Stop' : should return 0 (true)"
 /bin/cat ./nofile | /bin/echo "pipe statement after failure"
 /bin/echo "returns $?"
@@ -217,6 +225,7 @@ $PSNativeCommandErrorAction = 'Stop'
 ```
 
 ```output
+PS> ./file.ps1
 Without `$PSNativeCommandErrorAction = 'Stop' : should return 0 (true)
 cat: ./nofile: No such file or directory
 pipe statement after failure
