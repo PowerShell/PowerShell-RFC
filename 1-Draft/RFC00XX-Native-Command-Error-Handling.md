@@ -52,7 +52,7 @@ configuration.
 
 This specification proposes a similar idea, but adapted to the PowerShell conventions of preference
 variables and catchable, self-describing, terminating error objects. This proposal adds the
-equivalent functionality of `set -eo pipefail` to stop execution and return an error if any command in a pipeline
+equivalent functionality of `set -e -o pipefail` (abbreviated to `set -eo pipefail`) to stop execution and return an error if any command in a pipeline
 fails.
 
  The specification and alternative proposals are based on the
