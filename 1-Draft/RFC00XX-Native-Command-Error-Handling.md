@@ -79,106 +79,113 @@ The specification proposes similar functionality to the common POSIX shell confi
 In the example below, `set -u` behavior of `bash` is shown followed by the proposed behavior for
 PowerShell. This is not part of this proposal, but added for clarity.
 
+cat ./testfile.sh
+
 ```bash
-bash-3.2$ cat file
+
 #!/bin/bash
-/bin/echo "Without set -u : No output - No error is produced"
-/bin/echo "$firstname"
-/bin/echo ""
-/bin/echo "With set -u : Equivalent to Set-StrictMode -Version 2.0"
+echo "Without set -u : No output - No error is produced"
+echo "$firstname"
+echo "With set -u : Equivalent to Set-StrictMode -Version 2.0"
 set -u
-/bin/echo "$firstname"
+echo "$firstname"
 ```
 
+./testfile.sh
+
 ```output
-bash-3.2$ file
 Without set -u : No output - No error is produced
 
 With set -u : Equivalent to Set-StrictMode -Version 2.0
-/Users/jasonhelmick/natcmdbash/strict: line 10: firstname: unbound variable
+./testfile.sh: line 7: firstname: unbound variable
 ```
+
+Get-Content ./testfile.ps1
 
 ```powershell
-PS> cat ./file.ps1
-/bin/echo "Without Set-StrictMode -version 2.0 : No output - No error is produced"
-/bin/echo "$firstname"
-/bin/echo ""
-/bin/echo "With Set-StrictMode -version 2.0 : Equivalent to set -u"
+
+Write-Output "Without Set-StrictMode -version 2.0 : No output - No error is produced"
+Write-Output "$firstname"
+Write-Output "With Set-StrictMode -version 2.0 : Equivalent to set -u"
 Set-StrictMode -version 2.0
-/bin/echo "$firstname"
+Write-Output "$firstname"
 ```
 
+./testfile.ps1
+
 ```output
-PS> ./file.ps1
-Without set -u : No output - No error is produced
+Without Set-StrictMode -version 2.0 : No output - No error is produced
 
 With Set-StrictMode -version 2.0 : Equivalent to set -u
-InvalidOperation: /Users/jasonhelmick/natcmdbash/psstrict.ps1:9
+InvalidOperation: /Users/jasonhelmick/natcmdbash/testfile.ps1:5
 Line |
-   9 |  /bin/echo "$firstname"
-     |             ~~~~~~~~~~
+   5 |  Write-Output "$firstname"
+     |                ~~~~~~~~~~
      | The variable '$firstname' cannot be retrieved because it has not been set.
 ```
 
 ### set -e/ $ErrorActionPreference
 
-In the example below, `set -e` is not equivalent to `$ErrorActionPReference` for native commands.
+In the example below, `set -e` is not equivalent to `$ErrorActionPreference` for native commands.
+
+cat ./testfile.sh
 
 ```bash
-bash-3.2$ cat file
 #!/bin/bash
-/bin/echo "Without set -e : Will receive message after failure"
-/bin/cat ./nofile
-/bin/echo "Message After failure"
-/bin/echo ""
-/bin/echo "With set -e : Will NOT receive message after failure"
+echo "Without set -e : Will receive message after failure"
+cat ./nofile
+echo "Message After failure"
+echo "With set -e : Will NOT continue script execution after failure"
 set -e
-/bin/cat ./nofile
-/bin/echo "Message After failure"
+cat ./nofile
+echo "Message After failure"
 ```
 
+./testfile.sh
+
 ```output
-bash-3.2$ file
 Without set -e : Will receive message after failure
 cat: ./nofile: No such file or directory
 Message After failure
-
-With set -e : Will NOT receive message after failure
+With set -e : Will NOT continue script execution after failure
 cat: ./nofile: No such file or directory
 ```
 
+Get-Content ./testfile.ps1
+
 ```powershell
-PS> cat ./file.ps1
-/bin/echo "Without $ErrorActionPreference : Will receive message after failure"
-/bin/cat ./nofile
-/bin/echo "Message After failure"
-/bin/echo ""
-/bin/echo "With `$ErrorActionPreference = 'Stop' : SHOULD NOT receive message after failure - but does"
+Write-Output "Without `$ErrorActionPreference : Will receive message after failure"
+Get-Content -path ./nofile
+Write-Output "Message After failure"
+/bin/echo "With (Bash) `$ErrorActionPreference = 'Stop' : SHOULD NOT continue script execution after failure - but does"
 $ErrorActionPreference = "Stop"
 /bin/cat ./nofile
 /bin/echo "Message After failure"
-/bin/echo ""
-Write-Host "With cmdlet's - `$ErrorActionPreference = 'Stop' : Will NOT receive message after failure"
-$ErrorActionPreference = 'Stop'
-Get-Content ./nofile
-Write-Host "Message After failure"
+Write-Output "With (PowerShell) `$ErrorActionPreference = 'Stop' : SHOULD NOT continue script execution after failure"
+$ErrorActionPreference = "Stop"
+Get-Content -path ./nofile
+Write-Output "Message After failure"
 ```
 
+./testfile.ps1
+
 ```output
-PS> ./file.ps1
 Without $ErrorActionPreference : Will receive message after failure
-cat: ./nofile: No such file or directory
-Message After failure
-
-With $ErrorActionPreference = 'Stop' : SHOULD NOT receive message after failure - but does
-cat: ./nofile: No such file or directory
-Message After failure
-
-With cmdlet's - $ErrorActionPreference = 'Stop' : Will NOT receive message after failure
-Get-Content: /Users/jasonhelmick/natcmdbash/psstop.ps1:17
+Get-Content: /Users/jasonhelmick/natcmdbash/testfile.ps1:2
 Line |
-  17 |  Get-Content ./nofile
-     |  ~~~~~~~~~~~~~~~~~~~~
+   2 |  Get-Content -path ./nofile
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path '/Users/jasonhelmick/natcmdbash/nofile' because it does not exist.
+
+Message After failure
+With (Bash) $ErrorActionPreference = 'Stop' : SHOULD NOT continue script execution after failure - but does
+cat: ./nofile: No such file or directory
+Message After failure
+With (PowerShell) $ErrorActionPreference = 'Stop' : SHOULD NOT continue script execution after failure
+Get-Content: /Users/jasonhelmick/natcmdbash/testfile.ps1:10
+Line |
+  10 |  Get-Content -path ./nofile
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~
      | Cannot find path '/Users/jasonhelmick/natcmdbash/nofile' because it does not exist.
 ```
 
@@ -186,55 +193,61 @@ Line |
 
 In the example below, PowerShell has no equivalent to `set -o pipefail` for native commands.
 
+cat ./testfile.sh
+
 ```bash
-bash-3.2$ cat file
 #!/bin/bash
-/bin/echo "Without set -o pipefail : returns 0"
-/bin/cat ./nofile | /bin/echo "pipe statement after failure"
-/bin/echo "returns $?"
-/bin/echo ""
-/bin/echo "With set -o pipefail : returns non-zero"
+echo "Without set -o pipefail : returns zero (true)"
+cat ./nofile | echo "pipe statement after failure"
+echo "returns $?"
+echo "With set -o pipefail : returns non-zero (false)"
 set -o pipefail
-/bin/cat ./nofile | /bin/echo "pipe statement after failure"
-/bin/echo "returns $?"
+cat ./nofile | echo "pipe statement after failure"
+echo "returns $?"
 ```
 
+./testfile.sh
+
 ```output
-bash-3.2$ file
-Without set -o pipefail : returns 0
+Without set -o pipefail : returns zero (true)
 pipe statement after failure
 cat: ./nofile: No such file or directory
 returns 0
-
-With set -o pipefail : returns non-zero
-cat: ./nofile: No such file or directory
+With set -o pipefail : returns non-zero (false)
 pipe statement after failure
+cat: ./nofile: No such file or directory
 returns 1
 ```
 
+Get-Content ./testfile.ps1
+
 ```powershell
-PS> cat ./file.ps1
-/bin/echo "Without `$PSNativeCommandErrorAction = 'Stop' : should return 0 (true)"
-/bin/cat ./nofile | /bin/echo "pipe statement after failure"
-/bin/echo "returns $?"
-/bin/echo ""
-/bin/echo "With set -o equiv. `$PSNativeCommandErrorAction = 'Stop' : should return non-zero (false)"
-$PSNativeCommandErrorAction = 'Stop'
-/bin/cat ./nofile | /bin/echo "pipe statement after failure"
-/bin/echo "returns $?"
+Write-Output "Without `$ErrorActionPreference = 'Stop' : should return zero (true)"
+Get-Content -path ./nofile | Write-Output "pipe statement after failure"
+Write-Output "returns $?"
+Write-Output "With set -o equiv. `$ErrorActionPreference = 'Stop' : should return non-zero (false)"
+$ErrorActionPreference = 'Stop'
+Get-Content -path ./nofile | Write-Output "pipe statement after failure"
+Write-Output "returns $?"
 ```
 
-```output
-PS> ./file.ps1
-Without `$PSNativeCommandErrorAction = 'Stop' : should return 0 (true)
-cat: ./nofile: No such file or directory
-pipe statement after failure
-returns False
+./testfile.ps1
 
-With set -o equiv.  = 'Stop' : should return non-zero (false)
-cat: ./nofile: No such file or directory
-pipe statement after failure
+```output
+Without $ErrorActionPreference = 'Stop' : should return zero (true)
+Get-Content: /Users/jasonhelmick/natcmdbash/testfile.ps1:2
+Line |
+   2 |  Get-Content -path ./nofile | Write-Output "pipe statement after failu …
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path '/Users/jasonhelmick/natcmdbash/nofile' because it does not exist.
+
 returns False
+With set -o equiv. $ErrorActionPreference = 'Stop' : should return non-zero (false)
+Get-Content: /Users/jasonhelmick/natcmdbash/testfile.ps1:6
+Line |
+   6 |  Get-Content -path ./nofile | Write-Output "pipe statement after failu …
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path '/Users/jasonhelmick/natcmdbash/nofile' because it does not exist.
 ```
 
 > [!NOTE] A common configuration command for POSIX shells `set -euo pipefail` includes the `set -u`
@@ -277,13 +290,13 @@ The reported error record object will be the new type: `NativeCommandException` 
 
 | Property        | Definition
 ----------------  | -------------------
-| ExitCode:      |  The exit code of the failed command.
-| ErrorID:       | `"Program {0} ended with non-zero exit code {1}"`, with the command name and the exit code, from resource string `ProgramFailedToComplete`.
-| ErrorCategory: | `ErrorCategory.NotSpecified`.
+| ExitCode:       |  The exit code of the failed command.
+| ErrorID:        | `"Program {0} ended with non-zero exit code {1}"`, with the command name and the exit code, from resource string `ProgramFailedToComplete`.
+| ErrorCategory:  | `ErrorCategory.NotSpecified`.
 | object:         | Exit code
-| Source:        | The full path to the application
-| ProcessInfo    | Details of failed command including path, exit code, and PID
-| TargetObject   | Specifies the object that was being processed when the error occurred.
+| Source:         | The full path to the application
+| ProcessInfo     | Details of failed command including path, exit code, and PID
+| TargetObject    | Specifies the object that was being processed when the error occurred.
 
 ## Alternative Approaches and Considerations
 
