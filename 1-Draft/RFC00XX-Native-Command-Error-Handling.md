@@ -189,7 +189,7 @@ Line |
      | Cannot find path '/Users/jasonhelmick/natcmdbash/nofile' because it does not exist.
 ```
 
-### set -o pipefail/ PSNativeCommandErrorAction
+### set -o pipefail
 
 In the example below, PowerShell has no equivalent to `set -o pipefail` for native commands.
 
@@ -257,32 +257,13 @@ Line |
 
 ### $PSNativeCommandErrorAction
 
-The `$PSNativeCommandErrorAction` preference variable will implement a version of the
-`$ErrorActionPreference` variable for native commands.
+The `$PSNativeCommandErrorAction` preference variable will be implemented as a boolean.
 
-- The value will default to `Continue` for compatibility with existing behavior.
+- When enabled (1), `$ErrorActionPreference` will affect native commands with described behavior.
+- When disabled (0), `$ErrorActionPreference` will have no effect to the original behavior.
+- The default value is disabled (0) to maintain backward compatibility.
 - For non-zero exit codes and except for the value `Ignore`, an `ErrorRecord` will be added to
   `$Error` that wraps the exit code and the command executed that returned the exit code.
-- Initially, only the existing values of `$ErrorActionPreference` will be supported in
-  `$PSNativeCommandErrorAction` as described in the table below.
-
-### Valid values for `$PSNativeCommandErrorAction`
-
-| Value           | Definition
-----------------  | -------------------
-| Break           | Enter the debugger when an error occurs or when an exception is raised.
-| Continue        | Displays the error message and continues executing.
-| Ignore          | Suppresses the error message and continues to execute the command.
-| Inquire         | Displays the error message and asks you whether you want to continue.
-| SilentlyContinue| The error message isn't displayed and execution continues without interruption.
-| Stop            | Displays the error message and stops executing. In addition to the error generated, the Stop value generates an ActionPreferenceStopException object to the error stream. stream
-| Suspend         | Automatically suspends a job to allow for further investigation.
-
-### Preference variable resolves error handling conflicts
-
-In cases where an existing script already handles non-zero native command errors, the preference
-variable `$PSNativeCommandErrorAction` may be set to `Continue`. Error handling behavior of the
-PowerShell cmdlets is handled separately with `$ErrorActionPreference`.
 
 ### Error object
 
@@ -298,22 +279,13 @@ The reported error record object will be the new type: `NativeCommandException` 
 | ProcessInfo     | Details of failed command including path, exit code, and PID
 | TargetObject    | Specifies the object that was being processed when the error occurred.
 
+### Preference variable resolves error handling conflicts
+
+In cases where an existing script already handles non-zero native command errors, the preference
+variable `$PSNativeCommandErrorAction` may be set to `$false`. Error handling behavior of the
+PowerShell cmdlets is handled separately with `$ErrorActionPreference`.
+
 ## Alternative Approaches and Considerations
-
-### Native commands should respect $ErrorActionPreference
-
-Native commands should use the $ErrorActionPreference setting and not need
-$PSNativeCommandErrorAction. This could be released as an experimental feature.
-
-### Extending $PSNativeCommandErrorAction
-
-For users that prefer to set a single preference variable that affects both PowerShell and native
-commands, The values of `$PSNativeCommandErrorAction` may be extended to include
-`MatchErrorActionPreference`, which should apply the `$ErrorActionPreference` setting to native
-commands.
-
-- If `$PSNativeCommandErrorAction` is set to `MatchErrorActionPreference` then the value of
-  `$ErrorActionPreference` will define the behavior for native command errors.
 
 ### Explicit invocation logic
 
