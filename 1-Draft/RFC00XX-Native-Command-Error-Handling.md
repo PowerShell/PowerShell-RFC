@@ -255,9 +255,9 @@ Line |
 > equivalent to the existing PowerShell `Set-StrictMode` and does not need to be addressed in this
 > RFC.
 
-### $PSNativeCommandErrorAction
+### $PSNativeCommandUseErrorActionPreference
 
-The `$PSNativeCommandErrorAction` preference variable will be implemented as a boolean.
+The `$PSNativeCommandUseErrorActionPreference` preference variable will be implemented as a boolean.
 
 - When enabled (1), `$ErrorActionPreference` will affect native commands with described behavior.
 - When disabled (0), `$ErrorActionPreference` will have no effect to the original behavior.
@@ -282,8 +282,8 @@ The reported error record object will be the new type: `NativeCommandException` 
 ### Preference variable resolves error handling conflicts
 
 In cases where an existing script already handles non-zero native command errors, the preference
-variable `$PSNativeCommandErrorAction` may be set to `$false`. Error handling behavior of the
-PowerShell cmdlets is handled separately with `$ErrorActionPreference`.
+variable `$PSNativeCommandUseErrorActionPreference` may be set to `$false`. Error handling behavior
+of the PowerShell cmdlets is handled separately with `$ErrorActionPreference`.
 
 ## Alternative Approaches and Considerations
 
