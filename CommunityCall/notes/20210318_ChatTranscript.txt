@@ -1,0 +1,197 @@
+Nathan M
+ Is this still happening?(Nathan M  asked "This is my first time joining, is this working?")
+
+Nathan M
+ This is my first time joining, is this working?
+
+Steve Lee (POWERSHELL)
+ yes, just getting started(Nathan M  asked "This is my first time joining, is this working?")
+
+Anonymous
+ I thought this meeting was going to be a regular Teams call instead of a live event.
+
+When will that be changed?
+
+joshcorr
+We can hear you!
+
+Anonymous
+I had to drop the call and re-join before I was able to get in
+
+Darwin
+I added an item to the GH issue
+
+Dave Richardson
+My first time joining also
+
+Darwin
+Which is here: https://github.com/PowerShell/PowerShell-RFC/issues/280
+
+Nathan M
+Any idea when Download center would happen? It would be great for those of us that have github as a dns blackhole.
+
+Joey Aiello
+ No ETA right now, unfortunately. There's a lot of backend and internal work to get there. But we totally understand the scenario, that's a big reason for us wanting to do this(Nathan M  asked "Any idea when Download center would happen? It would be great for those of us that have github as a dns blackhole.")
+
+Anonymous
+we can see his console
+
+Roberth
+We see it
+
+Nathan M
+Good here
+
+Anonymous
+I can see Steves Console
+
+Dave Richardson
+I can see steves console
+
+Anonymous
+ Yes, can see the terminal
+
+Sebastian Schillman
+I can see his console
+
+Anonymous
+looks good to me :-)
+
+Anonymous
+ Yes, I am seeing the console demo
+
+Aditya Patwardhan
+ Yes, I can see
+
+Anonymous
+I can see
+
+Anonymous
+I see his Shell
+
+Sean mcgovern
+I see typing on a powershell console
+
+Anonymous
+ yes, i can see steve's console
+
+Nathan M
+ except session just froze, refreshing(Nathan M  asked "Good here")
+
+Anonymous
+I can see the terminal
+
+Mike O'Neill
+Thank you for the public MS stance on PS within Windows. Is it possible to make a similar statement about VSC? As ISE doesn't currently support PS 6+.
+
+joshcorr
+Any chance of getting a -Metadata on Get-Secret or Remove-Secret?
+
+Steve Lee (POWERSHELL)
+ Please open an issue!(joshcorr  asked "Any chance of getting a -Metadata on Get-Secret or Remove-Secret? ")
+
+Justin Grote
+ The metadata is there by default with Get-Secret if it is present. (joshcorr  asked "Any chance of getting a -Metadata on Get-Secret or Remove-Secret? ")
+
+Justin Grote
+ Also to be clear, I mean Get-SecretInfo, not get-Secret. Get-Secret is only meant to return the credential directly, so metadata there doesn't make sense.(joshcorr  asked "Any chance of getting a -Metadata on Get-Secret or Remove-Secret? ")
+
+Justin Grote
+ Both my Keepass and Chromium vaults have metadata support now, should do a new release early next week.(joshcorr  asked "Any chance of getting a -Metadata on Get-Secret or Remove-Secret? ")
+
+Anonymous
+For Dynamic Help are there options in the pager to add custom keybinds like vim?
+
+Steve Lee (POWERSHELL)
+ This is an open issue, please upvote!(For Dynamic Help are there options in the pager to add custom keybinds like vim?)
+
+Jason Helmick
+ Dynamic Help Blog: https://devblogs.microsoft.com/powershell/announcing-psreadline-2-2-beta-2-with-dynamic-help/
+
+
+Sean Wheeler
+New documentation published for utility modules: https://docs.microsoft.com/powershell/utility-modules/
+
+joshcorr
+ Sorry meant as a parameter.  I will post in an issue. Purpose would be if a vault supports multiple versions of a secret you can provide the version you want (joshcorr  asked "Any chance of getting a -Metadata on Get-Secret or Remove-Secret? ")
+
+Jason Helmick
+PSReadLine Github for Issues: https://github.com/PowerShell/PSReadLine
+
+Jason Helmick
+macOS Alt key issue: ttps://github.com/PowerShell/PSReadLine/issues/2242
+
+Justin Grote
+ Probably won't be a GA thing but Get-SecretInfo has a -Filter parameter that is meant to be implemented however the vault extension author wants. I've been considering using Keywork Query Language (Google-Style) syntax to select by metadata. You can also use the pipeline and Where-Object to filter secrets by the metadata.(joshcorr  asked "Any chance of getting a -Metadata on Get-Secret or Remove-Secret? ")
+
+Robin
+What VSCode bracketed section colouriser extension is Justin using?
+
+Anonymous
+Do you use the chocolatey nano package?
+
+Mike O'Neill
+bounceCode Awesome! I need that from time to time.
+
+Mike O'Neill
+Bracket pair colorizer and indent-rainbow
+
+Nathan M
+ My streaming keeps freezing, is there a good way to watch this again after the fact?
+
+Joey Aiello
+ Sorry about that, Nathan. There will be a YouTube recording published on our YT channel(Nathan M  asked "My streaming keeps freezing, is there a good way to watch this again after the fact?")
+
+Joey Aiello
+ https://www.youtube.com/channel/UCMhQH-yJlr4_XHkwNunfMog(Nathan M  asked "My streaming keeps freezing, is there a good way to watch this again after the fact?")
+
+Anonymous
+Not on container hosts that run server core on the cloud eh?
+
+Anonymous
+Or cloud shell.
+
+Darwin
+One liner for getting Nano: If (!(Test-Path env:chocolateyinstall)) {iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex} ; cinst -y fscapture
+
+Darwin
+See the GitHub issue re PowerShell Core now being autopackaged
+
+Darwin
+Also functions as a template for autopackaging on GitLab with GitLab runner :) https://gitlab.com/guided-explorations/microsoft/chocolatey/powershell-core
+
+Darwin
+Question will it cause heartburn for anyone to have powershell-preview package remerged to powershell-core on chocolatey?
+
+Dave Richardson
+ old question, maybe, is import-module still a viable way to install in house modules. or should I switch to using psrepos?
+
+Sean Wheeler
+ Stable release: https://aka.ms/powershell-release?tag=stable
+Preview release: https://aka.ms/powershell-release?tag=preview
+LTS release: https://aka.ms/powershell-release?tag=lts
+
+Justin Grote
+ Import-Module doesn't really "install" modules, it "loads" them, did oyu mean install-module? If so then yes you can add pretty much any file share as a powershell repository(Dave Richardson  asked "old question, maybe, is import-module still a viable way to install in house modules. or should I switch to using psrepos?")
+
+Justin Grote
+ Here's a good article on the subject: https://4sysops.com/archives/how-to-create-a-file-share-powershell-repository/(Dave Richardson  asked "old question, maybe, is import-module still a viable way to install in house modules. or should I switch to using psrepos?")
+
+Dave Richardson
+ Yes, should I start using Install-modules?(Dave Richardson  asked "old question, maybe, is import-module still a viable way to install in house modules. or should I switch to using psrepos?")
+
+Dave Richardson
+ Thanks(Dave Richardson  asked "old question, maybe, is import-module still a viable way to install in house modules. or should I switch to using psrepos?")
+
+Dave Richardson
+ We were copying them into the Windows  powershell modules folder, and on a new server we are not seeing them load, when copied(Dave Richardson  asked "old question, maybe, is import-module still a viable way to install in house modules. or should I switch to using psrepos?")
+
+Joel Sallow
+ I don't think there should be an issue provided the powershell-preview package is listed with the prerelease version numbers, since choco will not auto-update to a preview version unless asked
+
+Darwin
+previews are hidden on Chocolatey - hence why I put it on a seperate Id - so they won't be hidden on the site
+
+kvprasoon
+Thank you all :-)
+
