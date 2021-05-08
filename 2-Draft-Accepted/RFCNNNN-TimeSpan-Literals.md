@@ -18,6 +18,7 @@ The semantics of this method are more clear, as cmdlets with the `New` verb are 
 
 Cmdlets such as `Start-Sleep` offer both `-Seconds` and `-Milliseconds` as parameters.
 This style of time input is functional, but has a few issues:
+
 - Expanding the number of units requires updating the argument handling and the function body itself
 - Implementation in custom scripts or cmdlets requires boilerplate
 - Available options may not be consistent across cmdlets
@@ -34,32 +35,36 @@ Example of expressions and their equivalents in current PowerShell:
 
 Example of user interaction:
 
-```
+```pwsh
 Start-Sleep 20sec
 ```
+
 Result: Sleep for 20 seconds
 
 ---
 
-```
+```pwsh
 Start-Sleep 5min
 ```
+
 Result: Sleep for 300 seconds
 
 ---
 
-```
+```pwsh
 Start-Sleep 100ms
 ```
+
 Result: Sleep for 0.1 seconds
 
 ---
 
-```
+```pwsh
 $TimeSpan = 15sec
 $TimeSpan
 ```
-```
+
+```none
 
 Days              : 0
 Hours             : 0
@@ -78,10 +83,11 @@ TotalMilliseconds : 15000
 
 ---
 
-```
+```pwsh
 20dy
 ```
-```
+
+```none
 
 Days              : 20
 Hours             : 0
@@ -101,6 +107,7 @@ TotalMilliseconds : 1728000000
 ## Specification
 
 The following suffixes would now be recognized as `TimeSpan` objects:
+
 - `min` minutes
 - `sec` seconds
 - `ms` milliseconds
@@ -121,8 +128,6 @@ A year unit could be added, however, this requires deciding on the length of a y
 
 ## Related
 
-Related proposal on the PowerShell issues page:  
-https://github.com/PowerShell/PowerShell/issues/10712
+[Related proposal on the PowerShell issues page](https://github.com/PowerShell/PowerShell/issues/10712)
 
-Original proposal thread on the PowerShell issues page:  
-https://github.com/PowerShell/PowerShell/issues/12305
+[Original proposal thread on the PowerShell issues page](https://github.com/PowerShell/PowerShell/issues/12305)
