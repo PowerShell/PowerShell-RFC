@@ -127,9 +127,7 @@ These suffixes are not combinable with multiplier suffixes or type suffixes.
 
 The `Start-Sleep` cmdlet is expanded to allow a `-TimeSpan` parameter, where a `TimeSpan` object can be passed.
 
-The behaviour of `Start-Sleep` when only one anonymous parameter is given is changed such that a non-`TimeSpan` object is interpreted as seconds and a `TimeSpan` object is interpreted as argument to parameter `-TimeSpan`.
-
-> Sidenote: I’m unsure if this is feasible. Would this require an auxiliary parameter?
+The behaviour of `Start-Sleep` when only one anonymous parameter is given is that a non-`TimeSpan` object is interpreted as an argument to parameter `-Seconds` and a `TimeSpan` object is interpreted as argument to parameter `-TimeSpan`.
 
 ## Related
 
