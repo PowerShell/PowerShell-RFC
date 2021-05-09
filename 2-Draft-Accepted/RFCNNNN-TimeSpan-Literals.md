@@ -9,7 +9,7 @@ Breaking change: Yes
 
 # `TimeSpan` Literals and support for `TimeSpan` objects in Cmdlets such as Start-Sleep
 
-A new syntax expansion that adds support for `TimeSpan` literals, and cmdlets such as `Start-Sleep` accepting `TimeSpan` objects by default - this entails adding new suffixes to numeric literals as [described here](https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Core/About/about_numeric_literals?view=powershell-7).  
+A new syntax expansion that adds support for `TimeSpan` literals, and cmdlets such as `Start-Sleep` accepting `TimeSpan` objects by default - this entails adding new suffixes to numeric literals as [described here](https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Core/About/about_numeric_literals).  
 This is helpful as current methods for time specification have significant drawbacks (see Motivation).  
 This solution is significantly more concise than using `New-TimeSpan` (see User Experience).
 
