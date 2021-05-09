@@ -114,14 +114,14 @@ TotalMilliseconds : 1728000000
 
 The following suffixes would now be recognized and be turned into `TimeSpan` objects:
 
-| Suffix    | Name          | Method Name           | Seconds  |
-|-----------|---------------|-----------------------|----------|
-| `day`     | Days          | `FromDays`            | 86400    |
-| `h`       | Hours         | `FromHours`           | 3600     |
-| `ms`      | Milliseconds  | `FromMilliseconds`    | 0.001    |
-| `min`     | Minutes       | `FromMinutes`         | 60       |
-| `sec`     | Seconds       | `FromSeconds`         | 1        |
-| `tick`    | Ticks         | `FromTicks`           |          |
+| Suffix    | Name          | Method Name           | Seconds   |
+|-----------|---------------|-----------------------|-----------|
+| `day`     | Days          | `FromDays`            | 86400     |
+| `h`       | Hours         | `FromHours`           |  3600     |
+| `min`     | Minutes       | `FromMinutes`         |    60     |
+| `sec`     | Seconds       | `FromSeconds`         |     1     |
+| `ms`      | Milliseconds  | `FromMilliseconds`    |     0.001 |
+| `tick`    | Ticks         | `FromTicks`           |           |
 
 These suffixes are not combinable with multiplier suffixes or type suffixes.
 
