@@ -1,10 +1,10 @@
 ---
-RFC: RFC<four digit unique incrementing number assigned by Committee, this shall be left blank by the author>
+RFC: RFCNNNN
 Author: Anselm Schüler
 Status: Draft
 Area: Syntax and Cmdlet implementation
-Comments Due: <?>
 Plan to implement: Yes
+Breaking change: Yes
 ---
 
 # `TimeSpan` Literals and support for `TimeSpan` objects in Cmdlets such as Start-Sleep
