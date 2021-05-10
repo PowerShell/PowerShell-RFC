@@ -13,6 +13,8 @@ A new syntax expansion that adds support for `TimeSpan` literals, and cmdlets su
 This is helpful as current methods for time specification have significant drawbacks (see Motivation).  
 This solution is significantly more concise than using `New-TimeSpan` (see User Experience).
 
+Initially, this will be implemented in an experimental feature.
+
 ## Motivation
 
 ### Practicality
@@ -128,6 +130,8 @@ These suffixes are not combinable with multiplier suffixes or type suffixes.
 The `Start-Sleep` cmdlet is expanded to allow a `-TimeSpan` parameter, where a `TimeSpan` object can be passed.
 
 The behaviour of `Start-Sleep` when only one anonymous parameter is given is that a non-`TimeSpan` object is interpreted as an argument to parameter `-Seconds` and a `TimeSpan` object is interpreted as argument to parameter `-TimeSpan`.
+
+All of this is only enabled when an experimental feature called `TimeSpanLiterals` is enabled.
 
 ## Related
 
