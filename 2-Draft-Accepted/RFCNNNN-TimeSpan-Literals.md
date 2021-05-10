@@ -52,7 +52,7 @@ Result: Sleep for 20 seconds
 ---
 
 ```pwsh
-Start-Sleep 5m
+Start-Sleep 5min
 ```
 
 Result: Sleep for 300 seconds
