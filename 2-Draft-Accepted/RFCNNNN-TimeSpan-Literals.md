@@ -68,6 +68,22 @@ Result: Sleep for 0.1 seconds
 ---
 
 ```pwsh
+Start-Sleep (1min + 30sec)
+```
+
+Result: Sleep for 90 seconds
+
+---
+
+```pwsh
+Start-Sleep (2min + 35sec)
+```
+
+Result: Sleep for 155 seconds
+
+---
+
+```pwsh
 $TimeSpan = 15sec
 $TimeSpan
 ```
