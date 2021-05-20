@@ -28,7 +28,7 @@ Ensuring that the results are sorted is another such task.
 ```csharp
 using namespace System.Management.Automation;
 
-public class GetCommitCompleter : ArgumentCompleter
+public class GitCommitCompleter : ArgumentCompleter
 {
     protected override CompletionResultSortKind AddCompletionsFor(string commandName, string parameterName, IDictionary fakeBoundParameters)
     {
@@ -345,4 +345,3 @@ namespace System.Management.Automation
 ```
 
 ## Alternate Proposals and Considerations
-
