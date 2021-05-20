@@ -44,13 +44,14 @@ public class GitCommitCompleter : ArgumentCompleter
 
     private void CompleteGitCommitHash()
     {
-        var user = GetFakeBoundParameter<string>("User");
-        foreach(var commit in GitExe.Log())
+        var user = GetBoundParameterOrDefault<string>("User", defaultValue: null);
+        foreach (var commit in GitExe.Log())
         {
-            if (user is { } u && commit.User != u){
+            if (user is { } u && commit.User != u)
+            {
                 continue;
             }
-            CompleteMatching(text: commit.Hash, tooltip: $"{commit.User}\r\n{commit.Description}}": CompletionMatch.AnyContainsWithWordToComplete);
+            CompleteMatching(text: commit.Hash, toolTip: $"{commit.User}\r\n{commit.Description}", completionMatch: CompletionMatch.AnyContainsWordToComplete);
         }
     }
 }
@@ -59,30 +60,7 @@ public class GitCommitCompleter : ArgumentCompleter
 
 ## Specification
 
-```CSharp
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Management.Automation.Language;
-
-namespace System.Management.Automation
-{
-
-    public enum CompletionMatch
-    {
-        TextStartsWithWordToComplete,
-        TextContainsWordToComplete,
-        AnyStartsWithWordToComplete,
-        AnyContainsWordToComplete,
-    }
-
-    public enum CompletionResultSortKind
-    {
-        None,
-        PreferStartsWithWordToComplete,
-        Sorted
-    }
-
+```csharp
     /// <summary>
     ///     Base class for writing custom Argument Completers
     /// </summary>
@@ -94,6 +72,7 @@ namespace System.Management.Automation
         private IDictionary? _fakeBoundParameters;
         private string? _wordToComplete;
         private CommandAst? _commandAst;
+        private string _quote;
 
         protected ArgumentCompleter(StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase) : this(01, stringComparison)
         {
@@ -106,6 +85,8 @@ namespace System.Management.Automation
             {
                 _results = new List<CompletionResult>(capacity: capacity);
             }
+
+            _quote = string.Empty;
         }
         private List<CompletionResult> Results => _results ??= new List<CompletionResult>();
 
@@ -115,6 +96,7 @@ namespace System.Management.Automation
             string wordToComplete, CommandAst commandAst, IDictionary fakeBoundParameters)
         {
             _fakeBoundParameters = fakeBoundParameters;
+            _quote = CompletionCompleters.HandleDoubleAndSingleQuote(ref wordToComplete);
             WordToComplete = wordToComplete;
             CommandAst = commandAst;
             var sortKind = AddCompletionsFor(commandName: commandName, parameterName: parameterName, fakeBoundParameters: fakeBoundParameters);
@@ -149,11 +131,12 @@ namespace System.Management.Automation
         /// <param name="listItemText">the text to be displayed in a list</param>
         /// <param name="toolTip">the text for the tooltip with details to be displayed about the object</param>
         /// <param name="resultType">the type of completion result</param>
-        public void Complete(string text, string? listItemText = null, string? toolTip = null, CompletionResultType resultType = CompletionResultType.ParameterValue)
+        /// <param name="isGlobbingPath"><see langword="true"/> if the parameter to complete is a globbing path. This escapes '[' and ']'.</param>
+        public void Complete(string text, string? listItemText = null, string? toolTip = null, CompletionResultType resultType = CompletionResultType.ParameterValue, bool isGlobbingPath = false)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
 
-            var quotedText = QuoteCompletionText(text: text);
+            var quotedText = QuoteCompletionText(completionText: text, isGlobbingPath);
             var completionResult = new CompletionResult(completionText: quotedText, listItemText ?? text,
                 resultType: resultType, toolTip ?? text);
             Results.Add(item: completionResult);
@@ -255,9 +238,49 @@ namespace System.Management.Automation
         /// <summary>
         /// If necessary, puts quotation marks around the completion text
         /// </summary>
-        /// <param name="text">The text to complete</param>
-        /// <returns></returns>
-        protected virtual string QuoteCompletionText(string text) => text.Contains(" ") ? $@"""{text}""" : text;
+        /// <param name="completionText">The text to complete</param>
+        /// <param name="isGlobbingPath"><see langword="true"/> if the characters [ and ] should be escaped.</param>
+        /// <returns>A quoted string, if quoting was necessary. Otherwise <see param="completionText"/>.</returns>
+        protected virtual string QuoteCompletionText(string completionText, bool isGlobbingPath = false)
+        {
+            if (CompletionCompleters.CompletionRequiresQuotes(completionText, isGlobbingPath))
+            {
+                var quoteInUse = _quote == string.Empty ? "'" : _quote;
+                if (quoteInUse == "'")
+                {
+                    completionText = completionText.Replace("'", "''");
+                }
+                else
+                {
+                    // When double quote is in use, we have to escape the backtip and '$' even when using literal path
+                    //   Get-Content -LiteralPath ".\a``g.txt"
+                    completionText = completionText.Replace("`", "``");
+                    completionText = completionText.Replace("$", "`$");
+                }
+
+                if (isGlobbingPath)
+                {
+                    if (quoteInUse == "'")
+                    {
+                        completionText = completionText.Replace("[", "`[");
+                        completionText = completionText.Replace("]", "`]");
+                    }
+                    else
+                    {
+                        completionText = completionText.Replace("[", "``[");
+                        completionText = completionText.Replace("]", "``]");
+                    }
+                }
+
+                completionText = quoteInUse + completionText + quoteInUse;
+            }
+            else if (_quote != string.Empty)
+            {
+                completionText = _quote + completionText + _quote;
+            }
+
+            return completionText;
+        }
 
         /// <summary>
         ///     Predicate to test if a string starts with <see cref="WordToComplete" />
@@ -340,7 +363,79 @@ namespace System.Management.Automation
             private set => _commandAst = value;
         }
     }
-}
+
+    internal class CompletionCompleters
+    {
+        /// <summary>
+        ///     Determines what the <see param="wordToComplete"/> is without quotes, and 
+        ///     what quote character, if any, is uses
+        /// </summary>
+        /// <returns>The quote character, ' or ", or the empty string.</returns>
+        internal static string HandleDoubleAndSingleQuote(ref string wordToComplete)
+        {
+            string quote = string.Empty;
+
+            if (!string.IsNullOrEmpty(wordToComplete) && (wordToComplete[0].IsSingleQuote() || wordToComplete[0].IsDoubleQuote()))
+            {
+                char frontQuote = wordToComplete[0];
+                int length = wordToComplete.Length;
+
+                if (length == 1)
+                {
+                    wordToComplete = string.Empty;
+                    quote = frontQuote.IsSingleQuote() ? "'" : "\"";
+                }
+                else if (length > 1)
+                {
+                    if ((wordToComplete[length - 1].IsDoubleQuote() && frontQuote.IsDoubleQuote()) || (wordToComplete[length - 1].IsSingleQuote() && frontQuote.IsSingleQuote()))
+                    {
+                        wordToComplete = wordToComplete.Substring(1, length - 2);
+                        quote = frontQuote.IsSingleQuote() ? "'" : "\"";
+                    }
+                    else if (!wordToComplete[length - 1].IsDoubleQuote() && !wordToComplete[length - 1].IsSingleQuote())
+                    {
+                        wordToComplete = wordToComplete.Substring(1);
+                        quote = frontQuote.IsSingleQuote() ? "'" : "\"";
+                    }
+                }
+            }
+
+            return quote;
+        }
+
+
+        /// <summary>
+        ///     Determines if the item to complete requires quotes
+        /// </summary>
+        internal static bool CompletionRequiresQuotes(string completion, bool escape)
+        {
+            // If the tokenizer sees the completion as more than two tokens, or if there is some error, then
+            // some form of quoting is necessary (if it's a variable, we'd need ${}, filenames would need [], etc.)
+
+            Parser.ParseInput(completion, out Token[] tokens, out ParseError[] errors);
+
+            ReadOnlySpan<char> charToCheck = escape ? stackalloc char[] { '$', '[', ']', '`' } : stackalloc char[] { '$', '`' };
+
+            // Expect no errors and 2 tokens (1 is for our completion, the other is eof)
+            // Or if the completion is a keyword, we ignore the errors
+            bool requireQuote = !(errors.Length == 0 && tokens.Length == 2);
+            if ((!requireQuote && tokens[0] is StringToken) ||
+                (tokens.Length == 2 && (tokens[0].TokenFlags & TokenFlags.Keyword) != 0))
+            {
+                requireQuote = false;
+                var value = tokens[0].Text.AsSpan();
+                if (value.IndexOfAny(charToCheck) != -1)
+                    requireQuote = true;
+            }
+
+            return requireQuote;
+        }
+    }
+
+    internal static class CharExtensions {
+        public static bool IsSingleQuote(this char c) => c == '\'';
+        public static bool IsDoubleQuote(this char c) => c == '\"';
+    }
 
 ```
 
