@@ -16,7 +16,7 @@ The complete list of RFCs are available at https://github.com/powershell/powersh
 
 This process was adapted from the Chef RFC process as well as from the DMTF.org process,
 and then heavily modified based on the experiences of maintaining PowerShell over the first years
-of the project..
+of the project.
 
 ## Roles
 
