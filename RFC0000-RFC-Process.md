@@ -94,10 +94,16 @@ Note: the Committee may be slower to respond to RFCs where the Author has indica
 ### Rejected
 
 If the Committee decides not to proceed with the RFC, its PR is simply closed before it is merged.
+The Committee should also add the `Rejected` label to denote that the Committee
+rejected the RFC.
+In the future, this can be done automatically with GitHub Actions.
 
 ### Withdrawn
 
 Similarly, if an Author decides to withdraw their RFC, it will be closed before it is merged.
+The Committee should also add the `Withdrawn` label to denote that the author
+withdrew the RFC.
+In the future, this can be done automatically with GitHub Actions.
 
 ### Final
 
