@@ -195,7 +195,7 @@ Examples of user changing prediction color:
 ```powershell
 Set-PSReadLineOption -Colors @{ InLinePrediction = '#8A0303'}
 Set-PSReadLineOption -Colors @{ InLinePrediction = '#2F7004'}
-Set-PSReadLineOption -Colors @{ InLinePrediction = "$([char]0x1b)[36;7;238m"}
+Set-PSReadLineOption -Colors @{ InLinePrediction = "`e[36;7;238m"}
 ```
 
 Multiple types of color code values are supported in PSReadLine. For more information see
@@ -343,4 +343,3 @@ Kind              SubsystemType   IsRegistered Implementations
 ----              -------------   ------------ ---------------
 CommandPredictor  ICommandPredic…         True {Az Predictor}
 ```
-
