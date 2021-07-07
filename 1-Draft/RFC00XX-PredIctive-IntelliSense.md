@@ -10,8 +10,8 @@ Comments Due: 10/31/2020
 
 Tab completion has accelerated the success of both new and experienced PowerShell users. New users
 get the benefit of discovery; seeing available cmdlets and parameters as options while interactively
-typing. Experienced users receive the benefit of acceleration; typing less while using the **<tab>** key
-to quickly complete a command.
+typing. Experienced users receive the benefit of acceleration; typing less while using the **<tab>**
+key to quickly complete a command.
 
 The increasing amount of technology translates to an increase in cmdlets and full command
 complexity. Predictive IntelliSense is an addition to the concept of Tab Completion to assist the
@@ -102,9 +102,10 @@ predicted command may be accepted, edited, or ignored.
 
 ### Install and Remove Predictive IntelliSense
 
-Predictive IntelliSense is implemented in both the PowerShell engine and presented through the
-PSReadLine module. To receive the benefits of Predictive IntelliSense based on your PowerShell
-version, download and install the PSReadLine module from PSGallery
+Predictive IntelliSense application programming interface (API) is implemented in the PowerShell
+engine and presented through the PSReadLine module. To receive the benefits of Predictive
+IntelliSense based on your PowerShell version, download and install the PSReadLine module from
+PSGallery
 
 The current release is PSReadLine 2.1.0 Beta 2:
 
@@ -116,6 +117,9 @@ It is possible to unload or uninstall the PSReadLine module to disable Predictiv
 creates a negative impact to customers as it would remove all features of PSReadLine. For this
 reason, Predictive IntelliSense has its own PSReadLine configuration to enable and disable
 predictions.
+
+Note - When upgrading PowerShell preview versions, it's important to upgrade to the corresponding
+version of PSReadLine. Incorrect versions will result in an error when PowerShell starts.
 
 ### Enabling and Disabling Predictions
 
@@ -175,7 +179,7 @@ profile.
 The default light-grey prediction text color;
 
 ```powershell
-Set-PSReadLineOption -Colors @{ InLinePrediction = "$([char]0x1b)[38;5;238m"}
+Set-PSReadLineOption -Colors @{ InLinePrediction = "`e[38;5;238m"}
 ```
 
 Starting with PSReadLine 2.1.0-RC1, `Set-PSReadLineOption -Colors` array will include
@@ -209,8 +213,8 @@ Examples of different color code values:
 Set-PSReadLineOption -Colors @{ InLinePrediction = 'DarkRed'}
 Set-PSReadLineOption -Colors @{ InLinePrediction = [ConsoleColor]::DarkRed}
 
- # 24 bit color escape sequence
-Set-PSReadLineOption -Colors @{ InLinePrediction = "$([char]0x1b)[38;5;100m"}
+ # 24 bit color escape sequence on supported terminals
+Set-PSReadLineOption -Colors @{ InLinePrediction = "`e[38;5;100m"}
 
  # RGB value
 Set-PSReadLineOption -Colors @{ InLinePrediction = "#8181f7"}
