@@ -1,7 +1,7 @@
 ---
 RFC: RFC0017
 Author: Robert Holt
-Status: Experimental
+Status: Withdrawn
 Area: Domain Specific Languages, Object Schemas
 Comments Due:
 ---

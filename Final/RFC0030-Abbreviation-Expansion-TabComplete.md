@@ -1,7 +1,7 @@
 ---
 RFC: RFC0030
 Author: Steve Lee
-Status: Experimental-Accepted
+Status: Final
 SupercededBy: N/A
 Version: 1.0
 Area: Engine-CommandCompleter

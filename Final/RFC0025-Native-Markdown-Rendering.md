@@ -1,7 +1,7 @@
 ---
 RFC: 
 Author: Aditya Patwardhan
-Status: Draft
+Status: Final
 SupercededBy: 
 Version: 0.3
 Area: Formatting and Output

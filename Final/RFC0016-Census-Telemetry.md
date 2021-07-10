@@ -1,7 +1,7 @@
 ---
 RFC: RFC0016
 Author: Steve Lee, Jim Truher
-Status: Draft-Accepted
+Status: Final
 SupercededBy: n/a
 Version: 0.3
 Area: Host

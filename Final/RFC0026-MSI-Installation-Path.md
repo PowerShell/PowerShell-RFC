@@ -1,7 +1,7 @@
 ---
 RFC: RFC
 Author: Joey Aiello
-Status: Experimental-Accepted
+Status: Final
 Version: 0.2
 Area: Installation
 Comments Due: March 27, 2018

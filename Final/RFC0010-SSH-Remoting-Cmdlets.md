@@ -1,7 +1,7 @@
 ---
 RFC: 10
 Author: Paul Higinbotham
-Status: Experimental-Accepted
+Status: Final
 Version: 0.1
 Area: Remoting
 Comments Due: October 28, 2016

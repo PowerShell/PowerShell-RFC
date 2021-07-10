@@ -1,7 +1,7 @@
 ---
 RFC: RFC0040
 Author: Steve Lee
-Status: Draft-Accepted
+Status: Final
 SupercededBy: N/A
 Version: 1.0
 Area: Console

@@ -1,7 +1,7 @@
 ---
 RFC: RFC0020
 Author: James Truher
-Status: Draft
+Status: Final
 Area: FileSystem
 Comments Due: 4/16/2017
 ---

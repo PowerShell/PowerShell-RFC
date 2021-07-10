@@ -1,7 +1,7 @@
 ---
 RFC: RFC0021
 Author: Steve Lee
-Status: Draft-Accepted
+Status: Final
 SupercededBy: N/A
 Version: 0.1
 Area: Cmdlets

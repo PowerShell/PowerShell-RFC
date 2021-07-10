@@ -1,7 +1,7 @@
 ---
 RFC: RFC0025
 Author: Steve Lee
-Status: Draft-Accepted
+Status: Final
 SupercededBy: n/a
 Version: 1.0
 Area: Engine

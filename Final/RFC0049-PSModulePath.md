@@ -1,7 +1,7 @@
 ---
 RFC: 0049
 Author: Steve Lee
-Status: Draft
+Status: Final
 SupercededBy: n/a
 Version: 1.0
 Area: Engine

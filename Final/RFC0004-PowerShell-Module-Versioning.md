@@ -1,7 +1,7 @@
 ---
 RFC: 0004
 Author: J. Keith Bankston
-Status: Draft
+Status: Final
 Area: PowerShell Gallery, Module Versioning
 Comments Due: 5/28/2016
 ---

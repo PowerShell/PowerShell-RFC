@@ -1,7 +1,7 @@
 ---
 RFC: XXXX
 Author: Joel Sallow
-Status: Draft
+Status: Final
 Version: 1.0
 Area: Cmdlets
 Comments Due: 6/10/19

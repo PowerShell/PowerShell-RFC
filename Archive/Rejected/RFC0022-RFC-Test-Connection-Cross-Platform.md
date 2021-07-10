@@ -1,7 +1,8 @@
 ---
 RFC: RFC0022
 Author: Jody Whitlock
-Status: Draft
+Status: Rejected
+SupercededBy: RFC0037
 Area: Commands
 Comments Due: 
 ---
