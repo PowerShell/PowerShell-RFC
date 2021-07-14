@@ -94,9 +94,9 @@ interactive experience.
 
 ### Key Design Considerations Predictive IntelliSense
 
-Predictive IntelliSense displays the most recent match command completion from command history. The
-prediction may change if a better match is found as the user types additional information. The
-predicted command may be accepted, edited, or ignored.
+Predictive IntelliSense displays the most likely match from command history. The prediction may
+change if a better match is found as the user types additional information. The predicted command
+may be accepted, edited, or ignored.
 
 ![Prediction - Historical](./media/pred-wlc.png)
 
@@ -119,7 +119,7 @@ reason, Predictive IntelliSense has its own PSReadLine configuration to enable a
 predictions.
 
 Note - When upgrading PowerShell preview versions, it's important to upgrade to the corresponding
-version of PSReadLine. Incorrect versions will result in an error when PowerShell starts.
+version of PSReadLine. Some beta versions may result in an error when PowerShell starts.
 
 ### Enabling and Disabling Predictions
 
@@ -139,7 +139,7 @@ for prediction source;
 
 - None - This option disables Predictive IntelliSense
 - History - This option uses only the PSReadLine history for predictions
-- HistoryAndPlugin - This option uses both for predictions
+- HistoryAndPlugins - History provides initial completions, plugins provide additional completions.
 
 To enable Predictive IntelliSense, enter the following command in the shell or in the users Profile:
 
@@ -297,6 +297,9 @@ Additional providers enhance historic predictions by providing domain specific c
 completions. These providers register with the PowerShell engine which includes an extension model
 to support the registration.
 
+For more information about the extension model, see
+[Initial work of the subsystem plugin model](https://github.com/PowerShell/PowerShell/pull/13186)
+
 ## Extension Model Goals/Non-Goals
 
  Goals:
@@ -304,6 +307,7 @@ to support the registration.
 - Provide extension model to support additional providers
 - Support the discovery of providers using `Get-PSSubsystem`
 - Provide Module owners method of registration
+- Provide improvements to the predictors through feedback
 
 Non-goals:
 
