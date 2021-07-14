@@ -21,11 +21,11 @@ user in successfully completing full commands.
 
 The prediction suggestion appears as colored text following the user’s cursor. This enables new and
 experienced users of PowerShell to discover, edit, and execute full commands based on matching
-predictions from the user’s history or additional providers.
+predictions from the user’s history or additional plugins.
 
-Additional providers enhance historic predictions by providing domain specific commands and task
+Additional plugins enhance historic predictions by providing domain specific commands and task
 completions. Predictive IntelliSense includes an extension model to support the registration of
-additional providers.
+additional plugins.
 
 Predictions may be displayed in either **InlineView** or **ListView** depending on the user’s
 preference. Below, predictions are displayed with InlineView.
@@ -38,9 +38,9 @@ Below, predictions are displayed with a dropdown in ListView.
 
 ## Release plan
 
-Predictive IntelliSense is implemented in both the PowerShell engine and presented through the
-PSReadLine module. In an effort to support the most PowerShell users, the presentation of
-history-based predictions will be available to the following versions:
+Similar to tab completion, Predictive IntelliSense is implemented in both the PowerShell engine and
+presented through the PSReadLine module. In an effort to support the most PowerShell users, the
+presentation of history-based predictions will be available to the following versions:
 
 - Windows Powershell 5.1
 - PowerShell 7.0+
@@ -48,24 +48,25 @@ history-based predictions will be available to the following versions:
 Additional plugins require the the extension framework implemented in the PowerShell engine. Support
 for additional plugins is available in the following versions:
 
-- PowerShell 7.1+
+- PowerShell 7.2+
 
-History-based predictions preview and ship plan:
+History-based predictions initial preview and ship plan:
 
 - PSReadLine 2.1.0-beta2 currently available for download from PSGallery
 - PSReadLine 2.1.0-GA will ship with PowerShell 7.1
 - PSReadLine 2.1.0-GA will be available for download from PSGallery
 - History based prediction in the **InlineView**
 
-Extension/Plugin support preview and ship plan:
+Extension/Plugin support initial preview and ship plan:
 
-- PSReadLine 2.2.0-beta1 planned availability in October
+- PSReadLine 2.2.0-beta1 planned availability in October 20
+- PSReadline 2.2.0-beta3 planned availability in June 21
 - PSReadLine 2.2.0-GA will ship with PowerShell 7.2
 - PSReadLine 2.2.0-GA will be available for download from PSGallery
 - Includes support for **InlineView** and **ListView**
 - Includes support for additional prediction source **HistoryAndPlugins**
 - Note: Windows PowerShell 5.1 and PowerShell 7.0 will only support prediction source **History**.
-  PowerShell 7.1+ will support prediction sources **History** and **HistoryAndPlugins**
+  PowerShell 7.2+ will support prediction sources **History** and **HistoryAndPlugins**
 
 ## Goals/Non-Goals
 
@@ -75,7 +76,7 @@ Extension/Plugin support preview and ship plan:
 - The user will be able to enable and disable Predictive IntelliSense
 - The user will be able to change between InlineView and ListView
 - The user will have keyboard shortcuts to navigate and edit a prediction
-- The user will be able to register additional providers when desired
+- The user will be able to register additional plugins when desired
 - The user may customize the color of a prediction to support accessibility needs
 
 Non-goals:
@@ -293,8 +294,8 @@ receiving an updated prediction.
 
 ## Prediction Extension Model
 
-Additional providers enhance historic predictions by providing domain specific commands and task
-completions. These providers register with the PowerShell engine which includes an extension model
+Additional plugins enhance historic predictions by providing domain specific commands and task
+completions. Plugins register with the PowerShell engine which includes an extension model
 to support the registration.
 
 For more information about the extension model, see
@@ -304,8 +305,8 @@ For more information about the extension model, see
 
  Goals:
 
-- Provide extension model to support additional providers
-- Support the discovery of providers using `Get-PSSubsystem`
+- Provide extension model to support additional plugins
+- Support the discovery of plugins using `Get-PSSubsystem`
 - Provide Module owners method of registration
 - Provide improvements to the predictors through feedback
 
@@ -319,7 +320,7 @@ Non-goals:
 
 ### Discovery of Provider Metadata and Registration
 
-Providers are registered automatically to the PowerShell engine when the user installs a provider
+Plugins are registered automatically to the PowerShell engine when the user installs a provider
 module. Removal of registration occurs when the module is removed.
 
 Starting with PowerShell 7.1 Preview 7, and as an experimental feature of PowerShell 7.1-RC.1, the
@@ -330,13 +331,13 @@ experimental feature:
 Enable-ExperimentalFeature -Name PSSubsystemPluginModel
 ```
 
-To list the currently installed providers and their respective metadata such as version information:
+To list the currently installed plugins and their respective metadata such as version information:
 
 ```powershell
 Get-PSSubSystem -Kind CommandPredictor
 ```
 
-Example output with no additional providers registered;
+Example output with no additional plugins registered;
 
 ```output
 Kind              SubsystemType   IsRegistered Implementations
