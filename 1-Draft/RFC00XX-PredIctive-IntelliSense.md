@@ -63,9 +63,9 @@ Extension/Plugin support preview and ship plan:
 - PSReadLine 2.2.0-GA will ship with PowerShell 7.2
 - PSReadLine 2.2.0-GA will be available for download from PSGallery
 - Includes support for **InlineView** and **ListView**
-- Includes support for additional prediction source **Plugin** and **HistoryAndPlugin**
+- Includes support for additional prediction source **HistoryAndPlugins**
 - Note: Windows PowerShell 5.1 and PowerShell 7.0 will only support prediction source **History**.
-  PowerShell 7.1+ will support prediction sources **History**, **Plugin**, and **HistoryAndPlugin**
+  PowerShell 7.1+ will support prediction sources **History** and **HistoryAndPlugins**
 
 ## Goals/Non-Goals
 
