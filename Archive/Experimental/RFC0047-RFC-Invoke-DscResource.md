@@ -1,7 +1,7 @@
 ---
 RFC: RFC0047
 Author: Gael Colas
-Status: Experimental-Accepted
+Status: Experimental
 SupersededBy: N/A
 Version: 0.9
 Area: Microsoft.PowerShell.DesiredStateConfiguration

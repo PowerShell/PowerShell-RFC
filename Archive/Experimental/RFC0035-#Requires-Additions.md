@@ -1,7 +1,7 @@
 ---
 RFC: RFC
 Author: Robert Holt
-Status: Draft-Accepted
+Status: Experimental
 SupercededBy:
 Version: 0.2
 Area: Hash-requires

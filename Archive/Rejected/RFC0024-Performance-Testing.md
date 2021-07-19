@@ -1,7 +1,7 @@
 ---
 RFC: 
 Author: Aditya Patwardhan
-Status: Draft
+Status: Rejected
 SupercededBy:
 Version: 0.2
 Area: Testing

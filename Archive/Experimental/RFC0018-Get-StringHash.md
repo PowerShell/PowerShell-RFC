@@ -1,7 +1,7 @@
 ---
 RFC: 0018
 Author: Ilya Sazonov
-Status: Draft-Accepted
+Status: Experimental
 SupercededBy: n/a
 Version: 0.1
 Area: Cmdlet

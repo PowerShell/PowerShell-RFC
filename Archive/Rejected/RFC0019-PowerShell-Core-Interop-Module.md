@@ -1,7 +1,7 @@
 ---
 RFC: RFC0019
 Author: Darwin Sanoy
-Status: Draft
+Status: Rejected
 SupercededBy:
 Version: 0.1
 Area: Standard Modules
