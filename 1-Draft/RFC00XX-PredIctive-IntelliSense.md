@@ -81,8 +81,6 @@ Extension/Plugin support initial preview and ship plan:
 
 Non-goals:
 
-- Due to the relatively short length of a session compared to your PSReadline history,
-  PowerShell session history is not part of the historical suggestion
 - The extension framework doesn't allow a plugin implementation to call into the Runspace where
   PSReadLine is running when providing predictive suggestions.
 - VSCode implementation. We agree this is important for a consistent experience and are working to
@@ -298,7 +296,8 @@ Additional plugins enhance historic predictions by providing domain specific com
 completions. Plugins register with the PowerShell engine which includes an extension model
 to support the registration.
 
-For more information about the extension model, see
+An RFC for this subsystem will be coming in the future. For more information about the extension
+model, see
 [Initial work of the subsystem plugin model](https://github.com/PowerShell/PowerShell/pull/13186)
 
 ## Extension Model Goals/Non-Goals
