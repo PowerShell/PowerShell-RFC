@@ -1,6 +1,6 @@
 # PowerShell Core Community Call
 
-The PowerShell Community Call is held on the 3rd Thursday of every month.
+The PowerShell Community Call is held on the 3rd Thursday of every month at [9:30 AM US Pacific Time](http://www.timebie.com/std/pdt.php?q=9.5).
 Topics include PowerShell Core, PSEditorServices/VSCode-PowerShell, PSScriptAnalyzer,
 PowerShell Gallery, and any other projects owned by the PowerShell Team.
 
