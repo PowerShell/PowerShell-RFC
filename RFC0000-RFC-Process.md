@@ -14,7 +14,9 @@ This provides the community an opportunity to provide feedback before code is wr
 compatibility.
 The complete list of RFCs are available at https://github.com/powershell/powershell-rfc
 
-This process was adapted from the Chef RFC process as well as from the DMTF.org process.
+This process was adapted from the Chef RFC process as well as from the DMTF.org process,
+and then heavily modified based on the experiences of maintaining PowerShell over the first years
+of the project.
 
 ## Roles
 
@@ -22,6 +24,9 @@ This process was adapted from the Chef RFC process as well as from the DMTF.org 
 * **PowerShell Committee**: The design committe that votes to accept or reject an RFC.
 (Learn more about the PowerShell Committee [here](https://github.com/PowerShell/PowerShell/blob/master/docs/community/governance.md#powershell-committee).)
 * **Committee Member**: An individual member of the PowerShell Committee.
+* **Working Group (WG)**: A group responsible for deciding whether or not an issue proposal in
+  PowerShell/PowerShell, as well as for providing feedback within an RFC proposal.
+  (Learn more about Working Groups [here](https://github.com/PowerShell/PowerShell/blob/master/docs/community/working-group.md).)
 
 ## RFC Submission Convention
 
@@ -35,49 +40,70 @@ All RFC documents shall follow the [RFC template](RFCNNNN-New-RFC-Template.md).
 
 ## RFC Workflow
 
-RFCs may go through the following stages:
+RFCs go through the following stages:
 
-### Draft
+### Draft PR
 
 This is the initial draft of an RFC posted for comments and considered a work-in-progress.
 
-* New proposed drafts should be submitted as a Pull Request from the Author's fork into the `Draft-Accepted` folder.
-* The Author shall ensure that the `Allow edits from maintainers` box is checked so that a Committee Member can assign the next RFC number.
-* If the Pull Request has followed the correct template and process, a Committee Member will assign the label `Review - Open for comments` to the Pull Request to indicate that anyone can comment on the content of the submission.
-Typically, one or two months is allowed for comments, though this may be extended if a submission is particularly contentious or hasn't received enough feedback for the Committee to feel comfortable making a decision.
-* When the Committee closes the comment period, the Author should update the RFC and Pull Request with a new commit to address the comments.
+* New drafts should not be submitted until the appropriate Working Group has decided in
+  a PowerShell/PowerShell repository issue that an RFC is required in order for an experimental
+  implementation to be accepted.
+* Drafts should be submitted as a draft Pull Request from the Author's fork into the
+  `Draft-Accepted` folder.
+* The Author shall ensure that the `Allow edits from maintainers` box is checked so that a Committee
+  Member can assign the next RFC number.
+* As a draft PR, contributors are encouraged to comment on the content of the submission.
+
+### Non-Draft PR
+
+* After two months, and when the Author feels that they've addressed feedback on the RFC,
+  the Author should move the RFC PR out of the draft state.
+  This signals to the Committee that the RFC is ready for their formal review.
+* At this point, the Committee will add a `Review - Committee` label.
+
+### Experimental Feature
+
+Experimental features are used to provide a working example of proposed designs in order for the
+Committee and other users to understand real-world usage of the proposal.
+
+* If the Committee feels that the RFC is sound, or that it needs more real-world usage to be finalized,
+  they will add the `Experimental - Approved` label
+  to indicate that an implementation is okay (from the Committee perspective) to merge as an
+  experimental feature in PS/PS.
+* The Author may be asked to continue to update the RFC as the usage of the experimental feature
+  drives new insight into how the feature should be designed.
 * The Committee shall vote to merge or reject the RFC.
+
 Note: the Committee may be slower to respond to RFCs where the Author has indicated that they do not plan to implement the RFC.
 
-### Draft-Accepted
+### Accepted or Rejected
 
-The PowerShell Committee has reviewed the RFC and comments, and has voted to accept the RFC as a Draft.
-
-* New comments are not being sought.
-* No one has begun implementing the RFC, and there are no current plans to implement the RFC.
-In this case, the Committee will create `up-for-grabs` Issues in the [PowerShell](https://github.com/PowerShell/PowerShell) repository.
-
-### Experimental
-
-RFCs in the `Experimental` stage have been accepted by the Committee, and code is being written to provide a working example of the proposed design change to get additional feedback.
-
-### Experimental-Accepted
-
-Feedback from the experimental implementation and RFC have been reviewed.
-
-Because this working prototype already exists in preview builds available on GitHub, the community provide feedback on the implementation as issues in the [PowerShell/PowerShell repository](https://github.com/powershell/powershell)
-
-As the engineering team or code contributor works towards a final implementation, they should submit pull requests to PowerShell-RFC in order to keep the RFC in sync with the implementation.
-These pull requests shall be reviewed and accepted by the Committee, but a formal vote is not necessary.
-The Committee should merely confirm that the changes in the RFC match the working implementation.
+* Feedback from the experimental implementation and RFC has been reviewed.
+* Because this working prototype already exists in preview builds available on GitHub, the community
+  provides feedback on the implementation as issues in the [PowerShell/PowerShell repository](https://github.com/powershell/powershell).
+* As the engineering team or contributor works towards a final implementation,
+  the contributor should submit PRs to PowerShell-RFC in order to keep the RFC in sync with the implementation.
+* The Committee may ask the Author to continue updating the RFC as real world usage of the experimental
+  feature provides new information.
+* When the Committee feels that they have enough information from their own usage of and user
+  feedback on the experimental feature to vote on the RFC,
+  they will vote to accept or reject the RFC.
+  This will be done through a simple merge/rejection of the RFC PR.
 
 ### Rejected
 
-RFCs in the `Rejected` state were rejected by the Committee who decided not to proceed further.
+If the Committee decides not to proceed with the RFC, its PR is simply closed before it is merged.
+The Committee should also add the `Rejected` label to denote that the Committee
+rejected the RFC.
+In the future, this can be done automatically with GitHub Actions.
 
 ### Withdrawn
 
-RFCs in the `Withdrawn` state were rescinded by the RFC Author.
+Similarly, if an Author decides to withdraw their RFC, it will be closed before it is merged.
+The Committee should also add the `Withdrawn` label to denote that the author
+withdrew the RFC.
+In the future, this can be done automatically with GitHub Actions.
 
 ### Final
 
@@ -98,3 +124,5 @@ v1.3.1 - 3-22-2017 - Cleaned up language and made explicit clarifications to pro
 
 v1.4 - 3-31-2017 - Revised the RFC process to leverage pull requests for comments instead of issues.
 Continued cleanup of language and formatting.
+
+v2.0 - 1-12-2021 - Updated process to leverage draft PRs and Working Groups (WGs) instead of folders.
