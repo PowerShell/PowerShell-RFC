@@ -15,9 +15,9 @@ When an assembly is already loaded, it's not allowed to load the same assembly a
 This results in the PowerShell issue [#2083](https://github.com/PowerShell/PowerShell/issues/2083).
 Basically, when two modules depend on different versions of the same assembly,
 if the module that depends on the lower version is loaded first,
-the other module cannot be loaded in the same session anymore.
+the other module cannot be loaded in the same session afterwards.
 
-The proposal is to allow Loading a module into a custom `AssemblyLoadContext`.
+The proposal is to allow loading a module into a custom `AssemblyLoadContext`.
 All the module required assemblies, all the assemblies loaded by `Add-Type` in the module script,
 as well as assemblies produced by the PowerShell classes declared in the module,
 will be loaded into the custom load context.
@@ -71,7 +71,7 @@ will be loaded into the custom load context.
    The comment to the `RequiredModules` key in module manifest is:
    > Modules that must be imported into the global environment prior to importing this module.
 
-   As indicated by the comment, required moduels are shared by all modules,
+   As indicated by the comment, required modules are shared by all modules,
    so it makes most sense to always load a required module in the default ALC.
 
 ### Update Assembly Loading Logic
@@ -163,7 +163,7 @@ one can create an object of `B'::C'` and call `Demo-Cmdlet` with it.
 That call will result in a type casting exception with the confusing error like "cannot cast B::C to B::C".
 
 - The behavior in the 1st scenario would be by design due to the nature of the module being isolated.
-  The workaround would be `& $moudleM { [B::C] }`,
+  The workaround would be `& $moduleM { [B::C] }`,
   but we have to admit that it would be confusing to PowerShell users,
   especially in cases like this example,
   where the exposed command expects the user to pass in an object of the type loaded by the module itself.
@@ -186,7 +186,7 @@ then the type resolution will search assemblies from the custom-ALC and then the
 Otherwise, the type resolution will search the default-ALC only.
 
 So in the 1st scenario above,
-one can use `[M\B::C]` instead of `& $moudleM { [B::C] }`;
+one can use `[M\B::C]` instead of `& $moduleM { [B::C] }`;
 and in the 2nd scenario above,
 it's possible to make it work as expected if we construct the object using `[M\B::C]` from the default-ALC.
 
@@ -215,7 +215,7 @@ the cache data structure needs to be updated so as to make sure the cache is ass
 For the latter category, theoretically they will continue to work without change,
 because types loaded into different load contexts are different.
 
-### Reclaim Module AssemblyLoadContext
+### Reclaiming Module AssemblyLoadContext
 
 Starting from 3.0, .NET Core supports unloading an `AssemblyLoadContext` and all assemblies in it.
 Ideally, we would like to reclaim the load context associated with an isolated module when the module is removed.
