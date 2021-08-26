@@ -115,9 +115,10 @@ so that the resource cleanup can be enforced in all the following scenarios:
 4. when the pipeline is being stopped by <kbd>Ctrl+c</kbd> or `StopProcessing()`.
 
 > **Warning:** adding the `clean` block is a breaking change,
-> as it prevents users from directly calling a command named `clean`
-> (since this will now be parsed as a keyword instead of a command name).
-> However, such commands may still be invoked with the call operator (`& clean`).
+> as it prevents users from directly calling a command named `clean` as the first statement in a script block,
+> because `clean` will now be parsed as a keyword instead of a command name in that case.
+> However, it's likely a non-issue in most practical cases,
+> and when it is, the command can still be invoked with the call operator (`& clean`).
 > It also prevents users from defining their own `clean` dynamic keyword,
 > though the use of dynamic keywords is uncommon, so this is unlikely to become a concern.
 
@@ -483,7 +484,7 @@ I think it's easy to communicate this design decision to our users:
 
 ## Pipeline Stopping Behavior
 
-Today, the way how the `finally` clause behaves in case of pipeline stopping is inconsitent:
+Today, the way how the `finally` clause behaves in case of pipeline stopping is inconsistent:
 - If the pipeline stopping happens in the `try` clause, then the corresponding `finally` clause is guaranteed to run by suspending the stopping pipeline.
 - If the pipeline stopping happens in the `finally` clause, then the `finally` clause will be terminated immediately.
 
@@ -551,7 +552,7 @@ A few ideas were brought up on how to mitigate a non-cancellable long running `c
    Or alternatively, a `$PSStopProcessingTimeout` preference variable could be created to allow the user to adjust their own timeout preferences in specific time-sensitive scenarios.
    However, this could potentially be problematic in the same way as permitting pipeline stopping to cancel a `clean` block.
 
-There are also arguments questioning the needs to concern about the potential hang issue:
+There are also arguments questioning the need for concern about the potential hang issue:
 
 1. Binary cmdlet can already choose to ignore cancellation requests by either not implementing `StopProcessing()` or calling blocking methods.
 2. Script functions can also impede cancellation by calling a blocking .NET method.
