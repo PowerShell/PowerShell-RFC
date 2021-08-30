@@ -12,6 +12,7 @@ recurring event on your calendar.
 
 ## Notes
 
+* [August 19, 2021](./notes/20210819_Notes.md) ([YouTube recording](https://youtu.be/vP2E4NvCpIE))
 * [July 15, 2021](./notes/20210715_Notes.md) ([YouTube recording](https://youtu.be/ryORVfMFouo))
 * [June 17, 2021](./notes/20210617_Notes.md) ([YouTube recording](https://youtu.be/cYkf2WF1jQ4))
 * [May 20, 2021](./notes/20210520_Notes.md) ([YouTube recording](https://youtu.be/pxdUwXhyvzo))
