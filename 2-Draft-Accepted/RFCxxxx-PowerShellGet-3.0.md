@@ -117,10 +117,6 @@ With support of the generic `PSResource`, this means we can also find and
 install arbitrary nupkgs that may only contain an assembly the user wants to
 use in their script.
 
-For each repository, if the local cache does not exist, the cmdlet will call
-`Update-PSResourceCache` first and then attempt a search.
-However, this cmdlet does not update the cache if one exists.
-
 A `-Version` paramter will accept a string of a [Nuget version range syntax](https://docs.microsoft.com/en-us/nuget/reference/package-versioning#version-ranges-and-wildcards).
 
 A `-Prerelease` switch will allow include prerelease resources in the results.
@@ -142,9 +138,6 @@ An `-IncludeDependencies` switch will include dependent resources in the returne
 ### Installing resources
 
 `Install-PSResource` will mirror the parameter set for `Find-PSResource`.
-The cmd will only work for modules unless `-DestinationPath` is
-specified which works for all resource types.
-Other types will use `Save-PSResource` (see below).
 A `-Repository` parameter accepts a specific repository name or URL to the repository:
 
 ```powershell
@@ -165,19 +158,13 @@ If there are multiple repositories with the same priority level containing the s
 version, the first one registered is used and will be prompted to install.
 
 `-TrustRepository` can be used to suppress being prompted for untrusted sources.
-`-IgnoreDifferentPublisher` can be used to suppress being prompted if the publisher
+`-SkipPublisherCheck` can be used to suppress being prompted if the publisher
 of the module is different from the currently installed version.
 `-Reinstall` can be used to re-install a module.
-
-A `-DestinationPath` parameter allows specifying the target directory instead
-of the default one.
-This will be in a different parameter set than `-Scope`.
 
 A `-Type` parameter will accept an array of types to allow filtering.
 
 A `-Version` parameter will accept a string of a [Nuget version range syntax](https://docs.microsoft.com/en-us/nuget/reference/package-versioning#version-ranges-and-wildcards).
-
-A `-Tags` parameter will accept a string array and will filter based on PSResource tags.
 
 A `-Proxy` parameter will accept a uri.
 
@@ -252,9 +239,6 @@ nupkg) instead of expanding it into a folder.
 
 `Update-PSResource` will update all resources to most recent version by default.
 
-If the installed resource is a pre-release, it will automatically update to
-latest prerelease or stable version (if available).
-
 ### Publishing resources
 
 `Publish-PSResource` will supporting publishing modules, scripts and nupkgs.
@@ -262,9 +246,6 @@ It will follow the same model as `Publish-Module` in v2.
 
 A `-DestinationPath` can be used to publish the resulting nupkg locally.
 `Publish-PSResource` can accept a path to the nupkg to publish to a repository.
-
-A `-Nuspec` parameter can be used to specify a nuspec file rather than relying
-on this module to produce one.
 
 A `-SkipDependenciesCheck` switch can be used to bypass the default check that
 all dependencies are present.
@@ -274,12 +255,12 @@ all dependencies are present.
 `Get-PSResource` will list all installed resources with new `Type` column.
 
 ```output
-Version  Name       Type    Repository  Description
--------  ----       ----    ----------  -----------
-5.0.0    VSTeam     Module  PSGallery   Adds functionality for working with Visual …
-0.14.94  PSGitHub   Module  PSGallery   This PowerShell module enables integration …
-0.7.3    posh-git   Module  PSGallery   Provides prompt with Git status summary …
-1.0.1    PSAutoMute Script  PSGallery   Powershell script to Auto Mute you sound devices …
+Version  Name       Repository  Description
+-------  ----       ----------  -----------
+5.0.0    VSTeam     PSGallery   Adds functionality for working with Visual …
+0.14.94  PSGitHub   PSGallery   This PowerShell module enables integration …
+0.7.3    posh-git   PSGallery   Provides prompt with Git status summary …
+1.0.1    PSAutoMute PSGallery   Powershell script to Auto Mute you sound devices …
 ```
 
 ### Uninstalling resources
