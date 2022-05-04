@@ -37,7 +37,7 @@ on Windows and
 [Open Management Interface](https://www.dmtf.org/content/open-management-interface-omi-%E2%80%93-open-source-implementation-dmtf-cimwbem-standards)
 (OMI) on Linux.
 The *MI libraries are used to host the Local Configuration Manager (LCM) and APIs
-are used to parse information store in Managed Object Framework (MOF) file format,
+are used to parse information stored in Managed Object Framework (MOF) file format,
 which is used for both configuration files and schema files.
 
 ### Challenges with the current versions of DSC
