@@ -70,7 +70,7 @@ This specification is based on the cmdlet [Get-WhatsNew](https://github.com/Powe
 
 - Module Name: Microsoft.PowerShell.WhatsNew
 - Cmdlet name: Get-WhatsNew
-- Alias: gwn
+- Alias: none
 
 ### Syntax and parameter sets
 
