@@ -12,6 +12,8 @@ recurring event on your calendar.
 
 ## Notes
 
+* [May 19, 2022](./notes/20220519_Notes.md) ([YouTube recording](https://youtu.be/71FQo93BNAI)
+* [April 21, 2022](./notes/20220421_Notes.md) ([YouTube recording](https://youtu.be/PsqiEBwpcP8)
 * [March 17, 2022](./notes/20220317_Notes.md) ([YouTube recording](https://youtu.be/fbchMEs924o)
 * [February 17, 2022](./notes/20220217_Notes.md) ([YouTube recording](https://youtu.be/jAA1_xJpbFc)
 * [January 20, 2022](./notes/20220120_Notes.md) ([YouTube recording](https://youtu.be/hBTZA2Org6U)
