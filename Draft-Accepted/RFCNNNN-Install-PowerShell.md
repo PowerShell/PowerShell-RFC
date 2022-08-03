@@ -11,9 +11,9 @@ Plan to implement: Yes
 
 # Install-PowerShell7 Cmdlet for Windows
 
-This RFC proposes the addition of the `Install-PowerShell7` cmdlet in Windows to perform a
-simplified installation of the latest stable release of PowerShell 7. Options through parameters are
-provided for advanced installation scenarios.
+This RFC proposes the addition of the `Install-PowerShell7` cmdlet and new `PowerShell7` module for
+Windows to perform a simplified installation of the latest stable release of PowerShell 7. Options
+through parameters are provided for advanced installation scenarios.
 
 ## Motivation
 
@@ -82,9 +82,9 @@ that would;
 Goals:
 
 - Be discoverable as other built-in cmdlets
-- By default, download and install the latest stable release to the users Scope
-  - AllUsers - if user has administrative privileges
-  - CurrentUser - if the user does not have administrative privileges
+- By default, download and install the latest stable release to the users CurrentUser Scope
+  - CurrentUser - default installation scope
+  - AllUsers - Administrative users may explicit select this scope
 - Allow users to use remoting for install at scale with Invoke-Command
 - Allow advanced users to specify the version of PowerShell
 - Allow advanced users to specify scope (location of installation)
@@ -109,7 +109,7 @@ release of PowerShell into the user scope allowed by permissions. If administrat
 install to the scope of AllUsers. If user does not have administrative privilege, install to the
 scope CurrentUser.
 
-- The package install location - c:\temp
+- The package install location - $env:LOCALAPPDATA\Microsoft\PowerShell
 - The installer should update the Users PATH for pwsh
 - The installer should enable Microsoft Updates for scope AllUsers. Due to permission requirements,
   the scope CurrentUser will require manual updating.
@@ -119,11 +119,12 @@ The following parameters can be added by experienced PowerShell users to customi
 
 - Parameter: Version - overrides the default and allows the user to specify the version of
   PowerShell that will be installed. PowerShell version 7.0 and 7.1 are out of support, so version
-  numbers should begin with 7.2
+  numbers should begin with 7.2. This would install the latest 7.2.x.
 - Parameter: Scope - overrides the default and allows the user to specify the installation location
   (scope) AllUsers or CurrentUser.
 - Parameter: Channel - options Stable/Preview/LTS - allows the user to select if they want the
-  current preview or Long Term Service (LTS) release
+  current preview or Long Term Service (LTS) release. Preview should not be allowed if value of
+  parameter **-Version** is Generally Available (GA).
 - Parameter: Passthru - to provide informative output post installation
 
 ## Syntax and Parameter Sets
@@ -171,7 +172,7 @@ PSTypename   = "PSInstallationInfo"
   ```
   Version Path                                   Channel Computername
   ------- ----                                   ------- ------------
-  7.2.3   C:\Program Files\PowerShell\7\pwsh.exe Stable  LocalComp
+  7.2.3   C:\Program Files\PowerShell\7\pwsh.exe Stable
   ```
 
 - To install the latest stable release of PowerShell over PowerShell Remoting:
@@ -213,5 +214,5 @@ PSTypename   = "PSInstallationInfo"
 - To install the latest preview from a specific version:
 
   ```powershell
-  Install-PowerShell7 -Version 7.2 -Channel 'Preview'
+  Install-PowerShell7 -Version 7.3 -Channel 'Preview'
   ```
