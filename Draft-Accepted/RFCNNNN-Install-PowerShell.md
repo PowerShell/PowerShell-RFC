@@ -105,7 +105,7 @@ Cmdlet name: Install-PowerShell7
 Alias: None
 
 The default behavior is to download and extract the .ZIP package, then install the latest stable
-release of PowerShell into the user scope allowed by permissions. If administrative privilege,
+release of PowerShell into the user scope allowed by permissions. If with administrative privilege,
 install to the scope of AllUsers. If user does not have administrative privilege, install to the
 scope CurrentUser.
 
