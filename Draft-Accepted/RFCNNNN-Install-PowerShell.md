@@ -109,7 +109,7 @@ release of PowerShell into the user scope allowed by permissions. If with admini
 install to the scope of AllUsers. If user does not have administrative privilege, install to the
 scope CurrentUser.
 
-- The package install location - $env:LOCALAPPDATA\Microsoft\PowerShell
+- The package install location - $env:LOCALAPPDATA\Microsoft\pwsh
 - The installer should update the Users PATH for pwsh
 - The installer should enable Microsoft Updates for scope AllUsers. Due to permission requirements,
   the scope CurrentUser will require manual updating.
