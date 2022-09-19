@@ -12,6 +12,7 @@ recurring event on your calendar.
 
 ## Notes
 
+- [September 15, 2022](./notes/20220915_Notes.md) ([YouTube recording](https://youtu.be/19CnvXq8vU4))
 - [August 18, 2022](./notes/20220818_Notes.md) ([YouTube recording](https://youtu.be/kPn9RKqm4eg))
 - [July 21, 2022](./notes/20220721_Notes.md) ([YouTube recording](https://youtu.be/GcPTjtybohM))
 - [June 16, 2022](./notes/20220616_Notes.md) ([YouTube recording](https://youtu.be/ZYCQArCXEiI))
