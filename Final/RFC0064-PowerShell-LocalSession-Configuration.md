@@ -1,5 +1,5 @@
 ---
-RFC: RFCNNNN
+RFC: RFC0064
 Author: Paul Higinbotham
 Status: Draft
 Area: Microsoft.PowerShell.Core
