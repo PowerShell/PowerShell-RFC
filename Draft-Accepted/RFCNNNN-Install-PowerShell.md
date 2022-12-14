@@ -11,9 +11,9 @@ Plan to implement: Yes
 
 # Install-PowerShell7 Command
 
-This RFC proposes the addition of the `Install-PowerShell7` command to perform a simplified
+This RFC proposes adding a `Install-PowerShell7` command to Windows to perform a simplified
 installation of the latest Long Term Service (LTS) release of PowerShell 7. Options through
-parameters are provided to specify Stable, Preview, or Long Term Service (LTS) releases.
+parameters are provided to specify Stable, Preview, or LTS releases.
 
 ## Motivation
 
@@ -33,13 +33,13 @@ PowerShell 7. While this may not help customers that have post-deployment policy
 will help the majority of customers discover and update to the latest version of PowerShell for
 Windows.
 
-```output
+```
 As an admin,
 I can use Windows PowerShell 5.1 to provision multiple hosts with PowerShell 7 over PSRemoting,
 so that I can leverage new capabilities in PS7.
 ```
 
-```output
+```
 As a user,
 I can discover and install PowerShell 7 from Windows PowerShell 5.1 on my Windows machine,
 so that I can leverage new capabilities in PS7.
@@ -52,7 +52,7 @@ command and closing any open sessions of PowerShell.
 
 ## Shipping in Windows
 
-There are several issues that prevent shipping PowerShell 7 in Windows;
+There are several issues that prevent shipping PowerShell 7 in Windows:
 
 - Size
 - Support lifecycle differences
@@ -126,7 +126,7 @@ The following parameters can be added by experienced PowerShell users to customi
 - Parameter: Scope - overrides the default of CurrentUser and allows the user to specify the
   installation location AllUsers.
 - Parameter: Channel - options Stable/Preview/LTS - allows the user to select if they want the
-  current preview or Long Term Service (LTS) release. 
+  current preview or LTS release. 
 
 ## Syntax and Parameter Sets
 
