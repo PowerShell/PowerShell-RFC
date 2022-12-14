@@ -73,11 +73,11 @@ There are several issues that prevent shipping PowerShell 7 in Windows:
 ### Solution
 
 To solve these issues, the proposal is to ship a new command in Windows and the PowerShell Gallery
-that would;
+that would:
 
 - Be locally discoverable
 - Perform a simple download and install of the latest LTS release of PowerShell
-- Include parameter options to select Stable,Preview or Long Term Service releases
+- Include parameter options to select Stable, Preview, or LTS releases
 
 ## Goals/Non-Goals
 
@@ -135,7 +135,7 @@ familiar with a cmdlet syntax and will find this command similar in experience.
 
 ### ParameterSet Channel (Default)
 
-```output
+```
 Install-PowerShell7 -Channel {Preview | LTS | Stable} [-Scope {AllUsers | CurrentUser}] [-TrustMicrosoftPublisher]
 ```
 
@@ -162,7 +162,7 @@ should enable the publishers content for this session.
 ### Data model
 
 The `Install-PowerShell7` command provide useful information post installation. The data model for
-the output is below;
+the output is below.
 
 ```output
 PSTypename   = "PSInstallationInfo"
