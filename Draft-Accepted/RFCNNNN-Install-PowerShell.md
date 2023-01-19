@@ -46,7 +46,7 @@ so that I can leverage new capabilities in PS7.
 ```
 
 Additional scenarios are enabled when considering a command versus a cmdlet. While Windows users
-would find benefit and familiarity to a cmdlet, a command opens up scenarios where Powershell is not
+would find benefit and familiarity to a cmdlet, a command opens up scenarios where PowerShell is not
 pre-installed. Additionally, several installation issues due to open files are avoided by using a
 command and closing any open sessions of PowerShell.
 
@@ -83,7 +83,6 @@ that would:
 
 Goals:
 
-- Be locally discoverable, not only an artifact on PSGallery.
 - By default, download and install the latest LTS release to the users CurrentUser Scope
   - CurrentUser - default installation scope
   - AllUsers - Administrative users may explicit select this scope
@@ -110,16 +109,13 @@ on a system that currently does not include Powershell is an added benefit for u
 
 Command name: Install-PowerShell7
 
-The default behavior is to download and extract the .ZIP package, then install the latest LTS
-release of PowerShell into the user scope allowed by permissions. If the user has administrative
+The default behavior is to install to CurrentUser scope, with the latest LTS
+release of PowerShell. If the user has administrative
 privilege, they can choose to install to the scope of AllUsers.
 
 - The package install location - $env:LOCALAPPDATA\Microsoft\pwsh
-  - Downloaded packages should be certificate signature verified before installation. 
-  - Failure of the signature should return an error message and stop performing installation.
 - The installer should update the Users PATH for pwsh
-- The installer should enable Microsoft Updates for scope AllUsers. Due to permission requirements,
-  the scope CurrentUser will require manual updating.
+- The installer should enable Microsoft Updates for scope AllUsers. 
 
 The following parameters can be added by experienced PowerShell users to customize the installation.
 
@@ -130,8 +126,6 @@ The following parameters can be added by experienced PowerShell users to customi
 
 ## Syntax and Parameter Sets
 
-The syntax of the command is intentionally made similar to that of a cmdlet. Powershell users are
-familiar with a cmdlet syntax and will find this command similar in experience.
 
 ### ParameterSet Channel (Default)
 
@@ -159,18 +153,6 @@ The **TrustMicrosoftPublisher** is required for installation on Windows. Powersh
 signed with a Microsoft certificate, not the Windows certificate. When enabled, this parameter
 should enable the publishers content for this session.
 
-### Data model
-
-The `Install-PowerShell7` command provide useful information post installation. The data model for
-the output is below.
-
-```output
-PSTypename   = "PSInstallationInfo"
-[Version]Version      = $version
-[string]Path         = (Get-Command pwsh).source
-[string]Channel      = if ($Channel) { $channel} else {"LTS" }
-[string]Computername = $env:COMPUTERNAME
-```
 
 ## Demo.txt
 
