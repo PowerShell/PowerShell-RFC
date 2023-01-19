@@ -11,9 +11,8 @@ Plan to implement: Yes
 
 # Install-PowerShell7 Command
 
-This RFC proposes adding a `Install-PowerShell7` command to Windows to perform a simplified
-installation of the latest Long Term Service (LTS) release of PowerShell 7. Options through
-parameters are provided to specify Stable, Preview, or LTS releases.
+This RFC proposes adding a `install-powershell7` command to Windows to perform a simplified
+installation of the latest Long Term Service (LTS) release of PowerShell 7. 
 
 ## Motivation
 
@@ -101,16 +100,16 @@ Non-goals:
 
 ## Alternatives
 
-`Install-PowerShell7` cmdlet is an alternative approach that is more common to discover for a
+`install-powershell7` cmdlet is an alternative approach that is more common to discover for a
 Powershell user. The cmdlet approach increases the complexity of installing a new version of
 PowerShell from an existing version. Additionally, The ability to bootstrap and install PowerShell
 on a system that currently does not include Powershell is an added benefit for using a command.
 
-`Install-PowerShell7` with -Scope CurrentUser installs PowerShell to $env:LOCALAPPDATA\Microsoft\pwsh. The user may wish to specify a location for the installation with a parameter **Path**.
+`install-powershell7` with -Scope CurrentUser installs PowerShell to $env:LOCALAPPDATA\Microsoft\pwsh. The user may wish to specify a location for the installation with a parameter **Path**.
 
 ## Specification
 
-Command name: Install-PowerShell7
+Command name: install-powershell7
 
 The default behavior is to install to CurrentUser scope, with the latest LTS
 release of PowerShell. If the user has administrative
@@ -125,37 +124,37 @@ The following parameters can be added by experienced PowerShell users to customi
 - Parameter: Scope - overrides the default of CurrentUser and allows the user to specify the
   installation location AllUsers.
 - Parameter: Channel - options Stable/Preview/LTS - allows the user to select if they want the
-  current preview or LTS release. 
+  current preview or LTS release.
 
-## Syntax and Parameter Sets
+## Syntax
 
+The command `install-powershell7` is lower case and supports `/` switch options to be consistent
+with other command-line tools.
 
-### ParameterSet Channel (Default)
-
+```syntax
+install-powershell7  [<channel option>] [<scope option>]
 ```
-Install-PowerShell7 -Channel {Preview | LTS | Stable} [-Scope {AllUsers | CurrentUser}] [-TrustMicrosoftPublisher]
-```
 
-The **Channel** parameter has the following validation attribute:
-[ValidateSet("Preview", "LTS", "Stable")]
+The `<channel option>` must be one of the following:
 
-The **Scope** parameter has the following validation attribute:
-[ValidateSet("AllUsers", "CurrentUser")]
+- `/Preview`
+- `/Stable`
+- `/LTS`
 
-Scope specifies the installation scope of the module. The default installation scope is CurrentUser,
-which does not require elevation. Users may choose to select the AllUsers scope, which requires
-elevation.
+If you don't provide a channel option, the command defaults to `/LTS`.
+
+The `<scope option>` must be one of the following:
+
+- `/AllUsers`
+- `/CurrentUser`
+
+If you don't provide a scope option, the command defaults to `/CurrentUser`.
 
 Scope selection has an impact on receiving auto-updates from Microsoft Update:
 
-- AllUsers for x86/x64 will auto-update via Microsoft Update.
-  - Note, on arm64 there is no AllUsers
-- CurrentUser is manually updated
-
-The **TrustMicrosoftPublisher** is required for installation on Windows. Powershell packages are
-signed with a Microsoft certificate, not the Windows certificate. When enabled, this parameter
-should enable the publishers content for this session.
-
+- `/AllUsers` is an MSI-based installation with Microsoft Update enabled.
+- `/CurrentUser` is a ZIP-based installation. Users will need to manually
+  update when a new version is released.
 
 ## Demo.txt
 
@@ -165,26 +164,14 @@ should enable the publishers content for this session.
   install-powershell7 
   ```
 
-  ```output
-  Version Path                                   Channel Computername
-  ------- ----                                   ------- ------------
-  7.2.0   C:\Program Files\PowerShell\7\pwsh.exe LTS  
-  ```
-
 - To install the latest LTS release of PowerShell over PowerShell Remoting:
 
   ```powershell
-  Invoke-Command -Computername RemoteComputer1 -ScriptBlock {Install-PowerShell7}
+  Invoke-Command -Computername RemoteComputer1 -ScriptBlock {install-powershell7}
   ```
 
 - Install the Stable release using the current user scope.
 
   ```powershell
-  Install-PowerShell7 -Channel Stable -Scope CurrentUser -Passthru
-  ```
-
-  ```output
-  Version Path                                   Channel Computername
-  ------- ----                                   ------- ------------
-  7.2.0   C:\Users\jeff\PowerShell\7\pwsh.exe    Stable     RemoteComp
+  install-powershell7 /Stable /CurrentUser
   ```
