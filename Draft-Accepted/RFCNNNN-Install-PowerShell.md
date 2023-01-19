@@ -41,7 +41,7 @@ so that I can leverage new capabilities in PS7.
 
 ```
 As a user,
-I can discover and install PowerShell 7 from Windows PowerShell 5.1 on my Windows machine,
+I can discover and install PowerShell 7 from Windows PowerShell 5.1 or `cmd.exe` on my Windows machine,
 so that I can leverage new capabilities in PS7.
 ```
 
