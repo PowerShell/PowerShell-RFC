@@ -84,8 +84,9 @@ that would:
 Goals:
 
 - By default, download and install the latest LTS release to the users CurrentUser Scope
-  - CurrentUser - default installation scope
-  - AllUsers - Administrative users may explicit select this scope
+  - CurrentUser - default installation scope location $env:LOCALAPPDATA\Microsoft\pwsh
+  - AllUsers - Administrative users may explicit select this scope. AllUsers requires administrative
+    elevation and performs a silent install using the MSI defaults.
 - Allow users to use remoting for install at scale with Invoke-Command
 - Allow advanced users to specify channel Stable/Preview/LTS
 
@@ -104,6 +105,8 @@ Non-goals:
 Powershell user. The cmdlet approach increases the complexity of installing a new version of
 PowerShell from an existing version. Additionally, The ability to bootstrap and install PowerShell
 on a system that currently does not include Powershell is an added benefit for using a command.
+
+`Install-PowerShell7` with -Scope CurrentUser installs PowerShell to $env:LOCALAPPDATA\Microsoft\pwsh. The user may wish to specify a location for the installation with a parameter **Path**.
 
 ## Specification
 
