@@ -9,10 +9,10 @@ Comments Due: 6/30/2022
 Plan to implement: Yes
 ---
 
-# Install-PowerShell7 Command
+# Install-PowerShell7 Native Command
 
-This RFC proposes adding a `install-powershell7` command to Windows to perform a simplified
-installation of the latest Long Term Service (LTS) release of PowerShell 7. 
+This RFC proposes adding a `install-powershell7` native command to Windows to perform a simplified
+installation of the latest Long Term Service (LTS) release of PowerShell 7.
 
 ## Motivation
 
@@ -44,10 +44,10 @@ I can discover and install PowerShell 7 from Windows PowerShell 5.1 or `cmd.exe`
 so that I can leverage new capabilities in PS7.
 ```
 
-Additional scenarios are enabled when considering a command versus a cmdlet. While Windows users
-would find benefit and familiarity to a cmdlet, a command opens up scenarios where PowerShell is not
-pre-installed. Additionally, several installation issues due to open files are avoided by using a
-command and closing any open sessions of PowerShell.
+Additional scenarios are enabled when considering a native command versus a cmdlet. While Windows
+users would find benefit and familiarity to a cmdlet, a native command opens up scenarios where
+PowerShell is not pre-installed. Additionally, several installation issues due to open files are
+avoided by using a native command and closing any open sessions of PowerShell.
 
 ## Shipping in Windows
 
@@ -71,8 +71,7 @@ There are several issues that prevent shipping PowerShell 7 in Windows:
 
 ### Solution
 
-To solve these issues, the proposal is to ship a new command in Windows and the PowerShell Gallery
-that would:
+To solve these issues, the proposal is to ship a new command in Windows that would:
 
 - Be locally discoverable
 - Perform a simple download and install of the latest LTS release of PowerShell
@@ -83,7 +82,8 @@ that would:
 Goals:
 
 - By default, download and install the latest LTS release to the users CurrentUser Scope
-  - CurrentUser - default installation scope location $env:LOCALAPPDATA\Microsoft\pwsh
+  - CurrentUser - default installation scope location $env:LOCALAPPDATA\Microsoft\pwsh. If the path
+    exists, remove and replace.
   - AllUsers - Administrative users may explicit select this scope. AllUsers requires administrative
     elevation and performs a silent install using the MSI defaults.
 - Allow users to use remoting for install at scale with Invoke-Command
@@ -98,15 +98,6 @@ Non-goals:
 - Handling of additional MSI switch options - i.e. Enable PSRemoting
 - Cross platform support
 
-## Alternatives
-
-`install-powershell7` cmdlet is an alternative approach that is more common to discover for a
-Powershell user. The cmdlet approach increases the complexity of installing a new version of
-PowerShell from an existing version. Additionally, The ability to bootstrap and install PowerShell
-on a system that currently does not include Powershell is an added benefit for using a command.
-
-`install-powershell7` with -Scope CurrentUser installs PowerShell to $env:LOCALAPPDATA\Microsoft\pwsh. The user may wish to specify a location for the installation with a parameter **Path**.
-
 ## Specification
 
 Command name: install-powershell7
@@ -116,8 +107,9 @@ release of PowerShell. If the user has administrative
 privilege, they can choose to install to the scope of AllUsers.
 
 - The package install location - $env:LOCALAPPDATA\Microsoft\pwsh
+  - If this path already exists, remove and replace.
 - The installer should update the Users PATH for pwsh
-- The installer should enable Microsoft Updates for scope AllUsers. 
+- The installer should enable Microsoft Updates for scope AllUsers.
 
 The following parameters can be added by experienced PowerShell users to customize the installation.
 
@@ -128,7 +120,7 @@ The following parameters can be added by experienced PowerShell users to customi
 
 ## Syntax
 
-The command `install-powershell7` is lower case and supports `/` switch options to be consistent
+The command `install-powershell7` is lower case and supports `-/--` switch options to be consistent
 with other command-line tools.
 
 ```syntax
@@ -137,23 +129,23 @@ install-powershell7  [<channel option>] [<scope option>]
 
 The `<channel option>` must be one of the following:
 
-- `/Preview`
-- `/Stable`
-- `/LTS`
+- `-Preview`
+- `-Stable`
+- `-LTS`
 
-If you don't provide a channel option, the command defaults to `/LTS`.
+If you don't provide a channel option, the command defaults to `-LTS`.
 
 The `<scope option>` must be one of the following:
 
-- `/AllUsers`
-- `/CurrentUser`
+- `-AllUsers`
+- `-CurrentUser`
 
-If you don't provide a scope option, the command defaults to `/CurrentUser`.
+If you don't provide a scope option, the command defaults to `-CurrentUser`.
 
 Scope selection has an impact on receiving auto-updates from Microsoft Update:
 
-- `/AllUsers` is an MSI-based installation with Microsoft Update enabled.
-- `/CurrentUser` is a ZIP-based installation. Users will need to manually
+- `-AllUsers` is an MSI-based installation with Microsoft Update enabled.
+- `-CurrentUser` is a ZIP-based installation. Users will need to manually
   update when a new version is released.
 
 ## Demo.txt
