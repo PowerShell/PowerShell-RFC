@@ -124,28 +124,28 @@ The command `install-powershell7` is lower case and supports `-/--` switch optio
 with other command-line tools.
 
 ```syntax
-install-powershell7  [<channel option>] [<scope option>]
+install-powershell7  [-channel <option>] [-scope <option>]
 ```
 
-The `<channel option>` must be one of the following:
+The `--channel <option>` must be one of the following:
 
-- `-Preview`
-- `-Stable`
-- `-LTS`
+- `--channel preview`
+- `--channel stable`
+- `--channel lts`
 
-If you don't provide a channel option, the command defaults to `-LTS`.
+If you don't provide a channel option, the command defaults to `-channel lts`.
 
-The `<scope option>` must be one of the following:
+The `--scope <option>` must be one of the following:
 
-- `-AllUsers`
-- `-CurrentUser`
+- `--scope allusers`
+- `--scope currentuser`
 
-If you don't provide a scope option, the command defaults to `-CurrentUser`.
+If you don't provide a scope option, the command defaults to `--scope currentuser`.
 
 Scope selection has an impact on receiving auto-updates from Microsoft Update:
 
-- `-AllUsers` is an MSI-based installation with Microsoft Update enabled.
-- `-CurrentUser` is a ZIP-based installation. Users will need to manually
+- `--scope allusers` is an MSI-based installation with Microsoft Update enabled.
+- `--scope currentuser` is a ZIP-based installation. Users will need to manually
   update when a new version is released.
 
 ## Demo.txt
@@ -165,5 +165,11 @@ Scope selection has an impact on receiving auto-updates from Microsoft Update:
 - Install the Stable release using the current user scope.
 
   ```powershell
-  install-powershell7 -Stable -CurrentUser
+  install-powershell7 --channel stable --scope currentuser
+  ```
+
+- Alternative (short) to install the stable release using the current user scope.
+
+  ```powershell
+  install-powershell7 -c stable -s currentuser
   ```
