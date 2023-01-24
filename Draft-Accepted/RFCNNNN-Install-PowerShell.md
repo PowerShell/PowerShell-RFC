@@ -165,5 +165,5 @@ Scope selection has an impact on receiving auto-updates from Microsoft Update:
 - Install the Stable release using the current user scope.
 
   ```powershell
-  install-powershell7 /Stable /CurrentUser
+  install-powershell7 -Stable -CurrentUser
   ```
