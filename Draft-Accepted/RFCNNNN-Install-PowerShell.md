@@ -120,11 +120,12 @@ The following parameters can be added by experienced PowerShell users to customi
 
 ## Syntax
 
-The command `install-powershell7` is lower case and supports `-/--` switch options to be consistent
+The command `install-powershell7` is lower case and supports `-` or `--` parameters to be consistent
 with other command-line tools.
 
 ```syntax
-install-powershell7  [-channel <option>] [-scope <option>]
+install-powershell7  [--channel <option>] [--scope <option>]
+install-powershell7  [-c <option>] [-s <option>]
 ```
 
 The `--channel <option>` must be one of the following:
