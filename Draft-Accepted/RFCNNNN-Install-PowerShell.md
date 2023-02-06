@@ -33,12 +33,6 @@ will help the majority of customers discover and update to the latest version of
 Windows.
 
 ```
-As an admin,
-I can use Windows PowerShell 5.1 to provision multiple hosts with PowerShell 7 over PSRemoting,
-so that I can leverage new capabilities in PS7.
-```
-
-```
 As a user,
 I can discover and install PowerShell 7 from Windows PowerShell 5.1 or `cmd.exe` on my Windows machine,
 so that I can leverage new capabilities in PS7.
@@ -86,7 +80,6 @@ Goals:
     exists, remove and replace.
   - AllUsers - Administrative users may explicit select this scope. AllUsers requires administrative
     elevation and performs a silent install using the MSI defaults.
-- Allow users to use remoting for install at scale with Invoke-Command
 - Allow advanced users to specify channel Stable/Preview/LTS
 
 Non-goals:
@@ -97,19 +90,28 @@ Non-goals:
 - Disconnected scenarios - Users that are air-gapped may download the appropriate release from GitHub.
 - Handling of additional MSI switch options - i.e. Enable PSRemoting
 - Cross platform support
+- Deployments at scale
 
 ## Specification
 
 Command name: install-powershell7
 
-The default behavior is to install to CurrentUser scope, with the latest LTS
+The default behavior is to install the zip package silently to CurrentUser scope, with the latest LTS
 release of PowerShell. If the user has administrative
-privilege, they can choose to install to the scope of AllUsers.
+privilege, they can choose to install the msi package silently to the scope of AllUsers.
 
-- The package install location - $env:LOCALAPPDATA\Microsoft\pwsh
-  - If this path already exists, remove and replace.
+- The stable package install location - $env:LOCALAPPDATA\Microsoft\PowerShell-Stable
+  - If path exists, detect installed version and compare:
+    - If versions equal: Provide an error "PowerShell 7 is already installed" and exit.
+    - If versions not equal: Overwrite original installation.
+- The preview package install location - $env:LOCALAPPDATA\Microsoft\PowerShell-Preview
+  - If path exists, detect installed version and compare:
+    - If versions equal: Provide an error "PowerShell 7 is already installed" and exit.
+    - If versions not equal: Overwrite original installation.
 - The installer should update the Users PATH for pwsh
 - The installer should enable Microsoft Updates for scope AllUsers.
+- The command should show a progress bar during the download and installation of PowerShell 7.
+- The command should produce an error if the download location (US based url) fails.
 
 The following parameters can be added by experienced PowerShell users to customize the installation.
 
@@ -124,8 +126,8 @@ The command `install-powershell7` is lower case and supports `-` or `--` paramet
 with other command-line tools.
 
 ```syntax
-install-powershell7  [--channel <option>] [--scope <option>]
-install-powershell7  [-c <option>] [-s <option>]
+install-powershell7  [--channel <option>] [--scope <option>] [--force]
+install-powershell7  [-c <option>] [-s <option>] [-f]
 ```
 
 The `--channel <option>` must be one of the following:
@@ -149,18 +151,14 @@ Scope selection has an impact on receiving auto-updates from Microsoft Update:
 - `--scope currentuser` is a ZIP-based installation. Users will need to manually
   update when a new version is released.
 
+The `--force` switch clobbers a previous installation.
+
 ## Demo.txt
 
 - Install the latest LTS version by default.
 
   ```powershell
   install-powershell7 
-  ```
-
-- To install the latest LTS release of PowerShell over PowerShell Remoting:
-
-  ```powershell
-  Invoke-Command -Computername RemoteComputer1 -ScriptBlock {install-powershell7}
   ```
 
 - Install the Stable release using the current user scope.
