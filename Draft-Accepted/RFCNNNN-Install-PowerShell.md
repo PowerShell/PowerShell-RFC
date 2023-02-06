@@ -76,7 +76,7 @@ To solve these issues, the proposal is to ship a new command in Windows that wou
 Goals:
 
 - By default, download and install the latest LTS release to the users CurrentUser Scope
-  - CurrentUser - default installation scope location $env:LOCALAPPDATA\Microsoft\pwsh. If the path
+  - CurrentUser - default installation scope location TODO:$env:LOCALAPPDATA\Microsoft\PowerShell. TODO: If the path
     exists, remove and replace.
   - AllUsers - Administrative users may explicit select this scope. AllUsers requires administrative
     elevation and performs a silent install using the MSI defaults.
