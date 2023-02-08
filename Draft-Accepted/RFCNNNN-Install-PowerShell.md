@@ -75,8 +75,7 @@ To solve these issues, the proposal is to ship a new command in Windows that wou
 Goals:
 
 - By default, download and install the latest LTS release to the users CurrentUser Scope
-  - CurrentUser - default installation scope location TODO:$env:LOCALAPPDATA\Microsoft\PowerShell. TODO: If the path
-    exists, remove and replace.
+  - CurrentUser - default installation scope location
   - AllUsers - Administrative users may explicit select this scope. AllUsers requires administrative
     elevation and performs a silent install using the MSI defaults.
 - Allow advanced users to specify channel Stable/Preview/LTS
@@ -103,7 +102,7 @@ privilege, they can choose to install the msi package silently to the scope of A
 - The stable and LTS package install location - $env:LOCALAPPDATA\Local\Programs\PowerShell
   - If path exists, Provide an error "PowerShell 7 is already installed, use --clobber to overwrite
     existing installation"
-- The preview package install location - $env:LOCALAPPDATA\Local\Programs\\PowerShell-Preview
+- The preview package install location - $env:LOCALAPPDATA\Local\Programs\PowerShell-Preview
   - If path exists, Provide an error "PowerShell 7 Preview is already installed, use --clobber to overwrite
     existing installation"
 - Detect if Powershell is in use in the target folder and provide error "PowerShell is currently in
@@ -117,8 +116,8 @@ The following parameters can be added by experienced PowerShell users to customi
 
 - Parameter: Scope - overrides the default of CurrentUser and allows the user to specify the
   installation location AllUsers.
-- Parameter: Channel - options Stable/Preview/LTS - allows the user to select if they want the
-  current preview or LTS release.
+- Parameter: Channel - options LTS/Stable/Preview - allows the user to select if they want the
+  current preview or LTS release (default).
 
 ## Syntax
 
@@ -126,8 +125,8 @@ The command `install-powershell7` is lower case and supports `-` or `--` paramet
 with other command-line tools.
 
 ```syntax
-install-powershell7  [--channel <option>] [--scope <option>] [--force]
-install-powershell7  [-c <option>] [-s <option>] [-f]
+install-powershell7  [--channel <option>] [--scope <option>] [--clobber]
+install-powershell7  [-c <option>] [-s <option>] [--clobber]
 ```
 
 The `--channel <option>` must be one of the following:
@@ -151,7 +150,7 @@ Scope selection has an impact on receiving auto-updates from Microsoft Update:
 - `--scope currentuser` is a ZIP-based installation. Users will need to manually
   update when a new version is released.
 
-The `--clobber` switch clobbers a previous installation.
+The optional `--clobber` switch overwrites a previous installation.
 
 ## Demo.txt
 
