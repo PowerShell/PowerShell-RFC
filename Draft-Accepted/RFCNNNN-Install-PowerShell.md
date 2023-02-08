@@ -1,5 +1,5 @@
 ---
-RFC: RFC00XX
+RFC: RFC0065
 Author: Jason Helmick
 Status: Draft
 SupercededBy: N/A
