@@ -40,8 +40,7 @@ so that I can leverage new capabilities in PS7.
 
 Additional scenarios are enabled when considering a native command versus a cmdlet. While Windows
 users would find benefit and familiarity to a cmdlet, a native command opens up scenarios where
-PowerShell is not pre-installed. Additionally, several installation issues due to open files are
-avoided by using a native command and closing any open sessions of PowerShell.
+PowerShell is not pre-installed. 
 
 ## Shipping in Windows
 
@@ -81,6 +80,7 @@ Goals:
   - AllUsers - Administrative users may explicit select this scope. AllUsers requires administrative
     elevation and performs a silent install using the MSI defaults.
 - Allow advanced users to specify channel Stable/Preview/LTS
+- Tool will not partially install and leave any existing PowerShell in a non-functioning state.
 
 Non-goals:
 
@@ -106,6 +106,8 @@ privilege, they can choose to install the msi package silently to the scope of A
 - The preview package install location - $env:LOCALAPPDATA\Local\Programs\\PowerShell-Preview
   - If path exists, Provide an error "PowerShell 7 Preview is already installed, use --clobber to overwrite
     existing installation"
+- Detect if Powershell is in use in the target folder and provide error "PowerShell is currently in
+  use. Please close all Powershell instances and run the command from Start->Run or cmd.exe."
 - The installer should update the `$ENV:PATH` and Users PATH in the registry.
 - The installer should enable Microsoft Updates for scope AllUsers.
 - The command should show a progress bar during the download and installation of PowerShell 7.
