@@ -100,15 +100,13 @@ The default behavior is to install the zip package silently to CurrentUser scope
 release of PowerShell. If the user has administrative
 privilege, they can choose to install the msi package silently to the scope of AllUsers.
 
-- The stable package install location - $env:LOCALAPPDATA\Microsoft\PowerShell-Stable
-  - If path exists, detect installed version and compare:
-    - If versions equal: Provide an error "PowerShell 7 is already installed" and exit.
-    - If versions not equal: Overwrite original installation.
-- The preview package install location - $env:LOCALAPPDATA\Microsoft\PowerShell-Preview
-  - If path exists, detect installed version and compare:
-    - If versions equal: Provide an error "PowerShell 7 is already installed" and exit.
-    - If versions not equal: Overwrite original installation.
-- The installer should update the Users PATH for pwsh
+- The stable and LTS package install location - $env:LOCALAPPDATA\Local\Programs\PowerShell
+  - If path exists, Provide an error "PowerShell 7 is already installed, use --clobber to overwrite
+    existing installation"
+- The preview package install location - $env:LOCALAPPDATA\Local\Programs\\PowerShell-Preview
+  - If path exists, Provide an error "PowerShell 7 Preview is already installed, use --clobber to overwrite
+    existing installation"
+- The installer should update the `$ENV:PATH` and Users PATH in the registry.
 - The installer should enable Microsoft Updates for scope AllUsers.
 - The command should show a progress bar during the download and installation of PowerShell 7.
 - The command should produce an error if the download location (US based url) fails.
@@ -151,7 +149,7 @@ Scope selection has an impact on receiving auto-updates from Microsoft Update:
 - `--scope currentuser` is a ZIP-based installation. Users will need to manually
   update when a new version is released.
 
-The `--force` switch clobbers a previous installation.
+The `--clobber` switch clobbers a previous installation.
 
 ## Demo.txt
 
