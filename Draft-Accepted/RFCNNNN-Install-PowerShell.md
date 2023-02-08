@@ -40,7 +40,10 @@ so that I can leverage new capabilities in PS7.
 
 Additional scenarios are enabled when considering a native command versus a cmdlet. While Windows
 users would find benefit and familiarity to a cmdlet, a native command opens up scenarios where
-PowerShell is not pre-installed. 
+PowerShell is not pre-installed.
+
+Users can still use Windows Package Manager Client (winget) to install PowerShell 7, however, it is
+not available on all platforms.
 
 ## Shipping in Windows
 
