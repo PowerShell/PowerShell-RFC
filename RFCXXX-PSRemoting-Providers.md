@@ -17,7 +17,7 @@ There are 2 problems this RFC is aiming to help with:
 
 + As a user I want to have a unified way of using PSRemoting providers in my `Invoke-Command` calls so that I can simplify my code.
 
-+ As a module author I want to be simplify the work needed to implement and use my custom remoting providers
++ As a module author I want to simplify the work needed to implement and use my custom remoting providers
 
 ### Current Landscape
 
@@ -35,7 +35,7 @@ Some of the provider specific parameters in this cmdlet are:
 |`-ContainerId`|Containers|
 |`-Session`|Custom|
 
-Here is it in action:
+Here it is in action:
 
 ```powershell
 # Connects over WinRM
@@ -212,7 +212,7 @@ public sealed class RemotingProviderManagementIntrinsics
 }
 ```
 
-When a module is imported it can register it's own custom provider identifier through the standard mechanisms:
+When a module is imported it can register its own custom provider identifier through the standard mechanisms:
 
 ```csharp
 using System;
