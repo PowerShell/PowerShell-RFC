@@ -270,6 +270,13 @@ Invoke-Command -ComputerName psexec_system:Host1 -ScriptBlock { whoami }
 
 Unfortunately the UX around this would need to be tidied up to allow a user to easy designate the connection info builder needed by PowerShell in this proposed scenario.
 
++ Should modules be able to override registered options
+
+There might be a desire to support modules from overriding the builtin providers with their own custom one.
+For example I could use [PSWSMan](https://github.com/jborean93/PSWSMan) and have it replace the builtin `wsman`/`winrm` provider.
+The same thing could be done for modules wanting to extend the `ssh` provider with their own custom one.
+Should this be possible or should each provider registration be immutable?
+
 ## Considerations
 
 It should also be mentioned that [RunspaceConnectionInfo](https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.runspaces.runspaceconnectioninfo?view=powershellsdk-7.0.0) and [PSSessionOption](https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.remoting.pssessionoption?view=powershellsdk-7.2.0) currently contains a few WinRM specific properties.
