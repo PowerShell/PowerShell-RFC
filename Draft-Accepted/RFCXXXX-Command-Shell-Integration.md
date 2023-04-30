@@ -26,6 +26,7 @@ However, this typically works for the system and not for a particular user who d
 This can also make it more complicated to uninstall tools that place files across the filesystem.
 
 Although the examples here are focused on PowerShell, the design is intended to be generic and can be used by other shells.
+However, PowerShell specific implementation details are included.
 
 ## Motivation
 
@@ -131,26 +132,48 @@ Based on user feedback, there can be a configuration file to disable specific ex
 
 ## Specification
 
+### Discovery
+
 A JSON manifest file would be placed alongside the executable (or technically anywhere within `$env:PATH`) and discovered by the shell.
 All paths are relative to the location of the manifest file and must use the forward slash path separator.
 
+On Unix systems tools are sometimes synlinked to `/usr/bin`, for example, and on Windows, MSIX installed CLI tools are reparse points
+to a different location.
+Shells should look for the manifest file in the target location of a symlink or reparse point in addition to within `$env:PATH`.
+
+In the case that multiple JSON manifests are for the same executable, the last one wins.
+So if a user wants to override a manifest shipped with a tool, they can place their own in a location that is later in `$env:PATH`.
+
 ### Command shell integration manifest
 
-The JSON manifest file name would be `<name>.command.json`.
-The `<name>` portion is only used to differentiate between multiple manifests and does not need to match the executable name,
-but it is recommended to do so.
+The JSON manifest file name would be `<name>.<author>.command.json`.
+
+- `<name>` should match the executable name without the extension.
+- `<author>` is the name of the author or organization that created the tool to avoid collisions.
 
 ```json
 {
     "$schema": "https://schemas.microsoft.com/commandshell/2023/05/01/command.json",
     "executable": "az",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "author": "Microsoft",
+    "description": "Azure CLI",
+    "copyright": "Copyright (c) Microsoft",
+    "license": "https://github.com/Azure/azure-cli/blob/dev/LICENSE",
 }
 ```
 
-The `$schema` includes the version of the manifest with the URL pointing to a published JSON schema.
-The `executable` is the name of the executable that the manifest is for and expected to be found in `$env:PATH`
-The `version` is the version of the manifest for the tool and only used for informational purposes.
+The mandatory fields are:
+
+- `$schema` includes the version of the manifest with the URL pointing to a published JSON schema.
+- `executable` is the name of the executable that the manifest is for and expected to be found in `$env:PATH`
+- `version` is the version of the manifest for the tool and only used for informational purposes.
+
+The optional fields are:
+
+- `author` is the name of the author or organization that created the tool.
+- `description` is a short description of the tool.
+- `license` is the URL to the license for the tool.
 
 ### Structured Output and Custom Formatting Registration
 
@@ -179,6 +202,11 @@ can affect the behavior of child processes.
 JSON output can optionally include a `$typeNames` member which is an array of strings that indicate the type hierarchy of the object.
 PowerShell would use this as the same as the `TypeNames` member of a PSObject for formatting.
 Future enhancement would support a JSON defined formatting schema that could be used by other shells.
+
+Users may want to selectively disable structured output for a tool.
+How this is done is shell specific.
+For PowerShell, a user could set the environment variable `COMMAND_SHELL_STRUCTURED_OUTPUT` to `none` to disable structured output for all tools
+and remove that environment variable to re-enable it.
 
 ### Tab Completion Registration
 
@@ -234,6 +262,9 @@ or a shell specific script:
 Multiple shells can be specified and up to the shell to determine which one to use.
 Both a `command` and `script` can be specified, but only one of each and also up to the shell to determine which one to use.
 
+In this PowerShell example, the `az-completion.ps1` would be called one time to register the argument completer.
+A different shell may decide to call the script for each tab completion request.
+
 ### Help Registration
 
 The same manifest may define a path to the help content:
@@ -275,6 +306,14 @@ Specifically for PowerShell, a command may also want to optionally register a Pr
 
 Similar to `tabCompletion`, alternate shells can choose to adopt their own mechanism for registering these extensions
 under their shell specific key.
+
+In the case of PowerShell, predictors and feedback providers are assemblies so the value is the path to the assembly
+instead of a `.ps1` script.
+To enable support for MSIX installed tools and not load the dll directly from their location, PowerShell will
+copy the dll to the user's folder if it is not already there (SHA256 hash comparison) and load it from there:
+
+- On Unix, the dll will be copied to `$HOME/.local/share/powershell/Predictors` and `$HOME/.local/share/powershell/FeedbackProviders`
+- On Windows, the dll will be copied to `$HOME\AppData\Local\Microsoft\PowerShell\Predictors` and `$HOME\AppData\Local\Microsoft\PowerShell\FeedbackProviders`
 
 ## Alternate Proposals and Considerations
 
