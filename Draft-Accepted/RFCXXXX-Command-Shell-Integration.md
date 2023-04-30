@@ -176,7 +176,7 @@ Tools should check for this environment variable and output structured data in t
 If the tool calls other executables, it is responsible for removing or propagating the environment variable which
 can affect the behavior of child processes.
 
-JSON output should include a `$typeNames` member which is an array of strings that indicate the type hierarchy of the object.
+JSON output can optionally include a `$typeNames` member which is an array of strings that indicate the type hierarchy of the object.
 PowerShell would use this as the same as the `TypeNames` member of a PSObject for formatting.
 Future enhancement would support a JSON defined formatting schema that could be used by other shells.
 
