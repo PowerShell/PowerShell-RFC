@@ -12,6 +12,7 @@ recurring event on your calendar.
 
 ## Notes
 
+- [April 20, 2023](./notes/20230420_Notes.md) ([YouTube recording](https://youtu.be/saDa8mesGUg))
 - [March 16, 2023](./notes/20230316_Notes.md) ([YouTube recording](https://youtu.be/nDa8JWkW1_g))
 - [February 16, 2023](./notes/20230216_Notes.md) ([YouTube recording](https://youtu.be/WgIoV3lkY5I))
 - [January 19, 2023](./notes/20230119_Notes.md) ([YouTube recording](https://youtu.be/8pmIW_LlhuE))
