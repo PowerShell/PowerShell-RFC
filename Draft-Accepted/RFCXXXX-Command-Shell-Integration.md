@@ -44,7 +44,9 @@ manual effort by the user.
 ## Enhanced User Experience
 
 In these examples, we'll use a hypothetical version of `az` (Azure CLI) that implements all of the shell integration features.
-The user would simply install the tool and it would automatically be integrated with the shell.
+The user would simply install the tool and it would automatically be integrated with the shell if the session is interactive.
+
+PowerShell 7 would emit on startup any automatically loaded extensions unless `-NoLogo` is specified.
 
 ### Structured Output with Formatting
 
@@ -85,9 +87,9 @@ Current output:
 ]
 ```
 
-Although in PowerShell, this output can be piped to `ConvertFrom-Json`, it's an additional step for every `az` command execution.
+In PowerShell, this output can be piped to `ConvertFrom-Json` and it's an additional step for every `az` command execution.
 It would be preferrable to have the tool output structured data in a format that PowerShell can automatically convert to an object
-and used similarly to a cmdlet.
+and used similarly to a cmdlet but only if the `$typeNames` property is set (see below).
 
 Proposed output with custom formatting showing the most relevant information as well as a nested property:
 
@@ -137,23 +139,25 @@ Based on user feedback, there can be a configuration file to disable specific ex
 A JSON manifest file would be placed alongside the executable (or technically anywhere within `$env:PATH`) and discovered by the shell.
 All paths are relative to the location of the manifest file and must use the forward slash path separator.
 
+Additionally, to support Windows Apps, symlinks and reparse points should be followed from the exe to locate the manifest file.
+
 On Unix systems tools are sometimes synlinked to `/usr/bin`, for example, and on Windows, MSIX installed CLI tools are reparse points
 to a different location.
 Shells should look for the manifest file in the target location of a symlink or reparse point in addition to within `$env:PATH`.
 
-In the case that multiple JSON manifests are for the same executable, the last one wins.
+In the case that multiple JSON manifests are for the same executable, the first one wins.
 So if a user wants to override a manifest shipped with a tool, they can place their own in a location that is later in `$env:PATH`.
 
 ### Command shell integration manifest
 
-The JSON manifest file name would be `<name>.<author>.command.json`.
+The JSON manifest file name would be `<name>.<author>.shellintegration.json`.
 
 - `<name>` should match the executable name without the extension.
 - `<author>` is the name of the author or organization that created the tool to avoid collisions.
 
 ```json
 {
-    "$schema": "https://schemas.microsoft.com/commandshell/2023/05/01/command.json",
+    "$schema": "https://schemas.microsoft.com/commandshell/2023/05/01/command.shellintegration.json",
     "executable": "az",
     "version": "1.0.0",
     "author": "Microsoft",
@@ -200,13 +204,15 @@ If the tool calls other executables, it is responsible for removing or propagati
 can affect the behavior of child processes.
 
 JSON output can optionally include a `$typeNames` member which is an array of strings that indicate the type hierarchy of the object.
-PowerShell would use this as the same as the `TypeNames` member of a PSObject for formatting.
+PowerShell would convert this to the PSObject `TypeNames` member for formatting.
 Future enhancement would support a JSON defined formatting schema that could be used by other shells.
 
-Users may want to selectively disable structured output for a tool.
-How this is done is shell specific.
+Users may want to selectively disable structured output for a tool for a session or for a specific command use.
 For PowerShell, a user could set the environment variable `COMMAND_SHELL_STRUCTURED_OUTPUT` to `none` to disable structured output for all tools
 and remove that environment variable to re-enable it.
+
+Alternatively, if the users uses `Start-Process -Environment @{COMMAND_SHELL_STRUCTURED_OUTPUT='none'}` that would override PowerShell
+from setting the environment variable for the process.
 
 ### Tab Completion Registration
 
@@ -220,6 +226,8 @@ Currently supported variables:
 
 - `{commandLine}` - The full command line that the user has typed so far.
 - `{cursorPosition}` - The current cursor position within the command line, starting at 0 index.
+
+A literal `{` would need to be escaped: `\{`.
 
 ```json
 {
@@ -264,6 +272,8 @@ Both a `command` and `script` can be specified, but only one of each and also up
 
 In this PowerShell example, the `az-completion.ps1` would be called one time to register the argument completer.
 A different shell may decide to call the script for each tab completion request.
+
+File paths are relative to the manifest file location.
 
 ### Help Registration
 
@@ -314,6 +324,36 @@ copy the dll to the user's folder if it is not already there (SHA256 hash compar
 
 - On Unix, the dll will be copied to `$HOME/.local/share/powershell/Predictors` and `$HOME/.local/share/powershell/FeedbackProviders`
 - On Windows, the dll will be copied to `$HOME\AppData\Local\Microsoft\PowerShell\Predictors` and `$HOME\AppData\Local\Microsoft\PowerShell\FeedbackProviders`
+
+To avoid conflicts with other tools that have dlls with the same name, the dlls wil be in a subfolder named after the SHA256 hash of the original tool.
+At this point, there is no automatic cleanup of these folders.
+
+If there are dependencies needed for the predictor and feedback provider dlls, they should be included in the same folder
+using the [PowerShell 7 native dependency RID folders](https://learn.microsoft.com/en-us/powershell/scripting/dev-cross-plat/writing-portable-modules?view=powershell-7.3#dependency-on-native-libraries).
+
+### PowerShell opt-out of automatic registration of extensions
+
+Users may want to selectively disable the automatic registration of extensions for a tool.
+PowerShell will lazy load extensions when they are first used.
+A new automatic variable `$PSCommandShellExtensionsNoAutoload` will be an array of names of commands or modules that should not be automatically loaded.
+There is no provision for selecting specific extensions for a command or module.
+
+### PowerShell Modules leveraging automatic extension loading
+
+Within the module manifest file,
+there would be new members within `PrivateData` that work similarly to the command manifest file:
+
+```powershell
+@{
+    # Other members of the module manifest
+    PrivateData = @{
+        PSExtensions = @{
+            Predictor = 'az-predictor.dll'
+            FeedbackProvider = 'az-feedbackprovider.dll'
+        }
+    }
+}
+```
 
 ## Alternate Proposals and Considerations
 
