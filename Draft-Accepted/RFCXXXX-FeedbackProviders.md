@@ -185,5 +185,8 @@ Questions
 - Should the PowerShell engine be responsible for restricting feedback providers from being disruptive?
 
     - I.e if a feedback provider triggers on **success** _every_ time a user types a particular command, then should the engine restrict that if its never subsequently typed after being provided?
+    - What configurable things should there be for feedback provider creators to use? 
 
 - Do we need a better way to allow users to manage feedback providers?
+- How do we handle auto-registration? If we wanted feedback providers like `command-not-found` to be
+  registered automatically how do we do this? What other considerations does there need to be.
