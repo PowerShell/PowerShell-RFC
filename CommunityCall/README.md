@@ -10,7 +10,8 @@ Use [this ICS file](https://raw.githubusercontent.com/PowerShell/PowerShell-RFC/
 `Save Target/Link As` in order to download the file correctly) to put a
 recurring event on your calendar.
 
-Join the [Discussion](https://github.com/PowerShell/PowerShell-RFC/tree/master/CommunityCall) - each month we post an agenda and in the Discussion channel. We also accept questions and proposals for short demos from the community.
+Join the [Discussion](https://github.com/PowerShell/PowerShell-RFC/tree/master/CommunityCall) - each month we post an agenda and in the Discussion channel.
+We also accept questions and proposals for short demos from the community.
 
 ## Notes
 
