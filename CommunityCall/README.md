@@ -15,6 +15,7 @@ We also accept questions and proposals for short demos from the community.
 
 ## Notes
 
+- [June 15, 2023](./notes/20230615_Notes.md) ([YouTube recording](https://youtu.be/ZHuyESrIq9c))
 - [May 18, 2023](./notes/20230518_Notes.md) ([YouTube recording](https://youtu.be/YyoKy-ptzIE))
 - [April 20, 2023](./notes/20230420_Notes.md) ([YouTube recording](https://youtu.be/saDa8mesGUg))
 - [March 16, 2023](./notes/20230316_Notes.md) ([YouTube recording](https://youtu.be/nDa8JWkW1_g))
