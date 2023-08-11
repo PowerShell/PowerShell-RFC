@@ -87,3 +87,5 @@ Despite these advantages, the use of multiple quote characters were choosen due 
 
 The special backwards compatibility behavior when using a single `@` could be removed to make it easier for new users to learn the syntax and to simplify the code.  
 However it was declined the last time a PR was made: https://github.com/PowerShell/PowerShell/issues/2337#issuecomment-452380310
+
+Another update for the here-string syntax could be to allow it for single lines, like: `Write-Host @'Hello'@` this would enable users to type out strings without having to think about escaping quote characters. It would also enable tab completion providers to simplify the escaping logic for completion values. This can be added at a later point.
