@@ -1,0 +1,880 @@
+[Thursday 9:24 AM] Jason Helmick
+
+Hello and welcome to the August 2023 PowerShell Community Call -  where everyone is welcome!  We will get started shortly.
+
+ 
+
+This meeting is recorded. Recordings will be upload about a week after the call.  You can find our past Community Call’s on our YouTube channel: https://www.youtube.com/channel/UCMhQH-yJlr4_XHkwNunfMog
+
+ 
+
+Please remember our Code of Conduct: https://opensource.microsoft.com/codeofconduct/
+
+Please review our contributing guide: https://github.com/PowerShell/PowerShell/blob/master/.github/CONTRIBUTING.md
+
+ heart 1
+
+Code of Conduct
+
+Microsoft Open Source
+
+[Thursday 9:26 AM] Sydney Smith (SHE/HER)
+
+Welcome everyone  
+
+ heart 2 like 1
+
+[Thursday 9:27 AM] Sydney Smith (SHE/HER)
+
+The agenda and discussion https://github.com/orgs/PowerShell/discussions/20004
+
+ heart 1
+
+August 17th 2023 PowerShell Community Call · PowerShell · Discussion #20004
+
+Agenda to come Bug Bash recap @SydneyhSmith (Thank you community for joining!) PSResourceGet Release @SydneyhSmith Crescendo RC release @theJasonHelmick DSC v3 @mgreenegit Docs Update @sdwheeler VS...
+
+[Thursday 9:29 AM] Jason Helmick
+
+Mr Kanakos in da house!
+
+[Thursday 9:30 AM] Victor (External) (Guest)
+
+Hello everyone. I'm Victor from Nigeria
+
+ 1f44b_wavinghand 4 like 3
+
+[Thursday 9:30 AM] Grote, Justin
+
+Victor (Guest) welcome!
+
+ like 1
+
+[Thursday 9:35 AM] Sydney Smith (SHE/HER)
+
+https://devblogs.microsoft.com/powershell/psresourceget-preview-24-is-now-available/
+
+PSResourceGet Preview 24 is Now Available - PowerShell Team
+
+Microsoft.PowerShell.PSResourceGet is a continuation of the PowerShellGet 3.0 project. The latest preview release of this module under the new name is now available on the PowerShell Gallery. This ...
+
+[Thursday 9:35 AM] Michael Greene (POWERSHELL)
+
+the new alias's are awesome. check them out!
+
+ like 1
+
+[Thursday 9:35 AM] Michael Greene (POWERSHELL)
+
+THANK YOU community for helping us identify issues
+
+[Thursday 9:37 AM] James Brundage
+
+Sydney Smith (SHE/HER) cool work! Lemme know if you'd like a GitHub Action for PSResourceGet.
+
+ heart 2
+
+[Thursday 9:38 AM] Michael Greene (POWERSHELL)
+
+no more changes, until the next release after GA 
+
+[Thursday 9:39 AM] Mikey Lombardi
+
+tbc, Sean has been the person on the docs side carrying all the water for the PSResourceGet docs updates 😊 - my involvement has mostly been cheering him on and hitting the merge button 😅
+
+ handsinair 2 heart 1
+
+[Thursday 9:40 AM] Jason Helmick
+
+Crescendo RC Blog: https://devblogs.microsoft.com/powershell/announcing-powershell-crescendo-1-1-0-rc1/
+
+Crescendo GitHub: https://github.com/PowerShell/Crescendo
+
+Crescendo Docs: https://learn.microsoft.com/en-us/powershell/utility-modules/crescendo/overview?view=ps-modules
+
+ like 2 heart 1
+
+Announcing PowerShell Crescendo 1.1.0-RC1 - PowerShell Team
+
+This RC contains several community requested features and fixes including improved support for PSScriptAnalyzer, improvements to error handling, and the addition of `ExcludeAsArgument` property.
+
+[Thursday 9:42 AM] Demitrius Nelon
+
+WinGet 💖 PowerShell DSC
+
+ heart 2
+
+[Thursday 9:42 AM] Steven Bucher
+
+PowerShell/DSC (github.com)
+
+ like 1
+
+GitHub - PowerShell/DSC
+
+Contribute to PowerShell/DSC development by creating an account on GitHub.
+
+[Thursday 9:43 AM] Mikey Lombardi
+
+DSCv3 repo: https://github.com/PowerShell/DSC
+
+DSCv3 docs: https://learn.microsoft.com/en-us/powershell/dsc/overview?view=dsc-3.0
+
+DSCv3 CLI docs: https://learn.microsoft.com/en-us/powershell/dsc/reference/cli/dsc?view=dsc-3.0
+
+DSCv3 Samples site: https://powershell.github.io/DSC-Samples/
+
+DSCv3 Samples repo: https://github.com/PowerShell/DSC-Samples
+
+ heart 2 like 1
+
+PowerShell/DSC
+
+[Thursday 9:45 AM] Michael Greene (POWERSHELL)
+
+Mikey has done a GREAT job with a tutorials site ^
+
+ like 1 heart 1
+
+[Thursday 9:45 AM] Victor (External) (Guest)
+
+Wow
+
+[Thursday 9:46 AM] Michael Greene (POWERSHELL)
+
+For the first time ever, the tutorials are based on managing a fictional app, not just "set a registry key", etc
+
+ like 2 heart 1
+
+[Thursday 9:46 AM] Sean Wheeler
+
+Documentation update
+
+What's New in PowerShell-Docs for 2023 
+New PSResourceGet cmdlet - Import-PSGetRepository (Microsoft.PowerShell.PSResourceGet) 
+55 New DSCv3 docs! - Microsoft Desired State Configuration v3 overview 
+New DSCv3 code samples for creating resources - DSC Samples (powershell.github.io)
+
+List of changes to the PowerShell documentation for 2023
+
+[Thursday 9:47 AM] James Brundage
+
+Will DSC vNext support getting out the data only from gets (this helps make monitoring a lot easier, and yet it's something DSC hasn't exactly done in the past)?
+
+[Thursday 9:47 AM] Ryan Yates (Guest)
+
+Is the daily build still being released?
+
+[Thursday 9:49 AM] Mikey Lombardi
+
+Michael Greene (POWERSHELL)
+
+For the first time ever, the tutorials are based on managing a fictional app, not just "set a registry key", etc
+
+
+I spent years being frustrated by "how to write a resource" docs in CM tools always being too trivial (here's how you set a string in a fake file) or a real resource (here's how you write a resource to manage environment variables) - the former doesn't really help you understand what you're doing in detail, the latter leads to 100+ resources managing the same real-world component.
+
+
+ 
+
+So the samples in that repo manage a fictional application's configuration file - a very common requirement, but one that won't collide with real-world usage.
+
+ 
+
+There's also a contributor's guide with some specs - if you're comfortable programming in any language, I'd really like to get alternative implementations into the samples repo. You can contribute just the code, or code and tutorial - I'm happy to work with you on whatever! 💜
+
+ 
+
+https://powershell.github.io/DSC-Samples/contributing/tutorials/
+
+ 
+
+ like 2 heart 1
+
+Contributing a tutorial
+
+Sample implementations for Desired State Configuration v3.
+
+[Thursday 9:50 AM] Mikey Lombardi
+
+James Brundage (External)
+
+Will DSC vNext support getting out the data only from gets (this helps make monitoring a lot easier, and yet it's something DSC hasn't exactly done in the past)?
+
+
+Do you mean just getting current state for a configuration document?
+
+
+[Thursday 9:52 AM] Mikey Lombardi
+
+DSCv3 supports retrieving the current state of every instance in a configuration document. You can use the dsc config get command for that:
+
+ 
+
+https://learn.microsoft.com/powershell/dsc/reference/cli/config/get?view=dsc-3.0&preserveView=true
+
+dsc config get - PowerShell
+
+Command line reference for the 'dsc config get' command
+
+[Thursday 9:52 AM] Andy Jordan (THEY/THEM)
+
+Link to pre-release: https://github.com/PowerShell/vscode-powershell/releases/tag/v2023.9.0-preview
+
+Release v2023.9.0-preview · PowerShell/vscode-powershell
+
+v2023.9.0-preview
+Wednesday, August 09, 2023
+vscode-powershell
+
+🐛 🔧 vscode-powershell #4557 - Support ~, ./ and named workspace folders in cwd.
+✨ 🔧 vscode-powershell #4686 - Enhance additionalPo...
+
+[Thursday 9:53 AM] Michael Kanakos
+
+Sean Wheeler 
+
+do Get-WhatsNew updates release with PS updates ? 
+
+Can I update Get-WhatsNew immediately after a new release of PS? 
+
+[Thursday 9:54 AM] Mikey Lombardi
+
+Also, if anyone wants to chat about DSCv3, you can always find me online in the community chat spaces - Not only am I stoked about the new version, but I really want to make sure that when it does get closer to GA the docs are there to launch you to success. 😊
+
+ heart 3
+
+[Thursday 9:55 AM] Andrey Vernigora
+
+why is PowerShell Az module behind the az cli in terms of functionality? Damien Caro
+
+ heart 1
+
+[Thursday 9:55 AM] Darren Kattan
+
+Mikey Lombardi is there a DSC Discord channel?
+
+[Thursday 9:55 AM] Michael Greene (POWERSHELL)
+
+Darren Kattan
+
+Mikey Lombardi is there a DSC Discord channel?
+
+
+Yes!
+
+
+ heart 1
+
+[Thursday 9:55 AM] Darren Kattan
+
+I found it
+
+[Thursday 9:56 AM] Joel Miller
+
+Mikey Lombardi, What options are there for community chat spaces for DSCV3?
+
+[Thursday 9:56 AM] Joel Miller
+
+I may have missed that
+
+[Thursday 9:56 AM] Grote, Justin
+
+Unknown User
+
+why is PowerShell Az module behind the az cli in terms of functionality?
+
+
+Example? They're two entirely different dev teams so they probably have different priorities
+
+
+[Thursday 9:56 AM] Mikey Lombardi
+
+Darren Kattan
+
+Mikey Lombardi is there a DSC Discord channel?
+
+
+Yup! It's under the "Tech Specific" folder in the discord
+
+
+[Thursday 9:56 AM] Darren Kattan
+
+wait what I'm in Baton rouge!
+
+[Thursday 9:56 AM] Darren Kattan
+
+stfu I had no idea
+
+[Thursday 9:57 AM] Michael Greene (POWERSHELL)
+
+There is also a dsc community call, fyi. Details at dsccommunity.org
+
+ like 1
+
+[Thursday 9:57 AM] Damien Caro
+
+Andrey Vernigora (External)
+
+why is PowerShell Az module behind the az cli in terms of functionality?
+
+
+New services have support from both clients within 30 days of GA and we are working on closing any previous gaps that may exist.
+
+
+[Thursday 9:57 AM] Sean Wheeler
+
+mikefrobbins.github.io/psdocs-how-to/index.html
+
+How to create documentation for a PowerShell module, create updateable help, publish the help to a website, and publish the module to the PowerShell Gallery.
+
+[Thursday 9:58 AM] James Brundage
+
+Is PlatyPS still being updated?
+
+[Thursday 9:58 AM] Grote, Justin
+
+az cli also has a lot of bespoke stuff (like creating a service principal) that is actually an amalgamation of several different commands, I'm not sure how much parity is required for Az PowerShell to match
+
+ 1f4af_hundredpointssymbol 2
+
+[Thursday 9:58 AM] Darren Kattan
+
+Mikey Lombardi What are your thoughts on this: https://github.com/PowerShell/PowerShell/issues/9870#issuecomment-1674872937
+
+Feature Request: Output stream for WhatIf messages #9870
+
+[danielboth](https://github.com/danielboth) commented on this issue.
+
+Begin Reference, Mikey Lombardi, What optio... by Mikey Lombardi
+Mikey Lombardi
+Thursday 9:58 AM
+
+Unknown User
+8/17/2023, 9:56 AM
+Mikey Lombardi, What options are there for community chat spaces for DSCV3?
+The DSC Community keeps some good info on that here:
+
+
+
+
+ 
+
+https://dsccommunity.org/help/
+
+ 
+
+I'm personally keeping an eye on discord and in the repositories.
+
+Begin Reference, Is PlatyPS still being upd... by Aditya Patwardhan
+Aditya Patwardhan
+Thursday 9:58 AM
+
+James Brundage
+8/17/2023, 9:58 AM
+Is PlatyPS still being updated?
+Yes, I plan to get back to it starting next week.
+
+1 Heart reaction.
+1
+Begin Reference, Is PlatyPS still being upd... by Sean Wheeler
+Sean Wheeler
+Thursday 9:59 AM
+
+James Brundage
+8/17/2023, 9:58 AM
+Is PlatyPS still being updated?
+Yes, slowly...
+
+Begin Reference, Mikey Lombardi What are yo... by Mikey Lombardi
+Mikey Lombardi
+Thursday 10:00 AM
+
+Darren Kattan
+8/17/2023, 9:58 AM
+Mikey Lombardi What are your thoughts on this: https://github.com/PowerShell/PowerShell/issues/9870#issuecomment-1674872937
+We're on similar wavelengths, I think!
+
+
+
+
+ 
+
+https://github.com/PowerShell/PSDesiredStateConfiguration/discussions/91
+
+ 
+
+That functionality is also planned for the dsc command itself:
+
+ 
+
+https://github.com/PowerShell/DSC/issues/70
+
+Thank you Michael K. for all you do for the... by Ben Kahn
+Ben Kahn
+Thursday 10:00 AM
+
+Thank you Michael K. for all you do for the PowerShell community! 
+
+3 Heart reactions.
+3
+1 Like reaction.
+1
+Begin Reference, We're on similar wavelengt... by Darren Kattan
+Darren Kattan
+Thursday 10:01 AM
+
+Mikey Lombardi
+8/17/2023, 10:00 AM
+We're on similar wavelengths, I think! https://github.com/PowerShell/PSDesiredStateConfiguration/discussions/91 That functionality is also planned for the dsc command itself: https://github.com/PowerShell/DSC/issues/70
+Yaaas
+
+I'm interested in attending and maybe helpi... by Ben Kahn
+Ben Kahn
+Thursday 10:02 AM
+
+I'm interested in attending and maybe helping James Brundage. Where can I find more info? 
+
+Hundred points by Michael Greene (POWERSHELL)
+Michael Greene (POWERSHELL)
+Thursday 10:02 AM
+
+I am very interested in this as well. I am ... by Lionetti, Chris
+Lionetti, Chris
+Thursday 10:02 AM
+
+I am very interested in this as well. I am in the Seattle area; chris.lionetti@hpe.com I am in fact volunteering to help
+
+PS team would love to participate in meet-u... by Michael Greene (POWERSHELL)
+Michael Greene (POWERSHELL)
+Thursday 10:02 AM
+
+PS team would love to participate in meet-ups
+
+Aditya   Patwardhan  cool!  Long time / no ... by James Brundage
+James Brundage
+Thursday 10:02 AM
+
+Aditya Patwardhan cool!  Long time / no talk.  We should sync up about overlap between PlatyPS and HelpOut.
+
+1 Like reaction.
+1
+Dongbo   Wang  can you check about the dail... by Ryan Yates (Guest)
+Ryan Yates (Guest)
+Thursday 10:02 AM
+
+Dongbo Wang can you check about the daily build as my Job to install a new one seems to be failing
+
+Research Triangle PowerShell Usergroup is p... by Michael Kanakos
+Michael Kanakos
+Thursday 10:02 AM
+Edited
+
+Research Triangle PowerShell Usergroup is planning to do a PowerShell Saturday in early 2024! 
+
+Raleigh, NC 
+
+1 Heart reaction.
+1
+and anyone who is willing to help can email... by James Brundage
+James Brundage
+Thursday 10:02 AM
+
+and anyone who is willing to help can email me at james.brundage@start-automating.com or hit me up on the PowerShell Discord (@StartAutomating  on there)
+
+Any PowerSheller folks heading to SpiceWorl... by Andrew Pla
+Andrew Pla
+Thursday 10:03 AM
+
+Any PowerSheller folks heading to SpiceWorld next month?
+
+Link mikek@powershell.org or Link mkanako... by Michael Kanakos
+Michael Kanakos
+Thursday 10:03 AM
+
+mikek@powershell.org or mkanakos@gmail.com for anyone looking to reach out.
+
+PowerShell and DevOps Global Summit Call fo... by Januszko, Missy
+Januszko, Missy
+Thursday 10:03 AM
+
+PowerShell and DevOps Global Summit Call for Papers opens 10/1!
+
+7 Heart reactions.
+7
+1 Surprised reaction.
+1
+Sean   Wheeler  and Mike   Robbins   (AZUR... by Mikey Lombardi
+Mikey Lombardi
+Thursday 10:04 AM
+
+Sean Wheeler and Mike Robbins (AZURE POWERSHELL) are, unless my brain is fried!
+
+Begin Reference, Sean Wheeler and Mike Robb... by Andrew Pla
+Andrew Pla
+Thursday 10:04 AM
+
+Mikey Lombardi
+8/17/2023, 10:04 AM
+Sean Wheeler and Mike Robbins (AZURE POWERSHELL) are, unless my brain is fried!
+I think you are right. I think they are running a PowerShell course
+
+1 Heart reaction.
+1
+(going to SpiceWorld, I mean 😅) by Mikey Lombardi
+Mikey Lombardi
+Thursday 10:04 AM
+
+(going to SpiceWorld, I mean 😅)
+
+1 Like reaction.
+1
+1 Laugh reaction.
+1
+Begin Reference, Thank you Michael K. for a... by Michael Kanakos
+Michael Kanakos
+Thursday 10:05 AM
+
+Ben Kahn
+8/17/2023, 10:00 AM
+Thank you Michael K. for all you do for the PowerShell community!
+Happy to talk up events and activities as long as people don't tired of hearing my voice 
+
+2 Heart reactions.
+2
+Begin Reference, Happy to talk up events an... by Mikey Lombardi
+Mikey Lombardi
+Thursday 10:06 AM
+
+Michael Kanakos
+8/17/2023, 10:05 AM
+Happy to talk up events and activities as long as people don't tired of hearing my voice 🙂
+of those dulcet tones? not a chance 😤
+
+1 Heart reaction.
+1
+1 Laugh reaction.
+1
+Ben   Kahn  please drop me an email by James Brundage
+James Brundage
+Thursday 10:06 AM
+
+Ben Kahn please drop me an email
+
+1 Like reaction.
+1
+yooooooo tree view is rad by Mikey Lombardi
+Mikey Lombardi
+Thursday 10:07 AM
+
+yooooooo tree view is rad
+
+2 Like reactions.
+2
+Begin Reference, Dongbo Wang can you check ... by Dongbo Wang
+Dongbo Wang
+Thursday 10:08 AM
+
+Ryan Yates (Guest)
+8/17/2023, 10:02 AM
+Dongbo Wang can you check about the daily build as my Job to install a new one seems to be failing
+Daily build of the PowerShell repo? nightly builds seem to pass today
+
+I can't tell you how many times I'm iterati... by Mikey Lombardi
+Mikey Lombardi
+Thursday 10:08 AM
+
+I can't tell you how many times I'm iteratively accessing child members to find what's in there 😅
+
+Think its been a my machine issue Dongbo  ... by Ryan Yates (Guest)
+Ryan Yates (Guest)
+Thursday 10:09 AM
+
+Think its been a my machine issue Dongbo Wang sorry fort the call out
+
+2 Like reactions.
+2
+Begin Reference, Example? They're two entir... by Andrey Vernigora
+Andrey Vernigora
+Thursday 10:10 AM
+Edited
+Grote, Justin
+8/17/2023, 9:56 AM
+Example? They're two entirely different dev teams so they probably have different priorities
+
+Azure App Config service import functionality. First - Set-..KeyValue does not work at all, and there is no way to import yaml files. az cli does it no issues. Damien Caro
+
+...amd just found out I had the wrong mic e... by Michael Kanakos
+Michael Kanakos
+Thursday 10:11 AM
+
+...amd just found out I had the wrong mic enabled... sorry if I had some crappy audio earlier... 
+
+1 Heart reaction.
+1
+Begin Reference, az cli also has a lot of b... by Andrey Vernigora
+Andrey Vernigora
+Thursday 10:13 AM
+Edited
+Grote, Justin
+8/17/2023, 9:58 AM
+az cli also has a lot of bespoke stuff (like creating a service principal) that is actually an amalgamation of several different commands, I'm not sure how much parity is required for Az PowerShell to match
+
+i'd say - 100% parity  as jumping between the two is painful. so people pick the simplest path and use the tool that can do all needed stuff, instead of  mixing the tools
+
+James demo'ed this two weeks at my group. v... by Michael Kanakos
+Michael Kanakos
+Thursday 10:13 AM
+
+James demo'ed this two weeks at my group. very interesting demo . watch the demo on YT
+
+https://youtu.be/iZgcTD_uN-w
+
+Improving the Shell Experienc…
+
+01:38:29 | 376 views | 5 days ago
+
+youtu.be
+any chance we can rerun the pipelines for t... by Ryan Yates (Guest)
+Ryan Yates (Guest)
+Thursday 10:15 AM
+
+any chance we can rerun the pipelines for this pr https://github.com/PowerShell/PowerShell/pull/19884
+
+1 Like reaction.
+1
+Begin Reference, any chance we can rerun th... by Aditya Patwardhan
+Aditya Patwardhan
+Thursday 10:16 AM
+
+Ryan Yates (Guest)
+8/17/2023, 10:15 AM
+any chance we can rerun the pipelines for this pr https://github.com/PowerShell/PowerShell/pull/19884
+I will close and re-open to re-run the pipelunnes
+
+...and in true james brundage fashion... he... by Michael Kanakos
+Michael Kanakos
+Thursday 10:16 AM
+Edited
+
+...and in true james brundage fashion... he added a bunch of new stuff he since demo'ed two weeks ago
+
+1 Laugh reaction.
+1
+Begin Reference, I will close and re-open t... by Dongbo Wang
+Dongbo Wang
+Thursday 10:16 AM
+
+Aditya Patwardhan
+8/17/2023, 10:16 AM
+I will close and re-open to re-run the pipelunnes
+Already rerunning
+
+3 Heart reactions.
+3
+Pretty slick! by Darren Kattan
+Darren Kattan
+Thursday 10:18 AM
+
+Pretty slick!
+
+Love to hear it! by Andrew Pla
+Andrew Pla
+Thursday 10:19 AM
+
+Love to hear it!
+
+Can we get a compression module called mid... by Darren Kattan
+Darren Kattan
+Thursday 10:19 AM
+
+Can we get a compression module called middle out?
+
+3 Laugh reactions.
+3
+(Previously known as JSON adapters Wink ) ... by Steven Bucher
+Thursday 10:20 AM
+Steven Bucher
+
+(Previously known as JSON adapters ) announcements/changes coming soon 
+
+1 Heart reaction.
+1
+1 Like reaction.
+1
+1 Laugh reaction.
+1
+Begin Reference, Azure App Config service i... by Damien Caro
+Damien Caro
+Thursday 10:21 AM
+
+Andrey Vernigora
+8/17/2023, 10:10 AM
+Azure App Config service import functionality. First - Set-..KeyValue does not work at all, and there is no way to import yaml files. az cli does it no issues. Damien Caro
+The most efficient was to get this addressed is to submit an issue in the Azure PowerShell repo to get the attention of the owner of the module: https://github.com/Azure/azure-powershell/issues
+
+Issues · Azure/azure-powershell
+
+Microsoft Azure PowerShell. Contribute to Azure/azure-powershell development by creating an account on GitHub.
+
+github.com
+Begin Reference, i'd say - 100% parity 🙂 a... by Damien Caro
+Damien Caro
+Thursday 10:23 AM
+Andrey Vernigora
+8/17/2023, 10:13 AM
+i'd say - 100% parity 🙂 as jumping between the two is painful. so people pick the simplest path and use the tool that can do all needed stuff, instead of mixing the tools
+
+We are prioritizing where we fill the gaps, over the last several months we put our effort on increasing AKS support
+
+1 Like reaction.
+1
+Link https://github.com/StartAutomating/ugi by Michael Greene (POWERSHELL)
+Michael Greene (POWERSHELL)
+Thursday 10:23 AM
+
+https://github.com/StartAutomating/ugit
+
+GitHub - StartAutomating/ugit: Updated Git: A powerful PowerShell wrapper for git that lets you extend git, automate multiple repos, and output git as objects.
+
+Updated Git: A powerful PowerShell wrapper for git that lets you extend git, automate multiple repos, and output git as objects. - GitHub - StartAutomating/ugit: Updated Git: A powerful PowerShell ...
+
+github.com
+1 Like reaction.
+1
+Dongbo   Wang  looks like all test passed s... by Ryan Yates (Guest)
+Ryan Yates (Guest)
+Thursday 10:25 AM
+
+Dongbo Wang looks like all test passed so can  we get tha PR merged
+
+real-time dynamic parameter binding! by Darren Kattan
+Darren Kattan
+Thursday 10:25 AM
+
+real-time dynamic parameter binding!
+
+also - here are the instructions I followed... by Michael Greene (POWERSHELL)
+Michael Greene (POWERSHELL)
+Thursday 10:25 AM
+
+also - here are the instructions I followed to get a local CloudShell container:
+
+https://github.com/Azure/CloudShell#running-the-cloud-shell-image-locally
+
+Link Bind Dynamic Parameters Real-Time by d... by Darren Kattan
+Darren Kattan
+Thursday 10:26 AM
+
+Bind Dynamic Parameters Real-Time by dkattan · Pull Request #20069 · PowerShell/PowerShell (github.com)
+
+To add to the Azure Automation, discovered ... by Matthew Dowst
+Matthew Dowst
+Thursday 10:26 AM
+
+To add to the Azure Automation, discovered this week they are removing support for smart-quotes in PowerShell 5.1 modules. So heads up to anyone using custom modules.
+
+1 Grimacing face reaction.
+1
+    by Darren Kattan
+Darren Kattan
+Thursday 10:28 AM
+
+PowerShell
+Function Expand-ComputerName {
+
+    [CmdletBinding()]
+
+    Param()
+
+    DynamicParam {
+
+        Write-Host "Calling New-DynamicParameter for ComputerName"
+
+        New-DynamicParameter -Name ComputerName -Mandatory -Type string
+
+        Write-Host "`$ComputerName: $ComputerName"
+
+        if ($ComputerName -like '*`$AssetTag*') {
+
+            Write-Host "Calling New-DynamicParameter for AssetTag"
+
+            New-DynamicParameter -Name AssetTag -Mandatory -Type string
+
+            Write-Host "Done calling New-DynamicParameter for AssetTag"
+
+        }
+
+    }
+
+    Process {
+
+        $ExecutionContext.InvokeCommand.ExpandString($ComputerName)
+
+    }
+
+}
+Expand (17 lines)
+
+ 
+
+ 
+
+Yall are awesome Smile by Ryan Yates (Guest)
+Ryan Yates (Guest)
+Thursday 10:29 AM
+
+Yall are awesome 
+
+2 Like reactions.
+2
+1 Heart reaction.
+1
+Thank you! by Unknown User
+Victor (External) (Guest)
+Thursday 10:29 AM
+
+Thank you!
+
+Thanks! by Darren Kattan
+Darren Kattan
+Thursday 10:29 AM
+
+Thanks!
+
+thank you! by Michael Greene (POWERSHELL)
+Michael Greene (POWERSHELL)
+Thursday 10:29 AM
+
+thank you!
+
+Thanks! by James Brundage
+James Brundage
+Thursday 10:29 AM
+
+Thanks!
+
+Thanks folks! by Jon Junell
+Jon Junell
+Thursday 10:29 AM
+
+Thanks folks!
+
+Thanks everyone! by JB Lewis
+JB Lewis
+Thursday 10:29 AM
+
+Thanks everyone!
+
+Recording has stopped. Saving recording…
+Thursday 10:30 AM Recording has stopped. Saving recording…
+Recording Recording
+1h 3m 36s
+Context menu available
+Recording
+Jason Helmick
+This recording is set to expire. View or change the expiration date here. Learn more
+Meeting ended: at Thursday 3:48 PM after 6 hours 41 minutes 5 seconds This meeting contains recordings
+Thursday 3:48 PM Meeting ended: 6h 41m 5s
+View recap
+Transcript

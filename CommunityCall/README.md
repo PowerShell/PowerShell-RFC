@@ -1,7 +1,7 @@
-# PowerShell Core Community Call
+# PowerShell/OpenSSH Community Call
 
 The PowerShell Community Call is held on the 3rd Thursday of every month at [9:30 AM US Pacific Time](http://www.timebie.com/std/pdt.php?q=9.5).
-Topics include PowerShell Core, PSEditorServices/VSCode-PowerShell, PSScriptAnalyzer,
+Topics include PowerShell 7, Windows OpenSSH, PSEditorServices/VSCode-PowerShell, PSScriptAnalyzer,
 PowerShell Gallery, and any other projects owned by the PowerShell Team.
 
 You can join our Teams live event at https://aka.ms/JoinPSCall
@@ -10,8 +10,15 @@ Use [this ICS file](https://raw.githubusercontent.com/PowerShell/PowerShell-RFC/
 `Save Target/Link As` in order to download the file correctly) to put a
 recurring event on your calendar.
 
+Join the [Discussion](https://github.com/orgs/PowerShell/discussions/categories/community-call) - each month we post an agenda and in the Discussion channel.
+We also accept questions and proposals for short demos from the community.
+
 ## Notes
 
+- [August 17, 2023](./notes/20230817_Notes.md) ([YouTube recording](https://youtu.be/5Yb18nWobDY))
+- [July 20, 2023](./notes/20230720_Notes.md) ([YouTube recording](https://youtu.be/31WGvFd8ZZY))
+- [June 15, 2023](./notes/20230615_Notes.md) ([YouTube recording](https://youtu.be/ZHuyESrIq9c))
+- [May 18, 2023](./notes/20230518_Notes.md) ([YouTube recording](https://youtu.be/YyoKy-ptzIE))
 - [April 20, 2023](./notes/20230420_Notes.md) ([YouTube recording](https://youtu.be/saDa8mesGUg))
 - [March 16, 2023](./notes/20230316_Notes.md) ([YouTube recording](https://youtu.be/nDa8JWkW1_g))
 - [February 16, 2023](./notes/20230216_Notes.md) ([YouTube recording](https://youtu.be/WgIoV3lkY5I))
