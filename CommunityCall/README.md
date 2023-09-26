@@ -15,7 +15,9 @@ We also accept questions and proposals for short demos from the community.
 
 ## Notes
 
-- [August 17, 2023](./notes/20230817_Notes.md) ([YouTube recording](https://youtu.be/5Yb18nWobDY))
+- [September 21, 2023](./notes/20230921_Notes.md) ([YouTube recording](https://youtu.be/16CFPA83qRo)
+  and [transcript](./notes/20230921_ChatTranscript.md))
+- [August 17, 2023](./notes/20230817_Notes.md) ([YouTube recording](https://youtu.be/5Yb18nWobDY)
   and [transcript](./notes/20230817_ChatTranscript.txt))
 - [July 20, 2023](./notes/20230720_Notes.md) ([YouTube recording](https://youtu.be/31WGvFd8ZZY))
 - [June 15, 2023](./notes/20230615_Notes.md) ([YouTube recording](https://youtu.be/ZHuyESrIq9c))
