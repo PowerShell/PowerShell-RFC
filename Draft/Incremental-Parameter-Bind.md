@@ -135,7 +135,7 @@ Function Get-EdgeUpdates
 
 ## Alternate Proposals and Considerations
 
-1. **Explicit Flag for Incremental Binding**: Instead of changing the default behavior, introduce a. IncrementalBind flag to `CmdletBindingAttribute` or create an `IncrementalBindingAttribute` that enables incremental binding. This would allow script authors to opt-in to the new behavior explicitly.
+1. **Explicit Flag for Incremental Binding**: Instead of changing the default behavior, introduce an `IncrementalBind` flag to `CmdletBindingAttribute` or create an `IncrementalBindingAttribute` that enables incremental binding. This would allow script authors to opt-in to the new behavior explicitly.
 
 2. **Dynamic Binding Callbacks**: Another approach might be to allow a scriptblock callback to be attached to a `RuntimeDefinedParameter`. This callback would execute when the parameter is bound, providing more granular control over the binding process.
 
