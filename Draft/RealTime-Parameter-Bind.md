@@ -1,5 +1,5 @@
 ---
-RFC: RFC0066
+RFC: RFC
 Author: Darren Kattan, James Brundage
 Status: Draft
 Area: Dynamic Parameter Binding
