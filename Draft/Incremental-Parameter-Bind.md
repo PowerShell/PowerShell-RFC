@@ -221,10 +221,11 @@ dynamicparam
 
    The syntax could look like `Get-Help MyIncrementallyBindableFunction -Product Edge`
 
-   This is similar to --help or /h options for many command line tools where you can get details about sub-commands.
+   This is similar to `--help` or `/h` options for many command line tools where you can get details about sub-commands.
 
-   This would be relatively easy to wire up as
-       1. Get-Help doesn't have any parameters with ValueFromRemainingArguments
-       2. We could pass -ArgumentList to Get-Command to within Get-Help so the incrementally bound parameters become available
+   This would be relatively easy to wire up as:
+
+       1. `Get-Help` doesn't have any parameters with `ValueFromRemainingArguments`
+       2. We could pass `-ArgumentList` to `Get-Command` to within `Get-Help` so the incrementally bound parameters become visible
 
 Please note that the above proposal is a starting point and would benefit from feedback, especially concerning discoverability and performance.
