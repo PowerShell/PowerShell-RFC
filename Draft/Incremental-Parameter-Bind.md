@@ -20,7 +20,65 @@ Facilitate PowerShell's dynamic parameter block by allowing `RuntimeDefinedParam
 
 ## User Experience
 
-Suppose a user wants to interactively install different versions of Microsoft Edge, filtered by Product, Platform, and Architecture. With this proposed change, once the user selects a Product, the subsequent options for Platform are filtered based on that selection. Once a Platform is selected, the Architecture choices are then filtered, and so forth. 
+Suppose a user wants to write a Get-LatestAvailableMicrosoftEdgeVersion function using data available from https://edgeupdates.microsoft.com/api/products
+
+The data is JSON but is structured as followed
+
+1. Product: Stable
+   - Platform: Windows
+     - Architecture: x64
+       - msi: 118.0.2088.57
+     - Architecture: arm64
+       - msi: 118.0.2088.57
+     - Architecture: x86
+       - msi: 118.0.2088.57
+   - Platform: Linux
+     - Architecture: x64
+       - rpm: 118.0.2088.57
+       - deb: 118.0.2088.57
+   - Platform: MacOS
+     - Architecture: universal
+       - pkg: 118.0.2088.57
+       - plist: 118.0.2088.57
+   - Platform: Android
+     - Architecture: arm64
+       - Version: 118.0.2088.58
+   - Platform: iOS
+     - Architecture: arm64
+       - Version: 118.0.2088.60
+
+2. Product: Beta
+   - Platform: iOS
+     - Architecture: arm64
+       - Version: 118.0.2088.36
+   - Platform: Linux
+     - Architecture: x64
+       - rpm: 119.0.2151.12
+       - deb: 119.0.2151.12
+   - Platform: Windows
+     - Architecture: arm64
+       - msi: 119.0.2151.12
+     - Architecture: x64
+       - msi: 119.0.2151.12
+     - Architecture: x86
+       - msi: 119.0.2151.12
+   - Platform: MacOS
+     - Architecture: universal
+       - plist: 119.0.2151.12
+       - pkg: 119.0.2151.12
+   - Platform: Android
+     - Architecture: arm64
+       - Version: 119.0.2151.11
+
+
+To get the version number the function would require the following parameters:
+- Product
+- Platform
+- Architecture (Not Applicable for Android and iOS)
+- PackageType (Applicable for Linux to disambiguate rpm/deb and Windows to disambiguate msi/exe)
+
+
+With this proposed change, once the user selects a Product and Platform, Architecture and PackageType options are conditionally required based on the API data.
 
 The sample code below demonstrates how this experience _might_ look with the proposed changes:
 
@@ -137,8 +195,36 @@ Function Get-EdgeUpdates
 
 1. **Explicit Flag for Incremental Binding**: Instead of changing the default behavior, introduce an `IncrementalBind` flag to `CmdletBindingAttribute` or create an `IncrementalBindingAttribute` that enables incremental binding. This would allow script authors to opt-in to the new behavior explicitly.
 
-2. **Dynamic Binding Callbacks**: Another approach might be to allow a scriptblock callback to be attached to a `RuntimeDefinedParameter`. This callback would execute when the parameter is bound, providing more granular control over the binding process.
+2. **Expose BindParameter method in dynamicparam block**: Syntax could look like
+```powershell
+dynamicparam
+{   
+    $ProductParam = [RuntimeDefinedParameter]::new('Product', [string], $productParamAttributes)
+    
+    $_.BindParameter($ProductParam)
+    $Product = $PSBoundParameters['Product']
+    # or
+    $Product = $this.BindParameter($ProductParam)
+    # or
+    if($_.TryBindParameter($ProductParam, out $Product))
+    {
+        ...
+    }
+}
+```
 
-3. **Performance Considerations**: Depending on the implementation, there could be performance implications. The exact performance impact should be assessed during the development phase, and optimizations should be considered to ensure that this feature doesn't introduce significant overhead.
+1. **Performance Considerations**: Depending on the implementation, there could be performance implications. The exact performance impact should be assessed during the development phase, and optimizations should be considered to ensure that this feature doesn't introduce significant overhead.
 
-Please note that the above proposal is a starting point and would benefit from feedback, especially concerning backward compatibility and potential pitfalls not identified in this draft.
+2. **Discoverability and Documentation Considerations**: Perhaps the most reasonable objection to this RFC is discoverability of incrementally bound parameters by Get-Help. For this I propose we either:
+   - Do nothing as this is already a problem with dynamic parameters that are conditionally present based off the bound value of static parameters
+   - `Get-Help` could append `This function has dynamic parameters and may require additional parameters not documented here, supply -ArgumentList parameter for additional details` to commands that implement dynamic/incrementally bound parameters
+
+   The syntax could look like `Get-Help MyIncrementallyBindableFunction -Product Edge`
+
+   This is similar to --help or /h options for many command line tools where you can get details about sub-commands.
+
+   This would be relatively easy to wire up as
+       1. Get-Help doesn't have any parameters with ValueFromRemainingArguments
+       2. We could pass -ArgumentList to Get-Command to within Get-Help so the incrementally bound parameters become available
+
+Please note that the above proposal is a starting point and would benefit from feedback, especially concerning discoverability and performance.
