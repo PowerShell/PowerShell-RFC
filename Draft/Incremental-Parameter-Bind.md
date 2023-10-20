@@ -195,7 +195,7 @@ Function Get-EdgeUpdates
 
 1. **Explicit Flag for Incremental Binding**: Instead of changing the default behavior, introduce an `IncrementalBind` flag to `CmdletBindingAttribute` or create an `IncrementalBindingAttribute` that enables incremental binding. This would allow script authors to opt-in to the new behavior explicitly.
 
-2. **Expose BindParameter method in dynamicparam block**: Syntax could look like
+2. **Expose BindParameter() in dynamicparam block**: Syntax could look like
 ```powershell
 dynamicparam
 {   
