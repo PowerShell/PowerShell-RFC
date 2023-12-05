@@ -1,0 +1,136 @@
+BEGIN:VCALENDAR
+PRODID:-//Microsoft Corporation//Outlook 16.0 MIMEDIR//EN
+VERSION:2.0
+METHOD:REQUEST
+X-MS-OLK-FORCEINSPECTOROPEN:TRUE
+BEGIN:VTIMEZONE
+TZID:GMT Standard Time
+BEGIN:STANDARD
+DTSTART:16011028T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZOFFSETFROM:+0100
+TZOFFSETTO:-0000
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010325T010000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
+TZOFFSETFROM:-0000
+TZOFFSETTO:+0100
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;CN="Ryan Yates";RSVP=TRUE:mailto:ryan.yates@kilasuit.org
+CLASS:PUBLIC
+CREATED:20231205T211818Z
+DESCRIPTION: \n\n__________________________________________________________
+	______________________ \n\nMicrosoft Teams meeting \n\nJoin on your comput
+	er\, mobile app or room device \n\nClick here to join the meeting <https:/
+	/teams.microsoft.com/l/meetup-join/19%3ameeting_ZWMxN2QwMWQtNmMzYy00ZTg2LW
+	JjYzgtMTJiNjUxNDhlYWM1%40thread.v2/0?context=%7b%22Tid%22%3a%2220aeae3c-e7
+	8e-44b2-b99a-b71fd82956c9%22%2c%22Oid%22%3a%223cce6389-34b8-49dd-8164-9909
+	63a22264%22%7d>  \n\nMeeting ID: 397 563 666 250 \nPasscode: eFAfxg \n\nDo
+	wnload Teams <https://www.microsoft.com/en-us/microsoft-teams/download-app
+	>  | Join on the web <https://www.microsoft.com/microsoft-teams/join-a-mee
+	ting> \n\nLearn More <https://aka.ms/JoinTeamsMeeting>  | Meeting options 
+	<https://teams.microsoft.com/meetingOptions/?organizerId=3cce6389-34b8-49d
+	d-8164-990963a22264&tenantId=20aeae3c-e78e-44b2-b99a-b71fd82956c9&threadId
+	=19_meeting_ZWMxN2QwMWQtNmMzYy00ZTg2LWJjYzgtMTJiNjUxNDhlYWM1@thread.v2&mes
+	sageId=0&language=en-US>  \n\n____________________________________________
+	____________________________________ \n\n \n\n
+DTEND;TZID="GMT Standard Time":20231214T190000
+DTSTAMP:20231205T210216Z
+DTSTART;TZID="GMT Standard Time":20231214T180000
+LAST-MODIFIED:20231205T211818Z
+LOCATION:Microsoft Teams Meeting
+ORGANIZER;CN="Ryan Yates":mailto:ryan.yates@kilasuit.org
+PRIORITY:5
+SEQUENCE:3
+SUMMARY;LANGUAGE=en-gb:PowerShell Community December 2024 Call
+TRANSP:OPAQUE
+UID:040000008200E00074C5B7101A82E00800000000E078EBAD0725DA01000000000000000
+	01000000076DDD48DD4BF7941A9562F1852CDB22F
+X-ALT-DESC;FMTTYPE=text/html:<html xmlns:v="urn:schemas-microsoft-com:vml" 
+	xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-mic
+	rosoft-com:office:word" xmlns:m="http://schemas.microsoft.com/office/2004/
+	12/omml" xmlns="http://www.w3.org/TR/REC-html40"><head><meta name=Generato
+	r content="Microsoft Word 15 (filtered medium)"><style><!--\n/* Font Defin
+	itions */\n@font-face\n	{font-family:"Cambria Math"\;\n	panose-1:2 4 5 3 5
+	 4 6 3 2 4\;}\n@font-face\n	{font-family:Calibri\;\n	panose-1:2 15 5 2 2 2
+	 4 3 2 4\;}\n@font-face\n	{font-family:"Segoe UI"\;\n	panose-1:2 11 5 2 4 
+	2 4 2 2 3\;}\n@font-face\n	{font-family:"Segoe UI Semibold"\;\n	panose-1:2
+	 11 7 2 4 2 4 2 2 3\;}\n/* Style Definitions */\np.MsoNormal\, li.MsoNorma
+	l\, div.MsoNormal\n	{margin:0cm\;\n	font-size:11.0pt\;\n	font-family:"Cali
+	bri"\,sans-serif\;\n	mso-fareast-language:EN-US\;}\na:link\, span.MsoHyper
+	link\n	{mso-style-priority:99\;\n	color:#0563C1\;\n	text-decoration:underl
+	ine\;}\nspan.EmailStyle18\n	{mso-style-type:personal-compose\;\n	font-fami
+	ly:"Calibri"\,sans-serif\;\n	color:#2F5496\;}\n.MsoChpDefault\n	{mso-style
+	-type:export-only\;\n	font-size:10.0pt\;\n	mso-ligatures:none\;}\n@page Wo
+	rdSection1\n	{size:612.0pt 792.0pt\;\n	margin:72.0pt 72.0pt 72.0pt 72.0pt\
+	;}\ndiv.WordSection1\n	{page:WordSection1\;}\n--></style><!--[if gte mso 9
+	]><xml>\n<o:shapedefaults v:ext="edit" spidmax="1026" />\n</xml><![endif]-
+	-><!--[if gte mso 9]><xml>\n<o:shapelayout v:ext="edit">\n<o:idmap v:ext="
+	edit" data="1" />\n</o:shapelayout></xml><![endif]--></head><body lang=EN-
+	GB link="#0563C1" vlink="#954F72" style='word-wrap:break-word'><div class=
+	WordSection1><p class=MsoNormal><span style='color:#2F5496'><o:p>&nbsp\;</
+	o:p></span></p><div><p class=MsoNormal><span style='color:#5F5F5F'>_______
+	_________________________________________________________________________<
+	/span> <o:p></o:p></p></div><div><div style='margin-top:18.0pt\;margin-bot
+	tom:15.0pt'><p class=MsoNormal><span lang=EN-US style='font-size:18.0pt\;f
+	ont-family:"Segoe UI"\,sans-serif\;color:#252424'>Microsoft Teams meeting<
+	/span><span lang=EN-US style='font-family:"Segoe UI"\,sans-serif\;color:#2
+	52424'> <o:p></o:p></span></p></div><div style='margin-bottom:15.0pt'><div
+	><p class=MsoNormal><b><span lang=EN-US style='font-size:10.5pt\;font-fami
+	ly:"Segoe UI"\,sans-serif\;color:#252424'>Join on your computer\, mobile a
+	pp or room device</span></b><b><span lang=EN-US style='font-family:"Segoe 
+	UI"\,sans-serif\;color:#252424'> <o:p></o:p></span></b></p></div><p class=
+	MsoNormal><span lang=EN-US style='font-family:"Segoe UI"\,sans-serif\;colo
+	r:#252424'><a href="https://teams.microsoft.com/l/meetup-join/19%3ameeting
+	_ZWMxN2QwMWQtNmMzYy00ZTg2LWJjYzgtMTJiNjUxNDhlYWM1%40thread.v2/0?context=%7
+	b%22Tid%22%3a%2220aeae3c-e78e-44b2-b99a-b71fd82956c9%22%2c%22Oid%22%3a%223
+	cce6389-34b8-49dd-8164-990963a22264%22%7d" target="_blank"><span style='fo
+	nt-size:10.5pt\;font-family:"Segoe UI Semibold"\,sans-serif\;color:#6264A7
+	'>Click here to join the meeting</span></a> <o:p></o:p></span></p></div><d
+	iv style='margin-top:15.0pt\;margin-bottom:15.0pt'><div style='margin-bott
+	om:3.0pt'><p class=MsoNormal><span lang=EN-US style='font-size:10.5pt\;fon
+	t-family:"Segoe UI"\,sans-serif\;color:#252424'>Meeting ID: </span><span l
+	ang=EN-US style='font-size:12.0pt\;font-family:"Segoe UI"\,sans-serif\;col
+	or:#252424'>397 563 666 250</span><span lang=EN-US style='font-size:10.5pt
+	\;font-family:"Segoe UI"\,sans-serif\;color:#252424'> </span><span lang=EN
+	-US style='font-family:"Segoe UI"\,sans-serif\;color:#252424'><br></span><
+	span lang=EN-US style='font-size:10.5pt\;font-family:"Segoe UI"\,sans-seri
+	f\;color:#252424'>Passcode: </span><span lang=EN-US style='font-size:12.0p
+	t\;font-family:"Segoe UI"\,sans-serif\;color:#252424'>eFAfxg </span><span 
+	lang=EN-US style='font-family:"Segoe UI"\,sans-serif\;color:#252424'><o:p>
+	</o:p></span></p><div><p class=MsoNormal><span lang=EN-US style='font-size
+	:10.5pt\;font-family:"Segoe UI"\,sans-serif\;color:#252424'><a href="https
+	://www.microsoft.com/en-us/microsoft-teams/download-app" target="_blank"><
+	span style='color:#6264A7'>Download Teams</span></a> | <a href="https://ww
+	w.microsoft.com/microsoft-teams/join-a-meeting" target="_blank"><span styl
+	e='color:#6264A7'>Join on the web</span></a><o:p></o:p></span></p></div></
+	div></div><div style='margin-top:15.0pt\;margin-bottom:18.0pt'><p class=Ms
+	oNormal><span lang=EN-US style='font-family:"Segoe UI"\,sans-serif\;color:
+	#252424'><a href="https://aka.ms/JoinTeamsMeeting" target="_blank"><span s
+	tyle='font-size:10.5pt\;color:#6264A7'>Learn More</span></a> | <a href="ht
+	tps://teams.microsoft.com/meetingOptions/?organizerId=3cce6389-34b8-49dd-8
+	164-990963a22264&amp\;tenantId=20aeae3c-e78e-44b2-b99a-b71fd82956c9&amp\;t
+	hreadId=19_meeting_ZWMxN2QwMWQtNmMzYy00ZTg2LWJjYzgtMTJiNjUxNDhlYWM1@thread
+	.v2&amp\;messageId=0&amp\;language=en-US" target="_blank"><span style='fon
+	t-size:10.5pt\;color:#6264A7'>Meeting options</span></a> <o:p></o:p></span
+	></p></div></div><div><p class=MsoNormal><span style='color:#5F5F5F'>_____
+	__________________________________________________________________________
+	_</span> <o:p></o:p></p></div><p class=MsoNormal><span style='color:#2F549
+	6'><o:p>&nbsp\;</o:p></span></p></div></body></html>
+X-MICROSOFT-CDO-BUSYSTATUS:BUSY
+X-MICROSOFT-CDO-IMPORTANCE:1
+X-MICROSOFT-DISALLOW-COUNTER:FALSE
+X-MS-OLK-APPTLASTSEQUENCE:3
+X-MS-OLK-APPTSEQTIME:20231205T210216Z
+X-MS-OLK-AUTOFILLLOCATION:FALSE
+X-MS-OLK-CONFTYPE:0
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+END:VALARM
+END:VEVENT
+END:VCALENDAR
