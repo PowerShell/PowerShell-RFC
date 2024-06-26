@@ -9,3 +9,11 @@ design changes (instead of having long threads in issues).  The PowerShell Team 
 (depending on amount of feedback) to review the feedback and respond.
 
 We'll continue to refine this process as we learn from it.
+
+## Code of Conduct
+
+Please see our [Code of Conduct](.github/CODE_OF_CONDUCT.md) before participating in this project.
+
+## Security Policy
+
+For any security issues, please see our [Security Policy](.github/SECURITY.md).
