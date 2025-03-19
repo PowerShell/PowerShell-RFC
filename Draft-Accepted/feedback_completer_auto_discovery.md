@@ -93,8 +93,8 @@ Within each sub-folder, a JSON file named after the folder name should be define
 
 ```JSONC
 {
-    "module": "<module-name-or-path>",  ## Module to load to register the feedback provider.
-    "disable": false, ## Control whether auto-discovery should find this feedback provider.
+    "module": "<module-name-or-path>",  // Module to load to register the feedback provider.
+    "disable": false, // Control whether auto-discovery should find this feedback provider.
 }
 ```
 
@@ -176,9 +176,9 @@ Within each sub-folder, a JSON file named after the folder name should be define
 
 ```JSONC
 {
-    "module": "<module-name-or-path>",  ## Module to load to register the completer.
-    "script": "<script-path>",  ## Script to run to register the completer.
-    "disable": false,  ## Control whether auto-discovery should find this completer.
+    "module": "<module-name-or-path>",  // Module to load to register the completer.
+    "script": "<script-path>",  // Script to run to register the completer.
+    "disable": false,  // Control whether auto-discovery should find this completer.
 }
 ```
 
