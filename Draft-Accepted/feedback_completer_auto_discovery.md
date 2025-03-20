@@ -49,9 +49,9 @@ We will have separate directories for feedback providers and tab-completers, for
 
 The folders for feedback providers and tab-completers will be placed under the same path where modules folders are currently located:
 
-- In-box path: `$PSHOME/Feedbacks` and `$PSHOME/Completions`
-- Current user path: `<personal>/PowerShell/Feedbacks` and `<personal>/PowerShell/Completions`
-- All user path: `<shared>/PowerShell/Feedbacks` and `<shared>/PowerShell/Completions`
+- In-box path: `$PSHOME/feedbacks` and `$PSHOME/completions`
+- Current user path: `<personal>/PowerShell/feedbacks` and `<personal>/PowerShell/completions`
+- All user path: `<shared>/PowerShell/feedbacks` and `<shared>/PowerShell/completions`
 
 ### Feedback Provider
 
@@ -66,9 +66,9 @@ There are 2 kinds of feedback providers:
 The 1st kind doesn't have a specific corresponding trigger, so the auto-discovery for it only happens at the startup of a session.</br>
 The 2nd kind can use the native command name as the specific trigger, and the auto-discovery happens when the command gets executed.
 
-The strucutre of the `Feedbacks` folder is as follows:
+The strucutre of the `feedbacks` folder is as follows:
 ```none
-Feedbacks
+feedbacks
 │
 ├───_startup_
 │   ├───linux-command-not-found
@@ -85,7 +85,7 @@ Feedbacks
 ├───...
 ```
 
-Each item within `Feedbacks` is a folder.
+Each item within `feedbacks` is a folder.
 - `_startup_`: feedback providers declared in this folder will be auto-loaded at the startup of an interactive `ConsoleHost` session.
 - `git` or `kubectl`: feedback provider for a specific native command should be declared in a folder named after the native command. It will be auto-loaded when the native command gets executed.
 
@@ -109,10 +109,10 @@ About the `module` key:
 
 #### Execution Flow
 
-1. At startup, auto-load the enabled feedback providers from the `_startup_` folder of the `Feedbacks` paths. Do the auto-loading before processing user's profile.
+1. At startup, auto-load the enabled feedback providers from the `_startup_` folder of the `feedbacks` paths. Do the auto-loading before processing user's profile.
 2. Report what feedback providers were processed and the time taken, in the streaming way.
 3. In `NativeCommandProcessor`, when a native command gets executed,
-   - Check if a feedback provider for this native command is available in the `Feedbacks` paths;
+   - Check if a feedback provider for this native command is available in the `feedbacks` paths;
    - If so, check if the specified module already loaded;
    - If not, load it at the `DoComplete` phase, so the feedback provider will be ready right after the native command finishes.
 
@@ -131,10 +131,10 @@ Also, it's allowed to register multiple feedback providers for a single native c
    - Such a key could be handy if a user wants to share the feedback/tab-completer configurations among multiple machines via a cloud drive.
 
 3. Do we really need a folder for each feedback provider?
-   For example, can we simply have the files `git.json` and `kubectl.json` under the `Feedbacks` folder, and the files `linux-command-not-found.json` and `winget-command-not-found.json` under the `_startup_` folder?
+   For example, can we simply have the files `git.json` and `kubectl.json` under the `feedbacks` folder, and the files `linux-command-not-found.json` and `winget-command-not-found.json` under the `_startup_` folder?
    - Since it's possible to have non-module feedback provider that comes with a DLL only,
      then the DLL might need to be deployed along with the configuration.
-     In that case, the tool that deploys the DLL will either copy the DLL directly to `Feedbacks`,
+     In that case, the tool that deploys the DLL will either copy the DLL directly to `feedbacks`,
      or create a sub-folder named after the tool. Having a folder for each feedback provider makes sense in that case.
    - We will need a folder for each tab-completer because the completion implementation may just be a script file
      that needs to be deployed along with the completer's configuration.
@@ -152,9 +152,9 @@ Similarly, there are 2 kinds of tab-completers for native commands:
 The 1st kind doesn't have a specific corresponding trigger, so the auto-discovery for it only happens at the startup of a session.</br>
 The 2nd kind can use the native command name as the specific trigger, and the auto-discovery happens when user tab completes on the command.
 
-The strucutre of the `Completions` folder is as follows:
+The strucutre of the `completions` folder is as follows:
 ```none
-Completions
+completions
 │
 ├───_startup_
 │   └───unix-completer
@@ -168,7 +168,7 @@ Completions
 ├───...
 ```
 
-Each item within `Completions` is a folder.
+Each item within `completions` is a folder.
 - `_startup_`: tab-completer declared in this folder will be auto-loaded at the startup of an interactive `ConsoleHost` session.
 - `git` or `az`: tab-completer for a specific native command should be declared in a folder named after the native command. It will be auto-loaded when user tab completes on the command.
 
@@ -191,11 +191,11 @@ About the `module` and `script` keys:
 
 #### Execution Flow
 
-1. At startup, auto-load the enabled tab-completers from the `_startup_` folder of the `Completions` paths. Do the auto-loading before processing user's profile.
+1. At startup, auto-load the enabled tab-completers from the `_startup_` folder of the `completions` paths. Do the auto-loading before processing user's profile.
 2. Report what tab-completers were processed and the time taken, in the streaming way.
 3. In the completion system, when tab completion is triggered on a native command,
    - Check if a tab-completer for this native command already exists;
-   - If not, check if a tab-completer for this native command is available in the `Completions` paths;
+   - If not, check if a tab-completer for this native command is available in the `completions` paths;
    - If so, register it either by loading the module or running the script, and then call the tab-completer.
 
 **[NOTE:]** For a specific native command, you can only have 1 active completer for it. So, we will check if a completer already exists for a native command before searching in the paths.
