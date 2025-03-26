@@ -93,12 +93,14 @@ Within each sub-folder, a JSON file named after the folder name should be define
 
 ```JSONC
 {
-    "module": "<module-name-or-path>",  // Module to load to register the feedback provider.
+    "module": "<module-name-or-path>[@<version>]",  // Module to load to register the feedback provider.
+    "arguments": ["<arg1>", "<arg2>"],  // Optional arguments for module loading.
     "disable": false, // Control whether auto-discovery should find this feedback provider.
 }
 ```
 
 About the `module` key:
+- The `@<version>` part is optional, which allows specifying the module version if needed.
 - Its value could be the path to an assembly DLL, in which case the DLL will be loaded as a binary module.
 - The processing order is
   - First, expand the string. So, the value could contain PowerShell variables such as `$env:ProgramData`.
@@ -176,8 +178,9 @@ Within each sub-folder, a JSON file named after the folder name should be define
 
 ```JSONC
 {
-    "module": "<module-name-or-path>",  // Module to load to register the completer.
+    "module": "<module-name-or-path>[@<version>]",  // Module to load to register the completer.
     "script": "<script-path>",  // Script to run to register the completer.
+    "arguments": ["<arg1>", "<arg2>"],  // Optional arguments for module loading or script invocation.
     "disable": false,  // Control whether auto-discovery should find this completer.
 }
 ```
@@ -238,3 +241,29 @@ This feature is only for interactive session, so we need to decide on when the f
 5. We report progress when loading `feedback` or `completer` at startup, so how to allow users to disable the progress report?
    - We have the `-NoProfileLoadTime` flag today to not show the time taken for running profile.
 6. How about on a WDAC/AppLocker enforced environment?
+
+
+### Unified Location for load-at-startup Configurations
+
+There could be a similar demand for a predictor module. There won't be a specific trigger for any predictors,
+so for a predictor to be auto-discovered, it has to be loaded at the startup of an interactive session.
+
+Given that, maybe it's better to have a unified location for all the load-at-startup configurations:
+
+- Have a `startup` folder at the same level of `feedbacks` and `completions` folders;
+- All modules or scripts that need to be processed at session startup should have configurations deployed in the `startup` folder.
+
+Each item within `startup` is a folder, whose name should be the friendly name of the component, e.g. `"UnixTabCompletion"`.
+Within each sub-folder, a JSON file named after the folder name should be defined to configure the auto-discovery of the component.
+
+```JSONC
+{
+    "module": "<module-name-or-path>[@<version>]",  // Module to load.
+    "script": "<script-path>",  // Script to run.
+    "arguments": ["<arg1>", "<arg2>"],  // Optional arguments for module loading or script invocation.
+    "disable": false,  // Control whether auto-discovery should find this completer.
+}
+```
+
+The configuration processing will be the same as what is described in the [Tab Completer](#tab-completer) section above.
+Again, the `module` key take precedence. So, if both `module` and `script` keys are present, `script` will be ignored.
