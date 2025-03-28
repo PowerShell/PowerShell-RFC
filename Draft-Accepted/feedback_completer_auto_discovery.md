@@ -66,7 +66,7 @@ There are 2 kinds of feedback providers:
 The 1st kind doesn't have a specific corresponding trigger, so the auto-discovery for it only happens at the startup of a session.</br>
 The 2nd kind can use the native command name as the specific trigger, and the auto-discovery happens when the command gets executed.
 
-The strucutre of the `feedbacks` folder is as follows:
+The structure of the `feedbacks` folder is as follows:
 ```none
 feedbacks
 │
