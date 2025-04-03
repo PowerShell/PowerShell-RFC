@@ -16,7 +16,7 @@ This RFC proposes moving the current PowerShell user content location out of One
 ## Motivation
 
 - PowerShell currently places profile, modules, and configuration files in the user's Documents folder, which is against established conventions for shell configurations and tools.
-- PowerShell content files in OneDrive causes unnecessary syncing of configuration files, leading to various issues.
+- PowerShell content files in OneDrive can lead to unwanted syncing of module files, leading to various issues.
 - There is strong community demand for changing this behavior as the current setup is problematic for many users.
 - Changing the default location would align PowerShell with other developer tools and improve usability.
 
@@ -47,7 +47,7 @@ This RFC proposes moving the current PowerShell user content location out of One
     ├── Profiles                 (Not Configurable)
     └── PSModulePathConfig.json  (Not Configurable)
 
-- The proposed json file:
+- The configuration file:
 
     {
         "PSModulePath" : "C:\\Users\\chungjustin\\PowerShell"
