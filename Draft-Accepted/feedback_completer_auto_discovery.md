@@ -125,7 +125,7 @@ Also, it's allowed to register multiple feedback providers for a single native c
 #### Discussion Points
 
 1. Should we expand the string value for `module` key, or always treat the value as literal?
-   It feels like a useful feature, but could come with security implication, especially in WDAC/AppLocker enforced environment.
+   It feels like a useful feature, but could come with security implications, especially in System Lockdown Mode (SLM) or Restricted remoting environments.
    - Note: PowerShell data file (`.psd1`) doesn't allow environment variables.
 
 2. Should we add another key to indicate the target OS?
