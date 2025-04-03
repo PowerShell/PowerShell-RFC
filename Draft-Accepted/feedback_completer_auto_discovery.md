@@ -240,7 +240,7 @@ This feature is only for interactive session, so we need to decide on when the f
 4. Shall we add a flag (or flags) to allow user to disable this feature (or disable `feedback` and `completer` separately)?
 5. We report progress when loading `feedback` or `completer` at startup, so how to allow users to disable the progress report?
    - We have the `-NoProfileLoadTime` flag today to not show the time taken for running profile.
-6. How about on a WDAC/AppLocker enforced environment?
+6. How about on a System Lockdown Mode (SLM) or Restricted remoting environments?
 
 
 ### Unified Location for load-at-startup Configurations
