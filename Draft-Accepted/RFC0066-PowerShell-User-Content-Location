@@ -21,8 +21,8 @@ This RFC proposes moving the current PowerShell user content location out of One
 - Changing the default location would align PowerShell with other developer tools and improve usability.
 
     As a user,
-    I can customize the location of where PowerShell user content is installed,
-    so that I can choose to sync with OneDrive.
+    I can customize the location where PowerShell user content is installed,
+    so that I can avoid problems created by file sunc solutions like OneDrive.
 
 ## User Experience
 
@@ -32,9 +32,10 @@ This RFC proposes moving the current PowerShell user content location out of One
 
 ## Specification
 
-- This change will only apply to PowerShell on Windows.
+- The content folder location change will only apply to PowerShell on Windows.
+- Configurability of the content folder will apply to all systems.
 - This will be an experimental feature.
-- The PowerShell user content folder will be located in the AppData.
+- The PowerShell user content folder will be located in the `$env:LOCALAPPDATA\Microsoft\PowerShell`.
 - A configuration file in the PowerShell user content folder will determine the location of the user scoped PSModulePath.
 - The user will be responsible for specifying thier desired install location using PSResourceGet.
 - The location of Modules is configurable
@@ -43,24 +44,29 @@ This RFC proposes moving the current PowerShell user content location out of One
 
     C:\Users\UserName\AppData\Local\PowerShell\
     ├── Modules                  (Configurable)
-    ├── Scripts                  (Not Configurable)
-    ├── Profiles                 (Not Configurable)
+    ├── Scripts                  (Configurable)
+    ├── profile.ps1              (Configurable)
     └── PSModulePathConfig.json  (Not Configurable)
 
 - The configuration file:
 
-    {
-        "PSModulePath" : "C:\\Users\\chungjustin\\PowerShell"
-    }
+  ```json
+  {
+      "UserPSContentPath" : "C:\\Users\\User\\PowerShell"
+  }
+  ```
 
 ## Alternate Proposals and Considerations
 
 - The following functionalities will be affected:
-  - Secret Management.
+  - SecretManagement
+    - SecretManagement extension vaults are registered for the current user context in:
+        `$env:LOCALAPPDATA\Microsoft\PowerShell\secretmanagement\secretvaultregistry\`
+    When an extension vault is registered, SecretManagement stores the full path to the extension module in the registry. Moving the PowerShell content to a new location will break the vault registrations.
 - Use the following script to relocate the PowerShell contents folder:
 
-```pwsh
-$newPath = "C:\Custom\PowerShell\Modules"
-$currentUserModulePath = [System.Environment]::GetFolderPath('MyDocuments') + "\PowerShell\Modules"
-Move-Item -Path $currentUserModulePath -Destination $newPath -Force
-```
+  ```pwsh
+  $newPath = "C:\Custom\PowerShell\Modules"
+  $currentUserModulePath = [System.Environment]::GetFolderPath('MyDocuments') + "\PowerShell\Modules"
+  Move-Item -Path $currentUserModulePath -Destination $newPath -Force
+  ```
