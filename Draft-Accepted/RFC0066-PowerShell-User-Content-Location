@@ -22,7 +22,7 @@ This RFC proposes moving the current PowerShell user content location out of One
 
     As a user,
     I can customize the location where PowerShell user content is installed,
-    so that I can avoid problems created by file sunc solutions like OneDrive.
+    so that I can avoid problems created by file sync solutions like OneDrive.
 
 ## User Experience
 
@@ -43,10 +43,14 @@ This RFC proposes moving the current PowerShell user content location out of One
 - The proposed directory structure:
 
     C:\Users\UserName\AppData\Local\PowerShell\
-    ├── Modules                  (Configurable)
-    ├── Scripts                  (Configurable)
-    ├── profile.ps1              (Configurable)
-    └── PSModulePathConfig.json  (Not Configurable)
+    ├── PSContent                 (Configurable)
+    └── PSModulePathConfig.json   (Not Configurable)
+
+    PSContent                     (Configurable)
+    ├── Scripts                   (Not Configurable)
+    ├── Modules                   (Not Configurable)
+    ├── Help                      (Not Configurable)
+    └── profile.ps1               (Not Configurable)
 
 - The configuration file:
 
@@ -61,8 +65,11 @@ This RFC proposes moving the current PowerShell user content location out of One
 - The following functionalities will be affected:
   - SecretManagement
     - SecretManagement extension vaults are registered for the current user context in:
-        `$env:LOCALAPPDATA\Microsoft\PowerShell\secretmanagement\secretvaultregistry\`
-    When an extension vault is registered, SecretManagement stores the full path to the extension module in the registry. Moving the PowerShell content to a new location will break the vault registrations.
+      `$env:LOCALAPPDATA\Microsoft\PowerShell\secretmanagement\secretvaultregistry\`
+
+      When an extension vault is registered, SecretManagement stores the full path to the extension
+      module in the registry. Moving the PowerShell content to a new location will break the vault
+      registrations.
 - Use the following script to relocate the PowerShell contents folder:
 
   ```pwsh
