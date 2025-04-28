@@ -72,15 +72,15 @@ feedbacks
 │
 ├───_startup_
 │   ├───linux-command-not-found
-│   │       linux-command-not-found.json
+│   │       linux-command-not-found.psd1
 │   │
 │   └───winget-command-not-found
-│           winget-command-not-found.json
+│           winget-command-not-found.psd1
 ├───git
-│       git.json
+│       git.psd1
 │
 ├───kubectl
-│       kubectl.json
+│       kubectl.psd1
 │
 ├───...
 ```
@@ -89,13 +89,13 @@ Each item within `feedbacks` is a folder.
 - `_startup_`: feedback providers declared in this folder will be auto-loaded at the startup of an interactive `ConsoleHost` session.
 - `git` or `kubectl`: feedback provider for a specific native command should be declared in a folder named after the native command. It will be auto-loaded when the native command gets executed.
 
-Within each sub-folder, a JSON file named after the folder name should be defined to configure the auto-discovery for the feedback provider.
+Within each sub-folder, a `.psd1` file named after the folder name should be defined to configure the auto-discovery for the feedback provider.
 
-```JSONC
-{
-    "module": "<module-name-or-path>[@<version>]",  // Module to load to register the feedback provider.
-    "arguments": ["<arg1>", "<arg2>"],  // Optional arguments for module loading.
-    "disable": false, // Control whether auto-discovery should find this feedback provider.
+```powershell
+@{
+   module = '<module-name-or-path>[@<version>]',  # Module to load to register the feedback provider.
+   arguments = @('<arg1>', '<arg2>'),  # Optional arguments for module loading.
+   disable = $false,  # Control whether auto-discovery should find this feedback provider.
 }
 ```
 
@@ -124,16 +124,12 @@ Also, it's allowed to register multiple feedback providers for a single native c
 
 #### Discussion Points
 
-1. Should we expand the string value for `module` key, or always treat the value as literal?
-   It feels like a useful feature, but could come with security implications, especially in System Lockdown Mode (SLM) or Restricted remoting environments.
-   - Note: PowerShell data file (`.psd1`) doesn't allow environment variables.
-
-2. Should we add another key to indicate the target OS?
+1. Should we add another key to indicate the target OS?
    - A feedback provider may only work on a specific OS, such as the `"WinGet CommandNotFound"` feedback provider only works on Windows.
    - Such a key could be handy if a user wants to share the feedback/tab-completer configurations among multiple machines via a cloud drive.
 
-3. Do we really need a folder for each feedback provider?
-   For example, can we simply have the files `git.json` and `kubectl.json` under the `feedbacks` folder, and the files `linux-command-not-found.json` and `winget-command-not-found.json` under the `_startup_` folder?
+2. Do we really need a folder for each feedback provider?
+   For example, can we simply have the files `git.psd1` and `kubectl.psd1` under the `feedbacks` folder, and the files `linux-command-not-found.psd1` and `winget-command-not-found.psd1` under the `_startup_` folder?
    - Since it's possible to have non-module feedback provider that comes with a DLL only,
      then the DLL might need to be deployed along with the configuration.
      In that case, the tool that deploys the DLL will either copy the DLL directly to `feedbacks`,
@@ -160,12 +156,12 @@ completions
 │
 ├───_startup_
 │   └───unix-completer
-│           unix-completer.json
+│           unix-completer.psd1
 ├───git
-│       git.json
+│       git.psd1
 │
 ├───az
-│       az.json
+│       az.psd1
 │
 ├───...
 ```
@@ -174,14 +170,14 @@ Each item within `completions` is a folder.
 - `_startup_`: tab-completer declared in this folder will be auto-loaded at the startup of an interactive `ConsoleHost` session.
 - `git` or `az`: tab-completer for a specific native command should be declared in a folder named after the native command. It will be auto-loaded when user tab completes on the command.
 
-Within each sub-folder, a JSON file named after the folder name should be defined to configure the auto-discovery for the tab-completer.
+Within each sub-folder, a `psd1` file named after the folder name should be defined to configure the auto-discovery for the tab-completer.
 
-```JSONC
-{
-    "module": "<module-name-or-path>[@<version>]",  // Module to load to register the completer.
-    "script": "<script-path>",  // Script to run to register the completer.
-    "arguments": ["<arg1>", "<arg2>"],  // Optional arguments for module loading or script invocation.
-    "disable": false,  // Control whether auto-discovery should find this completer.
+```powershell
+@{
+   module = '<module-name-or-path>[@<version>]',  # Module to load to register the completer.
+   script = '<script-path>',  # Script to run to register the completer.
+   arguments = @('<arg1>', '<arg2>'),  # Optional arguments for module loading or script invocation.
+   disable" = $false,  # Control whether auto-discovery should find this completer.
 }
 ```
 
@@ -213,7 +209,7 @@ Different discussions:
 1. Do we really need a folder for each feedback provider?
    - [dongbo] Yes, I think we need.
    Appx and MSIX packages on Windows have [many constraints](https://github.com/PowerShell/PowerShell/issues/17283#issuecomment-1522133126) that make it difficult to integrate with a broader plugin ecosystem. The way for such an Appx/MSIX tool to expose tab-completer could be just running the tool with a special flag, such as `<tool> --ps-completion`,
-   to output some PowerShell script text for the user to run. In that case, the user will need to manually save the script text to a file and place the file next to the `tool.json` file.
+   to output some PowerShell script text for the user to run. In that case, the user will need to manually save the script text to a file and place the file next to the `tool.psd1` file.
    Having a folder is useful to group them together in that case.
 
 2. When running a script, it will run in the PSReadLine's module scope when completion is triggered from within PSReadLine.
@@ -241,7 +237,7 @@ This feature is only for interactive session, so we need to decide on when the f
 5. We report progress when loading `feedback` or `completer` at startup, so how to allow users to disable the progress report?
    - We have the `-NoProfileLoadTime` flag today to not show the time taken for running profile.
 6. How about on a System Lockdown Mode (SLM) or Restricted remoting environments?
-
+   - We use `.psd1` file for metadata, which can be signed if needed.
 
 ### Unified Location for load-at-startup Configurations
 
@@ -254,14 +250,14 @@ Given that, maybe it's better to have a unified location for all the load-at-sta
 - All modules or scripts that need to be processed at session startup should have configurations deployed in the `startup` folder.
 
 Each item within `startup` is a folder, whose name should be the friendly name of the component, e.g. `"UnixTabCompletion"`.
-Within each sub-folder, a JSON file named after the folder name should be defined to configure the auto-discovery of the component.
+Within each sub-folder, a `.psd1` file named after the folder name should be defined to configure the auto-discovery of the component.
 
-```JSONC
-{
-    "module": "<module-name-or-path>[@<version>]",  // Module to load.
-    "script": "<script-path>",  // Script to run.
-    "arguments": ["<arg1>", "<arg2>"],  // Optional arguments for module loading or script invocation.
-    "disable": false,  // Control whether auto-discovery should find this completer.
+```powershell
+@{
+   module = '<module-name-or-path>[@<version>]',  # Module to load.
+   script = '<script-path>',  # Script to run.
+   arguments = @('<arg1>', '<arg2>'),  # Optional arguments for module loading or script invocation.
+   disable = $false,  # Control whether auto-discovery should find this completer.
 }
 ```
 
