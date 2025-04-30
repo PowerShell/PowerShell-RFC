@@ -92,6 +92,8 @@ However, even in a non-interactive PowerShell session, user can still run comman
 
 #### Discusson points
 
+> **[NOTE]:** The draft spec has been discussed in an internal PowerShell design review meeting, and the "**[PS REVIEW COMMENT]**" tag indicates the review decision.
+
 1. When PowerShell runs with `pwsh -c` or `pwsh -f` without the `-noexit` flag,
 it runs a single command or file and then terminates, which is very similar to the first _"CMD running interactively"_ check above.
 So, should we disable the feature in this case?
