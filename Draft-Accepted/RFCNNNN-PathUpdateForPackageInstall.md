@@ -144,7 +144,7 @@ It's also used to guard a `"WingetCmdNotFound"` feature. Should we also disable 
      - WT response:
        > - it was our "get out of jail" card in case we legitimately broke something someone cared about.
            If you have a risk of breakage due to this new behavior, users may want a way to turn it off.
-       > - we haven't heard that we have broken anyone.
+       > - we haven't heard that we have broken anyone. But the new changes don't have so much market adoption yet.
        > - feel free to follow it. However, other things in PowerShell DON'T follow it today
      - To summarize:
        - It's for turning off all interactive improvements they made to CMD, not exclusive to the PATH refreshing feature
