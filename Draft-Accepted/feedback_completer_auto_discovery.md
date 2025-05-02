@@ -369,7 +369,7 @@ However, there are a few potential issues that will restrict where and how we ca
 It means we can only support the feature in Windows 11, and only by using C/C++ functions for now.
 When WinRT support comes in future, we may have trouble switching to that.
 
-### Overall thinking
+### Overall thinking about Appx/MSIX
 
 The above discussion shows Appx/MSIX describes the App Extension for an app to declare PowerShell resources,
 as well as for PowerShell to discover and access the resources inside the app pacakge.
