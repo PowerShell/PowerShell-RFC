@@ -202,14 +202,12 @@ About the `module` and `script` keys:
 #### Discussion Points
 
 Same discussions as in `Feedback Provider` section:
-1. Should we expand the string value for `module` and `script` keys, or always treat the value as literal?
-2. Should we add another key to indicate the target OS?
+1. Should we add another key to indicate the target OS?
 
 Different discussions:
-1. Do we really need a folder for each feedback provider?
+1. Do we really need a folder for each argument completer?
    - [dongbo] Yes, I think we need.
-   Appx and MSIX packages on Windows have [many constraints](https://github.com/PowerShell/PowerShell/issues/17283#issuecomment-1522133126) that make it difficult to integrate with a broader plugin ecosystem. The way for such an Appx/MSIX tool to expose tab-completer could be just running the tool with a special flag, such as `<tool> --ps-completion`,
-   to output some PowerShell script text for the user to run. In that case, the user will need to manually save the script text to a file and place the file next to the `tool.psd1` file.
+   The implementation of a completer can just be a `.ps1` script that needs to be deployed along with the completer's configuration.
    Having a folder is useful to group them together in that case.
 
 2. When running a script, it will run in the PSReadLine's module scope when completion is triggered from within PSReadLine.
@@ -263,3 +261,130 @@ Within each sub-folder, a `.psd1` file named after the folder name should be def
 
 The configuration processing will be the same as what is described in the [Tab Completer](#tab-completer) section above.
 Again, the `module` key take precedence. So, if both `module` and `script` keys are present, `script` will be ignored.
+
+
+## Appx and MSIX Apps
+
+What is discussed above requires a tool to deploy configurations to a pre-defined location during installation.
+However, an Appx/MSIX package on Windows may be isolated and thus cannot access the location. See [some constraints](https://github.com/PowerShell/PowerShell/issues/17283#issuecomment-1522133126).
+Therefore, to support auto-discovery of PowerShell resources like argument completer that come along with an Appx/MSIX package,
+PowerShell has to proactively inspect the package instead of depending on the app registering its resources with the mechanism described above.
+
+### Expose resources with App Extension
+
+MSIX' standard recommendation is for the packaged app to declare an `appExtension` in its manifest.
+Here is a snippet of the app manifest for MSIX package:
+
+```xml
+<Applications>
+   ...
+
+   <Extensions>
+      <uap3:Extension Category="windows.appExtension">
+         <uap3:AppExtension Name="add-in-contract" Id="add-in" PublicFolder="Public" DisplayName="Sample Add-in" Description="This is a sample add-in">
+            <uap3:Properties>
+               <!--Free form space-->
+            </uap3:Properties>
+         </uap3:AppExtension>
+      </uap3:Extension>
+   </Extensions>
+</Application>
+```
+
+In this example, you will notice a `Properties` element within the `AppExtension` element [[reference]](https://github.com/MicrosoftDocs/msix-docs/blob/main/msix-src/msix-sdk/sdk-guidance.md#how-to-effectively-use-the-same-package-on-all-platforms-windows-10-and-non-windows-10). 
+There is no validation performed in this section of the manifest file,
+and this allows tool developers to specify the resources exposed to PowerShell.
+
+An example would look like this:
+
+```xml
+<uap3:Extension Category="windows.appExtension">
+   <uap3:AppExtension
+      Name="com.microsoft.powershell.resources"
+      Id="winget.powershell"
+      PublicFolder="public"
+      DisplayName="WinGet PowerShell Resources">
+         <uap3:Properties>
+            <Completer Type="Script" Name="winget.completer" File="assets\winget.completer.s1" />
+            <Feedback Type="DLL" Name="winget.feedback" File="assets\WinGet.Feedback.dll" Discovery="auto"/>
+         </uap3:Properties>
+</uap3:Extension>
+```
+
+This model in Appx/MSIX packages can securely provide explicit details and avoid ambiguitities.
+And it ensures clean behavior on uninstall - packages registered for the user are discoverable and
+cleanly become invisible when the package is unregistered for the user.
+No concerns about incomplete uninstalls or manual hackery or anything that leaves the system in inconsistent states.
+
+### Resource Discovery
+
+PowerShell can use the `AppExtensionCatalog` APIs to enumerate those extensions with the name/namespace of the extension,
+and get any needed info about them [[reference]](https://learn.microsoft.com/uwp/api/windows.applicationmodel.appextensions.appextensioncatalog?view=winrt-26100).
+
+A sample enumeration:
+
+```c#
+var catalog = new AppExtensionCatalog.Open("com.microsoft.powershell.resources")
+foreach (var extension in catalog)
+{
+    ...use it...
+}
+```
+
+Note that `AppExtensionCatalog` is a WinRT type. It implies that changes will be needed to the project file to use the API,
+e.g. the `TargetFramework` needs to be Windows specific such as `net9.0-windows10.0.19041.0`.
+This may be a trouble to PowerShell as it's cross-platform.
+
+### Resource Access
+
+It's recommended to use the Dynamic Dependency API to access files in an Appx/MSIX package.
+The details about how to use the API can be found in [documentation](https://learn.microsoft.com/windows/apps/desktop/modernize/framework-packages/use-the-dynamic-dependency-api).
+
+Dynamic Dependencies enables you to use several tech to interact with a packaged Powershell extension,
+e.g. WinRT inproc and out-of-proc (`ActivateInstance`), inproc DLLs (`LoadLibrary`), inproc .NET assemblies (`Assembly.Load*()`), read a text file (`CreateFile(GetPackagePath()+"\foo.ps1"`) and other like tech.
+
+Note that, inproc is generally discouraged for extensibility models given the reliability and security implications.
+But it's technically feasible with Dynamic Dependencies as there are times it's necessary.
+In our case, PowerShell will need to load assemblies inproc as it's how it works.
+With Dynamic Dependency API, we can tell Windows that we are using a package's content,
+and it will ensure Windows doesn't try to service the package (e.g. updating or removing) while in use.
+It also adds the package to the Powershell process' package graph, making its resources available for `LoadLibrary`, `ActivateInstance` and other APIs.
+
+However, there are a few potential issues that will restrict where and how we can support it in PowerShell:
+
+1. There are 2 implementation of the API -- the Windows App SDK's dynamic dependency API AND the Windows 11's dynamic dependency API.
+   Only the Windows 11's implementation supports referencing and using a main package and
+   The Windows App SDK's implementation can only target a framework package [[reference]](https://learn.microsoft.com/windows/apps/desktop/modernize/framework-packages/use-the-dynamic-dependency-api#reference-and-use-a-main-package-windows-app-sdk-limitation).
+   In our scenario, the extension for PowerShell resource should be declared in the tool's package, namely the main package.
+   - A main package is the primary package that contains the core application binaries, assets, and manifest that define the app’s identity, capabilities, and behavior.
+   - A framework package is a special type of MSIX package that contains shared code, libraries, or resources used by one or more apps — but does not contain an app itself.
+
+2. The Windows 11's implementation targets Windows 11, version 22H2 (10.0; Build 22621), and later.
+   It only provides C and C++ functions, no WinRT types, unlike the Windows App SDK's implementation.
+
+3. I believe the Windows 11's implementation will provide WinRT types eventually.
+   But consuming WinRT types would requires changes to the project, e.g. the `TargetFramework` needs to be Windows specific such as `net9.0-windows10.0.19041.0`.
+   This may cause problem to PowerShell as it's cross-platform.
+
+It means we can only support the feature in Windows 11, and only by using C/C++ functions for now.
+When WinRT support comes in future, we may have trouble switching to that.
+
+### Overall thinking
+
+The above discussion shows Appx/MSIX describes the App Extension for an app to declare PowerShell resources,
+as well as for PowerShell to discover and access the resources inside the app pacakge.
+
+However, there are still missing parts to the feature we are looking at in this spec:
+
+1. How to deal with the resources that are supposed to be loaded at startup of PowerShell session, such as the `WinGetNotFound` feedback provider?
+   - Technically, we can defined a special extension namespace for apps to declare such resources with.
+     Then at startup, we get all extensions with that namespace and load all of them.
+   - But, would that be performant enough to do at the startup?
+
+2. How to allow user to disable the auto-discovery/loading of PowerShell resources from a particular Appx/MSIX app?
+   - Shall we have configurations for indivual Appx/MSIX apps only for the purpose of disabling?
+
+3. How to cache the information that an Appx/MSIX package doesn't have any PS resources declared and avoid the auto-discovery for it when user is using the tool?
+
+Given that supporting auto-discovery/loading for Appx/MSIX packages is completely different from other applications,
+It warrants another RFC to design for it specifically.
