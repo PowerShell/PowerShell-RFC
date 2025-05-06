@@ -318,6 +318,8 @@ No concerns about incomplete uninstalls or manual hackery or anything that leave
 
 ### Resource Discovery
 
+#### API for discovery
+
 PowerShell can use the `AppExtensionCatalog` APIs to enumerate those extensions with the name/namespace of the extension,
 and get any needed info about them [[reference]](https://learn.microsoft.com/uwp/api/windows.applicationmodel.appextensions.appextensioncatalog?view=winrt-26100).
 
@@ -334,6 +336,25 @@ foreach (var extension in catalog)
 Note that `AppExtensionCatalog` is a WinRT type. It implies that changes will be needed to the project file to use the API,
 e.g. the `TargetFramework` needs to be Windows specific such as `net9.0-windows10.0.19041.0`.
 This may be a trouble to PowerShell as it's cross-platform.
+
+#### Execution flow for discovery
+
+In PowerShell, we want lazy discovery for resources like argument completer,
+meaning that the discovery happens only when user press `wt.exe <tab>` for the first time, for example. 
+A hypothetical discovery process would naturally be like:
+1.	Is `wt.exe` an app execution alias of a MSIX package?
+2.	Yes, it is from the MSIX package "WindowsTerminal"<br/>
+   --> Check if the package offers extension for PowerShell resources, such as an argument completer.
+3.	Yes, access the resources.
+
+There are 2 blockers in this hypothetical discovery process:
+- `wt.exe` is essentially a reparse point. The API to get its target is undocumented. PowerShell used to detect its target but then reverted due to the undocumented API (see [PR#10331] and [PR#16044]).
+   **What is the suggested way to find the Appx/MSIX package that owns an app execution alias?**
+- In the 2nd step above, we’re only interested in "WindowsTerminal". The call `AppExtensionCatalog.Open("com.microsoft.powershell.resources")` will return all extensions with this name,
+  but **is there a way to query a specific package about its extension information?**
+
+[PR#10331]: https://github.com/PowerShell/PowerShell/pull/10331
+[PR#16044]: https://github.com/PowerShell/PowerShell/pull/16044
 
 ### Resource Access
 
@@ -381,10 +402,14 @@ However, there are still missing parts to the feature we are looking at in this 
      Then at startup, we get all extensions with that namespace and load all of them.
    - But, would that be performant enough to do at the startup?
 
-2. How to allow user to disable the auto-discovery/loading of PowerShell resources from a particular Appx/MSIX app?
+2. How to resolve an App Execution Alias to the actual app package? (undocumented API)
+
+3. How to get the `AppExtension` information from a specific app package? (without parsing the app manifest ourselves)
+
+4. How to allow user to disable the auto-discovery/loading of PowerShell resources from a particular Appx/MSIX app?
    - Shall we have configurations for indivual Appx/MSIX apps only for the purpose of disabling?
 
-3. How to cache the information that an Appx/MSIX package doesn't have any PS resources declared and avoid the auto-discovery for it when user is using the tool?
+5. How to cache the information that an Appx/MSIX package doesn't have any PS resources declared and avoid the auto-discovery for it when user is using the tool?
 
 Given that supporting auto-discovery/loading for Appx/MSIX packages is completely different from other applications,
 It warrants another RFC to design for it specifically.
