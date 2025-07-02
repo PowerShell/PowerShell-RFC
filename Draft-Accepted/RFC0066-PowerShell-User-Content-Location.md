@@ -12,7 +12,7 @@ Plan to implement: Yes
 # PowerShell User Content Location
 
 This RFC proposes moving the current PowerShell user content location out of OneDrive to the
-`AppData` directory on Windows machines.
+`LocalAppData` directory on Windows machines.
 
 ## Motivation
 
