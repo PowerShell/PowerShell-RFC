@@ -39,7 +39,7 @@ so that I can avoid problems created by file sync solutions like OneDrive.
 - A configuration file in the PowerShell user content folder will determine the location of the user
   scoped **PSModulePath**.
   - By default, the PowerShell user content folder will be located in the
-    `$env:LOCALAPPDATA\Microsoft\PowerShell`.
+    `$env:LOCALAPPDATA\PowerShell`.
   - The new location becomes the location used as the `CurrentUser` scope for PSResourceGet.
 - The proposed directory structure:
 
