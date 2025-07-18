@@ -18,6 +18,8 @@ We also accept questions and proposals for short demos from the community.
 
 ## Notes
 
+- [July 17, 2025](./notes/20250717_Notes.md) ([YouTube recording](https://youtu.be/q8Znqn6tyRo)
+  and [transcript](./notes/20250717_ChatTranscript.md))
 - [June 19, 2025](./notes/20250619_Notes.md) ([YouTube recording](https://youtu.be/pqS5EKAHTJA)
   and [transcript](./notes/20250619_ChatTranscript.md))
 - [May 15, 2025](./notes/20250515_Notes.md) ([YouTube recording](https://youtu.be/D6Pan2wDQYU)
