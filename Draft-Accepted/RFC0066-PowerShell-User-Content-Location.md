@@ -11,8 +11,8 @@ Plan to implement: Yes
 
 # PowerShell User Content Location
 
-This RFC proposes moving the current PowerShell user content location out of OneDrive to the
-`AppData` directory on Windows machines.
+This RFC proposes moving the current PowerShell user content location out of OneDrive &
+default to the `AppData` directory on Windows machines.
 
 ## Motivation
 
@@ -20,6 +20,11 @@ This RFC proposes moving the current PowerShell user content location out of One
 As a user,
 I can customize the location where PowerShell user content is installed,
 so that I can avoid problems created by file sync solutions like OneDrive.
+
+As an Admin,
+I must be able to customize the location set for my users either pre/during/post install,
+so that I can better manage my environment and better secure and support my users,
+to reduce unnecessary support tickets to my IT Team.
 ```
 
 - PowerShell currently places profile, modules, and configuration files in the user's Documents
@@ -46,21 +51,20 @@ so that I can avoid problems created by file sync solutions like OneDrive.
   ```
   C:\Users\UserName\AppData\Local\PowerShell\
   ├── powershell.config.json   (Not Configurable)
-  └── <PSContent>              (Configurable)
-      ├── Scripts                   (Not Configurable)
-      ├── Modules                   (Not Configurable)
-      ├── Help                      (Not Configurable)
-      └── <*profile>.ps1            (Not Configurable)
+  ├── Scripts                  (Configurable)
+  ├── Modules                  (Configurable)
+  ├── Help                     (Configurable)
+  └── <*profile>.ps1           (Configurable)
   ```
 
 - The following setting is added to the `powershell.config.json` file:
 
   **UserPSContentPath** specifies the full path of the content folder. The default value is
-  `$env:LOCALAPPDATA\PowerShell\PSContent`. The user can change this value to a different path.
+  `$env:LOCALAPPDATA\PowerShell`. The user can change this value to a different path.
 
   ```json
   {
-      "UserPSContentPath" : "$env:LOCALAPPDATA\\PowerShell\\PSContent",
+      "UserPSContentPath" : "$env:LOCALAPPDATA\\PowerShell",
   }
   ```
 
@@ -71,8 +75,11 @@ so that I can avoid problems created by file sync solutions like OneDrive.
   **UserPSContentPath**.
 - Users can configure a custom location for PowerShell user content by changing the value of
   **UserPSContentPath**.
-- Users will need to manually move/copy their existing PowerShell user content from the Documents
-  folder to the new location after enabling the feature.
+- Users will initially need to manually move/copy their existing PowerShell user content 
+  from the Documents folder to the new location after enabling the feature.
+- We intend to add a new cmdlet to aid this process in a future release shortly 
+  after this work has been completed as part of the work into hopefully the 7.6.0 GA
+  release or another 7.6.x release. Details on this to follow.
 
 ## Other considerations
 
@@ -99,11 +106,19 @@ so that I can avoid problems created by file sync solutions like OneDrive.
 - PowerShellGet is hardcoded to install scripts and modules in the user's `Documents` folder. It
   will not support this feature.
 
+- The following are required changes to PowerShell due to the content folder change:
+  - Profile path will need to use the API to get the content folder path.
+  - Updateable help path needs to use the API to get the content folder path.
+  - Scripts path will need to use the API to get the content folder path.
+  - Module path will ned to use the API to get the content folder path.
+
 ## Implementation questions
 
 - Will the experimental feature be enabled by default?
-  - Recommendation: No, the user should explicitly enable the feature and copy their existing
+  - No, the user should explicitly enable the feature and copy their existing
     PowerShell user content to the new location.
+  - This feature is planned to be available on preview versions first then stable and LTS versions
+    later.
 
 - How does `$PROFILE` get populated?
   - Can profile scripts be moved to `PSContent`?
@@ -111,7 +126,7 @@ so that I can avoid problems created by file sync solutions like OneDrive.
 
 - What happens if **UserPSContentPath** is added to the machine-level configuration file in
   `$PSHOME/powershell.config.json`?
-  - Recommendation: Ignore the setting in the machine-level configuration file since this is a user
+  - Ignore the setting in the machine-level configuration file since this is a user
     setting. No error - just ignore it.
 
 - Will **UserPSContentPath** support environment variables (like `$env:USERNAME` or `%USERNAME%`)?
