@@ -12,7 +12,7 @@ Plan to implement: Yes
 # PowerShell User Content Location
 
 This RFC proposes moving the current PowerShell user content location out of OneDrive &
-default to the `AppData` directory on Windows machines.
+default to the `LocalAppData` directory on Windows machines.
 
 ## Motivation
 
@@ -70,7 +70,7 @@ to reduce unnecessary support tickets to my IT Team.
 
 ## User Experience
 
-- On startup PowerShell will create a directory in AppData and a configuration file.
+- On startup PowerShell will create a directory in AppData and a configuration file if they don't exist.
 - The user scoped **PSModulePath** will point to `Modules` folder under the location specified by
   **UserPSContentPath**.
 - Users can configure a custom location for PowerShell user content by changing the value of
@@ -94,6 +94,7 @@ to reduce unnecessary support tickets to my IT Team.
   - Document instructions on how to re-register vaults after moving the content folder.
   - Document the need to keep Modules in the Documents folder to so that SecretManagement
     continues to work for multiple installs of PowerShell 7 (stable and preview).
+  - Provide a script to show users what vault modules are registered today and their hardcoded paths.
 
 - Use the following script to copy the PowerShell contents folder:
 
@@ -106,11 +107,11 @@ to reduce unnecessary support tickets to my IT Team.
 - PowerShellGet is hardcoded to install scripts and modules in the user's `Documents` folder. It
   will not support this feature.
 
-- The following are required changes to PowerShell due to the content folder change:
-  - Profile path will need to use the API to get the content folder path.
-  - Updateable help path needs to use the API to get the content folder path.
-  - Scripts path will need to use the API to get the content folder path.
-  - Module path will ned to use the API to get the content folder path.
+- The following Path changes are required in PowerShell due to the content folder change & will be retrived via the API:
+  - Profile.
+  - Updateable Help.
+  - Scripts.
+  - Modules.
 
 ## Implementation questions
 
@@ -131,3 +132,14 @@ to reduce unnecessary support tickets to my IT Team.
 
 - Will **UserPSContentPath** support environment variables (like `$env:USERNAME` or `%USERNAME%`)?
   - This could enable a global configuration scenario if we allowed configuration in `$PSHOME`.
+  - The string values will not be evaluated as a PowerShell expression.
+
+- Should the **UserPSContentPath** be an environmental variable?
+
+## Out of scope
+
+- Removal of PowerShellGet & PackageManagement due to being incompatible with this new feature.
+- Provide a bypass mechanism for the precedence order of configuration files and allow admins a way of testing this
+  on managed devices.
+- Machine level configurations should move to ProgramData on Windows out of program files.
+- Allow separate configurations for Scripts, Modules, Help, and Profile.
