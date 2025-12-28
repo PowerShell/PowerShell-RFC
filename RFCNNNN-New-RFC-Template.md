@@ -6,18 +6,15 @@ SupercededBy: <link to another RFC>
 Version: <Major>.<Minor>
 Area: <Area within the PowerShell language>
 Comments Due: <Date for submitting comments to current draft (minimum 1 month)>
-Plan to implement: <Yes | Yes but with help | No>
-# Helpers is only required if 'Plan to implement' is 'Yes but with help' and can contain either direct links to an individual or to a well known team like the Cmdlets working group or a project like PSResourceGet. This allows for both the "I wanna do this alone" as well as "I wanna do this with others" ways of working, whilst enabling opportunities to be able to work closer with others either as part of the PowerShell Team or from the Community. 
+# Helpers is only required if 'Plan to implement' is 'Yes but with help' and can contain either direct links to an individual or to a well known team like the Cmdlets Working Group or a project like PSResourceGet. This allows for both the "I'd like to do this alone" as well as "I'd like to do this with others" ways of working, whilst enabling opportunities to be able to work closer with others either as part of the PowerShell Team or from the Community.
+# Details to be Provided in the below Required Help Section
 Helpers: 
-# Helpers can be either individual accounts, a well known team like the working groups, an organisation or all of a project's repository maintainers
- - kilasuit
- - SteveL-MSFT
- - CmdletsWG # This is the common name not the team name that can be mentioned in the PowerShell Org in GitHub by those that are allowed to. It will be up to the working group to determine what level & kind of help they can provide.
- - Re-Initialise # all members of this organisation
- - DSCCommunity # all members of this organisation
- - PowerShell/PSResourceGet # all maintainers of this repository, which may also include external collaborators that have submitted PRs that were merged.
- # Helpers doesn't mean that each individual will be tasked to help with this RFC as they will have their own workloads to manage and balance.
- # Therefore this is a request to those indivuals or orgs for where they may be able to help with this RFC
+# Helpers should be a list that can contain
+# - Individual accounts
+# - Working Group/s
+# - a GitHub organisation/s
+# - Linked Project's 
+# - external team/organisation
 ---
 
 # Title
