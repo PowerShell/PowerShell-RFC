@@ -1,10 +1,11 @@
 # PowerShell/OpenSSH Community Call
 
-The PowerShell Community Call is held on the 3rd Thursday of every month at [9:30 AM US Pacific Time](http://www.timebie.com/std/pdt.php?q=9.5).
+The PowerShell Community Call is held on the 3rd Thursday of every month for 30 minutes at [9:30 AM US Pacific Time](http://www.timebie.com/std/pdt.php?q=9.5).
 Topics include PowerShell 7, Windows OpenSSH, PSEditorServices/VSCode-PowerShell, PSScriptAnalyzer,
-PowerShell Gallery, and any other projects owned by the PowerShell Team.
+PowerShell Gallery, Azure PowerShell/CLI, DSCv3 and any other projects owned by the PowerShell Team.
 
-> **_NOTE:_** For March 21st 2024 we will be doing the call at 7pm PST to accomodate those in Asia timezones.
+> [!NOTE]
+> For March and September calls we will be doing the call at 7pm PST to accomodate those in Asia timezones.
 
 
 You can join our Teams live event at https://aka.ms/JoinPSCall
@@ -15,6 +16,8 @@ recurring event on your calendar.
 
 Join the [Discussion](https://github.com/PowerShell/PowerShell/discussions/categories/community-call) - each month we post an agenda and in the Discussion channel.
 We also accept questions and proposals for short demos from the community.
+Each month we will have one community demo, the demo request must be posted to the discussion at least 24 hour in 
+advance of the call. The expected length of a community demo is no more than five minutes.
 
 ## Notes
 
