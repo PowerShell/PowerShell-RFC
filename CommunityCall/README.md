@@ -4,7 +4,8 @@ The PowerShell Community Call is held on the 3rd Thursday of every month for 30 
 Topics include PowerShell 7, Windows OpenSSH, PSEditorServices/VSCode-PowerShell, PSScriptAnalyzer,
 PowerShell Gallery, Azure PowerShell/CLI, DSCv3 and any other projects owned by the PowerShell Team.
 
-> **_NOTE:_** For March and September calls we will be doing the call at 7pm PST to accomodate those in Asia timezones.
+> [!NOTE]
+> For March and September calls we will be doing the call at 7pm PST to accomodate those in Asia timezones.
 
 
 You can join our Teams live event at https://aka.ms/JoinPSCall
