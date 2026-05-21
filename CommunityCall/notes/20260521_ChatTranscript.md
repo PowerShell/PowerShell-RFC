@@ -93,7 +93,7 @@ Awesome. So PS resource get 1.3 preview one. Anum, can you help me with more tha
 
 Anam Navied   16:17
 Yeah, let me share my screen.
-Hi everyone. So PSP Stores Get just had a 130 preview one release, and this included some features and bug fixes. So one of the features is that now MAR is going to be registered as a default trusted repository. And what that means is that if you have a fresh machine,
+Hi everyone. So PSResourceGet just had a 1.3.0.preview1 release, and this included some features and bug fixes. So one of the features is that now MAR is going to be registered as a default trusted repository. And what that means is that if you have a fresh machine,
 and you run PS resource get commands for the first time. MAR or Microsoft Artifact Registry will be registered as a default trusted repository. Like we've kind of done in the past, PS Gallery will also be registered, but it will continue being registered as a untrusted repository and MAR will have a higher priority.
 If you already are using PS resource get on your machine, you can kind of get this behavior by running register PS resource repository with the new Microsoft artifact registry switch. And what that's going to do is it's going to add MAR as a trusted repository to your repository configuration.
 And one thing that we do want to note here is that, as the user, if you don't want MAR registered, you could obviously run unregister PS resource repository to unregister it, or you could also run set PS resource repository to change the priority to be lower, so MAR isn't checked first, but really this.
@@ -106,7 +106,7 @@ Anam Navied   18:06
 concurrency for improved performance. So would love kind of some feedback on these new features. Oh, and then another feature that we added is DSC V3 resource for PS resource get. And Aditya will talk about that later in the community call today. We also had some community PRs in this release.
 So one of them is a bug fix to better detect if the current PowerShell session is Windows PowerShell or PowerShell Core in certain instances, such as when the session is running in VS Code or.NET Interactive or with Ruby or Puppet. So shout out to Borg Quit. I'm hoping I'm pronouncing that right.
 for that PR. We also had another fix where pre-release labels are honored in update PS resource scenarios. So let's say locally I have a version 120 preview on my machine and there's a new version 120. That pre-release label is going to be compared.
-more accurately and then it'll update the user correctly to the new version. So shout out to Sean R. Williams for that PR. The other thing I quickly wanted to mention is that as we did this 130 preview one release, the team also published A blog post for our roadmap.
+more accurately and then it'll update the user correctly to the new version. So shout out to Sean R. Williams for that PR. The other thing I quickly wanted to mention is that as we did this 1.3.0.preview1 release, the team also published A blog post for our roadmap.
 
 Jason Helmick   19:18
 CAI.
@@ -142,7 +142,7 @@ And, and, and since you're since you're here, why don't you go ahead and talk ab
 
 Aditya Patwardhan   22:32
 Yes.
-So we released 77 preview one about 3 weeks ago now. That's the first preview release for 770 train based on.NET 11. So please give it a try and give us feedback. One of the amazing things that happens in previews is we get a lot of community.
+So we released 7.7.0-preview.1 about 3 weeks ago now. That's the first preview release for 770 train based on.NET 11. So please give it a try and give us feedback. One of the amazing things that happens in previews is we get a lot of community.
 PRs included in the first preview because we have not been shipping previews since we are doing the work on GA and RC. So this is always exciting to see a lot of new community PRs coming in. And we would shortly be getting, I don't have a date yet, but a preview to coming up very soon. And in addition to that, we will also be having some servicing releases for 7475 and 76 coming.
 very shortly, either this week or next week.
 
