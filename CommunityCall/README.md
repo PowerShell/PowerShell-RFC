@@ -21,6 +21,8 @@ advance of the call. The expected length of a community demo is no more than fiv
 
 ## Notes
 
+- [June 18, 2026](./notes/20260618_Notes.md) ([YouTube recording](https://youtu.be/D068G5HfXxU)
+  and [transcript](./notes/20260618_ChatTranscript.md))
 - [May 21, 2026](./notes/20260521_Notes.md) ([YouTube recording](https://youtu.be/-Z97I5gpRBk)
   and [transcript](./notes/20260521_ChatTranscript.md))
 - [March 19, 2026](./notes/20260319_Notes.md) ([YouTube recording](https://youtu.be/vKJaOJU1RKY)
