@@ -95,7 +95,7 @@ you know, issues that come in and feedback, other feedback channels that we have
 Um...
 Um, but uh...
 Things should be getting better. What we're trying to do is provide more context for all of the rules and link back to supporting documentation to provide more value in that rules documentation. And just again, want to shout out to community contributors.
-Last month, Ariane submitted a big PR to clean up, 160 articles. We appreciate contributions like that, as well as the issues when you find problems in the documentation.
+Last month, ArieHein submitted a big PR to clean up, 160 articles. We appreciate contributions like that, as well as the issues when you find problems in the documentation.
 And when you find problems, if you're willing to submit PRs, even better. So that's my pitch. Back to you, Jason.
 
 Jason Helmick   15:21
