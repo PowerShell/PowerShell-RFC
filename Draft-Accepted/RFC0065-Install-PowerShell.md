@@ -79,7 +79,7 @@ Goals:
 
 - By default, download and install the latest LTS release to the users CurrentUser Scope
   - CurrentUser - default installation scope location
-  - AllUsers - Administrative users may explicit select this scope. AllUsers requires administrative
+  - AllUsers - Administrative users may explicitly select this scope. AllUsers requires administrative
     elevation and performs a silent install using the MSI defaults.
 - Allow advanced users to specify channel Stable/Preview/LTS
 - Tool will not partially install and leave any existing PowerShell in a non-functioning state.
@@ -108,8 +108,8 @@ privilege, they can choose to install the msi package silently to the scope of A
 - The preview package install location - $env:LOCALAPPDATA\Local\Programs\PowerShell-Preview
   - If path exists, Provide an error "PowerShell 7 Preview is already installed, use --clobber to overwrite
     existing installation"
-- Detect if Powershell is in use in the target folder and provide error "PowerShell is currently in
-  use. Please close all Powershell instances and run the command from Start->Run or cmd.exe."
+- Detect if PowerShell is in use in the target folder and provide error "PowerShell is currently in
+  use. Please close all PowerShell instances and run the command from Start->Run or cmd.exe."
 - The installer should update the `$ENV:PATH` and Users PATH in the registry.
 - The installer should enable Microsoft Updates for scope AllUsers.
 - The command should show a progress bar during the download and installation of PowerShell 7.

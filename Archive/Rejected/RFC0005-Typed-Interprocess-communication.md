@@ -8,11 +8,11 @@ Area: Implementing typed IPC.
 
 # Typed Interprocess communication
 
-Currently PowerShell does not have an efficient means of IPC, as the architecture [of unstructured/semi-structured text-based systems] itself forces extraneous computation, making long-chains highly inneffient and often error-prone.
+Currently PowerShell does not have an efficient means of IPC, as the architecture [of unstructured/semi-structured text-based systems] itself forces extraneous computation, making long-chains highly inefficient and often error-prone.
 
 ## Motivation
 
-As we know from prior experience languages like PHP the usage of text as an interface is inherently error-prone (which is often a key in security-vulnerabilities), even moreso when the implementation of the producer are not available to the consumer thus forcing an *ad hock* reverse-engineered solution.
+As we know from prior experience languages like PHP the usage of text as an interface is inherently error-prone (which is often a key in security-vulnerabilities), even moreso when the implementation of the producer are not available to the consumer thus forcing an *ad hoc* reverse-engineered solution.
 
 A solution to this problem could be achieved through the use of a “typed stream” rather than untyped text. Another consideration is if the data passes through several processes/transforms and has to be serialized/deserialized [from text] a lot of unnecessary processing is being forced into the process — while this may be negligible in many cases it definitely adds up when dealing with large amounts of data and/or long chains of processes where the deserialize/serialize must be used.
 
@@ -35,7 +35,7 @@ This RFC proposes the following:
 			0. Interface — Tree containing types for various external systems.
 				* e.g. a type for TCP-connections or other items which are commonly implemented as Integers but not technically integers; or things like “Little-endian, 16-bit value, unsigned” and “Little-endian, 16-bit value, signed”.
 			0. User — Defined for user-added types.
-				* This could also be [or contain] an “undefined” tree where anything below is system-dependant. While that would defeat the much of the usage of the OID-system, it would allow a sort of “type-registry” for the user’s system. (Not recommended, but a possibility nonetheless.)
+				* This could also be [or contain] an “undefined” tree where anything below is system-dependant. While that would defeat much of the usage of the OID-system, it would allow a sort of “type-registry” for the user’s system. (Not recommended, but a possibility nonetheless.)
 0. The system should provide for efficient transmission and be reliable (complete serialize/deserialize roundtrip).
 	* ASN.1 has the advantage that proper, unambiguous message-passing (in our case typed information) is efficient.
 0. The system should provide for error-checked values.
@@ -52,9 +52,9 @@ Invariably someone will suggest something like JSON as a solution to this proble
 0. JSON does not provide a means to check/enforce constraints, meaning that all clients will have to manually implement the check.
 0. JSON does not provide a means to check/enforce a structure, meaning that all clients will have to manually implement the check.
 0. Because of #2 JSON is unsuitable for transmitting records ("structs"), because of #1 JSON is unsuitable for transmitting objects (essentially stateful records).
-0. Because of #3 JSON is unsuitable for seralizing/deserializing complex/compound types such as are used in .NET.
+0. Because of #3 JSON is unsuitable for serializing/deserializing complex/compound types such as are used in .NET.
 
-Viable alternitives would include:
+Viable alternatives would include:
 
 * The Wulf, Lamb, Nestor [Interface Description Language](http://repository.cmu.edu/compsci/2412/); see also [Snodgrass’s book](https://www.amazon.com/Interface-Description-Language-Definition-Principles/dp/0716781980) ISBN 0716781980.
 	* Possibly w/ updated syntax to be more in-line with Ada-2012/SPARK-2014; see example #1 below.
@@ -89,7 +89,7 @@ Example 1:
           )
          );
     
-    -- Tax_ID: A string guarenteed to be an SSN or EIN.
+    -- Tax_ID: A string guaranteed to be an SSN or EIN.
     -- SSN (###-##-####)
     -- EIN (##-#######)
     Subtype Tax_ID is ID_String
@@ -114,7 +114,7 @@ Hemant Mahawar: Reject
 
 ### Majority Decision
 
-Commmittee agrees that this RFC does not provide sufficient details to move forward with an implementation.  PowerShell already supports IPC within PSRP (PowerShell Remoting Protocol).
+Committee agrees that this RFC does not provide sufficient details to move forward with an implementation.  PowerShell already supports IPC within PSRP (PowerShell Remoting Protocol).
 
 ### Minority Decision
 
