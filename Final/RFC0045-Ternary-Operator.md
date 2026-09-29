@@ -11,7 +11,7 @@ Plan to implement: Yes, PS7
 
 # Add Ternary Operator to PowerShell Language
 
-The ternary operator is one of the highly demanded enhancement to PowerShell language.
+The ternary operator is one of the highly demanded enhancements to PowerShell language.
 It received 46 up-votes in the issue [Suggestion: implement ternary conditionals](https://github.com/PowerShell/PowerShell/issues/3239) as of the writing of this RFC.
 The [prototype draft pull request](https://github.com/PowerShell/PowerShell/pull/10161) for this feature has also received a lot of attention and discussions.
 
@@ -109,7 +109,7 @@ Obvious examples are the `VariableAnalysis` and `Compiler` as you have to update
 The not-so-obvious ones include `ConstantValueVisitor`, `SafeValueVisitor`, `TypeInferenceVisitor` and more.
 Take the `TypeInferenceVisitor` as an instance, failing to update it may cause tab completion issues that are hard to catch.
 
-It's worth to discuss the `InternalVisit` implemention of the new AST type a bit.
+It's worth to discuss the `InternalVisit` implementation of the new AST type a bit.
 Many `Find*Visitor` types depend on this method to search through an AST tree,
 and almost all of them derive from `AstVisitor` instead of `AstVisitor2` because
 currently the AST types covered in `AstVisitor2` all have their own special scopes,
