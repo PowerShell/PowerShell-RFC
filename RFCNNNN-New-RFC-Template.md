@@ -6,7 +6,20 @@ SupercededBy: <link to another RFC>
 Version: <Major>.<Minor>
 Area: <Area within the PowerShell language>
 Comments Due: <Date for submitting comments to current draft (minimum 1 month)>
-Plan to implement: <Yes | No>
+Plan to implement: <Yes | With Help | No>
+# Helpers is only required if 'Plan to implement' is 'With Help' and can contain either direct 
+# links to an individual or to a well known team like the Cmdlets Working Group or a project like PSResourceGet.
+# This allows for both the "I'd like to do this alone" as well as "I'd like to do this with others" ways of working, 
+# whilst enabling opportunities to be able to work closer with others either as part of the PowerShell Team or from the Community.
+# It is not intented to be more than a suggested list & any listed can always decline to do so 
+# Details to be Provided in the below Required Help Section
+Helpers: 
+# Helpers is a list that may contain
+# - Individual accounts
+# - Working Group/s
+# - a GitHub organisation/s
+# - Linked Project's 
+# - external team/organisation
 ---
 
 # Title
@@ -36,3 +49,5 @@ Hello World
 
 ## Alternate Proposals and Considerations
 
+## Required Help
+This section is only required if 'Plan to implement' is 'Yes but with help' and should detail what help the RFC Author is looking for to ensure that the implementation required from this RFC is at an acceptable level for it to be accepted into the project. 
