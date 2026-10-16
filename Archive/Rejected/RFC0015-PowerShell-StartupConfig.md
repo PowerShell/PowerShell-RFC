@@ -44,7 +44,7 @@ Additional keys and subkeys may be added as needed.
 Keys which are not supported shall generate a _warning_ and be ignored.
 
 The configuration file in $PSHOME shall be applicable only to the PowerShell executable found therein.
-The configuration file in $HOME (PowerShell._version_.Config.psd) shall be applicable to only to the matching version of PowerShell Core.
+The configuration file in $HOME (PowerShell._version_.Config.psd) shall be applicable only to the matching version of PowerShell Core.
 Additionally, the parameter `-ConfigurationFile` shall be present in the PowerShell executable, which takes an array of strings which represent paths to config files.
 When the `-ConfigurationFile` parameter is present, those files only will be read for configuration data.
 
@@ -55,7 +55,7 @@ The config file should have a published schema to aid in file creation.
 * Tools to ease the creation/alteration/removal of settings should be created at a future date.
 
 ### Additional Optional Work
-We should have a mechanism for creating default config files, we could easily modify existing code for New-PSSessionConfiguraitonFile to do this, however this is not a requirement.
+We should have a mechanism for creating default config files, we could easily modify existing code for New-PSSessionConfigurationFile to do this, however this is not a requirement.
 
 ### Sample configuration file
 ```powershell
@@ -108,7 +108,7 @@ And $HOME configuration file defines it as:
             }
         }
 ```
-The the resultant configuration will be as defined by the file in $HOME.
+The resultant configuration will be as defined by the file in $HOME.
 
 However, if the configuration does not overlap then the settings will not be overridden:
 
@@ -154,7 +154,7 @@ The current proposal provides for those settings to be unalterable by a user whi
 ### Datafile Formats
 The format for the datafile could take many forms; XML, json, Linux Config, .yml, or .ini.
 I chose PowerShell Data format assuming that anyone that is configuring PowerShell is familiar with PowerShell constructs, and code is available to convert a PSD1 file to an object before the engine is started.
-Also, PSD1 files may conin comments, which may be very helpful in describing the settings.
+Also, PSD1 files may contain comments, which may be very helpful in describing the settings.
 The config file location is somewhat forced due to PowerShell's side-by-side requirements, so a global location (.e.g., `/etc/`) would greatly complicate the configuration file to cover multiple versions.
 
 ## PowerShell Committee Decision
